@@ -380,11 +380,12 @@ CREATE TABLE `pessoatrabalhaestado` (
   `idPessoa` int(11) NOT NULL,
   `idEstado` int(11) NOT NULL,
   `ehResponsavel` tinyint(4) NOT NULL DEFAULT '0',
+  `ehSecretario` tinyint(4) NOT NULL DEFAULT '0',
   PRIMARY KEY (`idPessoa`,`idEstado`),
   KEY `fk_pessoa_has_estado_estado1_idx` (`idEstado`),
   KEY `fk_pessoa_has_estado_pessoa1_idx` (`idPessoa`),
-  CONSTRAINT `fk_pessoa_has_estado_pessoa1` FOREIGN KEY (`idPessoa`) REFERENCES `pessoa` (`idpessoa`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_pessoa_has_estado_estado1` FOREIGN KEY (`idEstado`) REFERENCES `estado` (`Id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  CONSTRAINT `fk_pessoa_has_estado_estado1` FOREIGN KEY (`idEstado`) REFERENCES `estado` (`Id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_pessoa_has_estado_pessoa1` FOREIGN KEY (`idPessoa`) REFERENCES `pessoa` (`idpessoa`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -408,11 +409,12 @@ CREATE TABLE `pessoatrabalhamunicipio` (
   `idPessoa` int(11) NOT NULL,
   `idMunicipio` int(11) NOT NULL,
   `ehResponsavel` tinyint(4) NOT NULL DEFAULT '0',
+  `ehSecretario` tinyint(4) NOT NULL DEFAULT '0',
   PRIMARY KEY (`idPessoa`,`idMunicipio`),
   KEY `fk_pessoa_has_municipio_municipio1_idx` (`idMunicipio`),
   KEY `fk_pessoa_has_municipio_pessoa1_idx` (`idPessoa`),
-  CONSTRAINT `fk_pessoa_has_municipio_pessoa1` FOREIGN KEY (`idPessoa`) REFERENCES `pessoa` (`idpessoa`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_pessoa_has_municipio_municipio1` FOREIGN KEY (`idMunicipio`) REFERENCES `municipio` (`Id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  CONSTRAINT `fk_pessoa_has_municipio_municipio1` FOREIGN KEY (`idMunicipio`) REFERENCES `municipio` (`Id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_pessoa_has_municipio_pessoa1` FOREIGN KEY (`idPessoa`) REFERENCES `pessoa` (`idpessoa`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -457,4 +459,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-04-05  0:30:42
+-- Dump completed on 2020-04-05 10:05:51
