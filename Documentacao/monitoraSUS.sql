@@ -326,6 +326,50 @@ INSERT INTO `municipio` VALUES (1,1100015,'Alta Floresta D\'Oeste','RO'),(2,1100
 UNLOCK TABLES;
 
 --
+-- Table structure for table `pessoa`
+--
+
+DROP TABLE IF EXISTS `pessoa`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+ SET character_set_client = utf8mb4 ;
+CREATE TABLE `pessoa` (
+  `idpessoa` int(11) NOT NULL AUTO_INCREMENT,
+  `cpf` varchar(11) NOT NULL,
+  `nome` varchar(60) NOT NULL,
+  `cep` varchar(8) NOT NULL,
+  `rua` varchar(60) NOT NULL,
+  `bairro` varchar(60) NOT NULL,
+  `cidade` varchar(100) NOT NULL,
+  `estado` varchar(50) NOT NULL,
+  `numero` varchar(20) DEFAULT NULL,
+  `complemento` varchar(100) DEFAULT NULL,
+  `latitude` decimal(10,0) NOT NULL,
+  `longitude` decimal(10,0) NOT NULL,
+  `foneCelular` varchar(15) NOT NULL,
+  `foneFixo` varchar(15) DEFAULT NULL,
+  `email` varchar(60) DEFAULT NULL,
+  `dataNascimento` date NOT NULL,
+  `hipertenso` tinyint(4) NOT NULL DEFAULT '0',
+  `diabetes` tinyint(4) NOT NULL DEFAULT '0',
+  `obeso` tinyint(4) NOT NULL DEFAULT '0',
+  `cardiopatia` tinyint(4) NOT NULL DEFAULT '0',
+  `imunodeprimido` tinyint(4) NOT NULL DEFAULT '0',
+  `cancer` tinyint(4) NOT NULL DEFAULT '0',
+  `doencaRespiratoria` tinyint(4) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`idpessoa`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `pessoa`
+--
+
+LOCK TABLES `pessoa` WRITE;
+/*!40000 ALTER TABLE `pessoa` DISABLE KEYS */;
+/*!40000 ALTER TABLE `pessoa` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `pessoatrabalhaestado`
 --
 
@@ -380,6 +424,29 @@ LOCK TABLES `pessoatrabalhamunicipio` WRITE;
 /*!40000 ALTER TABLE `pessoatrabalhamunicipio` DISABLE KEYS */;
 /*!40000 ALTER TABLE `pessoatrabalhamunicipio` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `virusbacteria`
+--
+
+DROP TABLE IF EXISTS `virusbacteria`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+ SET character_set_client = utf8mb4 ;
+CREATE TABLE `virusbacteria` (
+  `idVirusBacteria` int(11) NOT NULL AUTO_INCREMENT,
+  `nome` varchar(60) NOT NULL,
+  PRIMARY KEY (`idVirusBacteria`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `virusbacteria`
+--
+
+LOCK TABLES `virusbacteria` WRITE;
+/*!40000 ALTER TABLE `virusbacteria` DISABLE KEYS */;
+/*!40000 ALTER TABLE `virusbacteria` ENABLE KEYS */;
+UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -390,4 +457,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-04-05  0:15:22
+-- Dump completed on 2020-04-05  0:30:42
