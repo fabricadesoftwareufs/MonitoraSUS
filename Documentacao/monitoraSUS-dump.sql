@@ -280,13 +280,19 @@ CREATE TABLE `exame` (
   `igG` enum('S','N','I') NOT NULL DEFAULT 'N',
   `igM` enum('S','N','I') NOT NULL DEFAULT 'N',
   `pcr` enum('S','N','I') NOT NULL DEFAULT 'N',
+  `estadoRealizacao` int(11) NOT NULL,
+  `municipio_Id` int(11) NOT NULL,
   PRIMARY KEY (`idExame`),
   KEY `fk_exame_virusBacteria1_idx` (`idVirusBacteria`),
   KEY `fk_exame_pessoa1_idx` (`idPaciente`),
   KEY `fk_exame_pessoa2_idx` (`idAgenteSaude`),
-  CONSTRAINT `fk_exame_virusBacteria1` FOREIGN KEY (`idVirusBacteria`) REFERENCES `virusbacteria` (`idVirusBacteria`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  KEY `fk_exame_estado1_idx` (`estadoRealizacao`),
+  KEY `fk_exame_municipio1_idx` (`municipio_Id`),
+  CONSTRAINT `fk_exame_estado1` FOREIGN KEY (`estadoRealizacao`) REFERENCES `estado` (`Id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_exame_municipio1` FOREIGN KEY (`municipio_Id`) REFERENCES `municipio` (`Id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_exame_pessoa1` FOREIGN KEY (`idPaciente`) REFERENCES `pessoa` (`idpessoa`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_exame_pessoa2` FOREIGN KEY (`idAgenteSaude`) REFERENCES `pessoa` (`idpessoa`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  CONSTRAINT `fk_exame_pessoa2` FOREIGN KEY (`idAgenteSaude`) REFERENCES `pessoa` (`idpessoa`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_exame_virusBacteria1` FOREIGN KEY (`idVirusBacteria`) REFERENCES `virusbacteria` (`idVirusBacteria`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -336,6 +342,7 @@ CREATE TABLE `pessoa` (
   `idpessoa` int(11) NOT NULL AUTO_INCREMENT,
   `cpf` varchar(11) NOT NULL,
   `nome` varchar(60) NOT NULL,
+  `sexo` enum('M','F') NOT NULL DEFAULT 'M',
   `cep` varchar(8) NOT NULL,
   `rua` varchar(60) NOT NULL,
   `bairro` varchar(60) NOT NULL,
@@ -381,6 +388,7 @@ CREATE TABLE `pessoatrabalhaestado` (
   `idEstado` int(11) NOT NULL,
   `ehResponsavel` tinyint(4) NOT NULL DEFAULT '0',
   `ehSecretario` tinyint(4) NOT NULL DEFAULT '0',
+  `situacaoCadastro` enum('S','A','I') NOT NULL DEFAULT 'S',
   PRIMARY KEY (`idPessoa`,`idEstado`),
   KEY `fk_pessoa_has_estado_estado1_idx` (`idEstado`),
   KEY `fk_pessoa_has_estado_pessoa1_idx` (`idPessoa`),
@@ -410,6 +418,7 @@ CREATE TABLE `pessoatrabalhamunicipio` (
   `idMunicipio` int(11) NOT NULL,
   `ehResponsavel` tinyint(4) NOT NULL DEFAULT '0',
   `ehSecretario` tinyint(4) NOT NULL DEFAULT '0',
+  `situacaoCadastro` enum('S','A','I') NOT NULL DEFAULT 'S',
   PRIMARY KEY (`idPessoa`,`idMunicipio`),
   KEY `fk_pessoa_has_municipio_municipio1_idx` (`idMunicipio`),
   KEY `fk_pessoa_has_municipio_pessoa1_idx` (`idPessoa`),
@@ -425,6 +434,34 @@ CREATE TABLE `pessoatrabalhamunicipio` (
 LOCK TABLES `pessoatrabalhamunicipio` WRITE;
 /*!40000 ALTER TABLE `pessoatrabalhamunicipio` DISABLE KEYS */;
 /*!40000 ALTER TABLE `pessoatrabalhamunicipio` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `situacaopessoavirusbacteria`
+--
+
+DROP TABLE IF EXISTS `situacaopessoavirusbacteria`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+ SET character_set_client = utf8mb4 ;
+CREATE TABLE `situacaopessoavirusbacteria` (
+  `idVirusBacteria` int(11) NOT NULL,
+  `idpessoa` int(11) NOT NULL,
+  `ultimaSituacaoSaude` enum('P','N','A','I','C') NOT NULL DEFAULT 'N',
+  PRIMARY KEY (`idVirusBacteria`,`idpessoa`),
+  KEY `fk_virusBacteria_has_pessoa_pessoa1_idx` (`idpessoa`),
+  KEY `fk_virusBacteria_has_pessoa_virusBacteria1_idx` (`idVirusBacteria`),
+  CONSTRAINT `fk_virusBacteria_has_pessoa_virusBacteria1` FOREIGN KEY (`idVirusBacteria`) REFERENCES `virusbacteria` (`idVirusBacteria`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_virusBacteria_has_pessoa_pessoa1` FOREIGN KEY (`idpessoa`) REFERENCES `pessoa` (`idpessoa`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `situacaopessoavirusbacteria`
+--
+
+LOCK TABLES `situacaopessoavirusbacteria` WRITE;
+/*!40000 ALTER TABLE `situacaopessoavirusbacteria` DISABLE KEYS */;
+/*!40000 ALTER TABLE `situacaopessoavirusbacteria` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -459,4 +496,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-04-05 10:05:51
+-- Dump completed on 2020-04-06  8:11:54
