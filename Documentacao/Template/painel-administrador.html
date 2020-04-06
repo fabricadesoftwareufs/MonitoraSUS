@@ -1,0 +1,168 @@
+<!--
+=========================================================
+* Argon Dashboard - v1.2.0
+=========================================================
+* Product Page: https://www.creative-tim.com/product/argon-dashboard
+
+
+* Copyright  Creative Tim (http://www.creative-tim.com)
+* Coded by www.creative-tim.com
+
+=========================================================
+* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+-->
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Language" content="pt-br">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="author" content="">
+    <meta name="description" content="">
+    
+    <title>MonitoraSUS</title>
+
+    <!-- Fonts -->
+    <link href="assets/fonts/fontawesome-free-5.13.0-web/css/all.min.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700">
+    <!-- Styles -->
+    <link rel="stylesheet" href="assets/css/argon.css?v=1.2.0" type="text/css">
+    <link rel="stylesheet" href="assets/css/custom.css" type="text/css">
+    <link rel="stylesheet" href="assets/js/plugins/sweetalert2/dist/css/sweetalert2.min.css">
+    
+</head>
+<body>
+    <!-- Main content -->
+	<div class="main-content"id="panel">
+        <!-- Topnav -->
+    <nav class="navbar bg-gradient-primary">
+        <div class="container-fluid">
+            <img src="assets/img/logo-sus.png" class="logo-header" >
+            <div class="top-user">
+                <span>  
+                    <i class="fa fa-user" aria-hidden="true"></i>Paulo David Almeida da Silva
+                </span>
+                <span>
+                    <i class="fas fa-map-marker-alt"></i> Sergipe / Aracaju
+                </span>
+                <span style="margin-top: 15px;">
+                    <i class="fas fa-sign-out-alt"></i> Sair
+                </span>
+            </div>
+        </div>
+      </nav>
+      <!-- Header -->
+      <div class="header bg-gradient-primary pb-5">
+        <div class="container-fluid">
+          <div class="header-body">
+          </div>
+        </div>
+      </div>
+      <!-- Page Content -->
+	    <div class="container-fluid mt--6">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card card-content">
+                        <div class="card-header bg-transparent">
+                            <div class="row align-items-center">
+                                <div class="col">
+                                    <h5 class="card-title  text-muted mb-0">MonitoraSUS</h5>
+                                    <h5 class="h3 mb-0">Administração</h5>
+                                </div>
+                                <div class="col text-right">
+                                    <a href="#" class="btn btn-sm btn-default">
+                                        <i class="fas fa-arrow-left"></i> Voltar
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body ">
+                            <div class="table-responsive">
+                                <table class="table align-items-center table-flush">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th scope="col" class="sort" data-sort="nome">Solicitante</th>
+                                            <th scope="col" class="sort" data-sort="cpf">CPF</th>
+                                            <th scope="col" class="sort" data-sort="estado">Estado</th>
+                                            <th scope="col" class="sort" data-sort="cidade">Munícipio</th>
+                                            <th scope="col" class="sort" data-sort="status">Status</th>
+                                            <th scope="col" class="sort" data-sort="acoes">Ações</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="list">
+                                        <tr>
+                                            <td> Argon Design System </td>
+                                            <td>123.005.951-99</td>
+                                            <td>Sergipe</td>
+                                            <td>Aracaju</td>
+                                            <td>
+                                                <span class="badge badge-dot mr-4">
+                                                    <i class="bg-warning"></i>
+                                                    <span class="status"> Pendente</span>
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-icon btn-success btn-sm" title="Ativar" type="button">
+                                                    <span class="btn-inner--icon"><i class="fas fa-check"></i></i></span>
+                                                </button>
+                                                <button class="btn btn-icon btn-danger btn-sm" title="Descartar" type="button">
+                                                    <span class="btn-inner--icon"><i class="fas fa-times"></i></i></span>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td> Argon Design System </td>
+                                            <td>123.005.951-99</td>
+                                            <td>Sergipe</td>
+                                            <td>Aracaju</td>
+                                            <td>
+                                                <span class="badge badge-dot mr-4">
+                                                    <i class="bg-success"></i>
+                                                    <span class="status"> Ativo </span>
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-icon btn-warning btn-sm" title="Bloquear"  type="button">
+                                                    <span class="btn-inner--icon"><i class="fas fa-ban"></i></i></span>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td> Argon Design System </td>
+                                            <td>123.005.951-99</td>
+                                            <td>Sergipe</td>
+                                            <td>Aracaju</td>
+                                            <td>
+                                                <span class="badge badge-dot mr-4">
+                                                    <i class="bg-danger"></i>
+                                                    <span class="status"> Bloqueado </span>
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-icon btn-success btn-sm" title="Ativar" type="button">
+                                                    <span class="btn-inner--icon"><i class="fas fa-check"></i></i></span>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+	    </div>
+	  </div>
+    <!-- Scripts -->
+    <script src="assets/js/plugins/jquery-3.4.1/jquery-3.4.1.min.js"></script>
+    <script src="assets/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="assets/vendor/js-cookie/js.cookie.js"></script>
+	<script src="assets/vendor/jquery.scrollbar/jquery.scrollbar.min.js"></script>
+	<script src="assets/vendor/jquery-scroll-lock/dist/jquery-scrollLock.min.js"></script>
+    <script src="assets/js/plugins/jquery-mask/dist/jquery.mask.min.js"></script>
+    <script src="assets/js/plugins/sweetalert2/dist/js/sweetalert2.min.js"></script>
+    <script src="assets/js/argon.js?v=1.2.0"></script>
+    <script src="assets/js/custom.js"></script>
+</body>
+</html>
