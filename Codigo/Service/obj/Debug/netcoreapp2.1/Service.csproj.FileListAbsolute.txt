@@ -1,0 +1,14 @@
+C:\Users\abraa\Documents\MonitoraSUS\Codigo\Service\bin\Debug\netcoreapp2.1\Service.deps.json
+C:\Users\abraa\Documents\MonitoraSUS\Codigo\Service\bin\Debug\netcoreapp2.1\Service.dll
+C:\Users\abraa\Documents\MonitoraSUS\Codigo\Service\bin\Debug\netcoreapp2.1\Service.pdb
+C:\Users\abraa\Documents\MonitoraSUS\Codigo\Service\bin\Debug\netcoreapp2.1\Model.dll
+C:\Users\abraa\Documents\MonitoraSUS\Codigo\Service\bin\Debug\netcoreapp2.1\Persistence.dll
+C:\Users\abraa\Documents\MonitoraSUS\Codigo\Service\bin\Debug\netcoreapp2.1\Model.pdb
+C:\Users\abraa\Documents\MonitoraSUS\Codigo\Service\bin\Debug\netcoreapp2.1\Persistence.pdb
+C:\Users\abraa\Documents\MonitoraSUS\Codigo\Service\obj\Debug\netcoreapp2.1\Service.csprojAssemblyReference.cache
+C:\Users\abraa\Documents\MonitoraSUS\Codigo\Service\obj\Debug\netcoreapp2.1\Service.csproj.CoreCompileInputs.cache
+C:\Users\abraa\Documents\MonitoraSUS\Codigo\Service\obj\Debug\netcoreapp2.1\Service.AssemblyInfoInputs.cache
+C:\Users\abraa\Documents\MonitoraSUS\Codigo\Service\obj\Debug\netcoreapp2.1\Service.AssemblyInfo.cs
+C:\Users\abraa\Documents\MonitoraSUS\Codigo\Service\obj\Debug\netcoreapp2.1\Service.csproj.CopyComplete
+C:\Users\abraa\Documents\MonitoraSUS\Codigo\Service\obj\Debug\netcoreapp2.1\Service.dll
+C:\Users\abraa\Documents\MonitoraSUS\Codigo\Service\obj\Debug\netcoreapp2.1\Service.pdb
