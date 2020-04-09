@@ -7,3 +7,11 @@ C:\Users\abraa\Documents\MonitoraSUS\Codigo\Model\obj\Debug\netcoreapp2.1\Model.
 C:\Users\abraa\Documents\MonitoraSUS\Codigo\Model\obj\Debug\netcoreapp2.1\Model.AssemblyInfo.cs
 C:\Users\abraa\Documents\MonitoraSUS\Codigo\Model\obj\Debug\netcoreapp2.1\Model.dll
 C:\Users\abraa\Documents\MonitoraSUS\Codigo\Model\obj\Debug\netcoreapp2.1\Model.pdb
+C:\Users\igorb\Desktop\MonitoraSUS\Codigo\Model\obj\Debug\netcoreapp2.1\Model.csprojAssemblyReference.cache
+C:\Users\igorb\Desktop\MonitoraSUS\Codigo\Model\obj\Debug\netcoreapp2.1\Model.AssemblyInfoInputs.cache
+C:\Users\igorb\Desktop\MonitoraSUS\Codigo\Model\obj\Debug\netcoreapp2.1\Model.AssemblyInfo.cs
+C:\Users\igorb\Desktop\MonitoraSUS\Codigo\Model\obj\Debug\netcoreapp2.1\Model.dll
+C:\Users\igorb\Desktop\MonitoraSUS\Codigo\Model\obj\Debug\netcoreapp2.1\Model.pdb
+C:\Users\igorb\Desktop\MonitoraSUS\Codigo\Model\bin\Debug\netcoreapp2.1\Model.deps.json
+C:\Users\igorb\Desktop\MonitoraSUS\Codigo\Model\bin\Debug\netcoreapp2.1\Model.dll
+C:\Users\igorb\Desktop\MonitoraSUS\Codigo\Model\bin\Debug\netcoreapp2.1\Model.pdb

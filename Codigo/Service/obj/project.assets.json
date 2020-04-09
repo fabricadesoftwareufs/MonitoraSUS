@@ -3585,43 +3585,41 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\abraa\\.nuget\\packages\\": {},
-    "C:\\ProgramData\\Xamarin\\NuGet\\": {},
+    "C:\\Users\\igorb\\.nuget\\packages\\": {},
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\abraa\\Documents\\MonitoraSUS\\Codigo\\Service\\Service.csproj",
+      "projectUniqueName": "C:\\Users\\igorb\\Desktop\\MonitoraSUS\\Codigo\\Service\\Service.csproj",
       "projectName": "Service",
-      "projectPath": "C:\\Users\\abraa\\Documents\\MonitoraSUS\\Codigo\\Service\\Service.csproj",
-      "packagesPath": "C:\\Users\\abraa\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\abraa\\Documents\\MonitoraSUS\\Codigo\\Service\\obj\\",
+      "projectPath": "C:\\Users\\igorb\\Desktop\\MonitoraSUS\\Codigo\\Service\\Service.csproj",
+      "packagesPath": "C:\\Users\\igorb\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\igorb\\Desktop\\MonitoraSUS\\Codigo\\Service\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
-        "C:\\ProgramData\\Xamarin\\NuGet\\",
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\abraa\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+        "C:\\Users\\igorb\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "netcoreapp2.1"
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "https://api.nuget.org/v3/index.json": {}
+        "https://api.nuget.org/v3/index.json": {},
+        "https://nuget.telerik.com/nuget": {}
       },
       "frameworks": {
         "netcoreapp2.1": {
           "projectReferences": {
-            "C:\\Users\\abraa\\Documents\\MonitoraSUS\\Codigo\\Model\\Model.csproj": {
-              "projectPath": "C:\\Users\\abraa\\Documents\\MonitoraSUS\\Codigo\\Model\\Model.csproj"
+            "C:\\Users\\igorb\\Desktop\\MonitoraSUS\\Codigo\\Model\\Model.csproj": {
+              "projectPath": "C:\\Users\\igorb\\Desktop\\MonitoraSUS\\Codigo\\Model\\Model.csproj"
             },
-            "C:\\Users\\abraa\\Documents\\MonitoraSUS\\Codigo\\Persistence\\Persistence.csproj": {
-              "projectPath": "C:\\Users\\abraa\\Documents\\MonitoraSUS\\Codigo\\Persistence\\Persistence.csproj"
+            "C:\\Users\\igorb\\Desktop\\MonitoraSUS\\Codigo\\Persistence\\Persistence.csproj": {
+              "projectPath": "C:\\Users\\igorb\\Desktop\\MonitoraSUS\\Codigo\\Persistence\\Persistence.csproj"
             }
           }
         }
@@ -3643,10 +3641,16 @@
           }
         },
         "imports": [
-          "net461"
+          "net461",
+          "net462",
+          "net47",
+          "net471",
+          "net472",
+          "net48"
         ],
         "assetTargetFallback": true,
-        "warn": true
+        "warn": true,
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.101\\RuntimeIdentifierGraph.json"
       }
     }
   }
