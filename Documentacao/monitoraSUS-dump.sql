@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS `estado` (
   PRIMARY KEY (`Id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=82 DEFAULT CHARSET=utf8;
 
--- Copiando dados para a tabela monitorasus.estado: ~0 rows (aproximadamente)
+-- Copiando dados para a tabela monitorasus.estado: ~54 rows (aproximadamente)
 /*!40000 ALTER TABLE `estado` DISABLE KEYS */;
 INSERT INTO `estado` (`Id`, `CodigoUf`, `Nome`, `Uf`, `Regiao`) VALUES
 	(28, 11, 'Rondônia', 'RO', 1),
@@ -124,7 +124,7 @@ CREATE TABLE IF NOT EXISTS `municipio` (
   PRIMARY KEY (`Id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5571 DEFAULT CHARSET=utf8;
 
--- Copiando dados para a tabela monitorasus.municipio: ~0 rows (aproximadamente)
+-- Copiando dados para a tabela monitorasus.municipio: ~5.570 rows (aproximadamente)
 /*!40000 ALTER TABLE `municipio` DISABLE KEYS */;
 INSERT INTO `municipio` (`Id`, `Codigo`, `Nome`, `Uf`) VALUES
 	(1, 5200050, 'Abadia de Goiás', '52'),
@@ -5786,16 +5786,18 @@ CREATE TABLE IF NOT EXISTS `situacaopessoavirusbacteria` (
 
 -- Copiando estrutura para tabela monitorasus.usuario
 CREATE TABLE IF NOT EXISTS `usuario` (
-  `idUsuario` int(11) NOT NULL,
+  `idUsuario` int(11) NOT NULL AUTO_INCREMENT,
   `cpf` varchar(45) NOT NULL,
   `senha` varchar(45) NOT NULL,
   `email` varchar(45) DEFAULT NULL,
   `tipoUsuario` tinyint(4) NOT NULL,
   PRIMARY KEY (`idUsuario`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- Copiando dados para a tabela monitorasus.usuario: ~0 rows (aproximadamente)
 /*!40000 ALTER TABLE `usuario` DISABLE KEYS */;
+INSERT INTO `usuario` (`idUsuario`, `cpf`, `senha`, `email`, `tipoUsuario`) VALUES
+	(1, '07334824571', '1234', 'ab@gmail.com', 0);
 /*!40000 ALTER TABLE `usuario` ENABLE KEYS */;
 
 -- Copiando estrutura para tabela monitorasus.virusbacteria

@@ -1,0 +1,68 @@
+﻿@model Model.ViewModel.LoginViewModel
+@{
+    ViewData["Title"] = "Login";
+}
+
+<!-- Login -->
+<div class="container ">
+    <div class="row justify-content-center">
+        <div class="col-xl-10 col-lg-12 col-md-9">
+            <div class="card o-hidden border-0 shadow-lg my-5">
+                <div class="card-body p-0">
+                    <!-- Nested Row within Card Body -->
+                    <div class="row">
+                        <div class="col-lg-6 d-none d-lg-block bg-login-image">
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="p-5">
+                                <div class="text-center">
+                                    <img src="assets/img/logo-sus.png" class="login-logo">
+                                    <h1 class="h4 text-gray-900 mb-4">MonitoraSUS</h1>
+                                </div>
+                                <hr>
+                                <form class="user" asp-action="LoginAsync" asp-controller="Login">
+                                    <div class="form-group">
+                                        <input asp-for="Cpf" id="cpf" class="form-control form-control-user" data-inputmask="'mask' : '***.***.***-**'" name="cpf" value="" placeholder="CPF" required="required">
+                                    </div>
+                                    <div class="form-group">
+                                        <input asp-for="Senha" type="password" id="senha" class="form-control form-control-user" name="password" placeholder="Senha" required="required">
+                                    </div>
+                                    <hr>
+                                    <button type="submit" class="btn btn-primary btn-user btn-block">
+                                        Entrar
+                                    </button>
+                                    <div class="info text-center">
+                                        <span>Resultado de Exame? </span><br><a href="#">Clique aqui</a>
+                                    </div>
+                                </form>
+                                <div class="card-register">
+                                    <div class="row">
+                                        <div class="col-6 card-button text-center">
+                                            <a href="@Url.Action("CreateUser","Login")">
+                                                <div class="card-button-body">
+                                                    <span>Secretaria ?</span>
+                                                    <i class="fas fa-user-plus fa-3x"></i>
+                                                    <span>Cadastre-se</span>
+                                                </div>
+                                            </a>
+                                        </div>
+                                        <div class="col-6 card-button text-center">
+                                            <a href="@Url.Action("CreateUser","Login")">
+                                                <div class="card-button-body">
+                                                    <span>Profissional ?</span>
+                                                    <i class="fas fa-user-md fa-3x"></i>
+                                                    <span>Cadastre-se</span>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
