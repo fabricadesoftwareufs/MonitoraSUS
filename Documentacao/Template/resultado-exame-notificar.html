@@ -1,0 +1,346 @@
+<!--
+=========================================================
+* Argon Dashboard - v1.2.0
+=========================================================
+* Product Page: https://www.creative-tim.com/product/argon-dashboard
+
+
+* Copyright  Creative Tim (http://www.creative-tim.com)
+* Coded by www.creative-tim.com
+
+=========================================================
+* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+-->
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Language" content="pt-br">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="author" content="">
+    <meta name="description" content="">
+    
+    <title>MonitoraSUS</title>
+
+    <!-- Fonts -->
+    <link href="assets/fonts/fontawesome-free-5.13.0-web/css/all.min.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700">
+    <!-- Styles -->
+    <link rel="stylesheet" href="assets/css/argon.css?v=1.2.0" type="text/css">
+    <link rel="stylesheet" href="assets/css/custom.css" type="text/css">
+    <link rel="stylesheet" href="assets/js/plugins/sweetalert2/dist/css/sweetalert2.min.css">
+    
+</head>
+<body>
+    <!-- Main content -->
+	<div class="main-content"id="panel">
+        <!-- Topnav -->
+    <nav class="navbar bg-gradient-primary">
+        <div class="container-fluid">
+            <img src="assets/img/logo-sus.png" class="logo-header" >
+            <div class="top-user">
+                <span>  
+                    <i class="fa fa-user" aria-hidden="true"></i>Paulo David Almeida da Silva
+                </span>
+                <span>
+                    <i class="fas fa-map-marker-alt"></i> Sergipe / Aracaju
+                </span>
+                <span style="margin-top: 15px;">
+                    <i class="fas fa-sign-out-alt"></i> Sair
+                </span>
+            </div>
+        </div>
+      </nav>
+      <!-- Header -->
+      <div class="header bg-gradient-primary pb-5">
+        <div class="container-fluid">
+          <div class="header-body">
+          </div>
+        </div>
+      </div>
+      <!-- Page Content -->
+	    <div class="container-fluid mt--6">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card card-content">
+                        <div class="card-header bg-transparent">
+                            <div class="row align-items-center">
+                                <div class="col">
+                                    <h5 class="card-title  text-muted mb-0">MonitoraSUS</h5>
+                                    <h5 class="h3 mb-0">Notificar Resultado Exame</h5>
+                                </div>
+                                <div class="col text-right">
+                                    <a href="#" class="btn btn-sm btn-default">
+                                        <i class="fas fa-arrow-left"></i> Voltar
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <form>
+                                <h6 class="heading-small text-muted mb-4">Dados Pessoais</h6>
+                                <div class="pl-lg-4">
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <label class="form-control-label" for="input-cpf">CPF</label>
+                                                <input type="text" id="input-cpf" required class="form-control" placeholder="" value="">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="form-control-label" for="input-nome">Paciente</label>
+                                                <input type="text" id="input-nome" required class="form-control" placeholder="Nome Completo" value="">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <label for="input-data-nascimento"  class="form-control-label">Data de Nascimento</label>
+                                                <input class="form-control" type="date" required value="" id="input-data-nascimento">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <label class="form-control-label" for="sexo">Sexo</label><br>
+                                                <div class="custom-control custom-radio custom-control-inline">
+                                                    <input type="radio" id="input-sexo-masc" required name="sexo" class="custom-control-input">
+                                                    <label class="custom-control-label" for="input-sexo-masc">Masculino</label>
+                                                </div>
+                                                <div class="custom-control custom-radio custom-control-inline">
+                                                    <input type="radio" id="input-sexo-fem" required name="sexo" class="custom-control-input">
+                                                    <label class="custom-control-label" for="input-sexo-fem">Feminino</label>
+                                                </div>
+                                            </div> 
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr class="my-4" />
+                                <h6 class="heading-small text-muted mb-4">Informações de Contato</h6>
+                                <div class="pl-lg-4">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="input-pesquisa">Pesquisa Endereço</label>
+                                        <input type="text" id="input-pesquisa" required class="form-control" placeholder="Pesquise pelo CEP, Rua, Bairro, Número" value="">
+                                    </div>
+                                    </div>
+									<div class="col-lg-2">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="input-cep">CEP</label>
+                                        <input id="input-cep" class="form-control" required placeholder="CEP" value="" type="text">
+                                    </div>
+                                    </div>
+                                    <div class="col-lg-5">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="input-logradouro">Logradouro</label>
+                                        <input type="text" id="input-logradouro" required class="form-control" placeholder="Rua, Av, Travessa" value="">
+                                    </div>
+                                    </div>
+                                    <div class="col-lg-1">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="input-numero">Número</label>
+                                        <input type="text" id="input-numero" required class="form-control" placeholder="" value="">
+                                    </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="input-bairro">Bairro</label>
+                                        <input type="text" id="input-bairro" required class="form-control" placeholder="Bairro" value="">
+                                    </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="input-cidade">Cidade</label>
+                                        <input type="text" id="input-cidade" required class="form-control" placeholder="Estado">
+                                    </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="input-estado">Estado</label>
+                                        <input type="text" id="input-estado" class="form-control" placeholder="Estado">
+                                    </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="input-complemento">Complemento</label>
+                                        <input type="text" id="input-complemento" class="form-control" placeholder="Complemento">
+                                    </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="input-celular">Celular</label>
+                                        <input type="text" id="input-celular"  required class="form-control" placeholder=" (79) 55555 5555">
+                                    </div>
+                                    </div>
+									<div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="input-telefone">Telefone</label>
+                                        <input type="text" id="input-telefone" required class="form-control" placeholder=" (79) 3000 6000">
+                                    </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="input-email">E-mail</label>
+                                        <input type="email" id="input-email" required class="form-control" placeholder="email@example.com">
+                                    </div>
+                                    </div>
+                                </div>
+                                </div>
+                                <hr class="my-4" />
+                                <h6 class="heading-small text-muted mb-4">Comorbidades</h6>
+                                <div class="pl-lg-4">
+                                    <div class="row">
+                                        <div class="col-lg-3">
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" id="customCheck1">
+                                                <label class="custom-control-label" for="customCheck1">Hipertensão</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" id="customCheck1">
+                                                <label class="custom-control-label" for="customCheck1">Diabetes</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" id="customCheck1">
+                                                <label class="custom-control-label" for="customCheck1">Obeso</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" id="customCheck1">
+                                                <label class="custom-control-label" for="customCheck1">Cardiopatia</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-3">
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" id="customCheck1">
+                                                <label class="custom-control-label" for="customCheck1">Imunodeprimido</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" id="customCheck1">
+                                                <label class="custom-control-label" for="customCheck1">Câncer</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" id="customCheck1">
+                                                <label class="custom-control-label" for="customCheck1">Doença Respiratória</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr class="my-4" />
+                                <h6 class="heading-small text-muted mb-4">RESULTADO</h6>
+                                <div class="pl-lg-4">
+                                    <div class="row">
+                                        <div class="col-lg-4">
+                                            <div class="form-group">
+                                            <label class="form-control-label" for="input-atuacao-estado">Exame</label>
+                                                <select class="form-control" id="input-atuacao-estado">
+                                                    <option>COVID-19</option>
+                                                    <option>H1N1</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div class="form-group">
+                                                <label for="input-data-sintomas"  class="form-control-label">Início dos Sintomas</label>
+                                                <input class="form-control" type="date" required value="" id="input-data-sintomas">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div class="form-group">
+                                                <label for="input-data-exame"  class="form-control-label">Data do Exame</label>
+                                                <input class="form-control" type="date" required value="" id="input-data-exame">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div class="form-group">
+                                                <label class="form-control-label" for="igg-reagente">IgG Reagente?</label><br>
+                                                <div class="custom-control custom-radio custom-control-inline">
+                                                    <input type="radio" id="input-igg-nao" checked name="igg" class="custom-control-input">
+                                                    <label class="custom-control-label" for="input-igg-nao">Não</label>
+                                                </div>
+                                                <div class="custom-control custom-radio custom-control-inline">
+                                                    <input type="radio" id="input-igg-sim" name="igg" class="custom-control-input">
+                                                    <label class="custom-control-label" for="input-igg-sim">Sim</label>
+                                                </div>
+                                                <div class="custom-control custom-radio custom-control-inline">
+                                                    <input type="radio" id="input-igg-indeterminado" name="igg" class="custom-control-input">
+                                                    <label class="custom-control-label" for="input-igg-indeterminado">Indeterminado</label>
+                                                </div>
+                                            </div> 
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div class="form-group">
+                                                <label class="form-control-label" for="igm-reagente">IgM Reagente?</label><br>
+                                                <div class="custom-control custom-radio custom-control-inline">
+                                                    <input type="radio" id="input-igm-nao" checked name="igm" class="custom-control-input">
+                                                    <label class="custom-control-label" for="input-igm-nao">Não</label>
+                                                </div>
+                                                <div class="custom-control custom-radio custom-control-inline">
+                                                    <input type="radio" id="input-igm-sim" name="igm" class="custom-control-input">
+                                                    <label class="custom-control-label" for="input-igm-sim">Sim</label>
+                                                </div>
+                                                <div class="custom-control custom-radio custom-control-inline">
+                                                    <input type="radio" id="input-igm-indeterminado" name="igm" class="custom-control-input">
+                                                    <label class="custom-control-label" for="input-igm-indeterminado">Indeterminado</label>
+                                                </div>
+                                            </div> 
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div class="form-group">
+                                                <label class="form-control-label" for="rt-pcr">RT PCR Reagente?</label><br>
+                                                <div class="custom-control custom-radio custom-control-inline">
+                                                    <input type="radio" id="input-rt-pcr-nao" checked name="rt-pcr" class="custom-control-input">
+                                                    <label class="custom-control-label" for="input-rt-pcr-nao">Não</label>
+                                                </div>
+                                                <div class="custom-control custom-radio custom-control-inline">
+                                                    <input type="radio" id="input-rt-pcr-sim" name="rt-pcr" class="custom-control-input">
+                                                    <label class="custom-control-label" for="input-rt-pcr-sim">Sim</label>
+                                                </div>
+                                                <div class="custom-control custom-radio custom-control-inline">
+                                                    <input type="radio" id="input-rt-pcr-indeterminado" name="rt-pcr" class="custom-control-input">
+                                                    <label class="custom-control-label" for="input-rt-pcr-indeterminado">Indeterminado</label>
+                                                </div>
+                                            </div> 
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr class="my-4" />
+                                <div class="row align-items-center">
+                                    <!--div class="col text-left">
+                                        <button class="btn btn-danger">Cancelar</button>
+                                    </div-->
+                                    <div class="col text-right">
+                                        <button class="btn btn-success">Notificar</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+	    </div>
+	  </div>
+    <!-- Scripts -->
+    <script src="assets/js/plugins/jquery-3.4.1/jquery-3.4.1.min.js"></script>
+    <script src="assets/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="assets/vendor/js-cookie/js.cookie.js"></script>
+	<script src="assets/vendor/jquery.scrollbar/jquery.scrollbar.min.js"></script>
+	<script src="assets/vendor/jquery-scroll-lock/dist/jquery-scrollLock.min.js"></script>
+    <script src="assets/js/plugins/jquery-mask/dist/jquery.mask.min.js"></script>
+    <script src="assets/js/plugins/sweetalert2/dist/js/sweetalert2.min.js"></script>
+    <script src="assets/js/argon.js?v=1.2.0"></script>
+    <script src="assets/js/custom.js"></script>
+    <script src="assets/js/resultado-exame.js"></script>
+</body>
+</html>
