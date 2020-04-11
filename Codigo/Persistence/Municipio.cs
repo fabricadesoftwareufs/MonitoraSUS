@@ -4,8 +4,8 @@ using System.Collections.Generic;
 namespace Persistence
 {
     public partial class Municipio
-    { 
-        public Municipio() 
+    {
+        public Municipio()
         {
             Exame = new HashSet<Exame>();
             Pessoatrabalhamunicipio = new HashSet<Pessoatrabalhamunicipio>();

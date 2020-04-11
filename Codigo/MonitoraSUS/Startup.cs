@@ -25,7 +25,7 @@ namespace MonitoraSUS
         {
 
             services.AddScoped<UsuarioService>();
-
+            services.AddScoped<PessoaService>();
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
         .AddCookie(options =>
         {

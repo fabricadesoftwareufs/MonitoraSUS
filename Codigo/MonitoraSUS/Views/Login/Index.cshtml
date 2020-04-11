@@ -20,14 +20,19 @@
                                     <h1 class="h4 text-gray-900 mb-4">MonitoraSUS</h1>
                                 </div>
                                 <hr>
-                                <form class="user" asp-action="LoginAsync" asp-controller="Login">
+                                <form class="user" asp-action="SignIn" asp-controller="Login">
                                     <div class="form-group">
                                         <input asp-for="Cpf" id="cpf" class="form-control form-control-user" data-inputmask="'mask' : '***.***.***-**'" name="cpf" value="" placeholder="CPF" required="required">
                                     </div>
                                     <div class="form-group">
-                                        <input asp-for="Senha" type="password" id="senha" class="form-control form-control-user" name="password" placeholder="Senha" required="required">
+                                        <input asp-for="Senha" id="senha" type="password" class="form-control form-control-user" name="senha" placeholder="Senha" required="required">
                                     </div>
                                     <hr>
+                                    <!-- Div erro -->
+                                    <div class="alert alert-danger" id="divErro" role="alert">
+                                        Credenciais incorretas!
+                                    </div>
+
                                     <button type="submit" class="btn btn-primary btn-user btn-block">
                                         Entrar
                                     </button>
@@ -38,7 +43,7 @@
                                 <div class="card-register">
                                     <div class="row">
                                         <div class="col-6 card-button text-center">
-                                            <a href="@Url.Action("CreateUser","Login")">
+                                            <a href="#">
                                                 <div class="card-button-body">
                                                     <span>Secretaria ?</span>
                                                     <i class="fas fa-user-plus fa-3x"></i>
@@ -47,7 +52,7 @@
                                             </a>
                                         </div>
                                         <div class="col-6 card-button text-center">
-                                            <a href="@Url.Action("CreateUser","Login")">
+                                            <a href="#">
                                                 <div class="card-button-body">
                                                     <span>Profissional ?</span>
                                                     <i class="fas fa-user-md fa-3x"></i>
@@ -66,3 +71,18 @@
     </div>
 </div>
 
+section Scripts {
+<!-- jQuery -->
+<script src="~/assets/vendor/jquery/dist/jquery.min.js"></script>
+<!-- Bootstrap -->
+<script src="~/assets/vendor/custom/bootstrap.min.js"></script>
+<!-- jquery.inputmask -->
+<script src="~/assets/vendor/custom/jquery.inputmask/dist/jquery.inputmask.bundle.js"></script>
+<!-- Custom Theme Scripts -->
+<script src="~/assets/vendor/custom/custom.min.js"></script>
+
+<script>
+    let div = document.getElementById("divErro");
+    window.location.href.includes("msg=erro") ? div.hidden = false : div.hidden = true;
+</script>
+}

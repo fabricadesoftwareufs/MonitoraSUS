@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using Model;
 using Model.ViewModel;
 using MonitoraSUS.Resources.Methods;
@@ -18,29 +17,37 @@ namespace MonitoraSUS.Controllers
     public class LoginController : Controller
     {
         private readonly UsuarioService _usuarioService;
-        public LoginController(UsuarioService usuarioService)
+        private readonly PessoaService _pessoaService;
+        public LoginController(UsuarioService usuarioService, PessoaService pessoaService)
         {
             _usuarioService = usuarioService;
-
+            _pessoaService = pessoaService;
         }
         public IActionResult Index()
         {
             return View();
         }
 
-        [AllowAnonymous]
         [HttpPost]
-        public async Task<IActionResult> LoginAsync(LoginViewModel login)
+        public async Task<IActionResult> SignIn(LoginViewModel login)
         {
             if (ModelState.IsValid)
             {
-                var user = _usuarioService.GetByLogin(MethodsUtils.RemoverCaracteresEspeciais(login.Cpf), login.Senha); ///Criptografia.GerarHashSenha(login.Senha));
+                var cpf = MethodsUtils.RemoverCaracteresEspeciais(login.Cpf);
+                var senha = Criptografia.GerarHashSenha(login.Senha);
+                var user = _usuarioService.GetByLogin(cpf, senha);
 
                 if (user != null)
                 {
+                    // informaçoes pessoais do usuario | adicionar as claims o dado que mais precisar
+                    var person = _pessoaService.GetById(user.IdPessoa);
+
                     var claims = new List<Claim>
                     {
                         new Claim(ClaimTypes.SerialNumber, user.IdUsuario.ToString()),
+                        new Claim(ClaimTypes.NameIdentifier, person.Nome),
+                        new Claim(ClaimTypes.StateOrProvince, person.Estado),
+                        new Claim(ClaimTypes.Locality, person.Cidade),
                         new Claim(ClaimTypes.UserData, user.Cpf),
                         new Claim(ClaimTypes.Email, user.Email),
                         new Claim(ClaimTypes.Role, user.TipoUsuario.ToString())
@@ -80,10 +87,9 @@ namespace MonitoraSUS.Controllers
                 // Informações do objeto
                 usuario.Cpf = MethodsUtils.RemoverCaracteresEspeciais(usuario.Cpf);
                 usuario.Senha = Criptografia.GerarHashSenha(usuario.Senha);
-                usuario.TipoUsuario = 0;       // usuario comum
 
                 if (_usuarioService.Insert(usuario))
-                    return RedirectToAction("LoginAsync", "Login");
+                    return RedirectToAction("SignIn", "Login");
             }
             return View(usuario);
         }
