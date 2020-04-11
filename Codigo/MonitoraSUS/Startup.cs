@@ -7,8 +7,12 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Persistence;
+using Service;
+using Service.Interface;
 
 namespace MonitoraSUS
 {
@@ -31,6 +35,13 @@ namespace MonitoraSUS
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            services.AddDbContext<monitorasusContext>(options =>
+                options.UseMySQL(
+                    Configuration.GetConnectionString("MySqlConnection")));
+
+            services.AddTransient<IVirusBacteriaService, VirusBacteriaService>();
+            services.AddTransient<IExameService, ExameService>();
+            services.AddTransient<IPessoaService, PessoaService>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
