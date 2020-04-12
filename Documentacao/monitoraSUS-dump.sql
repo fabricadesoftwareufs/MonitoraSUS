@@ -5791,11 +5791,15 @@ CREATE TABLE IF NOT EXISTS `usuario` (
   `senha` varchar(100) NOT NULL,
   `email` varchar(45) DEFAULT NULL,
   `tipoUsuario` tinyint(4) NOT NULL,
+<<<<<<< HEAD
   `idPessoa` int(11) NOT NULL,	
   PRIMARY KEY (`idUsuario`),
    CONSTRAINT `fk_usuario_pessoa1`
     FOREIGN KEY (`idPessoa`)
     REFERENCES `monitorasus`.`pessoa` (`idpessoa`)
+=======
+  PRIMARY KEY (`idUsuario`)
+>>>>>>> e4c1e68624a3cd0d017d931a709f93aa0af722a0
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- Copiando dados para a tabela monitorasus.usuario: ~0 rows (aproximadamente)
@@ -5814,6 +5818,20 @@ CREATE TABLE IF NOT EXISTS `virusbacteria` (
 -- Copiando dados para a tabela monitorasus.virusbacteria: ~0 rows (aproximadamente)
 /*!40000 ALTER TABLE `virusbacteria` DISABLE KEYS */;
 /*!40000 ALTER TABLE `virusbacteria` ENABLE KEYS */;
+
+-- Copiando estrutura para tabela monitorasus.usuario
+CREATE TABLE IF NOT EXISTS `usuario` (
+  `idUsuario` INT(11) NOT NULL AUTO_INCREMENT,
+  `cpf` VARCHAR(45) NOT NULL,
+  `senha` VARCHAR(45) NOT NULL,
+  `email` VARCHAR(45) NULL DEFAULT NULL,
+  `tipoUsuario` TINYINT(4) NOT NULL,
+  `idPessoa` INT(11) NOT NULL,
+  PRIMARY KEY (`idUsuario`),
+  CONSTRAINT `fk_usuario_pessoa1`
+    FOREIGN KEY (`idPessoa`)
+    REFERENCES `monitorasus`.`pessoa` (`idpessoa`)
+) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
