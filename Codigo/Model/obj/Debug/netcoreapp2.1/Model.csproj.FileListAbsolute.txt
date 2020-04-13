@@ -15,3 +15,11 @@ C:\Users\igorb\Desktop\MonitoraSUS\Codigo\Model\obj\Debug\netcoreapp2.1\Model.pd
 C:\Users\igorb\Desktop\MonitoraSUS\Codigo\Model\bin\Debug\netcoreapp2.1\Model.deps.json
 C:\Users\igorb\Desktop\MonitoraSUS\Codigo\Model\bin\Debug\netcoreapp2.1\Model.dll
 C:\Users\igorb\Desktop\MonitoraSUS\Codigo\Model\bin\Debug\netcoreapp2.1\Model.pdb
+C:\Users\igorb\Documents\MonitoraSUS\Codigo\Model\bin\Debug\netcoreapp2.1\Model.deps.json
+C:\Users\igorb\Documents\MonitoraSUS\Codigo\Model\bin\Debug\netcoreapp2.1\Model.dll
+C:\Users\igorb\Documents\MonitoraSUS\Codigo\Model\bin\Debug\netcoreapp2.1\Model.pdb
+C:\Users\igorb\Documents\MonitoraSUS\Codigo\Model\obj\Debug\netcoreapp2.1\Model.csprojAssemblyReference.cache
+C:\Users\igorb\Documents\MonitoraSUS\Codigo\Model\obj\Debug\netcoreapp2.1\Model.AssemblyInfoInputs.cache
+C:\Users\igorb\Documents\MonitoraSUS\Codigo\Model\obj\Debug\netcoreapp2.1\Model.AssemblyInfo.cs
+C:\Users\igorb\Documents\MonitoraSUS\Codigo\Model\obj\Debug\netcoreapp2.1\Model.dll
+C:\Users\igorb\Documents\MonitoraSUS\Codigo\Model\obj\Debug\netcoreapp2.1\Model.pdb

@@ -27,9 +27,8 @@ namespace Service
 
         }
 
-
         public PessoaModel GetById(int id)
-        =>_context.Pessoa
+        => _context.Pessoa
                 .Where(pessoaModel => pessoaModel.Idpessoa == id)
                 .Select(pessoa => new PessoaModel
                 {
@@ -57,17 +56,43 @@ namespace Service
                     Diabetes = Convert.ToBoolean(pessoa.Diabetes),
                     DoencaRespiratoria = Convert.ToBoolean(pessoa.DoencaRespiratoria),
                     Cardiopatia = Convert.ToBoolean(pessoa.Cardiopatia)
-    }).FirstOrDefault();
+                }).FirstOrDefault();
 
-    public bool Insert(PessoaModel pessoaModel)
+        public bool Insert(PessoaModel pessoaModel)
         {
-            _context.Add(ModelToEntity(pessoaModel, new Pessoa()));
+            _context.Add(ModelToEntity(pessoaModel));
             return _context.SaveChanges() == 1 ? true : false;
         }
 
-        private Pessoa ModelToEntity(PessoaModel pessoaModel, Pessoa pessoa)
+        private Pessoa ModelToEntity(PessoaModel pessoaModel)
         {
-            return pessoa;  
+            Pessoa pessoa = new Pessoa();
+            pessoa.Idpessoa = pessoaModel.Idpessoa;
+            pessoa.Nome = pessoaModel.Nome;
+            pessoa.Cpf = pessoaModel.Cpf;
+            pessoa.Email = pessoaModel.Email;
+            pessoa.FoneFixo = pessoaModel.FoneFixo;
+            pessoa.FoneCelular = pessoaModel.FoneCelular;
+            pessoa.DataNascimento = pessoaModel.DataNascimento;
+            pessoa.Sexo = pessoaModel.Sexo;
+            pessoa.Cep = pessoaModel.Cep;
+            pessoa.Rua = pessoaModel.Rua;
+            pessoa.Estado = pessoaModel.Estado;
+            pessoa.Cidade = pessoaModel.Cidade;
+            pessoa.Complemento = pessoaModel.Complemento;
+            pessoa.Bairro = pessoaModel.Bairro;
+            pessoa.Numero = pessoaModel.Numero;
+            pessoa.Latitude = pessoaModel.Latitude;
+            pessoa.Longitude = pessoaModel.Longitude;
+            pessoa.Imunodeprimido = Convert.ToByte(pessoaModel.Imunodeprimido);
+            pessoa.Cancer = Convert.ToByte(pessoaModel.Cancer);
+            pessoa.Hipertenso = Convert.ToByte(pessoaModel.Hipertenso);
+            pessoa.Obeso = Convert.ToByte(pessoaModel.Obeso);
+            pessoa.Diabetes = Convert.ToByte(pessoaModel.Diabetes);
+            pessoa.DoencaRespiratoria = Convert.ToByte(pessoaModel.DoencaRespiratoria);
+            pessoa.Cardiopatia = Convert.ToByte(pessoaModel.Cardiopatia);
+
+            return pessoa;
         }
 
         public bool Update(PessoaModel pessoaModel)

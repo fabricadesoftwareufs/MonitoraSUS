@@ -694,11 +694,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\igorb\\Desktop\\MonitoraSUS\\Codigo\\Model\\Model.csproj",
+      "projectUniqueName": "C:\\Users\\igorb\\Documents\\MonitoraSUS\\Codigo\\Model\\Model.csproj",
       "projectName": "Model",
-      "projectPath": "C:\\Users\\igorb\\Desktop\\MonitoraSUS\\Codigo\\Model\\Model.csproj",
+      "projectPath": "C:\\Users\\igorb\\Documents\\MonitoraSUS\\Codigo\\Model\\Model.csproj",
       "packagesPath": "C:\\Users\\igorb\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\igorb\\Desktop\\MonitoraSUS\\Codigo\\Model\\obj\\",
+      "outputPath": "C:\\Users\\igorb\\Documents\\MonitoraSUS\\Codigo\\Model\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"

@@ -5,10 +5,29 @@ namespace Model
 {
     public class ExameViewModel
     {
+        public ExameViewModel() 
+        {
+            IgM = "N";
+            IgG = "N";
+            Pcr = "N";
+            IdAgenteSaude = new PessoaModel();
+            IdVirusBacteria = new VirusBacteriaModel();
+            IdPaciente = new PessoaModel();
+            DataExame = DateTime.Now; 
+            DataInicioSintomas = DateTime.Now;
+            EstadoRealizacao = 0;
+            MunicipioId = 0;
+            PesquisarCpf = 0;
+            Resultado = "";
+        }
         public int IdExame { get; set; }
-        public int IdVirusBacteria { get; set; }
+        [Display(Name = "Virus ou Bacteria")]
+        public VirusBacteriaModel IdVirusBacteria { get; set; }
+        [Display(Name = "Paciente")]
         public PessoaModel IdPaciente { get; set; }
-        public int IdAgenteSaude { get; set; }
+        [Display(Name = "Agente de Saude")]
+        public PessoaModel IdAgenteSaude { get; set; }
+        [Display(Name = "Data do Exame")]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime DataExame { get; set; }
@@ -21,6 +40,7 @@ namespace Model
         public int EstadoRealizacao { get; set; }
         public int MunicipioId { get; set; }
         public int PesquisarCpf { get; set; }
+        public string Resultado { get; set; }
 
     }
 }

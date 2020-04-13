@@ -11,6 +11,7 @@ namespace Service
     public class ExameService : IExameService
     {
         private readonly monitorasusContext _context;
+
         public ExameService(monitorasusContext context)
         {
             _context = context;

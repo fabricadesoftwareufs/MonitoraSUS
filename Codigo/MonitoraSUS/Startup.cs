@@ -39,9 +39,12 @@ namespace MonitoraSUS
                 options.UseMySQL(
                     Configuration.GetConnectionString("MySqlConnection")));
 
-            services.AddTransient<IVirusBacteriaService, VirusBacteriaService>();
-            services.AddTransient<IExameService, ExameService>();
-            services.AddTransient<IPessoaService, PessoaService>();
+            services.AddScoped<VirusBacteriaServiceService>();
+            services.AddScoped<ExameService>();
+            services.AddScoped<PessoaService>();
+            services.AddScoped<EstadoService>();
+            services.AddScoped<MunicipioService>();
+            services.AddScoped<SituacaoVirusBacteriaService>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }

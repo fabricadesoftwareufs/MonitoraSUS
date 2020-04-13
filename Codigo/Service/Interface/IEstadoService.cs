@@ -10,5 +10,6 @@ namespace Service.Interface
         bool Delete(int id);
         List<EstadoModel> GetAll();
         EstadoModel GetById(int id);
+        EstadoModel GetByName(string name);
     }
 }
