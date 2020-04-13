@@ -12,6 +12,7 @@ namespace Persistence
             Pessoatrabalhaestado = new HashSet<Pessoatrabalhaestado>();
             Pessoatrabalhamunicipio = new HashSet<Pessoatrabalhamunicipio>();
             Situacaopessoavirusbacteria = new HashSet<Situacaopessoavirusbacteria>();
+            Usuario = new HashSet<Usuario>();
         }
 
         public int Idpessoa { get; set; }
@@ -44,5 +45,6 @@ namespace Persistence
         public ICollection<Pessoatrabalhaestado> Pessoatrabalhaestado { get; set; }
         public ICollection<Pessoatrabalhamunicipio> Pessoatrabalhamunicipio { get; set; }
         public ICollection<Situacaopessoavirusbacteria> Situacaopessoavirusbacteria { get; set; }
+        public ICollection<Usuario> Usuario { get; set; }
     }
 }
