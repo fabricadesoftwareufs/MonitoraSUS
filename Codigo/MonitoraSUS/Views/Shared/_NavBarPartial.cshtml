@@ -1,0 +1,40 @@
+﻿@using System.Security.Claims;
+
+@{
+    ViewData["Title"] = "_NavBarPartial";
+
+    var claimsIdentity = User.Identity as ClaimsIdentity;
+    string nome = "";
+    string estado = "";
+    string cidade = "";
+    int idUsuario = 0;
+
+    if (claimsIdentity != null)
+    {
+        idUsuario = int.Parse(claimsIdentity.Claims.Where(s => s.Type == ClaimTypes.SerialNumber).Select(s => s.Value).FirstOrDefault());
+        nome = claimsIdentity.Claims.Where(s => s.Type == ClaimTypes.NameIdentifier).Select(s => s.Value).FirstOrDefault();
+        estado = claimsIdentity.Claims.Where(s => s.Type == ClaimTypes.StateOrProvince).Select(s => s.Value).FirstOrDefault();
+        cidade = claimsIdentity.Claims.Where(s => s.Type == ClaimTypes.Locality).Select(s => s.Value).FirstOrDefault();
+
+    }
+}
+
+
+<!-- Topnav -->
+<nav class="navbar bg-gradient-primary">
+    <div class="container-fluid">
+        <img src="~/assets/img/logo-sus.png" class="logo-header">
+        <div class="top-user">
+            <span>
+                <i class="fa fa-user" aria-hidden="true"></i>@nome
+            </span>
+            <span>
+                <i class="fas fa-map-marker-alt"></i> @estado / @cidade
+            </span>
+            <span style="margin-top: 15px;">
+                <i class="fas fa-sign-out-alt"><a href="@Url.Action("Logout", "Login")" /></i> Sair
+            </span>
+        </div>
+    </div>
+</nav>
+
