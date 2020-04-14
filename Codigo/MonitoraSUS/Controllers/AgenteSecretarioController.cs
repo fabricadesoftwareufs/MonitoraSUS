@@ -4,7 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Model;
 using Service.Interface;
+using MonitoraSUS.Utils;
 
 namespace MonitoraSUS.Controllers
 {
@@ -12,10 +14,19 @@ namespace MonitoraSUS.Controllers
     {
         private readonly IMunicipioService _municipioService;
         private readonly IEstadoService _estadoService;
-        public AgenteSecretarioController(IMunicipioService municipioService, IEstadoService estadoService)
+        private readonly IPessoaService _pessoaService;
+        private readonly IPessoaTrabalhaEstadoService _pessoaTrabalhaEstadoService;
+        private readonly IPessoaTrabalhaMunicipioService _pessoaTrabalhaMunicipioService;
+
+        public AgenteSecretarioController(IMunicipioService municipioService, IEstadoService estadoService,
+            IPessoaService pessoaService, IPessoaTrabalhaMunicipioService pessoaTrabalhaMunicipioService,
+            IPessoaTrabalhaEstadoService pessoaTrabalhaEstadoService)
         {
             _municipioService = municipioService;
             _estadoService = estadoService;
+            _pessoaService = pessoaService;
+            _pessoaTrabalhaEstadoService = pessoaTrabalhaEstadoService;
+            _pessoaTrabalhaMunicipioService = pessoaTrabalhaMunicipioService;
         }
         // GET: AgenteSecretario
         public ActionResult Index()
@@ -43,38 +54,41 @@ namespace MonitoraSUS.Controllers
         {
             try
             {
-                var cpf = collection["Cpf"];
-                var nome = collection["Nome"];
-                var dataNascimento = collection["DataNascimento"];
-                var sexo = collection["sexo"];
-                var cep = collection["Cep"];
-                var rua = collection["Rua"];
-                var numero = collection["Numero"];
-                var bairro = collection["Bairro"];
-                var cidade = collection["Cidade"];
-                var estado = collection["Estado"];
-                var complemento = collection["Complemento"];
-                var cell = collection["FoneCelular"];
-                var fixo = collection["FoneFixo"];
-                var email = collection["Email"];
+                // INSERTING A USER AND RETURNING THE ID.
+                var idPessoaInserida = PeopleInserted(collection);
 
-                // Selects 
-                var estadoSelected = collection["select-Estado"];
-                var cidadeSelected = collection["select-Cidade"];
-
-                // Doenças
-                var hipertenso = collection["Hipertenso"];
-                var diabetes = collection["Diabetes"];
-                var obeso = collection["Obeso"];
-                var cardiopata = collection["Cardiopatia"];
-                var imunoDepri = collection["Imunodeprimido"];
-                var cancer = collection["Cancer"];
-                var doencaResp = collection["DoencaRespiratoria"];
-
-                // Local atuação
+                // ===================== OTHERS ENTITIES =====================
                 var atuacao = collection["areaAtuacao"];
+                if (atuacao.Equals("Municipal"))
+                    if (_pessoaTrabalhaMunicipioService
+                            .Insert(new PessoaTrabalhaMunicipioModel
+                            {
+                                IdPessoa = idPessoaInserida,
+                                IdMunicipio = Convert.ToInt32(collection["select-Cidade"]),
+                                EhSecretario = false,
+                                EhResponsavel = false
+                            })
+                        )
+                        return Ok();
+                    else
+                        return BadRequest();
 
-                return RedirectToAction(nameof(Create));
+                if (atuacao.Equals("Estadual"))
+                    if (_pessoaTrabalhaEstadoService
+                            .Insert(new PessoaTrabalhaEstadoModel
+                            {
+                                IdPessoa = idPessoaInserida,
+                                IdEstado = Convert.ToInt32(collection["select-Estado"]),
+                                EhSecretario = false,
+                                EhResponsavel = false
+                            })
+                        )
+                        return Ok();
+                    else
+                        return BadRequest();
+
+                // Redirecting
+                return RedirectToAction("Create");
             }
             catch
             {
@@ -89,39 +103,45 @@ namespace MonitoraSUS.Controllers
         {
             try
             {
-                var cpf = collection["Cpf"];
-                var nome = collection["Nome"];
-                var dataNascimento = collection["DataNascimento"];
-                var sexo = collection["sexo"];
-                var cep = collection["Cep"];
-                var rua = collection["Rua"];
-                var numero = collection["Numero"];
-                var bairro = collection["Bairro"];
-                var cidade = collection["Cidade"];
-                var estado = collection["Estado"];
-                var complemento = collection["Complemento"];
-                var cell = collection["FoneCelular"];
-                var fixo = collection["FoneFixo"];
-                var email = collection["Email"];
-                // Selects 
-                var estadoSelected = collection["select-Estado"];
-                var cidadeSelected = collection["select-Cidade"];
-                // Doenças
-                var hipertenso = collection["Hipertenso"];
-                var diabetes = collection["Diabetes"];
-                var obeso = collection["Obeso"];
-                var cardiopata = collection["Cardiopatia"];
-                var imunoDepri = collection["Imunodeprimido"];
-                var cancer = collection["Cancer"];
-                var doencaResp = collection["DoencaRespiratoria"];
+                // INSERTING A USER AND RETURNING THE ID.
+                var idPessoaInserida = PeopleInserted(collection);
 
+                // ===================== OTHERS ENTITIES =====================
                 var atuacao = collection["areaAtuacao"];
+                if (atuacao.Equals("Municipal"))
+                    if (_pessoaTrabalhaMunicipioService
+                            .Insert(new PessoaTrabalhaMunicipioModel
+                            {
+                                IdPessoa = idPessoaInserida,
+                                IdMunicipio = Convert.ToInt32(collection["select-Cidade"]),
+                                EhSecretario = true,
+                                EhResponsavel = true
+                            })
+                        )
+                        return Ok();
+                    else
+                        return BadRequest();
 
-                return RedirectToAction("Index", "Home");
+                if (atuacao.Equals("Estadual"))
+                    if (_pessoaTrabalhaEstadoService
+                            .Insert(new PessoaTrabalhaEstadoModel
+                            {
+                                IdPessoa = idPessoaInserida,
+                                IdEstado = Convert.ToInt32(collection["select-Estado"]),
+                                EhSecretario = true,
+                                EhResponsavel = true
+                            })
+                        )
+                        return Ok();
+                    else
+                        return BadRequest();
+
+                // Redirecting
+                return RedirectToAction("Create");
             }
-            catch
+            catch (Exception e)
             {
-                return View();
+                throw new Exception(e.Message);
             }
         }
 
@@ -181,6 +201,69 @@ namespace MonitoraSUS.Controllers
             {
                 return View();
             }
+        }
+
+        // ======================== PRIVATE METHODS ========================
+        private int PeopleInserted(IFormCollection collection)
+        {
+            // Info Pessoal
+            var cpf = Methods.RemoveSpecialsCaracts(collection["Cpf"]);
+            var nome = collection["Nome"];
+            var dataNascimento = collection["DataNascimento"];
+            var sexo = collection["sexo"];
+            var cell = Methods.RemoveSpecialsCaracts(collection["FoneCelular"]);
+            var fixo = Methods.RemoveSpecialsCaracts(collection["FoneFixo"]);
+            var email = collection["Email"];
+
+            // Localização
+            var cep = Methods.RemoveSpecialsCaracts(collection["Cep"]);
+            var rua = collection["Rua"];
+            var numero = collection["Numero"];
+            var bairro = collection["Bairro"];
+            var cidade = collection["Cidade"];
+            var estado = collection["Estado"];
+            var complemento = collection["Complemento"];
+            var latitude = collection["Latitude"];
+            var longitude = collection["Longitude"];
+
+            // Doenças
+            var hipertenso = collection["Hipertenso"];
+            var diabetes = collection["Diabetes"];
+            var obeso = collection["Obeso"];
+            var cardiopata = collection["Cardiopatia"];
+            var imunoDepri = collection["Imunodeprimido"];
+            var cancer = collection["Cancer"];
+            var doencaResp = collection["DoencaRespiratoria"];
+
+            // Inserção e recebendo o objeto inserido (ID)
+            var pessoa = _pessoaService.Insert(new PessoaModel
+            {
+                Cpf = cpf,
+                Nome = nome,
+                DataNascimento = Convert.ToDateTime(dataNascimento),
+                Sexo = sexo,
+                FoneCelular = cell,
+                FoneFixo = fixo,
+                Email = email,
+                Cep = cep,
+                Rua = rua,
+                Numero = numero,
+                Bairro = bairro,
+                Cidade = cidade,
+                Estado = estado,
+                Complemento = complemento,
+                Latitude = Convert.ToDecimal(latitude),
+                Longitude = Convert.ToDecimal(longitude),
+                Hipertenso = hipertenso.Contains("true") ? true : false,
+                Cardiopatia = cardiopata.Contains("true") ? true : false,
+                Cancer = cancer.Contains("true") ? true : false,
+                Diabetes = diabetes.Contains("true") ? true : false,
+                DoencaRespiratoria = doencaResp.Contains("true") ? true : false,
+                Imunodeprimido = imunoDepri.Contains("true") ? true : false,
+                Obeso = obeso.Contains("true") ? true : false
+            });
+
+            return pessoa.Idpessoa;
         }
     }
 }

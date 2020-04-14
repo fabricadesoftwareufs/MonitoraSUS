@@ -72,6 +72,8 @@
                                         <div class="form-group">
                                             <label class="form-control-label" for="input-pesquisa">Pesquisa Endereço</label>
                                             <input type="text" id="input-pesquisa" required class="form-control" placeholder="Pesquise pelo CEP, Rua, Bairro, Número">
+                                            <input type="hidden" id="longitude" asp-for="Longitude" />
+                                            <input type="hidden" id="latitude" asp-for="Latitude" />
                                         </div>
                                     </div>
                                     <div class="col-lg-2">
@@ -193,7 +195,7 @@
                                     <div class="col-lg-6">
                                         <div class="form-group">
                                             <label class="form-control-label" for="select-atuacao-estado">Estado</label>
-                                            <select class="form-control" id="select-atuacao-estado" name="select-Estado" onchange="cidadeSelect()">
+                                            <select class="form-control" id="select-atuacao-estado" name="select-Estado" required onchange="cidadeSelect()">
                                                 <option selected>Selecione o estado</option>
                                             </select>
                                         </div>
@@ -201,7 +203,7 @@
                                     <div class="col-lg-6">
                                         <div class="form-group">
                                             <label class="form-control-label" for="select-atuacao-cidade">Município</label>
-                                            <select class="form-control" id="select-atuacao-cidade" name="select-Cidade" disabled>
+                                            <select class="form-control" id="select-atuacao-cidade" required name="select-Cidade" disabled>
                                             </select>
                                         </div>
                                     </div>
@@ -209,11 +211,11 @@
                                         <div class="form-group">
                                             <label class="form-control-label" for="nivel-atuacao">Secretário</label><br>
                                             <div class="custom-control custom-radio custom-control-inline">
-                                                <input type="radio" id="input-atuacao-estadual" name="areaAtuacao" value="Estadual" class="custom-control-input">
+                                                <input type="radio" id="input-atuacao-estadual" name="areaAtuacao" checked value="Estadual" required class="custom-control-input">
                                                 <label class="custom-control-label" for="input-atuacao-estadual">Estadual</label>
                                             </div>
                                             <div class="custom-control custom-radio custom-control-inline">
-                                                <input type="radio" id="input-atuacao-municipal" name="areaAtuacao" value="Municipal" class="custom-control-input">
+                                                <input type="radio" id="input-atuacao-municipal" name="areaAtuacao" value="Municipal" required class="custom-control-input">
                                                 <label class="custom-control-label" for="input-atuacao-municipal">Municipal</label>
                                             </div>
                                         </div>
@@ -241,7 +243,8 @@
 
     <!-- GOOGLE SETING SCRIPTS -->
     <script>
-        var placeSearch, autocomplete;
+        var placeSearch, autocomplete, inputHtml, geocoder;
+        inputHtml = document.getElementById('input-pesquisa')
 
         var componentForm = {
             route: 'long_name',
@@ -252,8 +255,8 @@
         };
 
         function initAutocomplete() {
-            autocomplete = new google.maps.places.Autocomplete(
-                document.getElementById('input-pesquisa'), { types: ['geocode'] });
+            autocomplete = new google.maps.places.Autocomplete(inputHtml, { types: ['geocode'] });
+            geocoder = new google.maps.Geocoder();
 
             autocomplete.setFields(['address_component']);
             autocomplete.addListener('place_changed', fillInAddress);
@@ -261,6 +264,19 @@
 
         function fillInAddress() {
             var place = autocomplete.getPlace();
+
+            geocoder.geocode({ 'address': inputHtml.value }, function (results, status) {
+                if (status === 'OK') {
+                    let latitude = document.getElementById('latitude');
+                    let longitude = document.getElementById('longitude');
+
+                    // SETTING VALUES
+                    latitude.value = results[0].geometry.location.lat();
+                    longitude.value = results[0].geometry.location.lng();
+                } else {
+                    alert('ERRO AO INICIALIZAR O GEOCODE: ' + status);
+                }
+            });
 
             for (var component in componentForm) {
                 document.getElementById(component).value = '';

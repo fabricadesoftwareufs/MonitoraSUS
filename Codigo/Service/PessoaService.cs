@@ -36,8 +36,13 @@ namespace Service
             {
                 try
                 {
-                    _context.Pessoa.Add(ModelToEntity(pessoaModel, new Pessoa()));
-                    return _context.SaveChanges() == 1 ? pessoaModel : null;
+                    var pessoaInserida = new Pessoa();
+                    _context.Pessoa.Add(ModelToEntity(pessoaModel, pessoaInserida));
+                    _context.SaveChanges();
+
+                    // Returning the last inserted ID.
+                    pessoaModel.Idpessoa = pessoaInserida.Idpessoa;
+                    return pessoaModel;
                 }
                 catch (Exception e)
                 {
@@ -59,8 +64,7 @@ namespace Service
             entity.Idpessoa = model.Idpessoa;
             entity.Nome = model.Nome;
             entity.Cpf = model.Cpf;
-
-            entity.Sexo = model.Sexo;
+            entity.Sexo = model.Sexo == "Masculino" ? "M" : "F";
             entity.Cep = model.Cep;
             entity.Rua = model.Rua;
             entity.Bairro = model.Bairro;
