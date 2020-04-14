@@ -5712,8 +5712,8 @@ CREATE TABLE IF NOT EXISTS `pessoa` (
   `estado` varchar(50) NOT NULL,
   `numero` varchar(20) DEFAULT NULL,
   `complemento` varchar(100) DEFAULT NULL,
-  `latitude` decimal(10,0) NOT NULL,
-  `longitude` decimal(10,0) NOT NULL,
+  `latitude` decimal(10,8) NOT NULL,
+  `longitude` decimal(10,8) NOT NULL,
   `foneCelular` varchar(15) NOT NULL,
   `foneFixo` varchar(15) DEFAULT NULL,
   `email` varchar(60) DEFAULT NULL,
@@ -5788,17 +5788,16 @@ CREATE TABLE IF NOT EXISTS `situacaopessoavirusbacteria` (
 CREATE TABLE IF NOT EXISTS `usuario` (
   `idUsuario` int(11) NOT NULL AUTO_INCREMENT,
   `cpf` varchar(45) NOT NULL,
-  `senha` varchar(45) NOT NULL,
+  `senha` varchar(100) NOT NULL,
   `email` varchar(45) DEFAULT NULL,
   `tipoUsuario` tinyint(4) NOT NULL,
+  `idPessoa` int(11) NOT NULL,	
+  PRIMARY KEY (`idUsuario`),
+   CONSTRAINT `fk_usuario_pessoa1`
+    FOREIGN KEY (`idPessoa`)
+    REFERENCES `monitorasus`.`pessoa` (`idpessoa`)
   PRIMARY KEY (`idUsuario`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
-
--- Copiando dados para a tabela monitorasus.usuario: ~0 rows (aproximadamente)
-/*!40000 ALTER TABLE `usuario` DISABLE KEYS */;
-INSERT INTO `usuario` (`idUsuario`, `cpf`, `senha`, `email`, `tipoUsuario`) VALUES
-	(1, '07334824571', '1234', 'ab@gmail.com', 0);
-/*!40000 ALTER TABLE `usuario` ENABLE KEYS */;
 
 -- Copiando estrutura para tabela monitorasus.virusbacteria
 CREATE TABLE IF NOT EXISTS `virusbacteria` (

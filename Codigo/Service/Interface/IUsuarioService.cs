@@ -10,5 +10,6 @@ namespace Service.Interface
         bool Delete(int id);
         List<UsuarioModel> GetAll();
         UsuarioModel GetById(int id);
+        UsuarioModel GetByLogin(string cpf, string senha);
     }
 }

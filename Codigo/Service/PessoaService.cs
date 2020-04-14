@@ -1,4 +1,4 @@
-﻿using Model;
+using Model;
 using Persistence;
 using Service.Interface;
 using System;
@@ -56,33 +56,33 @@ namespace Service
             => _context
                 .Pessoa
                 .Where(p => p.Idpessoa == id)
-                .Select(p => new PessoaModel
+                .Select(model => new PessoaModel
                 {
-                    Idpessoa = p.Idpessoa,
-                    Cpf = p.Cpf,
-                    Nome = p.Nome,
-                    Bairro = p.Bairro,
-                    Cep = p.Cep,
-                    Cancer = Convert.ToBoolean(p.Cancer),
-                    Cardiopatia = Convert.ToBoolean(p.Cardiopatia),
-                    Cidade = p.Cidade,
-                    Complemento = p.Complemento,
-                    DataNascimento = p.DataNascimento,
-                    Diabetes = Convert.ToBoolean(p.Diabetes),
-                    DoencaRespiratoria = Convert.ToBoolean(p.DoencaRespiratoria),
-                    Email = p.Email,
-                    Estado = p.Estado,
-                    FoneCelular = p.FoneCelular,
-                    FoneFixo = p.FoneFixo,
-                    Hipertenso = Convert.ToBoolean(p.Hipertenso),
-                    Imunodeprimido = Convert.ToBoolean(p.Imunodeprimido),
-                    Latitude = p.Latitude,
-                    Longitude = p.Longitude,
-                    Numero = p.Numero,
-                    Obeso = Convert.ToBoolean(p.Obeso),
-                    Rua = p.Rua,
-                    Sexo = p.Sexo
-                }).FirstOrDefault();
+                  Idpessoa = model.Idpessoa,
+                  Nome = model.Nome,
+                  Sexo = model.Sexo,
+                  Cpf = model.Cpf,
+                  DataNascimento = model.DataNascimento,
+                  Email = model.Email,
+                  FoneCelular = model.FoneCelular,
+                  FoneFixo = model.FoneFixo,
+                  Latitude = model.Latitude,
+                  Longitude = model.Longitude,
+                  Estado = model.Estado,
+                  Bairro = model.Bairro,
+                  Cep = model.Cep,
+                  Rua = model.Rua,
+                  Complemento = model.Complemento,
+                  Cidade = model.Cidade,
+                  Numero = model.Numero,
+                  Cancer = Convert.ToBoolean(model.Cancer),
+                  Cardiopatia = Convert.ToBoolean(model.Cardiopatia),
+                  Diabetes = Convert.ToBoolean(model.Diabetes),
+                  DoencaRespiratoria = Convert.ToBoolean(model.DoencaRespiratoria),
+                  Hipertenso = Convert.ToBoolean(model.Hipertenso),
+                  Imunodeprimido = Convert.ToBoolean(model.Imunodeprimido),
+                  Obeso = Convert.ToBoolean(model.Obeso)
+                 }).FirstOrDefault();
 
         public PessoaModel Insert(PessoaModel pessoaModel)
         {
@@ -111,7 +111,7 @@ namespace Service
         {
             throw new NotImplementedException();
         }
-
+        
         // 
         private Pessoa ModelToEntity(PessoaModel model, Pessoa entity)
         {
@@ -141,6 +141,6 @@ namespace Service
             entity.DoencaRespiratoria = Convert.ToByte(model.DoencaRespiratoria);
 
             return entity;
-        }
-    }
+         }
+  }
 }

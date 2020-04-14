@@ -10,5 +10,8 @@ namespace Persistence
         public string Senha { get; set; }
         public string Email { get; set; }
         public byte TipoUsuario { get; set; }
+        public int IdPessoa { get; set; }
+
+        public Pessoa IdPessoaNavigation { get; set; }
     }
 }
