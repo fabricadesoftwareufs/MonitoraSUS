@@ -3,6 +3,7 @@ using Persistence;
 using Service.Interface;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Service
@@ -20,9 +21,29 @@ namespace Service
         }
 
         public List<PessoaTrabalhaEstadoModel> GetAll()
-        {
-            throw new NotImplementedException();
-        }
+            => _context
+                .Pessoatrabalhaestado
+                .Select(p => new PessoaTrabalhaEstadoModel
+                {
+                    IdPessoa = p.IdPessoa,
+                    IdEstado = p.IdEstado,
+                    EhResponsavel = Convert.ToBoolean(p.EhResponsavel),
+                    EhSecretario = Convert.ToBoolean(p.EhSecretario),
+                    SituacaoCadastro = p.SituacaoCadastro
+                }).ToList();
+
+        public List<PessoaTrabalhaEstadoModel> GetAllSecretariesPendents()
+            => _context
+                .Pessoatrabalhaestado
+                .Where(p => p.EhSecretario.Equals(1) && p.SituacaoCadastro.Contains('S'))
+                .Select(p => new PessoaTrabalhaEstadoModel
+                {
+                    IdPessoa = p.IdPessoa,
+                    IdEstado = p.IdEstado,
+                    EhResponsavel = Convert.ToBoolean(p.EhResponsavel),
+                    EhSecretario = Convert.ToBoolean(p.EhSecretario),
+                    SituacaoCadastro = p.SituacaoCadastro
+                }).ToList();
 
         public PessoaTrabalhaEstadoModel GetById(int id)
         {

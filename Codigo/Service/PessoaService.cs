@@ -3,6 +3,7 @@ using Persistence;
 using Service.Interface;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Service
@@ -21,14 +22,67 @@ namespace Service
         }
 
         public List<PessoaModel> GetAll()
-        {
-            throw new NotImplementedException();
-        }
+            => _context
+                .Pessoa
+                .Select(p => new PessoaModel
+                {
+                    Idpessoa = p.Idpessoa,
+                    Cpf = p.Cpf,
+                    Nome = p.Nome,
+                    Bairro = p.Bairro,
+                    Cep = p.Cep,
+                    Cancer = Convert.ToBoolean(p.Cancer),
+                    Cardiopatia = Convert.ToBoolean(p.Cardiopatia),
+                    Cidade = p.Cidade,
+                    Complemento = p.Complemento,
+                    DataNascimento = p.DataNascimento,
+                    Diabetes = Convert.ToBoolean(p.Diabetes),
+                    DoencaRespiratoria = Convert.ToBoolean(p.DoencaRespiratoria),
+                    Email = p.Email,
+                    Estado = p.Estado,
+                    FoneCelular = p.FoneCelular,
+                    FoneFixo = p.FoneFixo,
+                    Hipertenso = Convert.ToBoolean(p.Hipertenso),
+                    Imunodeprimido = Convert.ToBoolean(p.Imunodeprimido),
+                    Latitude = p.Latitude,
+                    Longitude = p.Longitude,
+                    Numero = p.Numero,
+                    Obeso = Convert.ToBoolean(p.Obeso),
+                    Rua = p.Rua,
+                    Sexo = p.Sexo
+                }).ToList();
 
         public PessoaModel GetById(int id)
-        {
-            throw new NotImplementedException();
-        }
+            => _context
+                .Pessoa
+                .Where(p => p.Idpessoa == id)
+                .Select(p => new PessoaModel
+                {
+                    Idpessoa = p.Idpessoa,
+                    Cpf = p.Cpf,
+                    Nome = p.Nome,
+                    Bairro = p.Bairro,
+                    Cep = p.Cep,
+                    Cancer = Convert.ToBoolean(p.Cancer),
+                    Cardiopatia = Convert.ToBoolean(p.Cardiopatia),
+                    Cidade = p.Cidade,
+                    Complemento = p.Complemento,
+                    DataNascimento = p.DataNascimento,
+                    Diabetes = Convert.ToBoolean(p.Diabetes),
+                    DoencaRespiratoria = Convert.ToBoolean(p.DoencaRespiratoria),
+                    Email = p.Email,
+                    Estado = p.Estado,
+                    FoneCelular = p.FoneCelular,
+                    FoneFixo = p.FoneFixo,
+                    Hipertenso = Convert.ToBoolean(p.Hipertenso),
+                    Imunodeprimido = Convert.ToBoolean(p.Imunodeprimido),
+                    Latitude = p.Latitude,
+                    Longitude = p.Longitude,
+                    Numero = p.Numero,
+                    Obeso = Convert.ToBoolean(p.Obeso),
+                    Rua = p.Rua,
+                    Sexo = p.Sexo
+                }).FirstOrDefault();
 
         public PessoaModel Insert(PessoaModel pessoaModel)
         {

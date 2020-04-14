@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Model;
 using Service.Interface;
 using MonitoraSUS.Utils;
+using Model.ViewModel;
 
 namespace MonitoraSUS.Controllers
 {
@@ -31,7 +32,16 @@ namespace MonitoraSUS.Controllers
         // GET: AgenteSecretario
         public ActionResult Index()
         {
-            return View();
+            var pessoas = _pessoaService.GetAll();
+            var secMuniEst = new List<SecretarioMunicipioEstadoViewModel>();
+
+            var secretariosEstadoPendentes = _pessoaTrabalhaEstadoService.GetAllSecretariesPendents();
+            var secretariosMunicipioPendente = _pessoaTrabalhaMunicipioService.GetAllSecretariesPendents();
+
+            secretariosEstadoPendentes.ForEach(item => secMuniEst.Add(new SecretarioMunicipioEstadoViewModel { Pessoa = _pessoaService.GetById(item.IdPessoa), PessoaEstado = item, Situacao = 0 }));
+            secretariosMunicipioPendente.ForEach(item => secMuniEst.Add(new SecretarioMunicipioEstadoViewModel { Pessoa = _pessoaService.GetById(item.IdPessoa), PessoaMunicipio = item, Situacao = 0 }));
+
+            return View(secMuniEst);
         }
 
         // GET: AgenteSecretario/Details/5

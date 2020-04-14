@@ -12,5 +12,6 @@ namespace Service.Interface
         bool Delete(int id);
         List<PessoaTrabalhaEstadoModel> GetAll();
         PessoaTrabalhaEstadoModel GetById(int id);
+        List<PessoaTrabalhaEstadoModel> GetAllSecretariesPendents();
     }
 }
