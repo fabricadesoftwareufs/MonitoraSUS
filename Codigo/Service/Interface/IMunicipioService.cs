@@ -9,6 +9,7 @@ namespace Service.Interface
         bool Update(MunicipioModel municipioModel);
         bool Delete(int id);
         List<MunicipioModel> GetAll();
+        List<MunicipioModel> GetByUFCode(string UFCode);
         MunicipioModel GetById(int id);
     }
 }

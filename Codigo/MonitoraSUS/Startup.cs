@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Persistence;
-using Service;
+using Service.Interface;
 
 namespace MonitoraSUS
 {
@@ -23,9 +23,6 @@ namespace MonitoraSUS
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
-            services.AddScoped<UsuarioService>();
-            services.AddScoped<PessoaService>();
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
         .AddCookie(options =>
         {
@@ -33,17 +30,27 @@ namespace MonitoraSUS
             options.AccessDeniedPath = "/Login/AcessDenied";
 
         });
-
-            services.AddDbContext<monitorasusContext>(options =>
-                options.UseMySQL(
-                    Configuration.GetConnectionString("MySqlConnection")));
-
+          
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
+
+            // Database Context.
+            services.AddDbContext<monitorasusContext>(options =>
+            {
+                options.UseMySQL(Configuration.GetConnectionString("MySqlConnection"));
+            });
+
+            // Dependencies Injections
+            services.AddScoped<IMunicipioService, MunicipioService>();
+            services.AddScoped<IEstadoService, EstadoService>();
+            services.AddScoped<IPessoaService, PessoaService>();
+            services.AddScoped<IPessoaTrabalhaMunicipioService, PessoaTrabalhaMunicipioService>();
+            services.AddScoped<IPessoaTrabalhaEstadoService, PessoaTrabalhaEstadoService>();
+            services.AddScoped<IUsuarioService, UsuarioService>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }

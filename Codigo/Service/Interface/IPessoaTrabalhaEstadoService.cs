@@ -5,12 +5,13 @@ using System.Text;
 
 namespace Service.Interface
 {
-    interface IPessoaTrabalhaEstadoService
+    public interface IPessoaTrabalhaEstadoService
     {
         bool Insert(PessoaTrabalhaEstadoModel pessoaTrabalhaEstadoModel);
         bool Update(PessoaTrabalhaEstadoModel pessoaTrabalhaEstadoModel);
         bool Delete(int id);
         List<PessoaTrabalhaEstadoModel> GetAll();
         PessoaTrabalhaEstadoModel GetById(int id);
+        List<PessoaTrabalhaEstadoModel> GetAllSecretariesPendents();
     }
 }
