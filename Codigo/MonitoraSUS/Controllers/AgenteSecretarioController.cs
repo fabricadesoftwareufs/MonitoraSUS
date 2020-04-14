@@ -43,7 +43,36 @@ namespace MonitoraSUS.Controllers
         {
             try
             {
-                // TODO: Add insert logic here
+                var cpf = collection["Cpf"];
+                var nome = collection["Nome"];
+                var dataNascimento = collection["DataNascimento"];
+                var sexo = collection["sexo"];
+                var cep = collection["Cep"];
+                var rua = collection["Rua"];
+                var numero = collection["Numero"];
+                var bairro = collection["Bairro"];
+                var cidade = collection["Cidade"];
+                var estado = collection["Estado"];
+                var complemento = collection["Complemento"];
+                var cell = collection["FoneCelular"];
+                var fixo = collection["FoneFixo"];
+                var email = collection["Email"];
+
+                // Selects 
+                var estadoSelected = collection["select-Estado"];
+                var cidadeSelected = collection["select-Cidade"];
+
+                // Doenças
+                var hipertenso = collection["Hipertenso"];
+                var diabetes = collection["Diabetes"];
+                var obeso = collection["Obeso"];
+                var cardiopata = collection["Cardiopatia"];
+                var imunoDepri = collection["Imunodeprimido"];
+                var cancer = collection["Cancer"];
+                var doencaResp = collection["DoencaRespiratoria"];
+
+                // Local atuação
+                var atuacao = collection["areaAtuacao"];
 
                 return RedirectToAction(nameof(Create));
             }
@@ -61,10 +90,34 @@ namespace MonitoraSUS.Controllers
             try
             {
                 var cpf = collection["Cpf"];
+                var nome = collection["Nome"];
+                var dataNascimento = collection["DataNascimento"];
+                var sexo = collection["sexo"];
+                var cep = collection["Cep"];
+                var rua = collection["Rua"];
+                var numero = collection["Numero"];
+                var bairro = collection["Bairro"];
+                var cidade = collection["Cidade"];
+                var estado = collection["Estado"];
+                var complemento = collection["Complemento"];
+                var cell = collection["FoneCelular"];
+                var fixo = collection["FoneFixo"];
+                var email = collection["Email"];
+                // Selects 
+                var estadoSelected = collection["select-Estado"];
+                var cidadeSelected = collection["select-Cidade"];
+                // Doenças
                 var hipertenso = collection["Hipertenso"];
-                Console.WriteLine(cpf);
+                var diabetes = collection["Diabetes"];
+                var obeso = collection["Obeso"];
+                var cardiopata = collection["Cardiopatia"];
+                var imunoDepri = collection["Imunodeprimido"];
+                var cancer = collection["Cancer"];
+                var doencaResp = collection["DoencaRespiratoria"];
 
-                return RedirectToAction(nameof(Create));
+                var atuacao = collection["areaAtuacao"];
+
+                return RedirectToAction("Index", "Home");
             }
             catch
             {

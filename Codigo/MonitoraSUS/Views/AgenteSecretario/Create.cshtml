@@ -53,11 +53,11 @@
                                         <div class="form-group">
                                             <label class="form-control-label" for="sexo">Sexo</label><br>
                                             <div class="custom-control custom-radio custom-control-inline">
-                                                <input type="radio" id="input-sexo-masc" required name="sexo" class="custom-control-input">
+                                                <input type="radio" id="input-sexo-masc" required name="sexo" value="Masculino" class="custom-control-input">
                                                 <label class="custom-control-label" for="input-sexo-masc">Masculino</label>
                                             </div>
                                             <div class="custom-control custom-radio custom-control-inline">
-                                                <input type="radio" id="input-sexo-fem" required name="sexo" class="custom-control-input">
+                                                <input type="radio" id="input-sexo-fem" required name="sexo" value="Feminino" class="custom-control-input">
                                                 <label class="custom-control-label" for="input-sexo-fem">Feminino</label>
                                             </div>
                                         </div>
@@ -77,37 +77,37 @@
                                     <div class="col-lg-2">
                                         <div class="form-group">
                                             <label class="form-control-label" for="input-cep">CEP</label>
-                                            <input id="postal_code" class="form-control" asp-for="Cep" required placeholder="CEP" type="text">
+                                            <input id="postal_code" class="form-control" asp-for="Cep" name="Cep" required placeholder="CEP" type="text">
                                         </div>
                                     </div>
                                     <div class="col-lg-5">
                                         <div class="form-group">
                                             <label class="form-control-label" for="input-logradouro">Logradouro</label>
-                                            <input type="text" id="route" required class="form-control" asp-for="Rua" placeholder="Rua, Av, Travessa">
+                                            <input type="text" id="route" required class="form-control" asp-for="Rua" name="Rua" placeholder="Rua, Av, Travessa">
                                         </div>
                                     </div>
                                     <div class="col-lg-1">
                                         <div class="form-group">
                                             <label class="form-control-label" for="input-numero">Número</label>
-                                            <input type="text" id="street_number" required class="form-control" asp-for="Numero" placeholder="">
+                                            <input type="text" id="street_number" class="form-control" asp-for="Numero" name="Numero" placeholder="">
                                         </div>
                                     </div>
                                     <div class="col-lg-4">
                                         <div class="form-group">
                                             <label class="form-control-label" for="input-bairro">Bairro</label>
-                                            <input type="text" id="input-bairro" required class="form-control" asp-for="Bairro" placeholder="Bairro">
+                                            <input type="text" id="input-bairro" required class="form-control" asp-for="Bairro" name="Bairro" placeholder="Bairro">
                                         </div>
                                     </div>
                                     <div class="col-lg-4">
                                         <div class="form-group">
                                             <label class="form-control-label" for="input-cidade">Cidade</label>
-                                            <input type="text" id="administrative_area_level_2" required class="form-control" asp-for="Cidade" placeholder="Cidade">
+                                            <input type="text" id="administrative_area_level_2" required class="form-control" asp-for="Cidade" name="Cidade" placeholder="Cidade">
                                         </div>
                                     </div>
                                     <div class="col-lg-4">
                                         <div class="form-group">
                                             <label class="form-control-label" for="input-estado">Estado</label>
-                                            <input type="text" id="administrative_area_level_1" class="form-control" asp-for="Estado" placeholder="Estado">
+                                            <input type="text" id="administrative_area_level_1" class="form-control" asp-for="Estado" name="Estado" placeholder="Estado">
                                         </div>
                                     </div>
                                     <div class="col-lg-4">
@@ -193,7 +193,7 @@
                                     <div class="col-lg-6">
                                         <div class="form-group">
                                             <label class="form-control-label" for="select-atuacao-estado">Estado</label>
-                                            <select class="form-control" id="select-atuacao-estado" onchange="cidadeSelect()">
+                                            <select class="form-control" id="select-atuacao-estado" name="select-Estado" onchange="cidadeSelect()">
                                                 <option selected>Selecione o estado</option>
                                             </select>
                                         </div>
@@ -201,7 +201,7 @@
                                     <div class="col-lg-6">
                                         <div class="form-group">
                                             <label class="form-control-label" for="select-atuacao-cidade">Município</label>
-                                            <select class="form-control" id="select-atuacao-cidade" disabled>
+                                            <select class="form-control" id="select-atuacao-cidade" name="select-Cidade" disabled>
                                             </select>
                                         </div>
                                     </div>
@@ -209,11 +209,11 @@
                                         <div class="form-group">
                                             <label class="form-control-label" for="nivel-atuacao">Secretário</label><br>
                                             <div class="custom-control custom-radio custom-control-inline">
-                                                <input type="radio" id="input-atuacao-estadual" checked name="atuacao" class="custom-control-input">
+                                                <input type="radio" id="input-atuacao-estadual" name="areaAtuacao" value="Estadual" class="custom-control-input">
                                                 <label class="custom-control-label" for="input-atuacao-estadual">Estadual</label>
                                             </div>
                                             <div class="custom-control custom-radio custom-control-inline">
-                                                <input type="radio" id="input-atuacao-municipal" name="atuacao" class="custom-control-input">
+                                                <input type="radio" id="input-atuacao-municipal" name="areaAtuacao" value="Municipal" class="custom-control-input">
                                                 <label class="custom-control-label" for="input-atuacao-municipal">Municipal</label>
                                             </div>
                                         </div>
@@ -274,7 +274,7 @@
 
                     // DISABLE ONLY INPUTS THAT RECEIVED A VALID VALUE
                     if (val != '')
-                        document.getElementById(addressType).disabled = true;
+                        document.getElementById(addressType).setAttribute('readonly', 'true');
                 }
             }
         }
@@ -321,7 +321,7 @@
                 for (let i = 0; i < data.length; i++) {
                     let option = document.createElement("option");
                     option.text = data[i].nome;
-                    option.value = data[i].uf;
+                    option.value = data[i].id;
 
                     selectCities.add(option);
                 }

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Service.Interface
 {
-    interface IPessoaTrabalhaEstadoService
+    public interface IPessoaTrabalhaEstadoService
     {
         bool Insert(PessoaTrabalhaEstadoModel pessoaTrabalhaEstadoModel);
         bool Update(PessoaTrabalhaEstadoModel pessoaTrabalhaEstadoModel);

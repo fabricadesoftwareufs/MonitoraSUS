@@ -44,6 +44,9 @@ namespace MonitoraSUS
             // Dependencies Injections
             services.AddScoped<IMunicipioService, MunicipioService>();
             services.AddScoped<IEstadoService, EstadoService>();
+            services.AddScoped<IPessoaService, PessoaService>();
+            services.AddScoped<IPessoaTrabalhaMunicipioService, PessoaTrabalhaMunicipioService>();
+            services.AddScoped<IPessoaTrabalhaEstadoService, PessoaTrabalhaEstadoService>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
