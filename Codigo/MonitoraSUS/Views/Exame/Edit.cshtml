@@ -3,56 +3,29 @@
 @{
     ViewData["Title"] = "Editar";
 
-    var cpf = "";
-    var nome = "";
-    string dataNascimento = "";
-    var sexo = "M";
-    var rua = "";
-    var cep = "";
-    var bairro = "";
-    var cidade = "";
-    var complemento = "";
-    string numero = "";
-    string estado = "";
-    string email = "";
-    string foneCelular = "";
-    string foneFixo = "";
-    bool hipertenso = false;
-    bool cardiopata = false;
-    bool cancer = false;
-    bool diabetico = false;
-    bool doenRespiatoria = false;
-    bool obeso = false;
-    bool imunodeprimido = false;
-    string dataExame = DateTime.Now.ToString("yyyy-MM-dd"); ;
-    string DataInicioSintomas = DateTime.Now.ToString("yyyy-MM-dd"); ;
-
-    if (Model != null)
-    {
-        cpf = Model.IdPaciente.Cpf;
-        nome = Model.IdPaciente.Nome;
-        dataNascimento = Model.IdPaciente.DataNascimento.ToString("yyyy-MM-dd");
-        sexo = Model.IdPaciente.Sexo;
-        rua = Model.IdPaciente.Rua;
-        cep = Model.IdPaciente.Cep;
-        bairro = Model.IdPaciente.Bairro;
-        cidade = Model.IdPaciente.Cidade;
-        complemento = Model.IdPaciente.Complemento;
-        numero = Model.IdPaciente.Numero;
-        estado = Model.IdPaciente.Estado;
-        email = Model.IdPaciente.Email;
-        foneCelular = Model.IdPaciente.FoneCelular;
-        foneFixo = Model.IdPaciente.FoneFixo;
-        hipertenso = Model.IdPaciente.Hipertenso;
-        obeso = Model.IdPaciente.Obeso;
-        cancer = Model.IdPaciente.Cancer;
-        imunodeprimido = Model.IdPaciente.Imunodeprimido;
-        diabetico = Model.IdPaciente.Diabetes;
-        doenRespiatoria = Model.IdPaciente.DoencaRespiratoria;
-        cardiopata = Model.IdPaciente.Cardiopatia;
-        dataExame = Model.DataExame.ToString("yyyy-MM-dd");
-        DataInicioSintomas = Model.DataInicioSintomas.ToString("yyyy-MM-dd");
-    }
+    var cpf = Model.IdPaciente.Cpf;
+    var nome = Model.IdPaciente.Nome;
+    var sexo = Model.IdPaciente.Sexo;
+    string dataNascimento = Model.IdPaciente.DataNascimento == null ? Model.IdPaciente.DataNascimento.ToString("yyyy-MM-dd") : DateTime.Now.ToString("yyyy-MM-dd");
+    var rua = Model.IdPaciente.Rua;
+    var cep = Model.IdPaciente.Cep;
+    var bairro = Model.IdPaciente.Bairro;
+    var cidade = Model.IdPaciente.Cidade;
+    var complemento = Model.IdPaciente.Complemento;
+    string numero = Model.IdPaciente.Numero;
+    string estado = Model.IdPaciente.Estado;
+    string email = Model.IdPaciente.Email;
+    string foneCelular = Model.IdPaciente.FoneCelular;
+    string foneFixo = Model.IdPaciente.FoneFixo;
+    bool hipertenso = Model.IdPaciente.Hipertenso;
+    bool cardiopata = Model.IdPaciente.Cardiopatia;
+    bool cancer = Model.IdPaciente.Cancer;
+    bool diabetico = Model.IdPaciente.Diabetes;
+    bool doenRespiatoria = Model.IdPaciente.DoencaRespiratoria;
+    bool obeso = Model.IdPaciente.Obeso;
+    bool imunodeprimido = Model.IdPaciente.Imunodeprimido;
+    string dataExame = Model.DataExame == null ? Model.DataExame.ToString("yyyy-MM-dd") : DateTime.Now.ToString("yyyy-MM-dd");
+    string DataInicioSintomas = Model.DataInicioSintomas == null ? Model.DataInicioSintomas.ToString("yyyy-MM-dd") : DateTime.Now.ToString("yyyy-MM-dd");
 }
 
 <!-- Page Content -->

@@ -54,7 +54,7 @@
                                 <div class="col-md-2">
                                     <div class="form-group">
                                         <label class="form-control-label" for="input-cpf">CPF</label>
-                                        <input asp-for="IdPaciente.Cpf" id="input-cpf" onchange="automaticInput(this.value)" placeholder="" value="@cpf" class="form-control" />
+                                        <input asp-for="IdPaciente.Cpf" id="input-cpf" placeholder="" value="@cpf" class="form-control" />
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -389,6 +389,28 @@
 
 <script>
 
+    /*$("#input-cpf").keyup(function () {
+        if (document.getElementById('input-cpf').value.length == 14) {
+            $('#modal-espera').modal('show');
+
+            document.getElementById('PesquisarCpf').value = 1;
+            document.forms["form-exame"].submit();
+
+        }
+    });*/
+    var input = document.getElementById('input-cpf');
+
+    input.addEventListener("keyup", function () {
+
+        if (document.getElementById('input-cpf').value.length == 14) {
+            $('#modal-espera').modal('show');
+
+            document.getElementById('PesquisarCpf').value = 1;
+            document.forms["form-exame"].submit();
+
+        }
+    });
+
     window.onload = function () {
         $('#modal-mensagem-retorno').modal('show');
     };
@@ -404,8 +426,8 @@
         if (!(cpf === "" || nome === "")) {
 
             var mensagem = "Cpf: " + cpf + "\n" +
-                "Paciente: " + nome + "\n" + 
-                "Resultado: "+ resultadoExame();
+                "Paciente: " + nome + "\n" +
+                "Resultado: " + resultadoExame();
 
             $('#acoes-model-form').show();
 
@@ -427,32 +449,31 @@
 
         if (pcr === "S" || igm === "S") {
             resultado = "Positivo";
-        }
-        else if (igg === "S") {
+        } else if (igg === "S") {
             resultado = "Curado";
-        }
-        else if (pcr === "N") {
+        } else if (pcr === "N") {
             resultado = "Negativo";
-        }
-        else if (pcr === "I") {
+        } else if (pcr === "I") {
             resultado = "Indetermiando";
         }
 
         return resultado;
 
     }
+   /*  $("#input-cpf").onkeyup(function(){// evento jquery quando o cara digita
 
-    function automaticInput(cpf) {
-        if (cpf.length == 14) {
-            $('#modal-espera').modal('show');
+            alert("digitou algo");
+       });
+       */
+    /* function automaticInput(cpf) {
+         if (cpf.length == 14) {
+             $('#modal-espera').modal('show');
 
-            alert("input");
+             document.getElementById('PesquisarCpf').value = 1;
+             document.forms["form-exame"].submit();
 
-            document.getElementById('PesquisarCpf').value = 1;
-            document.forms["form-exame"].submit();
-
-        }
-    }
+         }
+     }*/
 
 </script>
 
