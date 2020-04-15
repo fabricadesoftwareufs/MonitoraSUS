@@ -27,6 +27,7 @@
     string DataInicioSintomas = Model.DataInicioSintomas == null ? Model.DataInicioSintomas.ToString("yyyy-MM-dd") : DateTime.Now.ToString("yyyy-MM-dd");
 }
 
+
 <!-- Page Content -->
 <div class="container-fluid mt--6">
     <div class="row">
@@ -39,22 +40,27 @@
                             <h5 class="h3 mb-0">Notificar Resultado</h5>
                         </div>
                         <div class="col text-right">
-                            <a href="#" class="btn btn-sm btn-default">
+                            <a asp-action="Index" class="btn btn-sm btn-default">
                                 <i class="fas fa-arrow-left"></i> Voltar
                             </a>
                         </div>
                     </div>
                 </div>
+
                 <div class="card-body">
-                    <form asp-action="Create" name="form-exame">
+                    <form asp-action="Create" name="form-exame" id="form-exame">
                         <h6 class="heading-small text-muted mb-4">Dados Pessoais</h6>
-                        <h4 class="heading-small text-muted pl-lg-4">Digite um CPF e tecle enter para carregar as informações do paciente ou cadastre-o agora mesmo</h4>
+                        <h4 class="heading-small text-muted pl-lg-4">Digite um CPF para carregar as informações do paciente ou cadastre-o agora mesmo</h4>
                         <div class="pl-lg-4">
                             <div class="row">
                                 <div class="col-md-2">
                                     <div class="form-group">
                                         <label class="form-control-label" for="input-cpf">CPF</label>
                                         <input asp-for="IdPaciente.Cpf" id="input-cpf" placeholder="" value="@cpf" class="form-control" />
+                                        @if (TempData["resultadoPesquisa"] != null)
+                                        {
+                                            <h4 class="heading-small text-danger">@TempData["resultadoPesquisa"]</h4>
+                                        }
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -66,7 +72,7 @@
                                 <div class="col-md-2">
                                     <div class="form-group">
                                         <label for="input-data-nascimento" class="form-control-label">Data de Nascimento</label>
-                                        <input asp-for="IdPaciente.DataNascimento" type="date" id="input-data-nascimento" class="form-control" value="@dataNascimento" />
+                                        <input asp-for="IdPaciente.DataNascimento" type="date" id="input-data-nascimento" class="form-control" value="@dataNascimento" required />
                                     </div>
                                 </div>
                                 <div class="col-md-2">
@@ -89,22 +95,28 @@
                         <h6 class="heading-small text-muted mb-4">Informações de Contato</h6>
                         <div class="pl-lg-4">
                             <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="input-pesquisa">Pesquisa Endereço</label>
+                                        <input type="text" id="input-pesquisa" required class="form-control" placeholder="Pesquise pelo CEP, Rua, Bairro, Número">
+                                    </div>
+                                </div>
                                 <div class="col-lg-2">
                                     <div class="form-group">
-                                        <label class="form-control-label" for="input-cep">CEP</label>
-                                        <input asp-for="IdPaciente.Cep" id="input-cep" class="form-control" required placeholder="CEP" value="@cep">
+                                        <label class="form-control-label" for="postal_code">CEP</label>
+                                        <input asp-for="IdPaciente.Cep" id="postal_code" class="form-control" required placeholder="CEP" value="@cep">
                                     </div>
                                 </div>
                                 <div class="col-lg-5">
                                     <div class="form-group">
-                                        <label class="form-control-label" for="input-logradouro">Logradouro</label>
-                                        <input asp-for="IdPaciente.Rua" id="input-logradouro" required class="form-control" placeholder="Rua, Av, Travessa" value="@rua">
+                                        <label class="form-control-label" for="route">Logradouro</label>
+                                        <input asp-for="IdPaciente.Rua" id="route" required class="form-control" placeholder="Rua, Av, Travessa" value="@rua">
                                     </div>
                                 </div>
                                 <div class="col-lg-1">
                                     <div class="form-group">
-                                        <label class="form-control-label" for="input-numero">Número</label>
-                                        <input asp-for="IdPaciente.Numero" id="input-numero" required class="form-control" placeholder="" value="@numero">
+                                        <label class="form-control-label" for="street_number">Número</label>
+                                        <input asp-for="IdPaciente.Numero" id="street_number" required class="form-control" placeholder="" value="@numero">
                                     </div>
                                 </div>
                                 <div class="col-lg-4">
@@ -115,14 +127,14 @@
                                 </div>
                                 <div class="col-lg-4">
                                     <div class="form-group">
-                                        <label class="form-control-label" for="input-cidade">Cidade</label>
-                                        <input asp-for="IdPaciente.Cidade" id="input-cidade" required class="form-control" placeholder="Cidade" value="@cidade">
+                                        <label class="form-control-label" for="administrative_area_level_2">Cidade</label>
+                                        <input asp-for="IdPaciente.Cidade" id="administrative_area_level_2" required class="form-control" placeholder="Cidade" value="@cidade">
                                     </div>
                                 </div>
                                 <div class="col-lg-4">
                                     <div class="form-group">
-                                        <label class="form-control-label" for="input-estado">Estado</label>
-                                        <input asp-for="IdPaciente.Estado" id="input-estado" class="form-control" placeholder="Estado" value="@estado">
+                                        <label class="form-control-label" for="administrative_area_level_1">Estado</label>
+                                        <input asp-for="IdPaciente.Estado" id="administrative_area_level_1" class="form-control" placeholder="Estado" value="@estado">
                                     </div>
                                 </div>
                                 <div class="col-lg-4">
@@ -134,13 +146,13 @@
                                 <div class="col-lg-4" hidden>
                                     <div class="form-group">
                                         <label class="form-control-label" for="input-latitude">Latitude</label>
-                                        <input asp-for="IdPaciente.Latitude" id="input-latitude" class="form-control" placeholder="" value="446456">
+                                        <input asp-for="IdPaciente.Latitude" id="input-latitude" class="form-control" placeholder="" value="00">
                                     </div>
                                 </div>
                                 <div class="col-lg-4" hidden>
                                     <div class="form-group">
                                         <label class="form-control-label" for="input-longitude">Longitude</label>
-                                        <input asp-for="IdPaciente.Longitude" id="input-longitude" class="form-control" placeholder="" value="515155">
+                                        <input asp-for="IdPaciente.Longitude" id="input-longitude" class="form-control" placeholder="" value="00">
                                     </div>
                                 </div>
                                 <div class="col-lg-4">
@@ -168,47 +180,75 @@
                         <div class="pl-lg-4">
                             <div class="row">
                                 <div class="col-lg-3">
-                                    <div class="custom-control custom-checkbox form-group">
-                                        <input asp-for="IdPaciente.Cardiopatia" type="checkbox" checked="@cardiopata" class="custom-control-input" id="customCheck1" value="">
-                                        <label class="custom-control-label" for="customCheck1">Cardiopata</label>
+                                    <div class="form-group">
+                                        <div class="custom-control custom-checkbox checkbox">
+                                            <label>
+                                                <input asp-for="IdPaciente.Cardiopatia" checked="@cardiopata" class="custom-control-input" id="customCheck1" />
+                                                <label class="custom-control-label" for="customCheck1">Cardiopatia</label>
+                                            </label>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-lg-3">
-                                    <div class="custom-control custom-checkbox form-group">
-                                        <input asp-for="IdPaciente.Diabetes" type="checkbox" checked="@diabetico" class="custom-control-input" id="customCheck2" value="">
-                                        <label class="custom-control-label" for="customCheck2">Diabetático</label>
+                                    <div class="form-group">
+                                        <div class="custom-control custom-checkbox checkbox">
+                                            <label>
+                                                <input asp-for="IdPaciente.Diabetes" checked="@diabetico" class="custom-control-input" id="customCheck2" />
+                                                <label class="custom-control-label" for="customCheck2">Diabetes</label>
+                                            </label>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-lg-3">
-                                    <div class="custom-control custom-checkbox form-group">
-                                        <input asp-for="IdPaciente.Obeso" type="checkbox" checked="@obeso" class="custom-control-input" id="customCheck3" value="">
-                                        <label class="custom-control-label" for="customCheck3">Obeso</label>
+                                    <div class="form-group">
+                                        <div class="custom-control custom-checkbox checkbox">
+                                            <label>
+                                                <input asp-for="IdPaciente.Obeso" checked="@obeso" class="custom-control-input" id="customCheck3" />
+                                                <label class="custom-control-label" for="customCheck3">Obesidade</label>
+                                            </label>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-lg-3">
-                                    <div class="custom-control custom-checkbox form-group">
-                                        <input asp-for="IdPaciente.Hipertenso" type="checkbox" checked="@hipertenso" class="custom-control-input" id="customCheck4" value="">
-                                        <label class="custom-control-label" for="customCheck4">Hipertenso</label>
+                                    <div class="form-group">
+                                        <div class="custom-control custom-checkbox checkbox">
+                                            <label>
+                                                <input asp-for="IdPaciente.Hipertenso" checked="@hipertenso" class="custom-control-input" id="customCheck4" />
+                                                <label class="custom-control-label" for="customCheck4">Hipertenso</label>
+                                            </label>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-lg-3">
-                                    <div class="custom-control custom-checkbox form-group">
-                                        <input asp-for="IdPaciente.Imunodeprimido" type="checkbox" checked="@imunodeprimido" class="custom-control-input" id="customCheck5" value="">
-                                        <label class="custom-control-label" for="customCheck5">Imunodeprimido</label>
+                                    <div class="form-group">
+                                        <div class="custom-control custom-checkbox checkbox">
+                                            <label>
+                                                <input asp-for="IdPaciente.Imunodeprimido" checked="@imunodeprimido" class="custom-control-input" id="customCheck5" />
+                                                <label class="custom-control-label" for="customCheck5">Imunodeprimido</label>
+                                            </label>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-lg-3">
-                                    <div class="custom-control custom-checkbox form-group">
-                                        <input asp-for="IdPaciente.Cancer" type="checkbox" checked="@cancer" class="custom-control-input" id="customCheck6" value="">
-                                        <label class="custom-control-label" for="customCheck6">Câncer</label>
+                                    <div class="form-group">
+                                        <div class="custom-control custom-checkbox checkbox">
+                                            <label>
+                                                <input asp-for="IdPaciente.Cancer" checked="@cancer" class="custom-control-input" id="customCheck6" />
+                                                <label class="custom-control-label" for="customCheck6">Câncer</label>
+                                            </label>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-lg-3">
-                                    <div class="custom-control custom-checkbox form-group">
-                                        <input asp-for="IdPaciente.DoencaRespiratoria" type="checkbox" checked="@doenRespiatoria" class="custom-control-input" id="customCheck7" value="@doenRespiatoria">
-                                        <label class="custom-control-label" for="customCheck7">Doença Respiratória</label>
+                                    <div class="form-group">
+                                        <div class="custom-control custom-checkbox checkbox">
+                                            <label>
+                                                <input asp-for="IdPaciente.DoencaRespiratoria" checked="@doenRespiatoria" class="custom-control-input" id="customCheck7" />
+                                                <label class="custom-control-label" for="customCheck7">Doença Respiratória</label>
+                                            </label>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -304,7 +344,11 @@
 
                                         <div class="col text-center  form-group" id="acoes-model-form">
                                             <button type="button" data-dismiss="modal" class="btn btn-danger">Não</button>
-                                            <button type="submit" value="Sim" class="btn btn-success">Sim</button>
+                                            <button onclick="submitForm()" data-dismiss="modal" id="btn-submit" value="Sim" class="btn btn-success">Sim</button>
+                                        </div>
+
+                                        <div class="col text-center" id="ok-model-form">
+                                            <button type="button" data-dismiss="modal" class="btn btn-success">Ok</button>
                                         </div>
 
                                     </div>
@@ -387,59 +431,189 @@
 }
 
 
+<!-- GOOGLE SETING SCRIPTS -->
+<script>
+    var placeSearch, autocomplete, inputHtml, geocoder;
+    inputHtml = document.getElementById('input-pesquisa');
+
+    var componentForm = {
+        route: 'long_name',
+        street_number: 'short_name',
+        administrative_area_level_1: 'long_name',
+        administrative_area_level_2: 'long_name',
+        postal_code: 'short_name'
+    };
+
+    function initAutocomplete() {
+        autocomplete = new google.maps.places.Autocomplete(inputHtml, { types: ['geocode'] });
+        geocoder = new google.maps.Geocoder();
+
+        autocomplete.setFields(['address_component']);
+        autocomplete.addListener('place_changed', fillInAddress);
+    }
+
+    function fillInAddress() {
+        var place = autocomplete.getPlace();
+
+        geocoder.geocode({ 'address': inputHtml.value }, function (results, status) {
+            if (status === 'OK') {
+                let latitude = document.getElementById('input-latitude');
+                let longitude = document.getElementById('input-longitude');
+
+                // SETTING VALUES
+                latitude.value = results[0].geometry.location.lat();
+                longitude.value = results[0].geometry.location.lng();
+            } else {
+                alert('ERRO AO INICIALIZAR O GEOCODE: ' + status);
+            }
+        });
+
+        for (var component in componentForm) {
+            document.getElementById(component).value = '';
+        }
+
+        for (var i = 0; i < place.address_components.length; i++) {
+            var addressType = place.address_components[i].types[0];
+            if (componentForm[addressType]) {
+                var val = place.address_components[i][componentForm[addressType]];
+                document.getElementById(addressType).value = val;
+
+                // DISABLE ONLY INPUTS THAT RECEIVED A VALID VALUE
+                if (val != '')
+                    document.getElementById(addressType).setAttribute('readonly', 'true');
+            }
+        }
+    }
+
+    // Bias the autocomplete object to the user's geographical location,
+    // as supplied by the browser's 'navigator.geolocation' object.
+    function geolocate() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                var geolocation = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                };
+                var circle = new google.maps.Circle(
+                    { center: geolocation, radius: position.coords.accuracy });
+                autocomplete.setBounds(circle.getBounds());
+            });
+        }
+    }
+</script>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCbtYabZNfEWTf5nvsDe4QkBbz_PUPv2Uk&libraries=places&callback=initAutocomplete&language=pt-BR"
+        async defer></script>
+
+
 <script>
 
-    /*$("#input-cpf").keyup(function () {
-        if (document.getElementById('input-cpf').value.length == 14) {
-            $('#modal-espera').modal('show');
+    // Mostra modal com mensagem de erro
+    window.onload = function () {
+        $('#modal-mensagem-retorno').modal('show');
+    };
 
-            document.getElementById('PesquisarCpf').value = 1;
-            document.forms["form-exame"].submit();
-
-        }
-    });*/
+    // Pegando o cpf enquanto o usuario digita e submetendo quando terminar
     var input = document.getElementById('input-cpf');
-
     input.addEventListener("keyup", function () {
 
         if (document.getElementById('input-cpf').value.length == 14) {
             $('#modal-espera').modal('show');
 
             document.getElementById('PesquisarCpf').value = 1;
-            document.forms["form-exame"].submit();
 
+            document.forms["form-exame"].submit();
         }
+
     });
 
-    window.onload = function () {
-        $('#modal-mensagem-retorno').modal('show');
-    };
+    // submete o formulário completo
+    function submitForm() {
+        $('#modal-espera').modal('show');
+        document.forms["form-exame"].submit();
+    }
 
+    // mostra modal de confirmaocao
     function mensagemResultado() {
-
-        var cpf = document.getElementById('input-cpf').value;
-        var nome = document.getElementById('input-nome').value;
-
-        var mensagem = "O paciente não foi informado ou " +
-            "existem campos sem preencher!";
-
-        if (!(cpf === "" || nome === "")) {
-
-            var mensagem = "Cpf: " + cpf + "\n" +
-                "Paciente: " + nome + "\n" +
-                "Resultado: " + resultadoExame();
-
-            $('#acoes-model-form').show();
-
-        } else {
-            $('#acoes-model-form').hide();
-        }
-
+        var mensagem = verificaCampoRequired();
 
         $('#texto-confirmacao').text(mensagem);
         $('#modal-confirmar').modal('show');
     }
 
+    // verifica se todos os campos estão preenchidos (diretiva required parou de funcionar)
+    function verificaCampoRequired() {
+        var cpf = document.getElementById('input-cpf').value;
+        var nome = document.getElementById('input-nome').value;
+        var dataNasc = document.getElementById('input-data-nascimento').value;
+        var cep = document.getElementById('postal_code').value;
+        var numero = document.getElementById('street_number').value;
+        var rua = document.getElementById('route').value;
+        var bairro = document.getElementById('input-bairro').value;
+        var cidade = document.getElementById('administrative_area_level_2').value;
+        var estado = document.getElementById('administrative_area_level_1').value;
+        var foneCelular = document.getElementById('input-celular').value;
+        var dataExame = document.getElementById('input-data-exame').value;
+        var dataSintomas = document.getElementById('input-data-exame').value;
+
+        var mensagem = "Os demais campos precisam ser preenchidos ";
+
+        $('#ok-model-form').hide();
+        $('#acoes-model-form').hide();
+
+        if (cpf === "" || nome === "" || dataNasc === "" || cep === "" ||
+            rua === "" || bairro === "" || cidade === "" || estado === "" ||
+            foneCelular === "" || dataExame === "" || dataSintomas === "" || numero === "") {
+
+            if (cpf === "")
+                mensagem += "- CPF ";
+
+            if (nome === "")
+                mensagem += "- NOME ";
+
+            if (dataNasc === "")
+                mensagem += "- DATA DE NASCIMENTO ";
+
+            if (cep === "")
+                mensagem += "- CEP ";
+
+            if (rua === "")
+                mensagem += "- RUA ";
+
+            if (numero === "")
+                mensagem += "- NUMERO";
+
+            if (bairro === "")
+                mensagem += "- BAIRRO ";
+
+            if (cidade === "")
+                mensagem += "- CIDADE ";
+
+            if (estado === "")
+                mensagem += "- ESTADO ";
+
+            if (foneCelular === "")
+                mensagem += "- CELULAR ";
+
+            if (dataExame === "")
+                mensagem += "- DATA DO EXAME ";
+
+            if (dataSintomas === "")
+                mensagem += "- DATA DOS SINTOMAS ";
+
+            $('#ok-model-form').show();
+        } else {
+            var mensagem = "Cpf: " + cpf + "\n" +
+                "Paciente: " + nome + "\n" +
+                "Resultado: " + resultadoExame();
+
+            $('#acoes-model-form').show();
+        }
+
+        return mensagem;
+    }
+
+    // Calcula o resultado do exame
     function resultadoExame() {
         var igg = $("input[name='IgG']:checked").val();
         var igm = $("input[name='IgM']:checked").val();
@@ -458,22 +632,9 @@
         }
 
         return resultado;
-
     }
-   /*  $("#input-cpf").onkeyup(function(){// evento jquery quando o cara digita
 
-            alert("digitou algo");
-       });
-       */
-    /* function automaticInput(cpf) {
-         if (cpf.length == 14) {
-             $('#modal-espera').modal('show');
 
-             document.getElementById('PesquisarCpf').value = 1;
-             document.forms["form-exame"].submit();
-
-         }
-     }*/
 
 </script>
 

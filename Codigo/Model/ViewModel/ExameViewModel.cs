@@ -13,6 +13,7 @@ namespace Model
             IdAgenteSaude = new PessoaModel();
             IdVirusBacteria = new VirusBacteriaModel();
             IdPaciente = new PessoaModel();
+            IdPaciente.Sexo = "M";
             DataExame = DateTime.Now; 
             DataInicioSintomas = DateTime.Now;
             EstadoRealizacao = 0;
@@ -40,6 +41,7 @@ namespace Model
         public int EstadoRealizacao { get; set; }
         public int MunicipioId { get; set; }
         public int PesquisarCpf { get; set; }
+        [Display(Name = "Resultado")]
         public string Resultado { get; set; }
 
     }

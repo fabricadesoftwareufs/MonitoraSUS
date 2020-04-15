@@ -18,7 +18,9 @@ namespace Service
 
         public bool Delete(int id)
         {
-            throw new NotImplementedException();
+            var virus = _context.Virusbacteria.Find(id);
+            _context.Virusbacteria.Remove(virus);
+            return _context.SaveChanges() == 1 ? true : false;
         }
 
         public List<VirusBacteriaModel> GetAll()
@@ -31,18 +33,33 @@ namespace Service
 
 
         public VirusBacteriaModel GetById(int id)
-        {
-            throw new NotImplementedException();
-        }
+        => _context.Virusbacteria
+                .Where(virusBacteriaModel => virusBacteriaModel.IdVirusBacteria == id)
+                .Select(virusbacteria => new VirusBacteriaModel
+                {
+                    IdVirusBacteria = virusbacteria.IdVirusBacteria,
+                    Nome = virusbacteria.Nome
+                }).FirstOrDefault();
 
         public bool Insert(VirusBacteriaModel virusBacteriaModel)
         {
-            throw new NotImplementedException();
+            _context.Add(ModelToEntity(virusBacteriaModel));
+            return _context.SaveChanges() == 1 ? true : false;
+        }
+
+        private Virusbacteria ModelToEntity(VirusBacteriaModel virusModel)
+        {
+            return new Virusbacteria
+            {
+                IdVirusBacteria = virusModel.IdVirusBacteria,
+                Nome = virusModel.Nome
+            };
         }
 
         public bool Update(VirusBacteriaModel virusBacteriaModel)
         {
-            throw new NotImplementedException();
+            _context.Update(ModelToEntity(virusBacteriaModel));
+            return _context.SaveChanges() == 1 ? true : false;
         }
     }
 }

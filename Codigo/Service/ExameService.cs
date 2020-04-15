@@ -19,7 +19,9 @@ namespace Service
 
         public bool Delete(int id)
         {
-            throw new NotImplementedException();
+            var exame = _context.Exame.Find(id);
+            _context.Exame.Remove(exame);
+            return _context.SaveChanges() == 1 ? true : false;
         }
 
         public List<ExameModel> GetAll()
@@ -41,35 +43,53 @@ namespace Service
 
 
         public ExameModel GetById(int id)
-        {
-            throw new NotImplementedException();
-        }
+          => _context.Exame
+                .Where(exameModel => exameModel.IdExame == id)
+                .Select(exame => new ExameModel
+                {
+                    IdVirusBacteria = exame.IdVirusBacteria,
+                    IdExame = exame.IdExame,
+                    IdPaciente = exame.IdPaciente,
+                    IdAgenteSaude = exame.IdAgenteSaude,
+                    DataExame = exame.DataExame,
+                    DataInicioSintomas = exame.DataInicioSintomas,
+                    IgG = exame.IgG,
+                    IgM = exame.IgM,
+                    Pcr = exame.Pcr,
+                    EstadoRealizacao = exame.EstadoRealizacao,
+                    MunicipioId = exame.MunicipioId,
+                }).FirstOrDefault();
 
         public bool Insert(ExameModel exameModel)
         {
-            _context.Add(ModelToEntity(exameModel, new Exame()));
+            _context.Add(ModelToEntity(exameModel));
             return _context.SaveChanges() == 1 ? true : false;
         }
 
-        private Exame ModelToEntity(ExameModel exameModel, Exame exame)
+        private Exame ModelToEntity(ExameModel exameModel)
         {
-            exame.IdAgenteSaude = exameModel.IdAgenteSaude;
-            exame.IdPaciente = exameModel.IdPaciente;
-            exame.IdVirusBacteria = exameModel.IdVirusBacteria;
-            exame.IgG = exameModel.IgG;
-            exame.IgM = exameModel.IgM;
-            exame.Pcr = exameModel.Pcr;
-            exame.EstadoRealizacao  = exameModel.EstadoRealizacao;
-            exame.MunicipioId       = exameModel.MunicipioId;
-            exame.DataInicioSintomas = exameModel.DataInicioSintomas;
-            exame.DataExame = exameModel.DataExame;
+            Exame exame = new Exame
+            {
+                IdExame = exameModel.IdExame,
+                IdAgenteSaude = exameModel.IdAgenteSaude,
+                IdPaciente = exameModel.IdPaciente,
+                IdVirusBacteria = exameModel.IdVirusBacteria,
+                IgG = exameModel.IgG,
+                IgM = exameModel.IgM,
+                Pcr = exameModel.Pcr,
+                EstadoRealizacao = exameModel.EstadoRealizacao,
+                MunicipioId = exameModel.MunicipioId,
+                DataInicioSintomas = exameModel.DataInicioSintomas,
+                DataExame = exameModel.DataExame
+            };
 
             return exame;
         }
 
         public bool Update(ExameModel exameModel)
         {
-            throw new NotImplementedException();
+            _context.Update(ModelToEntity(exameModel));
+            return _context.SaveChanges() == 1 ? true : false;
         }
 
     

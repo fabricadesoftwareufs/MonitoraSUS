@@ -39,6 +39,12 @@ namespace MonitoraSUS.Controllers
             return View(GetAllExamesViewModel());
         }
 
+        public IActionResult Details(int id)
+        {
+            
+            return View(GetExameViewModelById(id));
+        }
+
 
         public IActionResult Edit(int id)
         {
@@ -59,18 +65,18 @@ namespace MonitoraSUS.Controllers
 
             try
             {
-                _exameContext.Update(CreateExameModel(exame));
-                _situacaoPessoaContext.Update(CreateSituacaoPessoaModelByExame(exame, _situacaoPessoaContext.GetByIdPessoa(exame.IdPaciente.Idpessoa)));
+                _exameContext.Update(CreateExameModel(exame,false));
+                _situacaoPessoaContext.Update(CreateSituacaoPessoaModelByExame(exame, _situacaoPessoaContext.GetById(exame.IdPaciente.Idpessoa, exame.IdVirusBacteria.IdVirusBacteria)));
                 _pessoaContext.Update(CreatePessoaModelByExame(exame));
 
                 TempData["mensagemSucesso"] = "Notificação realizada com SUCESSO!";
 
-                return View();
+                return View(new ExameViewModel());
 
             }
             catch
             {
-                TempData["mensagemErro"] = "Houve um problema ao atualizar as informaçõess, tente novamente ou " +
+                TempData["mensagemErro"] = "Houve um problema ao atualizar as informações, tente novamente ou " +
                   "entre em contato com os desenvolvedores";
 
                 return View(exame);
@@ -99,6 +105,9 @@ namespace MonitoraSUS.Controllers
 
                 if (pessoa != null)
                     exame.IdPaciente = pessoa;
+                else
+                    TempData["resultadoPesquisa"] = "Paciente não cadastrado, preencha os campos para cadastra-lo!";
+
 
                 return View(exame);
             }
@@ -126,7 +135,10 @@ namespace MonitoraSUS.Controllers
                 try
                 {
                     // inserindo o resultado do exame (situacao da pessoa)                  
-                    var situacaoPessoa = _situacaoPessoaContext.GetByIdPessoa(exame.IdPaciente.Idpessoa);
+                    var cpf = RemoveSpecialsCaracts(exame.IdPaciente.Cpf);
+                    var idPessoa = _pessoaContext.GetByCpf(cpf).Idpessoa;
+                    var situacaoPessoa = _situacaoPessoaContext.GetById(idPessoa,exame.IdVirusBacteria.IdVirusBacteria);
+                    
                     if (situacaoPessoa == null)
                         _situacaoPessoaContext.Insert(CreateSituacaoPessoaModelByExame(exame, situacaoPessoa)); 
                     else
@@ -142,7 +154,7 @@ namespace MonitoraSUS.Controllers
                 try
                 {
                     // inserindo o exame
-                    _exameContext.Insert(CreateExameModel(exame));
+                    _exameContext.Insert(CreateExameModel(exame,true));
                 }
                 catch
                 {
@@ -156,7 +168,7 @@ namespace MonitoraSUS.Controllers
 
                 TempData["mensagemSucesso"] = "Notificação realizada com SUCESSO!";
 
-                return View();
+                return View(new ExameViewModel());
             }
         }
 
@@ -165,25 +177,26 @@ namespace MonitoraSUS.Controllers
 
             if (situacao != null)
             {
-                situacao.UltimaSituacaoSaude = GetStatusExame(exame);
+                situacao.UltimaSituacaoSaude = GetResultadoExame(exame);
             }
             else
             {
                 situacao = new SituacaoPessoaVirusBacteriaModel();
 
                 situacao.IdVirusBacteria = exame.IdVirusBacteria.IdVirusBacteria;
-                situacao.Idpessoa = exame.IdPaciente.Idpessoa;
-                situacao.UltimaSituacaoSaude = GetStatusExame(exame);
+                situacao.Idpessoa = _pessoaContext.GetByCpf(RemoveSpecialsCaracts(exame.IdPaciente.Cpf)).Idpessoa;
+                situacao.UltimaSituacaoSaude = GetResultadoExame(exame);
             }
 
             return situacao;
         }
 
-        public ExameModel CreateExameModel(ExameViewModel viewModel)
+        public ExameModel CreateExameModel(ExameViewModel viewModel, bool atualizarCidadeEstado)
         {
             ExameModel exame = new ExameModel();
 
-            exame.IdPaciente = viewModel.IdPaciente.Idpessoa;
+            exame.IdExame = viewModel.IdExame;
+            exame.IdPaciente = _pessoaContext.GetByCpf(RemoveSpecialsCaracts(viewModel.IdPaciente.Cpf)).Idpessoa;
             exame.IdVirusBacteria = viewModel.IdVirusBacteria.IdVirusBacteria;
             exame.IgG = viewModel.IgG;
             exame.IgM = viewModel.IgM;
@@ -192,13 +205,19 @@ namespace MonitoraSUS.Controllers
             exame.MunicipioId = viewModel.MunicipioId;
             exame.DataInicioSintomas = viewModel.DataInicioSintomas;
             exame.DataExame = viewModel.DataExame;
+            exame.IdAgenteSaude = viewModel.IdAgenteSaude.Idpessoa;
+
 
             // pegando informações do agente de saúde logado no sistema
-            var agente = _pessoaContext.GetById(1);
-            exame.IdAgenteSaude = agente.Idpessoa;
-            exame.EstadoRealizacao = _estadoContext.GetByName(agente.Estado).Id;
-            exame.MunicipioId = _municicpioContext.GetByName(agente.Cidade).Id;
+            var agente = _pessoaContext.GetById(5);
 
+            if (atualizarCidadeEstado)
+            {
+                exame.IdAgenteSaude = agente.Idpessoa;
+                exame.EstadoRealizacao = _estadoContext.GetByName(agente.Estado).Id;
+                exame.MunicipioId = _municicpioContext.GetByName(agente.Cidade).Id;
+            }
+            
             return exame;
         }
 
@@ -208,10 +227,11 @@ namespace MonitoraSUS.Controllers
 
             ExameViewModel ex = new ExameViewModel();
 
+            ex.IdExame = exame.IdExame;
             ex.IdPaciente = _pessoaContext.GetById(exame.IdPaciente);
             ex.IdAgenteSaude = _pessoaContext.GetById(exame.IdAgenteSaude);
             ex.IdVirusBacteria = _virusBacteriaContext.GetById(exame.IdVirusBacteria);
-            ex.Resultado = _situacaoPessoaContext.GetByIdPessoa(exame.IdPaciente).UltimaSituacaoSaude;
+            ex.Resultado = GetStatusExame(GetResultadoExame(new ExameViewModel { Pcr = exame.Pcr, IgG = exame.IgG, IgM = exame.IgM }));
             ex.IgG = exame.IgG;
             ex.IgM = exame.IgM;
             ex.Pcr = exame.Pcr;
@@ -234,11 +254,11 @@ namespace MonitoraSUS.Controllers
             foreach (var exame in exames)
             {
                 ExameViewModel ex = new ExameViewModel();
-
+                ex.IdExame = exame.IdExame;
                 ex.IdPaciente = _pessoaContext.GetById(exame.IdPaciente);
                 ex.IdAgenteSaude = _pessoaContext.GetById(exame.IdAgenteSaude);
                 ex.IdVirusBacteria = _virusBacteriaContext.GetById(exame.IdVirusBacteria);
-                ex.Resultado = _situacaoPessoaContext.GetByIdPessoa(exame.IdPaciente).UltimaSituacaoSaude;
+                ex.Resultado = GetStatusExame(GetResultadoExame(new ExameViewModel { Pcr = exame.Pcr, IgG = exame.IgG, IgM = exame.IgM}));
                 ex.IgG = exame.IgG;
                 ex.IgM = exame.IgM;
                 ex.Pcr = exame.Pcr;
@@ -266,36 +286,53 @@ namespace MonitoraSUS.Controllers
             if (exame.IdPaciente.FoneFixo != null)
                 exame.IdPaciente.FoneFixo = RemoveSpecialsCaracts(exame.IdPaciente.FoneFixo);
 
-
+            exame.IdPaciente.Idpessoa = _pessoaContext.GetByCpf(exame.IdPaciente.Cpf).Idpessoa;
+            
             return exame.IdPaciente;
         }
 
         public static string RemoveSpecialsCaracts(string poluatedString)
             => Regex.Replace(poluatedString, "[^0-9a-zA-Z]+", "");
 
-        public string GetStatusExame(ExameViewModel exame)
+        public string GetResultadoExame(ExameViewModel exame)
         {
 
             string resultado = "I";
 
-            if (exame.Pcr.Equals('S') || exame.IgM.Equals('S'))
+            if (exame.Pcr.Equals("S") || exame.IgM.Equals("S"))
             {
                 resultado = "P";
             }
-            else if (exame.IgG.Equals('S'))
+            else if (exame.IgG.Equals("S"))
             {
                 resultado = "C";
             }
-            else if (exame.Pcr.Equals('N'))
+            else if (exame.Pcr.Equals("N"))
             {
                 resultado = "N";
             }
-            else if (exame.Pcr.Equals('I'))
+            else if (exame.Pcr.Equals("I"))
             {
                 resultado = "I";
             }
 
             return resultado;
+        }
+
+        public string GetStatusExame(string status)
+        {
+
+
+            switch (status) { 
+                case "I": return "IDETERMINADO";
+                case "N": return "NEGATIVO";
+                case "C": return "CURADO";
+                case "P": return "POSITIVO";
+
+                default: return "INDEFINIDO"; 
+            }
+
+            
         }
 
     }

@@ -20,25 +20,28 @@ namespace Service
 
         public bool Delete(int id)
         {
-            throw new NotImplementedException();
+            var situacao = _context.Situacaopessoavirusbacteria.Find(id);
+            _context.Situacaopessoavirusbacteria.Remove(situacao);
+            return _context.SaveChanges() == 1 ? true : false;
         }
 
         public List<SituacaoPessoaVirusBacteriaModel> GetAll()
-        {
-            throw new NotImplementedException();
-        }
-
-        public SituacaoPessoaVirusBacteriaModel GetById(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public SituacaoPessoaVirusBacteriaModel GetByIdPessoa(int idPessoa)
-       => _context.Situacaopessoavirusbacteria
-                .Where(situacaoPessoa => situacaoPessoa.Idpessoa == idPessoa)
+        => _context.Situacaopessoavirusbacteria
                 .Select(situacao => new SituacaoPessoaVirusBacteriaModel
                 {
-                    
+
+                    Idpessoa = situacao.Idpessoa,
+                    IdVirusBacteria = situacao.IdVirusBacteria,
+                    UltimaSituacaoSaude = situacao.UltimaSituacaoSaude
+
+                }).ToList();
+
+        public SituacaoPessoaVirusBacteriaModel GetById(int idPessoa,int idVirus)
+       => _context.Situacaopessoavirusbacteria
+                .Where(situacaoPessoa => situacaoPessoa.IdVirusBacteria == idVirus && situacaoPessoa.Idpessoa == idPessoa)
+                .Select(situacao => new SituacaoPessoaVirusBacteriaModel
+                {
+
                     Idpessoa = situacao.Idpessoa,
                     IdVirusBacteria = situacao.IdVirusBacteria,
                     UltimaSituacaoSaude = situacao.UltimaSituacaoSaude
@@ -46,14 +49,27 @@ namespace Service
                 }).FirstOrDefault();
 
 
-        public bool Insert(SituacaoPessoaVirusBacteriaModel situacaoPessoaVirusBacteriaModel)
+        public bool Insert(SituacaoPessoaVirusBacteriaModel situacaoModel)
         {
-            throw new NotImplementedException();
+            _context.Add(ModelToEntity(situacaoModel));
+            return _context.SaveChanges() == 1 ? true : false;
         }
 
-        public bool Update(SituacaoPessoaVirusBacteriaModel situacaoPessoaVirusBacteriaModel)
+        private Situacaopessoavirusbacteria ModelToEntity(SituacaoPessoaVirusBacteriaModel situacaoModel)
         {
-            throw new NotImplementedException();
+            Situacaopessoavirusbacteria s = new Situacaopessoavirusbacteria();
+
+            s.IdVirusBacteria = situacaoModel.IdVirusBacteria;
+            s.Idpessoa = situacaoModel.Idpessoa;
+            s.UltimaSituacaoSaude = situacaoModel.UltimaSituacaoSaude;
+
+            return s;
+        }
+
+        public bool Update(SituacaoPessoaVirusBacteriaModel situacaoModel)
+        {
+            _context.Update(ModelToEntity(situacaoModel));
+            return _context.SaveChanges() == 1 ? true : false;
         }
     }
 }
