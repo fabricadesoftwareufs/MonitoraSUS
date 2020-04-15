@@ -11,20 +11,20 @@ namespace MonitoraSUS.Controllers
 {
     public class ExameController : Controller
     {
-        private readonly VirusBacteriaServiceService _virusBacteriaContext;
-        private readonly ExameService _exameContext;
-        private readonly PessoaService _pessoaContext;
-        private readonly MunicipioService _municicpioContext;
-        private readonly EstadoService _estadoContext;
-        private readonly SituacaoVirusBacteriaService _situacaoPessoaContext;
+        private readonly IVirusBacteriaService _virusBacteriaContext;
+        private readonly IExameService _exameContext;
+        private readonly IPessoaService _pessoaContext;
+        private readonly IMunicipioService _municicpioContext;
+        private readonly IEstadoService _estadoContext;
+        private readonly ISituacaoVirusBacteriaService _situacaoPessoaContext;
 
 
-        public ExameController(VirusBacteriaServiceService virusBacteriaContext,
-                               ExameService exameContext,
-                               PessoaService pessoaContext,
-                               MunicipioService municicpioContext,
-                               EstadoService estadoContext,
-                               SituacaoVirusBacteriaService situacaoPessoaContext)
+        public ExameController(IVirusBacteriaService virusBacteriaContext,
+                               IExameService exameContext,
+                               IPessoaService pessoaContext,
+                               IMunicipioService municicpioContext,
+                               IEstadoService estadoContext,
+                               ISituacaoVirusBacteriaService situacaoPessoaContext)
         {
             _virusBacteriaContext = virusBacteriaContext;
             _exameContext = exameContext;

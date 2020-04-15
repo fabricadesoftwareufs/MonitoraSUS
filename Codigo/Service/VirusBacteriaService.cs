@@ -8,10 +8,10 @@ using System.Text;
 
 namespace Service
 {
-    public class VirusBacteriaServiceService : IVirusBacteriaService
+    public class VirusBacteriaService : IVirusBacteriaService
     {
         private readonly monitorasusContext _context;
-        public VirusBacteriaServiceService(monitorasusContext context)
+        public VirusBacteriaService(monitorasusContext context)
         {
             _context = context;
         }

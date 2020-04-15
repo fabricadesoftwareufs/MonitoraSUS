@@ -39,12 +39,12 @@ namespace MonitoraSUS
                 options.UseMySQL(
                     Configuration.GetConnectionString("MySqlConnection")));
 
-            services.AddScoped<VirusBacteriaServiceService>();
-            services.AddScoped<ExameService>();
-            services.AddScoped<PessoaService>();
-            services.AddScoped<EstadoService>();
-            services.AddScoped<MunicipioService>();
-            services.AddScoped<SituacaoVirusBacteriaService>();
+            services.AddScoped<IVirusBacteriaService,VirusBacteriaService>();
+            services.AddScoped<IExameService, ExameService>();
+            services.AddScoped<IPessoaService, PessoaService>();
+            services.AddScoped<IEstadoService, EstadoService>();
+            services.AddScoped<IMunicipioService, MunicipioService>();
+            services.AddScoped<ISituacaoVirusBacteriaService,SituacaoVirusBacteriaService>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
