@@ -14,13 +14,15 @@ namespace Persistence
         public string IgG { get; set; }
         public string IgM { get; set; }
         public string Pcr { get; set; }
-        public int EstadoRealizacao { get; set; }
-        public int MunicipioId { get; set; }
+        public int IdEstado { get; set; }
+        public int? IdMunicipio { get; set; }
+        public int? IdEmpresaSaude { get; set; }
 
-        public Estado EstadoRealizacaoNavigation { get; set; }
         public Pessoa IdAgenteSaudeNavigation { get; set; }
+        public Empresaexame IdEmpresaSaudeNavigation { get; set; }
+        public Estado IdEstadoNavigation { get; set; }
+        public Municipio IdMunicipioNavigation { get; set; }
         public Pessoa IdPacienteNavigation { get; set; }
         public Virusbacteria IdVirusBacteriaNavigation { get; set; }
-        public Municipio Municipio { get; set; }
     }
 }
