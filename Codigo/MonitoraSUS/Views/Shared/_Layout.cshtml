@@ -14,45 +14,52 @@
     <link rel="stylesheet" href="~/assets/css/custom.css" type="text/css">
     <link rel="stylesheet" href="~/assets/js/plugins/sweetalert2/dist/css/sweetalert2.min.css">
 </head>
-<body>
-    <!-- Main content -->
-    <div class="main-content" id="panel">
-        <!-- Topnav -->
-        <nav class="navbar bg-gradient-primary">
-            <div class="container-fluid">
-                <img src="~/assets/img/logo-sus.png" class="logo-header">
-                <div class="top-user">
-                    <span>
-                        <i class="fa fa-user" aria-hidden="true"></i>Paulo David Almeida da Silva
-                    </span>
-                    <span>
-                        <i class="fas fa-map-marker-alt"></i> Sergipe / Aracaju
-                    </span>
-                    <span style="margin-top: 15px;">
-                        <i class="fas fa-sign-out-alt"></i> Sair
-                    </span>
-                </div>
-            </div>
-        </nav>
-
-        <!-- Header -->
-        <partial name="_Header" />
-
-        <!-- Page Content -->
+@if (!User.Identity.IsAuthenticated)
+{
+    <body class="login">
         @RenderBody()
-    </div>
 
-    <!-- Scripts -->
-    <script src="~/assets/js/plugins/jquery-3.4.1/jquery-3.4.1.min.js"></script>
-    <script src="~/assets/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/assets/vendor/js-cookie/js.cookie.js"></script>
-    <script src="~/assets/vendor/jquery.scrollbar/jquery.scrollbar.min.js"></script>
-    <script src="~/assets/vendor/jquery-scroll-lock/dist/jquery-scrollLock.min.js"></script>
-    <script src="~/assets/js/plugins/jquery-mask/dist/jquery.mask.min.js"></script>
-    <script src="~/assets/js/plugins/sweetalert2/dist/js/sweetalert2.min.js"></script>
-    <script src="~/assets/js/argon.js?v=1.2.0"></script>
-    <script src="~/assets/js/custom.js"></script>
+        <!-- Scripts -->
+        <script src="~/assets/js/plugins/jquery-3.4.1/jquery-3.4.1.min.js"></script>
+        <script src="~/assets/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="~/assets/vendor/js-cookie/js.cookie.js"></script>
+        <script src="~/assets/vendor/jquery.scrollbar/jquery.scrollbar.min.js"></script>
+        <script src="~/assets/vendor/jquery-scroll-lock/dist/jquery-scrollLock.min.js"></script>
+        <script src="~/assets/js/plugins/jquery-mask/dist/jquery.mask.min.js"></script>
+        <script src="~/assets/js/plugins/sweetalert2/dist/js/sweetalert2.min.js"></script>
+        <script src="~/assets/js/argon.js?v=1.2.0"></script>
+        <script src="~/assets/js/custom.js"></script>
 
-    @RenderSection("Scripts", required: false)
-</body>
+        @RenderSection("Scripts", required: false)
+
+    </body>
+}
+else
+{
+    <body>
+        <!-- Main content -->
+        <div class="main-content" id="panel">
+            <!-- Top Nav-->
+            <partial name="_NavBarPartial" />
+            <!-- Header -->
+            <partial name="_Header" />
+
+            <!-- Page Content -->
+            @RenderBody()
+        </div>
+
+        <!-- Scripts -->
+        <script src="~/assets/js/plugins/jquery-3.4.1/jquery-3.4.1.min.js"></script>
+        <script src="~/assets/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="~/assets/vendor/js-cookie/js.cookie.js"></script>
+        <script src="~/assets/vendor/jquery.scrollbar/jquery.scrollbar.min.js"></script>
+        <script src="~/assets/vendor/jquery-scroll-lock/dist/jquery-scrollLock.min.js"></script>
+        <script src="~/assets/js/plugins/jquery-mask/dist/jquery.mask.min.js"></script>
+        <script src="~/assets/js/plugins/sweetalert2/dist/js/sweetalert2.min.js"></script>
+        <script src="~/assets/js/argon.js?v=1.2.0"></script>
+        <script src="~/assets/js/custom.js"></script>
+
+        @RenderSection("Scripts", required: false)
+    </body>
+}
 </html>

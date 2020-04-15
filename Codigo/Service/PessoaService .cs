@@ -4,7 +4,6 @@ using Service.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Service
 {
@@ -21,6 +20,35 @@ namespace Service
             var pessoa = _context.Pessoa.Find(id);
             _context.Pessoa.Remove(pessoa);
             return _context.SaveChanges() == 1 ? true : false;
+        }
+
+        public bool Update(PessoaModel pessoaModel)
+        {
+            _context.Update(ModelToEntity(pessoaModel, new Pessoa()));
+            return _context.SaveChanges() == 1 ? true : false;
+        }
+
+        public PessoaModel Insert(PessoaModel pessoaModel)
+        {
+            if (pessoaModel != null)
+            {
+                try
+                {
+                    var pessoaInserida = new Pessoa();
+                    _context.Pessoa.Add(ModelToEntity(pessoaModel, pessoaInserida));
+                    _context.SaveChanges();
+
+                    // Returning the last inserted ID.
+                    pessoaModel.Idpessoa = pessoaInserida.Idpessoa;
+                    return pessoaModel;
+                }
+                catch (Exception e)
+                {
+                    throw new Exception(e.Message);
+                }
+            }
+
+            return null;
         }
 
         public List<PessoaModel> GetAll()
@@ -84,48 +112,38 @@ namespace Service
                     Cardiopatia = Convert.ToBoolean(pessoa.Cardiopatia)
                 }).FirstOrDefault();
 
-        public bool Insert(PessoaModel pessoaModel)
+
+        private Pessoa ModelToEntity(PessoaModel model, Pessoa entity)
         {
-            _context.Add(ModelToEntity(pessoaModel));
-            return _context.SaveChanges() == 1 ? true : false;
+            entity.Idpessoa = model.Idpessoa;
+            entity.Nome = model.Nome;
+            entity.Cpf = model.Cpf;
+            entity.Sexo = model.Sexo == "Masculino" ? "M" : "F";
+            entity.Cep = model.Cep;
+            entity.Rua = model.Rua;
+            entity.Bairro = model.Bairro;
+            entity.Cidade = model.Cidade;
+            entity.Estado = model.Estado;
+            entity.Numero = model.Numero;
+            entity.Complemento = model.Complemento;
+            entity.Latitude = model.Latitude;
+            entity.Longitude = model.Longitude;
+            entity.FoneCelular = model.FoneCelular;
+            entity.FoneFixo = model.FoneFixo;
+            entity.Email = model.Email;
+            entity.DataNascimento = model.DataNascimento;
+            entity.Hipertenso = Convert.ToByte(model.Hipertenso);
+            entity.Diabetes = Convert.ToByte(model.Diabetes);
+            entity.Obeso = Convert.ToByte(model.Obeso);
+            entity.Cardiopatia = Convert.ToByte(model.Cardiopatia);
+            entity.Imunodeprimido = Convert.ToByte(model.Imunodeprimido);
+            entity.Cancer = Convert.ToByte(model.Cancer);
+            entity.DoencaRespiratoria = Convert.ToByte(model.DoencaRespiratoria);
+
+            return entity;
         }
 
-        private Pessoa ModelToEntity(PessoaModel pessoaModel)
-        {
-            Pessoa pessoa = new Pessoa();
-            pessoa.Idpessoa = pessoaModel.Idpessoa;
-            pessoa.Nome = pessoaModel.Nome;
-            pessoa.Cpf = pessoaModel.Cpf;
-            pessoa.Email = pessoaModel.Email;
-            pessoa.FoneFixo = pessoaModel.FoneFixo;
-            pessoa.FoneCelular = pessoaModel.FoneCelular;
-            pessoa.DataNascimento = pessoaModel.DataNascimento;
-            pessoa.Sexo = pessoaModel.Sexo;
-            pessoa.Cep = pessoaModel.Cep;
-            pessoa.Rua = pessoaModel.Rua;
-            pessoa.Estado = pessoaModel.Estado;
-            pessoa.Cidade = pessoaModel.Cidade;
-            pessoa.Complemento = pessoaModel.Complemento;
-            pessoa.Bairro = pessoaModel.Bairro;
-            pessoa.Numero = pessoaModel.Numero;
-            pessoa.Latitude = pessoaModel.Latitude;
-            pessoa.Longitude = pessoaModel.Longitude;
-            pessoa.Imunodeprimido = Convert.ToByte(pessoaModel.Imunodeprimido);
-            pessoa.Cancer = Convert.ToByte(pessoaModel.Cancer);
-            pessoa.Hipertenso = Convert.ToByte(pessoaModel.Hipertenso);
-            pessoa.Obeso = Convert.ToByte(pessoaModel.Obeso);
-            pessoa.Diabetes = Convert.ToByte(pessoaModel.Diabetes);
-            pessoa.DoencaRespiratoria = Convert.ToByte(pessoaModel.DoencaRespiratoria);
-            pessoa.Cardiopatia = Convert.ToByte(pessoaModel.Cardiopatia);
-
-            return pessoa;
-        }
-
-        public bool Update(PessoaModel pessoaModel)
-        {
-            _context.Update(ModelToEntity(pessoaModel));
-            return _context.SaveChanges() == 1 ? true : false;
-        }
+       
 
 
         public PessoaModel GetByCpf(string cpf)

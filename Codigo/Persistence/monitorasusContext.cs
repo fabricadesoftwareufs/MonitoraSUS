@@ -27,7 +27,7 @@ namespace Persistence
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-          
+            
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -447,10 +447,12 @@ namespace Persistence
 
                 entity.ToTable("usuario", "monitorasus");
 
+                entity.HasIndex(e => e.IdPessoa)
+                    .HasName("fk_usuario_pessoa1_idx");
+
                 entity.Property(e => e.IdUsuario)
                     .HasColumnName("idUsuario")
-                    .HasColumnType("int(11)")
-                    .ValueGeneratedNever();
+                    .HasColumnType("int(11)");
 
                 entity.Property(e => e.Cpf)
                     .IsRequired()
@@ -463,6 +465,10 @@ namespace Persistence
                     .HasMaxLength(45)
                     .IsUnicode(false);
 
+                entity.Property(e => e.IdPessoa)
+                    .HasColumnName("idPessoa")
+                    .HasColumnType("int(11)");
+
                 entity.Property(e => e.Senha)
                     .IsRequired()
                     .HasColumnName("senha")
@@ -472,6 +478,12 @@ namespace Persistence
                 entity.Property(e => e.TipoUsuario)
                     .HasColumnName("tipoUsuario")
                     .HasColumnType("tinyint(4)");
+
+                entity.HasOne(d => d.IdPessoaNavigation)
+                    .WithMany(p => p.Usuario)
+                    .HasForeignKey(d => d.IdPessoa)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_usuario_pessoa1");
             });
 
             modelBuilder.Entity<Virusbacteria>(entity =>

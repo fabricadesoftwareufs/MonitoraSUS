@@ -1,11 +1,12 @@
 ﻿using Model;
 using Persistence;
+using Service.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Service.Interface
+namespace Service
 {
     public class EstadoService : IEstadoService
     {
@@ -19,18 +20,47 @@ namespace Service.Interface
 
         public bool Delete(int id)
         {
-            throw new NotImplementedException();
-        }
-
-        public List<EstadoModel> GetAll()
-        {
-            throw new NotImplementedException();
+            var estado = _context.Estado.Find(id);
+            _context.Estado.Remove(estado);
+            return _context.SaveChanges() == 1 ? true : false;
         }
 
         public EstadoModel GetById(int id)
+         => _context.Estado
+             .Where(estadoModel => estadoModel.Id == id)
+             .Select(e => new EstadoModel
+             {
+                 Id = e.Id,
+                 CodigoUf = e.CodigoUf,
+                 Nome = e.Nome,
+                 Regiao = e.Regiao,
+                 Uf = e.Uf
+             }).FirstOrDefault();
+
+        public bool Insert(EstadoModel estadoModel)
         {
-            throw new NotImplementedException();
+            _context.Add(ModelToEntity(estadoModel));
+            return _context.SaveChanges() == 1 ? true : false;
         }
+
+        public bool Update(EstadoModel estadoModel)
+        {
+            _context.Update(ModelToEntity(estadoModel));
+            return _context.SaveChanges() == 1 ? true : false;
+        }
+
+        public List<EstadoModel> GetAll()
+         => _context
+             .Estado
+             .Select(e => new EstadoModel
+             {
+                 Id = e.Id,
+                 CodigoUf = e.CodigoUf,
+                 Nome = e.Nome,
+                 Regiao = e.Regiao,
+                 Uf = e.Uf
+             }).ToList();
+
 
         public EstadoModel GetByName(string name)
               => _context.Estado
@@ -45,15 +75,16 @@ namespace Service.Interface
 
                 }).FirstOrDefault();
 
+        public Estado ModelToEntity(EstadoModel estado) {
 
-    public bool Insert(EstadoModel estadoModel)
-    {
-        throw new NotImplementedException();
-    }
-
-    public bool Update(EstadoModel estadoModel)
-    {
-        throw new NotImplementedException();
+            return new Estado {
+                Id = estado.Id,
+                Nome = estado.Nome,
+                CodigoUf = estado.CodigoUf,
+                Regiao = estado.Regiao,
+                Uf = estado.Uf
+            };
+        }
     }
 }
-}
+

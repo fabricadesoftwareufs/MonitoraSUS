@@ -5,7 +5,7 @@ namespace Service.Interface
 {
     public interface IPessoaService
     {
-        bool Insert(PessoaModel pessoaModel);
+        PessoaModel Insert(PessoaModel pessoaModel);
         bool Update(PessoaModel pessoaModel);
         bool Delete(int id);
         List<PessoaModel> GetAll();
