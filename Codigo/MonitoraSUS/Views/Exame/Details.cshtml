@@ -20,11 +20,10 @@
                                 <h5 class="h3 mb-0">Detalhes do exame</h5>
                             </div>
                             <div class="col text-right">
-                                <a href="#" class="btn btn-sm btn-default">
-                                    <i class="fas fa-arrow-left"></i> Voltar
-                                </a>
-                                @Html.ActionLink("Editar", "Edit", new { id = Model.IdExame }, new { @class = "btn btn-sm btn-info" })
 
+                                @Html.ActionLink("Editar", "Edit", new { id = Model.IdExame }, new { @class = "btn btn-info" })
+
+                                <a class="btn btn-default" asp-action="Index"> <i class="fas fa-arrow-left"></i> Voltar</a>
                             </div>
 
                         </div>

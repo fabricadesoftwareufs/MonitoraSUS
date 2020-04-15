@@ -627,13 +627,13 @@
 
             if (pcr === "S" || igm === "S") {
                 resultado = "Positivo";
+            } else if (pcr === "I" || igm === "I") {
+                resultado = "Indeterminado";
             } else if (igg === "S") {
                 resultado = "Curado";
-            } else if (pcr === "N") {
+            } else if (pcr === "N" || igm === "N") {
                 resultado = "Negativo";
-            } else if (pcr === "I") {
-                resultado = "Indetermiando";
-            }
+            } 
 
             return resultado;
         }

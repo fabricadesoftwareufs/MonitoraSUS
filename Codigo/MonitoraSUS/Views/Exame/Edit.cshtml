@@ -45,7 +45,7 @@
                                 <h5 class="h3 mb-0">Notificar Resultado</h5>
                             </div>
                             <div class="col text-right">
-                                <a href="#" class="btn btn-sm btn-default">
+                                <a asp-action="Index" class="btn btn-sm btn-default">
                                     <i class="fas fa-arrow-left"></i> Voltar
                                 </a>
                             </div>
@@ -613,12 +613,12 @@
 
         if (pcr === "S" || igm === "S") {
             resultado = "Positivo";
+        } else if (pcr === "I" || igm === "I") {
+            resultado = "Indeterminado";
         } else if (igg === "S") {
             resultado = "Curado";
-        } else if (pcr === "N") {
+        } else if (pcr === "N" || igm === "N") {
             resultado = "Negativo";
-        } else if (pcr === "I") {
-            resultado = "Indetermiando";
         }
 
         return resultado;

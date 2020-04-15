@@ -50,6 +50,19 @@ namespace Service
             throw new NotImplementedException();
         }
 
+        public PessoaTrabalhaEstadoModel GetSecretarioAtivoByIdPessoa(int idPessoa)
+        => _context
+                .Pessoatrabalhaestado
+                .Where(p => p.EhSecretario.Equals(1) && p.SituacaoCadastro.Equals("A") && p.IdPessoa ==  idPessoa)
+                .Select(p => new PessoaTrabalhaEstadoModel
+                {
+                    IdPessoa = p.IdPessoa,
+                    IdEstado = p.IdEstado,
+                    EhResponsavel = Convert.ToBoolean(p.EhResponsavel),
+                    EhSecretario = Convert.ToBoolean(p.EhSecretario),
+                    SituacaoCadastro = p.SituacaoCadastro
+                }).FirstOrDefault();
+
         public bool Insert(PessoaTrabalhaEstadoModel pessoaTrabalhaEstadoModel)
         {
             if (pessoaTrabalhaEstadoModel != null)
