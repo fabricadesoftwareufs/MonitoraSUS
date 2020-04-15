@@ -10,5 +10,6 @@ namespace Service.Interface
         bool Delete(int id);
         List<PessoaModel> GetAll();
         PessoaModel GetById(int id);
+        PessoaModel GetByCpf(string cpf);
     }
 }

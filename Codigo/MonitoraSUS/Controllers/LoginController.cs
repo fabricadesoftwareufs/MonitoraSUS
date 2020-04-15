@@ -10,15 +10,16 @@ using Model.ViewModel;
 using MonitoraSUS.Resources.Methods;
 using QueroTransporteWeb.Resources.Methods;
 using Service;
+using Service.Interface;
 
 namespace MonitoraSUS.Controllers
 {
     [AllowAnonymous]
     public class LoginController : Controller
     {
-        private readonly UsuarioService _usuarioService;
-        private readonly PessoaService _pessoaService;
-        public LoginController(UsuarioService usuarioService, PessoaService pessoaService)
+        private readonly IUsuarioService _usuarioService;
+        private readonly IPessoaService _pessoaService;
+        public LoginController(IUsuarioService usuarioService, IPessoaService pessoaService)
         {
             _usuarioService = usuarioService;
             _pessoaService = pessoaService;

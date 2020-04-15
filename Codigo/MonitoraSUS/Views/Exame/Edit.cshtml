@@ -1,0 +1,633 @@
+﻿@model Model.ExameViewModel
+
+@{
+    ViewData["Title"] = "Editar";
+
+    var cpf = Model.IdPaciente.Cpf;
+    var nome = Model.IdPaciente.Nome;
+    Model.IdPaciente.Sexo = Model.IdPaciente.Sexo == "M" ? "Masculino" : "Feminino";
+    string dataNascimento = Model.IdPaciente.DataNascimento == null ? Model.IdPaciente.DataNascimento.ToString("yyyy-MM-dd") : DateTime.Now.ToString("yyyy-MM-dd");
+    var rua = Model.IdPaciente.Rua;
+    var cep = Model.IdPaciente.Cep;
+    var bairro = Model.IdPaciente.Bairro;
+    var cidade = Model.IdPaciente.Cidade;
+    var complemento = Model.IdPaciente.Complemento;
+    string numero = Model.IdPaciente.Numero;
+    string estado = Model.IdPaciente.Estado;
+    string email = Model.IdPaciente.Email;
+    string foneCelular = Model.IdPaciente.FoneCelular;
+    string foneFixo = Model.IdPaciente.FoneFixo;
+    bool hipertenso = Model.IdPaciente.Hipertenso;
+    bool cardiopata = Model.IdPaciente.Cardiopatia;
+    bool cancer = Model.IdPaciente.Cancer;
+    bool diabetico = Model.IdPaciente.Diabetes;
+    bool doenRespiatoria = Model.IdPaciente.DoencaRespiratoria;
+    bool obeso = Model.IdPaciente.Obeso;
+    bool imunodeprimido = Model.IdPaciente.Imunodeprimido;
+    string dataExame = Model.DataExame == null ? Model.DataExame.ToString("yyyy-MM-dd") : DateTime.Now.ToString("yyyy-MM-dd");
+    string DataInicioSintomas = Model.DataInicioSintomas == null ? Model.DataInicioSintomas.ToString("yyyy-MM-dd") : DateTime.Now.ToString("yyyy-MM-dd");
+    var estadoid = Model.EstadoRealizacao;
+    var municipioid = Model.MunicipioId;
+    var idAgente = Model.IdAgenteSaude.Idpessoa;
+    var idExame = Model.IdExame;
+}
+
+<!-- Page Content -->
+<div class="main-content card-content" id="panel">
+    <div class="container-fluid mt--6">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-content">
+                    <div class="card-header bg-transparent">
+                        <div class="row align-items-center">
+                            <div class="col">
+                                <h5 class="card-title  text-muted mb-0">MonitoraSUS</h5>
+                                <h5 class="h3 mb-0">Notificar Resultado</h5>
+                            </div>
+                            <div class="col text-right">
+                                <a href="#" class="btn btn-sm btn-default">
+                                    <i class="fas fa-arrow-left"></i> Voltar
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        <form asp-action="Edit" name="form-exame">
+                            <h6 class="heading-small text-muted mb-4">Dados Pessoais</h6>
+                            <div class="pl-lg-4">
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <label class="form-control-label" for="input-cpf">CPF</label>
+                                            <input asp-for="IdPaciente.Cpf" id="input-cpf" placeholder="" value="@cpf" class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="form-control-label" for="input-nome">Paciente</label>
+                                            <input asp-for="IdPaciente.Nome" id="input-nome" placeholder="Nome Completo" class="form-control" value="@nome" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <label for="input-data-nascimento" class="form-control-label">Data de Nascimento</label>
+                                            <input asp-for="IdPaciente.DataNascimento" type="date" id="input-data-nascimento" class="form-control" value="@dataNascimento" required />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <label class="form-control-label" for="sexo">Sexo</label><br>
+
+                                            <div class="custom-control custom-radio custom-control-inline">
+                                                @Html.RadioButtonFor(model => model.IdPaciente.Sexo, "Masculino", new { @class = "custom-control-input", @id = "input-sexo-masc" })
+                                                <label class="custom-control-label" for="input-sexo-masc">Masculino</label>
+                                            </div>
+                                            <div class="custom-control custom-radio custom-control-inline">
+                                                @Html.RadioButtonFor(model => model.IdPaciente.Sexo, "Feminino", new { @class = "custom-control-input", @id = "input-sexo-fem" })
+                                                <label class="custom-control-label" for="input-sexo-fem">Feminino</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr class="my-4" />
+                            <h6 class="heading-small text-muted mb-4">Informações de Contato</h6>
+                            <div class="pl-lg-4">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="form-group">
+                                            <label class="form-control-label" for="input-pesquisa">Pesquisa Endereço</label>
+                                            <input type="text" id="input-pesquisa" required class="form-control" placeholder="Pesquise pelo CEP, Rua, Bairro, Número">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <div class="form-group">
+                                            <label class="form-control-label" for="postal_code">CEP</label>
+                                            <input asp-for="IdPaciente.Cep" id="postal_code" class="form-control" required placeholder="CEP" value="@cep">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-5">
+                                        <div class="form-group">
+                                            <label class="form-control-label" for="route">Logradouro</label>
+                                            <input asp-for="IdPaciente.Rua" id="route" required class="form-control" placeholder="Rua, Av, Travessa" value="@rua">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-1">
+                                        <div class="form-group">
+                                            <label class="form-control-label" for="street_number">Número</label>
+                                            <input asp-for="IdPaciente.Numero" id="street_number" required class="form-control" placeholder="" value="@numero">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label class="form-control-label" for="input-bairro">Bairro</label>
+                                            <input asp-for="IdPaciente.Bairro" id="input-bairro" required class="form-control" placeholder="Bairro" value="@bairro">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label class="form-control-label" for="administrative_area_level_2">Cidade</label>
+                                            <input asp-for="IdPaciente.Cidade" id="administrative_area_level_2" required class="form-control" placeholder="Cidade" value="@cidade">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label class="form-control-label" for="administrative_area_level_1">Estado</label>
+                                            <input asp-for="IdPaciente.Estado" id="administrative_area_level_1" class="form-control" placeholder="Estado" value="@estado">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label class="form-control-label" for="input-complemento">Complemento</label>
+                                            <input asp-for="IdPaciente.Complemento" id="input-complemento" class="form-control" placeholder="Complemento" value="@complemento">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4" hidden>
+                                        <div class="form-group">
+                                            <label class="form-control-label" for="input-latitude">Latitude</label>
+                                            <input asp-for="IdPaciente.Latitude" id="input-latitude" class="form-control" placeholder="" value="00">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4" hidden>
+                                        <div class="form-group">
+                                            <label class="form-control-label" for="input-longitude">Longitude</label>
+                                            <input asp-for="IdPaciente.Longitude" id="input-longitude" class="form-control" placeholder="" value="00">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label class="form-control-label" for="input-email">E-mail</label>
+                                            <input asp-for="IdPaciente.Email" id="input-email" required class="form-control" placeholder="email@example.com" value="@email">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label class="form-control-label" for="input-celular">Celular</label>
+                                            <input asp-for="IdPaciente.FoneCelular" id="input-celular" required class="form-control" placeholder=" (79) 55555 5555" value="@foneCelular">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label class="form-control-label" for="input-telefone">Telefone</label>
+                                            <input asp-for="IdPaciente.FoneFixo" id="input-telefone" class="form-control" placeholder=" (79) 3000 6000" value="@foneFixo">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr class="my-4" />
+                            <h6 class="heading-small text-muted mb-4">Comobirdades</h6>
+                            <div class="pl-lg-4">
+                                <div class="row">
+                                    <div class="col-lg-3">
+                                        <div class="form-group">
+                                            <div class="custom-control custom-checkbox checkbox">
+                                                <label>
+                                                    <input asp-for="IdPaciente.Cardiopatia" checked="@cardiopata" class="custom-control-input" id="customCheck1" />
+                                                    <label class="custom-control-label" for="customCheck1">Cardiopatia</label>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <div class="form-group">
+                                            <div class="custom-control custom-checkbox checkbox">
+                                                <label>
+                                                    <input asp-for="IdPaciente.Diabetes" checked="@diabetico" class="custom-control-input" id="customCheck2" />
+                                                    <label class="custom-control-label" for="customCheck2">Diabetes</label>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <div class="form-group">
+                                            <div class="custom-control custom-checkbox checkbox">
+                                                <label>
+                                                    <input asp-for="IdPaciente.Obeso" checked="@obeso" class="custom-control-input" id="customCheck3" />
+                                                    <label class="custom-control-label" for="customCheck3">Obesidade</label>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <div class="form-group">
+                                            <div class="custom-control custom-checkbox checkbox">
+                                                <label>
+                                                    <input asp-for="IdPaciente.Hipertenso" checked="@hipertenso" class="custom-control-input" id="customCheck4" />
+                                                    <label class="custom-control-label" for="customCheck4">Hipertenso</label>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-3">
+                                        <div class="form-group">
+                                            <div class="custom-control custom-checkbox checkbox">
+                                                <label>
+                                                    <input asp-for="IdPaciente.Imunodeprimido" checked="@imunodeprimido" class="custom-control-input" id="customCheck5" />
+                                                    <label class="custom-control-label" for="customCheck5">Imunodeprimido</label>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <div class="form-group">
+                                            <div class="custom-control custom-checkbox checkbox">
+                                                <label>
+                                                    <input asp-for="IdPaciente.Cancer" checked="@cancer" class="custom-control-input" id="customCheck6" />
+                                                    <label class="custom-control-label" for="customCheck6">Câncer</label>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <div class="form-group">
+                                            <div class="custom-control custom-checkbox checkbox">
+                                                <label>
+                                                    <input asp-for="IdPaciente.DoencaRespiratoria" checked="@doenRespiatoria" class="custom-control-input" id="customCheck7" />
+                                                    <label class="custom-control-label" for="customCheck7">Doença Respiratória</label>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr class="my-4" />
+                            <h6 class="heading-small text-muted mb-4">RESULTADO</h6>
+                            <div class="pl-lg-4">
+                                <div class="row">
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label class="form-control-label" for="input-atuacao-estado">Exame</label>
+                                            <label asp-for="IdVirusBacteria.IdVirusBacteria" class="control-label"></label>
+                                            @Html.DropDownListFor(model => model.IdVirusBacteria.IdVirusBacteria, ViewBag.VirusBacteria as SelectList, new
+                                            { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label for="input-data-sintomas" class="form-control-label">Início dos Sintomas</label>
+                                            <input asp-for="DataInicioSintomas" class="form-control" required value="@DataInicioSintomas" id="input-data-sintomas">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label for="input-data-exame" class="form-control-label">Data do Exame</label>
+                                            <input asp-for="DataExame" class="form-control" required value="@dataExame" id="input-data-exame">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label class="form-control-label" for="igg-reagente">IgG Reagente?</label><br>
+                                            <div class="custom-control custom-radio custom-control-inline">
+                                                @Html.RadioButtonFor(model => model.IgG, "N", new { @class = "custom-control-input", @id = "input-igg-nao" })
+                                                <label class="custom-control-label" for="input-igg-nao">Não</label>
+                                            </div>
+                                            <div class="custom-control custom-radio custom-control-inline">
+                                                @Html.RadioButtonFor(model => model.IgG, "S", new { @class = "custom-control-input", @id = "input-igg-sim" })
+                                                <label class="custom-control-label" for="input-igg-sim">Sim</label>
+                                            </div>
+                                            <div class="custom-control custom-radio custom-control-inline">
+                                                @Html.RadioButtonFor(model => model.IgG, "I", new { @class = "custom-control-input", @id = "input-igg-indeterminado" })
+                                                <label class="custom-control-label" for="input-igg-indeterminado">Indeterminado</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label class="form-control-label" for="igm-reagente">IgM Reagente?</label><br>
+
+                                            <div class="custom-control custom-radio custom-control-inline">
+                                                @Html.RadioButtonFor(model => model.IgM, "N", new { @class = "custom-control-input", @id = "input-igm-nao" })
+                                                <label class="custom-control-label" for="input-igm-nao">Não</label>
+                                            </div>
+                                            <div class="custom-control custom-radio custom-control-inline">
+                                                @Html.RadioButtonFor(model => model.IgM, "S", new { @class = "custom-control-input", @id = "input-igm-sim" })
+                                                <label class="custom-control-label" for="input-igm-sim">Sim</label>
+                                            </div>
+                                            <div class="custom-control custom-radio custom-control-inline">
+                                                @Html.RadioButtonFor(model => model.IgM, "I", new { @class = "custom-control-input", @id = "input-igm-indeterminado" })
+                                                <label class="custom-control-label" for="input-igm-indeterminado">Indeterminado</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label class="form-control-label" for="rt-pcr">RT PCR Reagente?</label><br>
+                                            <div class="custom-control custom-radio custom-control-inline">
+                                                @Html.RadioButtonFor(model => model.Pcr, "N", new { @class = "custom-control-input", @id = "input-rt-pcr-nao" })
+                                                <label class="custom-control-label" for="input-rt-pcr-nao">Não</label>
+                                            </div>
+                                            <div class="custom-control custom-radio custom-control-inline">
+                                                @Html.RadioButtonFor(model => model.Pcr, "S", new { @class = "custom-control-input", @id = "input-rt-pcr-sim" })
+                                                <label class="custom-control-label" for="input-rt-pcr-sim">Sim</label>
+                                            </div>
+                                            <div class="custom-control custom-radio custom-control-inline">
+                                                @Html.RadioButtonFor(model => model.Pcr, "I", new { @class = "custom-control-input", @id = "input-rt-pcr-indeterminado" })
+                                                <label class="custom-control-label" for="input-rt-pcr-indeterminado">Indeterminado</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group" hidden>
+                                <input asp-for="EstadoRealizacao" id="estado-realizacao" class="form-control" placeholder="" value="@estadoid">
+                                <input asp-for="MunicipioId" id="municipio" class="form-control" placeholder="" value="@municipioid">
+                                <input asp-for="IdAgenteSaude.Idpessoa" id="agente" class="form-control" placeholder="" value="@idAgente">
+                                <input asp-for="IdExame" id="exame" placeholder="" value="@idExame" class="form-control" />
+                            </div>
+                            <hr class="my-4" />
+                            <div class="modal fade bs-example-modal-sm" id="modal-confirmar" tabindex="-1" role="dialog" aria-hidden="true">
+                                <div class="modal-dialog modal-sm">
+                                    <div class="modal-content">
+                                        <div style="padding: 10pt;text-align: center">
+                                            <p id="titulo-confirmacao"> Confirmar alteração ? </p>
+                                            <p id="texto-confirmacao"></p>
+
+                                            <div class="col text-center  form-group" id="acoes-model-form">
+                                                <button type="button" data-dismiss="modal" class="btn btn-danger">Não</button>
+                                                <button onclick="submitForm()" data-dismiss="modal" id="acoes-model-form" value="Sim" class="btn btn-success">Sim</button>
+                                            </div>
+
+                                            <div class="col text-center" id="ok-model-form">
+                                                <button type="button" data-dismiss="modal" class="btn btn-success">Ok</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        <div class="row align-items-center">
+                            <div class="col text-right">
+                                <button value="Notificar" onclick='mensagemResultado()' class="btn btn-success">Notificar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade bs-example-modal-sm" id="modal-espera" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="loading-spinner" style="padding: 20pt;text-align: center">
+                    <svg id="hourglass" width='64px' height='64px' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" class="uil-hourglass">
+                        <rect x="0" y="0" width="100" height="100" fill="none" class="bk"></rect>
+                        <g>
+                            <path fill="none" stroke="#007282" stroke-width="5" stroke-miterlimit="10" d="M58.4,51.7c-0.9-0.9-1.4-2-1.4-2.3s0.5-0.4,1.4-1.4 C70.8,43.8,79.8,30.5,80,15.5H70H30H20c0.2,15,9.2,28.1,21.6,32.3c0.9,0.9,1.4,1.2,1.4,1.5s-0.5,1.6-1.4,2.5 C29.2,56.1,20.2,69.5,20,85.5h10h40h10C79.8,69.5,70.8,55.9,58.4,51.7z" class="glass"></path>
+                            <clipPath id="uil-hourglass-clip1">
+                                <rect x="15" y="20" width="70" height="25" class="clip">
+                                    <animate attributeName="height" from="25" to="0" dur="1s" repeatCount="indefinite" vlaues="25;0;0" keyTimes="0;0.5;1"></animate>
+                                    <animate attributeName="y" from="20" to="45" dur="1s" repeatCount="indefinite" vlaues="20;45;45" keyTimes="0;0.5;1"></animate>
+                                </rect>
+                            </clipPath>
+                            <clipPath id="uil-hourglass-clip2">
+                                <rect x="15" y="55" width="70" height="25" class="clip">
+                                    <animate attributeName="height" from="0" to="25" dur="1s" repeatCount="indefinite" vlaues="0;25;25" keyTimes="0;0.5;1"></animate>
+                                    <animate attributeName="y" from="80" to="55" dur="1s" repeatCount="indefinite" vlaues="80;55;55" keyTimes="0;0.5;1"></animate>
+                                </rect>
+                            </clipPath>
+                            <path d="M29,23c3.1,11.4,11.3,19.5,21,19.5S67.9,34.4,71,23H29z" clip-path="url(#uil-hourglass-clip1)" fill="#ffab00" class="sand"></path>
+                            <path d="M71.6,78c-3-11.6-11.5-20-21.5-20s-18.5,8.4-21.5,20H71.6z" clip-path="url(#uil-hourglass-clip2)" fill="#ffab00" class="sand"></path>
+                            <animateTransform attributeName="transform" type="rotate" from="0 50 50" to="180 50 50" repeatCount="indefinite" dur="1s" values="0 50 50;0 50 50;180 50 50" keyTimes="0;0.7;1"></animateTransform>
+                        </g>
+                    </svg>
+
+                    <p>Aguarde enquanto verificamos se esse paciente já existe...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@if (TempData["mensagemSucesso"] != null || TempData["mensagemErro"] != null)
+{
+    <div class="modal fade bs-example-modal-sm" id="modal-mensagem-retorno" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div style="padding: 20pt;text-align: center">
+                    @if (TempData["mensagemSucesso"] != null)
+                    {
+                        <p> @TempData["mensagemSucesso"] </p>
+
+                        <p>
+                            Foi enviada uma mensagem de Email/SMS/Whatsapp
+                            para o celular cadastrado para notificá-lo da alteração
+                            do resultado do exame.
+                        </p>
+                        <a asp-action="Index" class="btn btn-success">Ok</a>
+
+                    }
+                    else
+                    {
+                        <p> @TempData["mensagemErro"] </p>
+                        <button type="button" data-dismiss="modal" class="btn btn-success">Ok</button>
+
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+
+
+<!-- GOOGLE SETING SCRIPTS -->
+<script>
+    var placeSearch, autocomplete, inputHtml, geocoder;
+    inputHtml = document.getElementById('input-pesquisa');
+
+    var componentForm = {
+        route: 'long_name',
+        street_number: 'short_name',
+        administrative_area_level_1: 'long_name',
+        administrative_area_level_2: 'long_name',
+        postal_code: 'short_name'
+    };
+
+    function initAutocomplete() {
+        autocomplete = new google.maps.places.Autocomplete(inputHtml, { types: ['geocode'] });
+        geocoder = new google.maps.Geocoder();
+
+        autocomplete.setFields(['address_component']);
+        autocomplete.addListener('place_changed', fillInAddress);
+    }
+
+    function fillInAddress() {
+        var place = autocomplete.getPlace();
+
+        geocoder.geocode({ 'address': inputHtml.value }, function (results, status) {
+            if (status === 'OK') {
+                let latitude = document.getElementById('input-latitude');
+                let longitude = document.getElementById('input-longitude');
+
+                // SETTING VALUES
+                latitude.value = results[0].geometry.location.lat();
+                longitude.value = results[0].geometry.location.lng();
+            } else {
+                alert('ERRO AO INICIALIZAR O GEOCODE: ' + status);
+            }
+        });
+
+        for (var component in componentForm) {
+            document.getElementById(component).value = '';
+        }
+
+        for (var i = 0; i < place.address_components.length; i++) {
+            var addressType = place.address_components[i].types[0];
+            if (componentForm[addressType]) {
+                var val = place.address_components[i][componentForm[addressType]];
+                document.getElementById(addressType).value = val;
+
+                // DISABLE ONLY INPUTS THAT RECEIVED A VALID VALUE
+                if (val != '')
+                    document.getElementById(addressType).setAttribute('readonly', 'true');
+            }
+        }
+    }
+
+    // Bias the autocomplete object to the user's geographical location,
+    // as supplied by the browser's 'navigator.geolocation' object.
+    function geolocate() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                var geolocation = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                };
+                var circle = new google.maps.Circle(
+                    { center: geolocation, radius: position.coords.accuracy });
+                autocomplete.setBounds(circle.getBounds());
+            });
+        }
+    }
+</script>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCbtYabZNfEWTf5nvsDe4QkBbz_PUPv2Uk&libraries=places&callback=initAutocomplete&language=pt-BR"
+        async defer></script>
+
+
+<script>
+
+    window.onload = function () {
+        $('#modal-mensagem-retorno').modal('show');
+    };
+
+    // submete o formulário completo
+    function submitForm() {
+        $('#modal-espera').modal('show');
+        document.forms["form-exame"].submit();
+    }
+
+    function mensagemResultado() {
+        var mensagem = verificaCampoRequired();
+
+        $('#texto-confirmacao').text(mensagem);
+        $('#modal-confirmar').modal('show');
+    }
+
+    // verifica se todos os campos estão preenchidos (diretiva required parou de funcionar)
+    function verificaCampoRequired() {
+        var cpf = document.getElementById('input-cpf').value;
+        var nome = document.getElementById('input-nome').value;
+        var dataNasc = document.getElementById('input-data-nascimento').value;
+        var cep = document.getElementById('postal_code').value;
+        var numero = document.getElementById('street_number').value;
+        var rua = document.getElementById('route').value;
+        var bairro = document.getElementById('input-bairro').value;
+        var cidade = document.getElementById('administrative_area_level_2').value;
+        var estado = document.getElementById('administrative_area_level_1').value;
+        var foneCelular = document.getElementById('input-celular').value;
+        var dataExame = document.getElementById('input-data-exame').value;
+        var dataSintomas = document.getElementById('input-data-exame').value;
+
+        var mensagem = "Os demais campos precisam ser preenchidos ";
+
+        $('#ok-model-form').hide();
+        $('#acoes-model-form').hide();
+
+        if (cpf === "" || nome === "" || dataNasc === "" || cep === "" ||
+            rua === "" || bairro === "" || cidade === "" || estado === "" ||
+            foneCelular === "" || dataExame === "" || dataSintomas === "" || numero === "") {
+
+            if (cpf === "")
+                mensagem += "- CPF ";
+
+            if (nome === "")
+                mensagem += "- NOME ";
+
+            if (dataNasc === "")
+                mensagem += "- DATA DE NASCIMENTO ";
+
+            if (cep === "")
+                mensagem += "- CEP ";
+
+            if (rua === "")
+                mensagem += "- RUA ";
+
+            if (numero === "")
+                mensagem += "- NUMERO";
+
+            if (bairro === "")
+                mensagem += "- BAIRRO ";
+
+            if (cidade === "")
+                mensagem += "- CIDADE ";
+
+            if (estado === "")
+                mensagem += "- ESTADO ";
+
+            if (foneCelular === "")
+                mensagem += "- CELULAR ";
+
+            if (dataExame === "")
+                mensagem += "- DATA DO EXAME ";
+
+            if (dataSintomas === "")
+                mensagem += "- DATA DOS SINTOMAS ";
+
+            $('#ok-model-form').show();
+        } else {
+            var mensagem = "Cpf: " + cpf + "\n" +
+                "Paciente: " + nome + "\n" +
+                "Resultado: " + resultadoExame();
+
+            $('#acoes-model-form').show();
+        }
+
+        return mensagem;
+    }
+
+    // Calcula o resultado do exame
+    function resultadoExame() {
+        var igg = $("input[name='IgG']:checked").val();
+        var igm = $("input[name='IgM']:checked").val();
+        var pcr = $("input[name='Pcr']:checked").val();
+
+        var resultado = "Indetermiando";
+
+        if (pcr === "S" || igm === "S") {
+            resultado = "Positivo";
+        } else if (igg === "S") {
+            resultado = "Curado";
+        } else if (pcr === "N") {
+            resultado = "Negativo";
+        } else if (pcr === "I") {
+            resultado = "Indetermiando";
+        }
+
+        return resultado;
+    }
+
+</script>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+

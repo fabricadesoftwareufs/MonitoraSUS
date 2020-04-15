@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Persistence;
+using Service;
 using Service.Interface;
 
 namespace MonitoraSUS
@@ -38,19 +39,19 @@ namespace MonitoraSUS
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            // Database Context.
             services.AddDbContext<monitorasusContext>(options =>
-            {
-                options.UseMySQL(Configuration.GetConnectionString("MySqlConnection"));
-            });
+                options.UseMySQL(
+                    Configuration.GetConnectionString("MySqlConnection")));
 
-            // Dependencies Injections
-            services.AddScoped<IMunicipioService, MunicipioService>();
-            services.AddScoped<IEstadoService, EstadoService>();
+            services.AddScoped<IVirusBacteriaService,VirusBacteriaService>();
+            services.AddScoped<IExameService, ExameService>();
             services.AddScoped<IPessoaService, PessoaService>();
+            services.AddScoped<IEstadoService, EstadoService>();
+            services.AddScoped<ISituacaoVirusBacteriaService,SituacaoVirusBacteriaService>();
+            services.AddScoped<IMunicipioService, MunicipioService>();
             services.AddScoped<IPessoaTrabalhaMunicipioService, PessoaTrabalhaMunicipioService>();
             services.AddScoped<IPessoaTrabalhaEstadoService, PessoaTrabalhaEstadoService>();
-            services.AddScoped<IUsuarioService, UsuarioService>();
+            services.AddScoped<IUsuarioService, UsuarioService>();           
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }

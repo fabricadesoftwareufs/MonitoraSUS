@@ -11,6 +11,7 @@ namespace Service
     public class MunicipioService : IMunicipioService
     {
         private readonly monitorasusContext _context;
+
         public MunicipioService(monitorasusContext context)
         {
             _context = context;
@@ -18,18 +19,42 @@ namespace Service
 
         public bool Delete(int id)
         {
-            throw new NotImplementedException();
+            var municipio = _context.Municipio.Find(id);
+            _context.Municipio.Remove(municipio);
+            return _context.SaveChanges() == 1 ? true : false;
         }
 
         public List<MunicipioModel> GetAll()
-        {
-            throw new NotImplementedException();
-        }
+          => _context.Municipio
+                .Select(municipio => new MunicipioModel
+                {
+                    Id = municipio.Id,
+                    Nome = municipio.Nome,
+                    Uf = municipio.Uf,
+                    Codigo = municipio.Codigo
+                }).ToList();
 
         public MunicipioModel GetById(int id)
-        {
-            throw new NotImplementedException();
-        }
+         => _context.Municipio
+                .Where(municipioModel => municipioModel.Id == id)
+                .Select(municipio => new MunicipioModel
+                {
+                    Id = municipio.Id,
+                    Nome = municipio.Nome,
+                    Uf = municipio.Uf,
+                    Codigo = municipio.Codigo
+                }).FirstOrDefault();
+
+        public MunicipioModel GetByName(string name)
+         => _context.Municipio
+                .Where(municipioModel => municipioModel.Nome.ToUpper().Equals(name.ToUpper()))
+                .Select(municipio => new MunicipioModel
+                {
+                    Id = municipio.Id,
+                    Nome = municipio.Nome,
+                    Uf = municipio.Uf,
+                    Codigo = municipio.Codigo
+                }).FirstOrDefault();
 
         public List<MunicipioModel> GetByUFCode(string UFCode)
             => _context
@@ -45,12 +70,25 @@ namespace Service
 
         public bool Insert(MunicipioModel municipioModel)
         {
-            throw new NotImplementedException();
+            _context.Update(ModelToEntity(municipioModel));
+            return _context.SaveChanges() == 1 ? true : false;
         }
 
         public bool Update(MunicipioModel municipioModel)
         {
-            throw new NotImplementedException();
+            _context.Update(ModelToEntity(municipioModel));
+            return _context.SaveChanges() == 1 ? true : false;
+        }
+        public Municipio ModelToEntity(MunicipioModel municipio)
+        {
+
+            return new Municipio
+            {
+                Id = municipio.Id,
+                Nome = municipio.Nome,
+                Uf = municipio.Uf,
+                Codigo = municipio.Codigo,
+            };
         }
     }
 }
