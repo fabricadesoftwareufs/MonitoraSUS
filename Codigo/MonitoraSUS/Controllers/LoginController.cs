@@ -7,8 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Model;
 using Model.ViewModel;
-using MonitoraSUS.Resources.Methods;
-using QueroTransporteWeb.Resources.Methods;
+using MonitoraSUS.Utils;
 using Service;
 using Service.Interface;
 
@@ -29,12 +28,15 @@ namespace MonitoraSUS.Controllers
             return View();
         }
 
+        [HttpGet("Login/RetornaSenha/{senha}")]
+        public string RetornaSenha(string senha) => Criptografia.GerarHashSenha(senha);
+
         [HttpPost]
         public async Task<IActionResult> SignIn(LoginViewModel login)
         {
             if (ModelState.IsValid)
             {
-                var cpf = MethodsUtils.RemoverCaracteresEspeciais(login.Cpf);
+                var cpf = Methods.RemoveSpecialsCaracts(login.Cpf);
                 var senha = Criptografia.GerarHashSenha(login.Senha);
                 var user = _usuarioService.GetByLogin(cpf, senha);
 
@@ -42,6 +44,7 @@ namespace MonitoraSUS.Controllers
                 {
                     // informaçoes pessoais do usuario | adicionar as claims o dado que mais precisar
                     var person = _pessoaService.GetById(user.IdPessoa);
+                    var role = ReturnRole(user.TipoUsuario);
 
                     var claims = new List<Claim>
                     {
@@ -51,7 +54,7 @@ namespace MonitoraSUS.Controllers
                         new Claim(ClaimTypes.Locality, person.Cidade),
                         new Claim(ClaimTypes.UserData, user.Cpf),
                         new Claim(ClaimTypes.Email, user.Email),
-                        new Claim(ClaimTypes.Role, user.TipoUsuario.ToString())
+                        new Claim(ClaimTypes.Role, role)
                     };
                     // Adicionando uma identidade as claims.
                     var identidade = new ClaimsIdentity(claims, "login");
@@ -86,7 +89,7 @@ namespace MonitoraSUS.Controllers
             if (ModelState.IsValid)
             {
                 // Informações do objeto
-                usuario.Cpf = MethodsUtils.RemoverCaracteresEspeciais(usuario.Cpf);
+                usuario.Cpf = Methods.RemoveSpecialsCaracts(usuario.Cpf);
                 usuario.Senha = Criptografia.GerarHashSenha(usuario.Senha);
 
                 if (_usuarioService.Insert(usuario))
@@ -99,6 +102,19 @@ namespace MonitoraSUS.Controllers
         public ActionResult AcessDenied()
         {
             return View();
+        }
+
+        private string ReturnRole(int userType)
+        {
+            switch (userType)
+            {
+                case 0: return "USUARIO";
+                case 1: return "AGENTE";
+                case 2: return "COORDENADOR";
+                case 3: return "SECRETARIO";
+                case 4: return "ADM";
+                default: return "UNDEFINED";
+            }
         }
     }
 }

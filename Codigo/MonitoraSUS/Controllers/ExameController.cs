@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Model;
-using MonitoraSUS.Resources.Methods;
+using MonitoraSUS.Utils;
 using Service;
 using Service.Interface;
 
@@ -22,8 +22,6 @@ namespace MonitoraSUS.Controllers
         private readonly IPessoaTrabalhaEstadoService _pessoaTrabalhaEstadoContext;
         private readonly IEmpresaExameService _empresaExameContext;
         private readonly IPessoaTrabalhaMunicipioService _pessoaTrabalhaMunicipioContext;
-
-
 
         public ExameController(IVirusBacteriaService virusBacteriaContext,
                                IExameService exameContext,
@@ -124,7 +122,7 @@ namespace MonitoraSUS.Controllers
 
             if (exame.PesquisarCpf == 1) // pesquisar usuario por cpf 
             {
-                var cpf = RemoveSpecialsCaracts(exame.IdPaciente.Cpf); // cpf sem caracteres especiais
+                var cpf = Methods.RemoveSpecialsCaracts(exame.IdPaciente.Cpf); // cpf sem caracteres especiais
 
                 var pessoa = _pessoaContext.GetByCpf(cpf);
 
@@ -171,7 +169,7 @@ namespace MonitoraSUS.Controllers
                 try
                 {
                     // inserindo o resultado do exame (situacao da pessoa)                  
-                    var cpf = RemoveSpecialsCaracts(exame.IdPaciente.Cpf);
+                    var cpf = Methods.RemoveSpecialsCaracts(exame.IdPaciente.Cpf);
                     var idPessoa = _pessoaContext.GetByCpf(cpf).Idpessoa;
                     var situacaoPessoa = _situacaoPessoaContext.GetById(idPessoa, exame.IdVirusBacteria.IdVirusBacteria);
 
@@ -220,7 +218,7 @@ namespace MonitoraSUS.Controllers
                 situacao = new SituacaoPessoaVirusBacteriaModel();
 
                 situacao.IdVirusBacteria = exame.IdVirusBacteria.IdVirusBacteria;
-                situacao.Idpessoa = _pessoaContext.GetByCpf(RemoveSpecialsCaracts(exame.IdPaciente.Cpf)).Idpessoa;
+                situacao.Idpessoa = _pessoaContext.GetByCpf(Methods.RemoveSpecialsCaracts(exame.IdPaciente.Cpf)).Idpessoa;
                 situacao.UltimaSituacaoSaude = GetResultadoExame(exame);
             }
 
@@ -232,7 +230,7 @@ namespace MonitoraSUS.Controllers
             ExameModel exame = new ExameModel();
 
             exame.IdExame = viewModel.IdExame;
-            exame.IdPaciente = _pessoaContext.GetByCpf(RemoveSpecialsCaracts(viewModel.IdPaciente.Cpf)).Idpessoa;
+            exame.IdPaciente = _pessoaContext.GetByCpf(Methods.RemoveSpecialsCaracts(viewModel.IdPaciente.Cpf)).Idpessoa;
             exame.IdVirusBacteria = viewModel.IdVirusBacteria.IdVirusBacteria;
             exame.IgG = viewModel.IgG;
             exame.IgM = viewModel.IgM;
@@ -251,16 +249,16 @@ namespace MonitoraSUS.Controllers
             // var agente = _pessoaContext.GetById(MethodsUtils.RetornLoggedUser((ClaimsIdentity)User.Identity).IdPessoa);
             var agente = _pessoaContext.GetById(5);
             var secretarioMunicipio = _pessoaTrabalhaMunicipioContext.GetByIdPessoa(agente.Idpessoa);
-            var secretarioEstado    = _pessoaTrabalhaEstadoContext.GetByIdPessoa(agente.Idpessoa);
+            var secretarioEstado = _pessoaTrabalhaEstadoContext.GetByIdPessoa(agente.Idpessoa);
 
             // verificando se o funcionario trabalha no municipio ou no estado
             if (secretarioMunicipio != null)
             {
                 exame.IdMunicipio = secretarioMunicipio.IdMunicipio;
                 exame.IdEstado = _estadoContext.GetByUf(_municicpioContext.GetById(secretarioMunicipio.IdMunicipio).Uf).Id;
-                
+
                 if (secretarioEstado != null)
-                    exame.IdEmpresaSaude = secretarioEstado.IdEmpresaExame; 
+                    exame.IdEmpresaSaude = secretarioEstado.IdEmpresaExame;
             }
             else
             {
@@ -305,7 +303,7 @@ namespace MonitoraSUS.Controllers
              * os exames que ele pode ver
              */
 
-            // var usuario = MethodsUtils.RetornLoggedUser((ClaimsIdentity)User.Identity);
+             //var usuario = MonitoraSUS.RetornLoggedUser((ClaimsIdentity)User.Identity);
             var usuario = new UsuarioModel { IdUsuario = 0, IdPessoa = 5, TipoUsuario = 1 };
 
             var exames = new List<ExameModel>();
@@ -327,7 +325,7 @@ namespace MonitoraSUS.Controllers
                 else
                 {
                     var secretarioEstado = _pessoaTrabalhaEstadoContext.GetByIdPessoa(usuario.IdPessoa);
-                    if(secretarioEstado != null)
+                    if (secretarioEstado != null)
                         exames = _exameContext.GetByIdEstado(secretarioEstado.IdEstado);
                 }
             }
@@ -362,13 +360,13 @@ namespace MonitoraSUS.Controllers
         {
 
 
-            exame.IdPaciente.Cpf = RemoveSpecialsCaracts(exame.IdPaciente.Cpf);
-            exame.IdPaciente.Cep = RemoveSpecialsCaracts(exame.IdPaciente.Cep);
-            exame.IdPaciente.FoneCelular = RemoveSpecialsCaracts(exame.IdPaciente.FoneCelular);
+            exame.IdPaciente.Cpf = Methods.RemoveSpecialsCaracts(exame.IdPaciente.Cpf);
+            exame.IdPaciente.Cep = Methods.RemoveSpecialsCaracts(exame.IdPaciente.Cep);
+            exame.IdPaciente.FoneCelular = Methods.RemoveSpecialsCaracts(exame.IdPaciente.FoneCelular);
             exame.IdPaciente.Sexo = exame.IdPaciente.Sexo.Equals("M") ? "Masculino" : "Feminino";
 
             if (exame.IdPaciente.FoneFixo != null)
-                exame.IdPaciente.FoneFixo = RemoveSpecialsCaracts(exame.IdPaciente.FoneFixo);
+                exame.IdPaciente.FoneFixo = Methods.RemoveSpecialsCaracts(exame.IdPaciente.FoneFixo);
 
             var paciente = _pessoaContext.GetByCpf(exame.IdPaciente.Cpf);
             if (paciente != null)
@@ -376,9 +374,6 @@ namespace MonitoraSUS.Controllers
 
             return exame.IdPaciente;
         }
-
-        public static string RemoveSpecialsCaracts(string poluatedString)
-            => Regex.Replace(poluatedString, "[^0-9a-zA-Z]+", "");
 
         public string GetResultadoExame(ExameViewModel exame)
         {
