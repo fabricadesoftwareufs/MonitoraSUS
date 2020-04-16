@@ -26,10 +26,11 @@
     bool imunodeprimido = Model.IdPaciente.Imunodeprimido;
     string dataExame = Model.DataExame == null ? Model.DataExame.ToString("yyyy-MM-dd") : DateTime.Now.ToString("yyyy-MM-dd");
     string DataInicioSintomas = Model.DataInicioSintomas == null ? Model.DataInicioSintomas.ToString("yyyy-MM-dd") : DateTime.Now.ToString("yyyy-MM-dd");
-    var estadoid = Model.EstadoRealizacao;
+    var estadoid = Model.IdEstado;
     var municipioid = Model.MunicipioId;
     var idAgente = Model.IdAgenteSaude.Idpessoa;
     var idExame = Model.IdExame;
+    var idEmpresaSaude = Model.IdEmpresaSaude;
 }
 
 <!-- Page Content -->
@@ -45,7 +46,7 @@
                                 <h5 class="h3 mb-0">Notificar Resultado</h5>
                             </div>
                             <div class="col text-right">
-                                <a href="#" class="btn btn-sm btn-default">
+                                <a asp-action="Index" class="btn btn-sm btn-default">
                                     <i class="fas fa-arrow-left"></i> Voltar
                                 </a>
                             </div>
@@ -60,7 +61,7 @@
                                     <div class="col-md-2">
                                         <div class="form-group">
                                             <label class="form-control-label" for="input-cpf">CPF</label>
-                                            <input asp-for="IdPaciente.Cpf" id="input-cpf" placeholder="" value="@cpf" class="form-control" />
+                                            <input asp-for="IdPaciente.Cpf" id="input-cpf" placeholder="" value="@cpf" class="form-control" readonly/>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -332,10 +333,11 @@
                                 </div>
                             </div>
                             <div class="form-group" hidden>
-                                <input asp-for="EstadoRealizacao" id="estado-realizacao" class="form-control" placeholder="" value="@estadoid">
+                                <input asp-for="IdEstado" id="estado-realizacao" class="form-control" placeholder="" value="@estadoid">
                                 <input asp-for="MunicipioId" id="municipio" class="form-control" placeholder="" value="@municipioid">
                                 <input asp-for="IdAgenteSaude.Idpessoa" id="agente" class="form-control" placeholder="" value="@idAgente">
-                                <input asp-for="IdExame" id="exame" placeholder="" value="@idExame" class="form-control" />
+                                <input asp-for="IdExame" id="exame" placeholder="" class="form-control" value="@idExame"  />
+                                <input asp-for="IdEmpresaSaude" id="empresa-saude" class="form-control" value="@idEmpresaSaude" />
                             </div>
                             <hr class="my-4" />
                             <div class="modal fade bs-example-modal-sm" id="modal-confirmar" tabindex="-1" role="dialog" aria-hidden="true">
@@ -613,12 +615,12 @@
 
         if (pcr === "S" || igm === "S") {
             resultado = "Positivo";
+        } else if (pcr === "I" || igm === "I") {
+            resultado = "Indeterminado";
         } else if (igg === "S") {
             resultado = "Curado";
-        } else if (pcr === "N") {
+        } else if (pcr === "N" || igm === "N") {
             resultado = "Negativo";
-        } else if (pcr === "I") {
-            resultado = "Indetermiando";
         }
 
         return resultado;

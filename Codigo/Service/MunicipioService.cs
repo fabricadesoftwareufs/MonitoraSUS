@@ -70,7 +70,7 @@ namespace Service
 
         public bool Insert(MunicipioModel municipioModel)
         {
-            _context.Update(ModelToEntity(municipioModel));
+            _context.Add(ModelToEntity(municipioModel));
             return _context.SaveChanges() == 1 ? true : false;
         }
 
