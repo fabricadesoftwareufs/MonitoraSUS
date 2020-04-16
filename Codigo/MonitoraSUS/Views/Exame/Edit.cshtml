@@ -5,7 +5,6 @@
 
     var cpf = Model.IdPaciente.Cpf;
     var nome = Model.IdPaciente.Nome;
-    Model.IdPaciente.Sexo = Model.IdPaciente.Sexo == "M" ? "Masculino" : "Feminino";
     string dataNascimento = Model.IdPaciente.DataNascimento == null ? Model.IdPaciente.DataNascimento.ToString("yyyy-MM-dd") : DateTime.Now.ToString("yyyy-MM-dd");
     var rua = Model.IdPaciente.Rua;
     var cep = Model.IdPaciente.Cep;
@@ -31,6 +30,7 @@
     var idAgente = Model.IdAgenteSaude.Idpessoa;
     var idExame = Model.IdExame;
     var idEmpresaSaude = Model.IdEmpresaSaude;
+    var idPaciente = Model.IdPaciente.Idpessoa;
 }
 
 <!-- Page Content -->
@@ -81,11 +81,11 @@
                                             <label class="form-control-label" for="sexo">Sexo</label><br>
 
                                             <div class="custom-control custom-radio custom-control-inline">
-                                                @Html.RadioButtonFor(model => model.IdPaciente.Sexo, "Masculino", new { @class = "custom-control-input", @id = "input-sexo-masc" })
+                                                @Html.RadioButtonFor(model => model.IdPaciente.Sexo, "M", new { @class = "custom-control-input", @id = "input-sexo-masc" })
                                                 <label class="custom-control-label" for="input-sexo-masc">Masculino</label>
                                             </div>
                                             <div class="custom-control custom-radio custom-control-inline">
-                                                @Html.RadioButtonFor(model => model.IdPaciente.Sexo, "Feminino", new { @class = "custom-control-input", @id = "input-sexo-fem" })
+                                                @Html.RadioButtonFor(model => model.IdPaciente.Sexo, "F", new { @class = "custom-control-input", @id = "input-sexo-fem" })
                                                 <label class="custom-control-label" for="input-sexo-fem">Feminino</label>
                                             </div>
                                         </div>
@@ -147,13 +147,13 @@
                                     <div class="col-lg-4" hidden>
                                         <div class="form-group">
                                             <label class="form-control-label" for="input-latitude">Latitude</label>
-                                            <input asp-for="IdPaciente.Latitude" id="input-latitude" class="form-control" placeholder="" value="00">
+                                            <input asp-for="IdPaciente.Latitude" id="input-latitude" class="form-control" placeholder="" value="21">
                                         </div>
                                     </div>
                                     <div class="col-lg-4" hidden>
                                         <div class="form-group">
                                             <label class="form-control-label" for="input-longitude">Longitude</label>
-                                            <input asp-for="IdPaciente.Longitude" id="input-longitude" class="form-control" placeholder="" value="00">
+                                            <input asp-for="IdPaciente.Longitude" id="input-longitude" class="form-control" placeholder="" value="12">
                                         </div>
                                     </div>
                                     <div class="col-lg-4">
@@ -336,7 +336,8 @@
                                 <input asp-for="IdEstado" id="estado-realizacao" class="form-control" placeholder="" value="@estadoid">
                                 <input asp-for="MunicipioId" id="municipio" class="form-control" placeholder="" value="@municipioid">
                                 <input asp-for="IdAgenteSaude.Idpessoa" id="agente" class="form-control" placeholder="" value="@idAgente">
-                                <input asp-for="IdExame" id="exame" placeholder="" class="form-control" value="@idExame"  />
+                                <input asp-for="IdPaciente.Idpessoa" id="paciente" class="form-control" placeholder="" value="@idPaciente">
+                                <input asp-for="IdExame" id="exame" placeholder="" class="form-control" value="@idExame" />
                                 <input asp-for="IdEmpresaSaude" id="empresa-saude" class="form-control" value="@idEmpresaSaude" />
                             </div>
                             <hr class="my-4" />

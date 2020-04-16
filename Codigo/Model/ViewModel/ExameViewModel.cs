@@ -13,7 +13,7 @@ namespace Model
             IdAgenteSaude = new PessoaModel();
             IdVirusBacteria = new VirusBacteriaModel();
             IdPaciente = new PessoaModel();
-            IdPaciente.Sexo = "Masculino";
+            IdPaciente.Sexo = "M";
             DataExame = DateTime.Now; 
             DataInicioSintomas = DateTime.Now;
             IdEstado = 0;

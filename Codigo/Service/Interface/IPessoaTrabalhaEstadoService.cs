@@ -13,6 +13,6 @@ namespace Service.Interface
         List<PessoaTrabalhaEstadoModel> GetAll();
         PessoaTrabalhaEstadoModel GetById(int idPessoa, int idEstado);
         List<PessoaTrabalhaEstadoModel> GetAllSecretariesPendents();
-        PessoaTrabalhaEstadoModel GetSecretarioAtivoByIdPessoa(int idPessoa);
+        PessoaTrabalhaEstadoModel GetByIdPessoa(int idPessoa);
     }
 }
