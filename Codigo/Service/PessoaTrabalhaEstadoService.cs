@@ -32,6 +32,19 @@ namespace Service
                     SituacaoCadastro = p.SituacaoCadastro
                 }).ToList();
 
+        public List<PessoaTrabalhaEstadoModel> GetAllAgents()
+            => _context
+                .Pessoatrabalhaestado
+                .Where(p => p.EhSecretario.Equals(0))
+                .Select(p => new PessoaTrabalhaEstadoModel
+                {
+                    IdPessoa = p.IdPessoa,
+                    IdEstado = p.IdEstado,
+                    EhResponsavel = Convert.ToBoolean(p.EhResponsavel),
+                    EhSecretario = Convert.ToBoolean(p.EhSecretario),
+                    SituacaoCadastro = p.SituacaoCadastro
+                }).ToList();
+
         public List<PessoaTrabalhaEstadoModel> GetAllSecretariesPendents()
             => _context
                 .Pessoatrabalhaestado
@@ -46,9 +59,18 @@ namespace Service
                 }).ToList();
 
         public PessoaTrabalhaEstadoModel GetById(int id)
-        {
-            throw new NotImplementedException();
-        }
+            => _context
+                .Pessoatrabalhaestado
+                .Where(p => p.IdPessoa == id)
+                .Select(p => new PessoaTrabalhaEstadoModel
+                {
+                    IdPessoa = p.IdPessoa,
+                    IdEstado = p.IdEstado,
+                    EhResponsavel = Convert.ToBoolean(p.EhResponsavel),
+                    EhSecretario = Convert.ToBoolean(p.EhSecretario),
+                    SituacaoCadastro = p.SituacaoCadastro
+                }).FirstOrDefault();
+
 
         public bool Insert(PessoaTrabalhaEstadoModel pessoaTrabalhaEstadoModel)
         {

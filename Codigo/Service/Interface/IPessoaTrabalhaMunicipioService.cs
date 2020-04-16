@@ -10,6 +10,7 @@ namespace Service.Interface
         bool Delete(int id);
         List<PessoaTrabalhaMunicipioModel> GetAll();
         List<PessoaTrabalhaMunicipioModel> GetAllSecretariesPendents();
+        List<PessoaTrabalhaMunicipioModel> GetAllAgents();
         PessoaTrabalhaMunicipioModel GetById(int id);
     }
 }

@@ -42,7 +42,7 @@ namespace Service
 
 
         public UsuarioModel GetById(int id)
-       => _context
+            => _context
                 .Usuario
                 .Where(r => r.IdUsuario == id)
                 .Select(model => new UsuarioModel
@@ -55,7 +55,7 @@ namespace Service
                 }).FirstOrDefault();
 
         public UsuarioModel GetByLogin(string cpf, string senha)
-         => _context
+            => _context
                 .Usuario
                 .Where(model => model.Cpf.Equals(cpf) && model.Senha.Equals(senha))
                 .Select(model => new UsuarioModel

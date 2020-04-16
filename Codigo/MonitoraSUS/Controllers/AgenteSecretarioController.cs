@@ -8,9 +8,11 @@ using Model;
 using Service.Interface;
 using MonitoraSUS.Utils;
 using Model.ViewModel;
+using System.Security.Claims;
 
 namespace MonitoraSUS.Controllers
 {
+
     public class AgenteSecretarioController : Controller
     {
         private readonly IMunicipioService _municipioService;
@@ -42,6 +44,32 @@ namespace MonitoraSUS.Controllers
             secretariosMunicipioPendente.ForEach(item => secMuniEst.Add(new SecretarioMunicipioEstadoViewModel { Pessoa = _pessoaService.GetById(item.IdPessoa), PessoaMunicipio = item, Situacao = 0 }));
 
             return View(secMuniEst);
+        }
+        /// <summary>
+        /// Se for secretario poderá administrar o status do agente no sistema, A, I, S. 
+        /// </summary>
+        /// <returns></returns>
+        // GET: Aprovacao do agente de saúde
+        []
+        public ActionResult IndexApproveAgent()
+        {
+            // usuario logado
+            var usuario = Utils.Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
+
+            List<>
+
+                var pessoaTrabalhaEstado = _pessoaTrabalhaEstadoService.GetById(usuario.IdPessoa);
+            if (pessoaTrabalhaEstado != null)
+            {
+                var agentesEstado = _pessoaTrabalhaEstadoService.GetAllAgents();
+            }
+            else
+            {
+                var agentesMunicipio = _pessoaTrabalhaMunicipioService.GetAllAgents();
+            }
+
+
+
         }
 
         // GET: AgenteSecretario/Details/5

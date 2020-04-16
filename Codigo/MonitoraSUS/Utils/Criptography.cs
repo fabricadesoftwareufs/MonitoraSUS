@@ -1,32 +1,32 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
 
-namespace QueroTransporteWeb.Resources.Methods
+namespace MonitoraSUS.Utils
 {
-    public class Criptografia
+    public class Criptography
     {
         /// <summary>
         /// Enum ALGORITMOS - Representa os tipos de algoritmos de hash disponíveis para geração de senhas.
         /// </summary>
-        private enum ALGORITMOS { SHA1, MD5, SHA256 };
+        private enum ALGORITMS { SHA1, MD5, SHA256 };
 
         /// <summary>
         /// Propriedade Algoritmo - Representa o algoritmo de hash específico.
         /// </summary>
-        private static HashAlgorithm Algoritmo { get; set; }
+        private static HashAlgorithm Algoritm { get; set; }
 
         /// <summary>
         /// Método AlgoritmoFactory - Cria um algoritmo de hash específico conforme a opção escolhida.
         /// </summary>
         /// <param name="opcao"> Tipo do algoritmo. </param>
-        private static void AlgoritmoFactory(ALGORITMOS opcao)
+        private static void AlgoritmoFactory(ALGORITMS opcao)
         {
-            if (opcao == ALGORITMOS.MD5)
-                Algoritmo = MD5.Create();
-            else if (opcao == ALGORITMOS.SHA1)
-                Algoritmo = SHA1.Create();
+            if (opcao == ALGORITMS.MD5)
+                Algoritm = MD5.Create();
+            else if (opcao == ALGORITMS.SHA1)
+                Algoritm = SHA1.Create();
             else
-                Algoritmo = SHA256.Create();
+                Algoritm = SHA256.Create();
         }
 
         /// <summary>
@@ -34,19 +34,19 @@ namespace QueroTransporteWeb.Resources.Methods
         /// </summary>
         /// <param name="senha"> Senha em texto plano (sem aplicação de Hash ou Criptografia). </param>
         /// <returns> Hash da senha fornecida. </returns>
-        public static string GerarHashSenha(string senha)
+        public static string GenerateHashPasswd(string senha)
         {
             var senhaCifrada = Encoding.UTF8.GetBytes(senha);
 
             // Aplicação da sequência MD5, SHA256, MD5, SHA256.
-            AlgoritmoFactory(ALGORITMOS.MD5);
-            senhaCifrada = Algoritmo.ComputeHash(senhaCifrada);
-            AlgoritmoFactory(ALGORITMOS.SHA256);
-            senhaCifrada = Algoritmo.ComputeHash(senhaCifrada);
-            AlgoritmoFactory(ALGORITMOS.MD5);
-            senhaCifrada = Algoritmo.ComputeHash(senhaCifrada);
-            AlgoritmoFactory(ALGORITMOS.SHA256);
-            senhaCifrada = Algoritmo.ComputeHash(senhaCifrada);
+            AlgoritmoFactory(ALGORITMS.MD5);
+            senhaCifrada = Algoritm.ComputeHash(senhaCifrada);
+            AlgoritmoFactory(ALGORITMS.SHA256);
+            senhaCifrada = Algoritm.ComputeHash(senhaCifrada);
+            AlgoritmoFactory(ALGORITMS.MD5);
+            senhaCifrada = Algoritm.ComputeHash(senhaCifrada);
+            AlgoritmoFactory(ALGORITMS.SHA256);
+            senhaCifrada = Algoritm.ComputeHash(senhaCifrada);
 
             var stringSenha = new StringBuilder();
             foreach (var caractere in senhaCifrada)

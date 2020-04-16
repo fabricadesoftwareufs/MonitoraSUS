@@ -9,16 +9,16 @@ using Model;
 using Model.ViewModel;
 using MonitoraSUS.Resources.Methods;
 using QueroTransporteWeb.Resources.Methods;
-using Service;
+using Service.Interface;
 
 namespace MonitoraSUS.Controllers
 {
     [AllowAnonymous]
     public class LoginController : Controller
     {
-        private readonly UsuarioService _usuarioService;
-        private readonly PessoaService _pessoaService;
-        public LoginController(UsuarioService usuarioService, PessoaService pessoaService)
+        private readonly IUsuarioService _usuarioService;
+        private readonly IPessoaService _pessoaService;
+        public LoginController(IUsuarioService usuarioService, IPessoaService pessoaService)
         {
             _usuarioService = usuarioService;
             _pessoaService = pessoaService;
@@ -33,8 +33,8 @@ namespace MonitoraSUS.Controllers
         {
             if (ModelState.IsValid)
             {
-                var cpf = MethodsUtils.RemoverCaracteresEspeciais(login.Cpf);
-                var senha = Criptografia.GerarHashSenha(login.Senha);
+                var cpf = Utils.Methods.RemoveSpecialsCaracts(login.Cpf);
+                var senha = Utils.Criptography.GenerateHashPasswd(login.Senha);
                 var user = _usuarioService.GetByLogin(cpf, senha);
 
                 if (user != null)
@@ -45,12 +45,13 @@ namespace MonitoraSUS.Controllers
                     var claims = new List<Claim>
                     {
                         new Claim(ClaimTypes.SerialNumber, user.IdUsuario.ToString()),
-                        new Claim(ClaimTypes.NameIdentifier, person.Nome),
+                        new Claim(ClaimTypes.Name, person.Nome),
                         new Claim(ClaimTypes.StateOrProvince, person.Estado),
                         new Claim(ClaimTypes.Locality, person.Cidade),
                         new Claim(ClaimTypes.UserData, user.Cpf),
                         new Claim(ClaimTypes.Email, user.Email),
-                        new Claim(ClaimTypes.Role, user.TipoUsuario.ToString())
+                        new Claim(ClaimTypes.Role, user.TipoUsuario.ToString()),
+                        new Claim(ClaimTypes.NameIdentifier, user.IdPessoa.ToString())
                     };
                     // Adicionando uma identidade as claims.
                     var identidade = new ClaimsIdentity(claims, "login");
