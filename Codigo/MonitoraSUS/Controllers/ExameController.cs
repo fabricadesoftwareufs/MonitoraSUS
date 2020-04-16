@@ -19,7 +19,8 @@ namespace MonitoraSUS.Controllers
         private readonly IMunicipioService _municicpioContext;
         private readonly IEstadoService _estadoContext;
         private readonly ISituacaoVirusBacteriaService _situacaoPessoaContext;
-        private readonly IPessoaTrabalhaEstadoService _pessoaTrabalhaEstado;
+        private readonly IPessoaTrabalhaEstadoService _pessoaTrabalhaEstadoContext;
+        private readonly IEmpresaExameService _empresaExameContext;
 
 
         public ExameController(IVirusBacteriaService virusBacteriaContext,
@@ -36,7 +37,7 @@ namespace MonitoraSUS.Controllers
             _municicpioContext = municicpioContext;
             _estadoContext = estadoContext;
             _situacaoPessoaContext = situacaoPessoaContext;
-            _pessoaTrabalhaEstado = pessoaTrabalhaEstado;
+            _pessoaTrabalhaEstadoContext = pessoaTrabalhaEstado;
         }
 
         public IActionResult Index()
@@ -206,25 +207,29 @@ namespace MonitoraSUS.Controllers
             exame.IgG = viewModel.IgG;
             exame.IgM = viewModel.IgM;
             exame.Pcr = viewModel.Pcr;
-            exame.EstadoRealizacao = viewModel.EstadoRealizacao;
-            exame.MunicipioId = viewModel.MunicipioId;
+            exame.IdEstado = viewModel.IdEstado;
+            exame.IdMunicipio = viewModel.MunicipioId;
             exame.DataInicioSintomas = viewModel.DataInicioSintomas;
             exame.DataExame = viewModel.DataExame;
             exame.IdAgenteSaude = viewModel.IdAgenteSaude.Idpessoa;
+            exame.IdEmpresaSaude = viewModel.IdEmpresaSaude;
 
             // pegando informações do agente de saúde logado no sistema
-
             // var agente = _pessoaContext.GetById(MethodsUtils.RetornLoggedUser((ClaimsIdentity)User.Identity).IdPessoa);
             var agente = _pessoaContext.GetById(5);
+            
+            if (atualizarCidadeEstado)
+            {
+                exame.IdEstado = _estadoContext.GetByName(agente.Estado).Id;
+                exame.IdMunicipio = _municicpioContext.GetByName(agente.Cidade).Id;
+                
+                var pessoaEstado =  _pessoaTrabalhaEstadoContext.GetSecretarioAtivoByIdPessoa(agente.Idpessoa);
+                if (pessoaEstado != null)
+                    exame.IdEmpresaSaude = pessoaEstado.IdEmpresaExame;
+            }
 
             exame.IdAgenteSaude = agente.Idpessoa;
 
-            if (atualizarCidadeEstado)
-            {
-                exame.EstadoRealizacao = _estadoContext.GetByName(agente.Estado).Id;
-                exame.MunicipioId = _municicpioContext.GetByName(agente.Cidade).Id;
-            }
-            
             return exame;
         }
 
@@ -242,12 +247,12 @@ namespace MonitoraSUS.Controllers
             ex.IgG = exame.IgG;
             ex.IgM = exame.IgM;
             ex.Pcr = exame.Pcr;
-            ex.EstadoRealizacao = exame.EstadoRealizacao;
-            ex.MunicipioId = exame.MunicipioId;
+            ex.IdEstado = exame.IdEstado;
+            ex.MunicipioId = exame.IdMunicipio;
             ex.DataInicioSintomas = exame.DataInicioSintomas;
             ex.DataExame = exame.DataExame;
-            ex.EstadoRealizacao = exame.EstadoRealizacao;
-            ex.MunicipioId = exame.MunicipioId;
+           
+
 
             return ex;
         }
@@ -265,7 +270,7 @@ namespace MonitoraSUS.Controllers
             } 
             else if (usuario.TipoUsuario == 2) 
             {
-                var secretario = _pessoaTrabalhaEstado.GetSecretarioAtivoByIdPessoa(usuario.IdPessoa);
+                var secretario = _pessoaTrabalhaEstadoContext.GetSecretarioAtivoByIdPessoa(usuario.IdPessoa);
                 
                 if (secretario != null)
                     exames = _exameContext.GetByIdEstado(secretario.IdEstado);
@@ -284,12 +289,12 @@ namespace MonitoraSUS.Controllers
                 ex.IgG = exame.IgG;
                 ex.IgM = exame.IgM;
                 ex.Pcr = exame.Pcr;
-                ex.EstadoRealizacao = exame.EstadoRealizacao;
-                ex.MunicipioId = exame.MunicipioId;
+                ex.IdEstado = exame.IdEstado;
+                ex.MunicipioId = exame.IdMunicipio;
                 ex.DataInicioSintomas = exame.DataInicioSintomas;
                 ex.DataExame = exame.DataExame;
-                ex.EstadoRealizacao = exame.EstadoRealizacao;
-                ex.MunicipioId = exame.MunicipioId;
+                ex.IdEstado = exame.IdEstado;
+                ex.MunicipioId = exame.IdMunicipio;
 
                 examesViewModel.Add(ex);
             }
@@ -307,8 +312,10 @@ namespace MonitoraSUS.Controllers
 
             if (exame.IdPaciente.FoneFixo != null)
                 exame.IdPaciente.FoneFixo = RemoveSpecialsCaracts(exame.IdPaciente.FoneFixo);
-
-            exame.IdPaciente.Idpessoa = _pessoaContext.GetByCpf(exame.IdPaciente.Cpf).Idpessoa;
+            
+            var paciente = _pessoaContext.GetByCpf(exame.IdPaciente.Cpf);
+            if (paciente != null)
+                exame.IdPaciente.Idpessoa = paciente.Idpessoa;
             
             return exame.IdPaciente;
         }

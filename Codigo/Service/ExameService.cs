@@ -50,8 +50,9 @@ namespace Service
                     IgG = exame.IgG,
                     IgM = exame.IgM,
                     Pcr = exame.Pcr,
-                    EstadoRealizacao = exame.EstadoRealizacao,
-                    MunicipioId = exame.MunicipioId,
+                    IdEstado = exame.IdEstado,
+                    IdMunicipio = exame.IdMunicipio,
+                    IdEmpresaSaude = exame.IdEmpresaSaude,
                 }).ToList();
 
         public List<ExameModel> GetAll()
@@ -67,8 +68,9 @@ namespace Service
                     IgG = exame.IgG,
                     IgM = exame.IgM,
                     Pcr = exame.Pcr,
-                    EstadoRealizacao = exame.EstadoRealizacao,
-                    MunicipioId = exame.MunicipioId,
+                    IdEstado = exame.IdEstado,
+                    IdMunicipio = exame.IdMunicipio,
+                    IdEmpresaSaude = exame.IdEmpresaSaude,
                 }).ToList();
 
 
@@ -86,13 +88,14 @@ namespace Service
                     IgG = exame.IgG,
                     IgM = exame.IgM,
                     Pcr = exame.Pcr,
-                    EstadoRealizacao = exame.EstadoRealizacao,
-                    MunicipioId = exame.MunicipioId,
+                    IdEstado = exame.IdEstado,
+                    IdMunicipio = exame.IdMunicipio,
+                    IdEmpresaSaude = exame.IdEmpresaSaude,
                 }).FirstOrDefault();
 
         private Exame ModelToEntity(ExameModel exameModel)
         {
-            Exame exame = new Exame
+            return new Exame
             {
                 IdExame = exameModel.IdExame,
                 IdAgenteSaude = exameModel.IdAgenteSaude,
@@ -101,18 +104,17 @@ namespace Service
                 IgG = exameModel.IgG,
                 IgM = exameModel.IgM,
                 Pcr = exameModel.Pcr,
-                EstadoRealizacao = exameModel.EstadoRealizacao,
-                MunicipioId = exameModel.MunicipioId,
+                IdEstado = exameModel.IdEstado,
+                IdMunicipio = exameModel.IdMunicipio,
                 DataInicioSintomas = exameModel.DataInicioSintomas,
-                DataExame = exameModel.DataExame
+                DataExame = exameModel.DataExame,
+                IdEmpresaSaude = exameModel.IdEmpresaSaude,
             };
-
-            return exame;
         }
 
         public List<ExameModel> GetByIdEstado(int idEstado)
          => _context.Exame
-                .Where(exameModel => exameModel.EstadoRealizacao == idEstado)
+                .Where(exameModel => exameModel.IdEstado == idEstado)
                 .Select(exame => new ExameModel
                 {
                     IdVirusBacteria = exame.IdVirusBacteria,
@@ -124,8 +126,9 @@ namespace Service
                     IgG = exame.IgG,
                     IgM = exame.IgM,
                     Pcr = exame.Pcr,
-                    EstadoRealizacao = exame.EstadoRealizacao,
-                    MunicipioId = exame.MunicipioId,
+                    IdEstado = exame.IdEstado,
+                    IdMunicipio = exame.IdMunicipio,
+                    IdEmpresaSaude = exame.IdEmpresaSaude,
                 }).ToList();
     }
 }

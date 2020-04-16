@@ -5,13 +5,15 @@ namespace Persistence
 {
     public partial class Pessoatrabalhaestado
     {
-        public int IdPessoa { get; set; }
+        public int Idpessoa { get; set; }
         public int IdEstado { get; set; }
         public byte EhResponsavel { get; set; }
         public byte EhSecretario { get; set; }
         public string SituacaoCadastro { get; set; }
+        public int? IdEmpresaExame { get; set; }
 
+        public Empresaexame IdEmpresaExameNavigation { get; set; }
         public Estado IdEstadoNavigation { get; set; }
-        public Pessoa IdPessoaNavigation { get; set; }
+        public Pessoa IdpessoaNavigation { get; set; }
     }
 }

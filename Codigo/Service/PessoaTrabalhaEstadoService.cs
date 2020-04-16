@@ -25,42 +25,53 @@ namespace Service
                 .Pessoatrabalhaestado
                 .Select(p => new PessoaTrabalhaEstadoModel
                 {
-                    IdPessoa = p.IdPessoa,
+                    IdPessoa = p.Idpessoa,
                     IdEstado = p.IdEstado,
                     EhResponsavel = Convert.ToBoolean(p.EhResponsavel),
                     EhSecretario = Convert.ToBoolean(p.EhSecretario),
-                    SituacaoCadastro = p.SituacaoCadastro
+                    SituacaoCadastro = p.SituacaoCadastro,
+                    IdEmpresaExame = p.IdEmpresaExame,
                 }).ToList();
 
         public List<PessoaTrabalhaEstadoModel> GetAllSecretariesPendents()
             => _context
                 .Pessoatrabalhaestado
-                .Where(p => p.EhSecretario.Equals(1) && p.SituacaoCadastro.Contains('S'))
+                .Where(p => p.EhSecretario.Equals(1) && p.SituacaoCadastro.Equals("S"))
                 .Select(p => new PessoaTrabalhaEstadoModel
                 {
-                    IdPessoa = p.IdPessoa,
+                    IdPessoa = p.Idpessoa,
                     IdEstado = p.IdEstado,
                     EhResponsavel = Convert.ToBoolean(p.EhResponsavel),
                     EhSecretario = Convert.ToBoolean(p.EhSecretario),
-                    SituacaoCadastro = p.SituacaoCadastro
+                    SituacaoCadastro = p.SituacaoCadastro,
+                    IdEmpresaExame = p.IdEmpresaExame,
                 }).ToList();
 
-        public PessoaTrabalhaEstadoModel GetById(int id)
-        {
-            throw new NotImplementedException();
-        }
+        public PessoaTrabalhaEstadoModel GetById(int idPessoa,int idEstado)
+         => _context.Pessoatrabalhaestado
+                .Where(p => p.Idpessoa == idPessoa && p.IdEstado == idEstado)
+                .Select(p => new PessoaTrabalhaEstadoModel
+                {
+                    IdPessoa = p.Idpessoa,
+                    IdEstado = p.IdEstado,
+                    EhResponsavel = Convert.ToBoolean(p.EhResponsavel),
+                    EhSecretario = Convert.ToBoolean(p.EhSecretario),
+                    SituacaoCadastro = p.SituacaoCadastro,
+                    IdEmpresaExame = p.IdEmpresaExame,
+                }).FirstOrDefault();
 
         public PessoaTrabalhaEstadoModel GetSecretarioAtivoByIdPessoa(int idPessoa)
         => _context
                 .Pessoatrabalhaestado
-                .Where(p => p.EhSecretario.Equals(1) && p.SituacaoCadastro.Equals("A") && p.IdPessoa ==  idPessoa)
+                .Where(p => p.EhSecretario.Equals(1) && p.SituacaoCadastro.Equals("A") && p.Idpessoa ==  idPessoa)
                 .Select(p => new PessoaTrabalhaEstadoModel
                 {
-                    IdPessoa = p.IdPessoa,
+                    IdPessoa = p.Idpessoa,
                     IdEstado = p.IdEstado,
                     EhResponsavel = Convert.ToBoolean(p.EhResponsavel),
                     EhSecretario = Convert.ToBoolean(p.EhSecretario),
-                    SituacaoCadastro = p.SituacaoCadastro
+                    SituacaoCadastro = p.SituacaoCadastro,
+                    IdEmpresaExame = p.IdEmpresaExame,
                 }).FirstOrDefault();
 
         public bool Insert(PessoaTrabalhaEstadoModel pessoaTrabalhaEstadoModel)
@@ -89,10 +100,11 @@ namespace Service
         private Pessoatrabalhaestado ModelToEntity(PessoaTrabalhaEstadoModel model, Pessoatrabalhaestado entity)
         {
             entity.IdEstado = model.IdEstado;
-            entity.IdPessoa = model.IdPessoa;
+            entity.Idpessoa = model.IdPessoa;
             entity.EhResponsavel = Convert.ToByte(model.EhResponsavel);
             entity.EhSecretario = Convert.ToByte(model.EhSecretario);
             entity.SituacaoCadastro = model.SituacaoCadastro;
+            entity.IdEmpresaExame = model.IdEmpresaExame;
 
             return entity;
         }

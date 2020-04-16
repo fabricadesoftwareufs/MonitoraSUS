@@ -51,6 +51,12 @@ namespace Service
             return null;
         }
 
+        /*public PessoaModel Insert(PessoaModel pessoaModel)
+        {
+            _context.Add(ModelToEntity(pessoaModel,new Pessoa()));
+            return null;
+        }  */
+
         public List<PessoaModel> GetAll()
          => _context.Pessoa
                 .Select(pessoa => new PessoaModel
