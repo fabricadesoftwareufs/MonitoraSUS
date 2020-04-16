@@ -1,0 +1,295 @@
+<!--
+=========================================================
+* Argon Dashboard - v1.2.0
+=========================================================
+* Product Page: https://www.creative-tim.com/product/argon-dashboard
+
+
+* Copyright  Creative Tim (http://www.creative-tim.com)
+* Coded by www.creative-tim.com
+
+
+
+=========================================================
+* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+-->
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Language" content="pt-br">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="author" content="">
+    <meta name="description" content="">
+    
+    <title>MonitoraSUS</title>
+
+    <!-- Fonts -->
+    <link href="assets/fonts/fontawesome-free-5.13.0-web/css/all.min.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Styles -->
+    <link rel="stylesheet" href="assets/css/argon.css?v=1.2.0" type="text/css">
+    <link rel="stylesheet" href="assets/css/custom.css" type="text/css">
+    <link rel="stylesheet" href="assets/js/plugins/sweetalert2/dist/css/sweetalert2.min.css">
+</head>
+
+<body>
+    <!-- Main content -->
+    <div class="main-content" id="panel">
+        <nav class="navbar fixed-top navbar-horizontal navbar-expand-lg navbar-dark bg-gradient-primary">
+        <div class="container">
+            <img src="assets/img/logo-sus.png" class="logo-painel" >  
+            <a class="navbar-painel" href="#">MonitoraSUS</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-default" aria-controls="navbar-default" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbar-default">
+                <div class="navbar-collapse-header">
+                    <div class="row">
+                        <div class="col-6 collapse-brand">
+                            <a href="javascript:void(0)">
+                                <img src="../../assets/img/brand/blue.png">
+                            </a>
+                        </div>
+                        <div class="col-6 collapse-close">
+                            <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-default" aria-controls="navbar-default" aria-expanded="false" aria-label="Toggle navigation">
+                                <span></span>
+                                <span></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="navbar-nav ml-lg-auto">
+                    <img src="assets/img/logo-ufs_horizontal.png"  class="logo-painel-right">  
+                </div>
+            </div>
+        </div>
+        </nav>
+        <!-- Header -->
+        <div class="header pb-5">
+            <div class="container">
+                <div class="header-body">
+                </div>
+            </div>
+        </div>
+        <div class="container mt--6">
+            <div class="row row-title-painel">
+                <div class="col-md-12">
+                    <h2 class="h1 mb-0 poppins">Painel Covid19</h2>
+                    <p class="home-info">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor 
+                        incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation. 
+                    </p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="card card-stats card-stats-round10">
+                        <div class="card-body">        
+                            <div class="row">
+                                <div class="col-auto">
+                                    <div class="icon icon-shape bg-success text-white rounded-circle shadow">
+                                        <i class="fas fa-check"></i>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <h5 class="card-title text-uppercase text-muted mb-0 poppins">Confirmados</h5>
+                                    <span class="h2 font-weight-bold mb-0 poppins text-success">48</span>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card card-stats card-stats-round10">
+                        <div class="card-body">        
+                            <div class="row">
+                                <div class="col-auto">
+                                    <div class="icon icon-shape bg-warning text-white rounded-circle shadow">
+                                        <i class="fas fa-question"></i>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <h5 class="card-title text-uppercase text-muted mb-0 poppins">Suspeitos</h5>
+                                    <span class="h2 font-weight-bold mb-0 poppins text-warning">77</span>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card card-stats card-stats-round10">
+                        <div class="card-body">        
+                            <div class="row">
+                                <div class="col-auto">
+                                    <div class="icon icon-shape bg-primary text-white rounded-circle shadow">
+                                        <i class="fas fa-times"></i>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <h5 class="card-title text-uppercase text-muted mb-0 poppins">Descartados</h5>
+                                    <span class="h2 font-weight-bold mb-0 poppins text-primary">356 </span>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card card-stats card-stats-round10">
+                        <div class="card-body">        
+                            <div class="row">
+                                <div class="col-auto">
+                                    <div class="icon icon-shape bg-danger text-white rounded-circle shadow">
+                                        <i class="fas fa-cross"></i>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <h5 class="card-title text-uppercase text-muted mb-0 poppins">óbitos</h5>
+                                    <span class="h2 font-weight-bold mb-0 poppins text-danger">2</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row row-card-mapa">
+                <div class="col-md-8">
+                    <div class="card card-stats-round10">
+                        <div class="card-header ">
+                            <div class="row align-items-center">
+                                <div class="col">
+                                    <h5 class="h3 mb-0 poppins">Casos em Sergipe</h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            
+                        </div>
+                      </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card card-stats-round10">
+                        <div class="card-header ">
+                            <div class="row align-items-center">
+                                <div class="col">
+                                    <h5 class="h3 mb-0 poppins">Casos por cidade</h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table align-items-center table-flush">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th scope="col" class="sort" ></th>
+                                            <th scope="col" class="text-center">
+                                                <i class="fas fa-check text-success"></i></i>
+                                            </th>
+                                            <th scope="col" class="text-center">
+                                                <i class="fas fa-question text-warning"></i></i>
+                                            </th>
+                                            <th scope="col" class="text-center">
+                                                <i class="fas fa-times text-primary"></i></i>
+                                            </th>
+                                            <th scope="col" class="text-center">
+                                                <i class="fas fa-cross text-danger"></i></i>
+                                            </th>
+                                            
+                                        </tr>
+                                    </thead>
+                                    <tbody class="list">
+                                        <tr>
+                                            <td style="padding-left: 15px !important;"> Aracaju </td>
+                                            <td class="text-center">48</td>
+                                            <td class="text-center">77</td>
+                                            <td class="text-center">356</td>
+                                            <td class="text-center">2</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding-left: 15px !important;"> Aracaju </td>
+                                            <td class="text-center">48</td>
+                                            <td class="text-center">77</td>
+                                            <td class="text-center">356</td>
+                                            <td class="text-center">2</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding-left: 15px !important;"> Aracaju </td>
+                                            <td class="text-center">48</td>
+                                            <td class="text-center">77</td>
+                                            <td class="text-center">356</td>
+                                            <td class="text-center">2</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding-left: 15px !important;"> Aracaju </td>
+                                            <td class="text-center">48</td>
+                                            <td class="text-center">77</td>
+                                            <td class="text-center">356</td>
+                                            <td class="text-center">2</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding-left: 15px !important;"> Aracaju </td>
+                                            <td class="text-center">48</td>
+                                            <td class="text-center">77</td>
+                                            <td class="text-center">356</td>
+                                            <td class="text-center">2</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding-left: 15px !important;"> Aracaju </td>
+                                            <td class="text-center">48</td>
+                                            <td class="text-center">77</td>
+                                            <td class="text-center">356</td>
+                                            <td class="text-center">2</td>
+                                        </tr>
+                                        
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                      </div>
+                </div>
+            </div>  
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card card-stats-round10">
+                        <div class="card-header ">
+                            <div class="row align-items-center">
+                                <div class="col">
+                                    <h5 class="h3 mb-0 poppins">Evolução de casos</h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="chart">
+                            <!-- Chart wrapper -->
+                            <canvas id="chart-sales-dark" class="chart-canvas"></canvas>
+                          </div>
+                        </div>
+                      </div>
+                </div>
+            </div> 
+            <div class="footer-page" style="margin: 1rem;">
+                Copyright &copy; 2020 Universidade Federal de Sergipe. Todos os direitos reservados.
+            </div> 
+        </div>
+    </div>
+    
+    <!-- Scripts -->
+    <script src="assets/vendor/chart.js/dist/Chart.min.js"></script>
+    <script src="assets/vendor/chart.js/dist/Chart.extension.js"></script>
+    <script src="assets/js/plugins/jquery-3.4.1/jquery-3.4.1.min.js"></script>
+    <script src="assets/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="assets/vendor/js-cookie/js.cookie.js"></script>
+	<script src="assets/vendor/jquery.scrollbar/jquery.scrollbar.min.js"></script>
+	<script src="assets/vendor/jquery-scroll-lock/dist/jquery-scrollLock.min.js"></script>
+    <script src="assets/js/plugins/jquery-mask/dist/jquery.mask.min.js"></script>
+    <script src="assets/js/plugins/sweetalert2/dist/js/sweetalert2.min.js"></script>
+    <script src="assets/js/argon.js?v=1.2.0"></script>
+    <script src="assets/js/custom.js"></script>
+</body>
+
+</html>

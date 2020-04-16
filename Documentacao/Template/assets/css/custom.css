@@ -39,3 +39,104 @@
 .card-round{
     border-radius: 10px !important;
 }
+/*  CSS Painel */
+
+.navbar-painel:hover,
+.navbar-painel:focus
+{
+    text-decoration: none;
+}
+
+.navbar-horizontal .navbar-painel
+{   
+    color: #FFF;
+    font-size: 16px;
+    font-weight: 700;
+    font-family: 'Poppins', sans-serif !important;
+    letter-spacing: -.39px;
+    line-height: 16px;
+}
+
+.poppins
+{   
+    font-family: 'Poppins', sans-serif !important;
+}
+.navbar-horizontal .navbar-painel img
+{
+    height: 30px;
+}
+
+.logo-painel{
+    height: 60px;
+    width: 60px;
+    margin-right:10px;
+}
+
+.logo-painel-right{
+    height: 80px;
+}
+
+.logo-painel-footer{
+    height: 80px;
+}
+
+.color-text{
+    color: #172b3e;
+}
+
+.bg-card-primary-translucent{
+    background-color: #007bffd4 !important;
+}
+
+.bg-card-primary-translucent .h3{
+    color: #fff !important;
+}
+
+.card-painel-home{
+    background-color: #007bff05 !important;
+    min-height: 63vh !important;
+}
+
+.home-info {
+    padding-top: 0.8rem;
+    padding-bottom: 0.8rem;
+    font-weight: 400;
+}
+
+.card-button-painel{
+    cursor: pointer;
+    padding: 1.5rem; 
+}
+
+
+.footer-page{
+    font-size: 0.875rem;
+    text-align: center;
+    
+}
+
+.bg-icon-blue{
+    background-color: #007bff;
+}
+
+.row-title-painel{
+    margin-top: 10rem;
+    margin-bottom: 1.8rem;
+}
+
+.card-stats-round10{
+    border-radius: 10px;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    margin-bottom: 15px !important;
+}
+
+.row-card-mapa .card-body{
+    min-height: 45vh;
+    max-height: 45vh;
+}
+
+.row-card-mapa .card .table td, .row-card-mapa .card .table th{
+    padding-left: 0;
+    padding-right: 0;
+}
