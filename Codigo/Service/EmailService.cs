@@ -3,6 +3,7 @@ using Service.Interface;
 using System;
 using System.Net;
 using System.Net.Mail;
+using System.Runtime.InteropServices.ComTypes;
 using System.Threading.Tasks;
 
 namespace Service
@@ -20,14 +21,17 @@ namespace Service
         {
             try
             {
-                string toEmail = string.IsNullOrEmpty(emailDestino) ? _configuration["EmailSettings:DestinatarioPadrao"] : emailDestino;
+                var email = "";
+                if (!string.IsNullOrEmpty(emailDestino))
+                    email = emailDestino;
+                else
+                    throw new Exception("Email não pode ser vazio!!");
 
                 var mail = new MailMessage
                 {
                     From = new MailAddress(_configuration["EmailSettings:Email"], "Fabrica de Software"),
                 };
-                mail.To.Add(new MailAddress(toEmail));
-                mail.CC.Add(new MailAddress(_configuration["EmailSettings:Backup"]));
+                mail.To.Add(new MailAddress(email));
 
                 mail.Subject = assunto;
                 mail.Body = mensagem;

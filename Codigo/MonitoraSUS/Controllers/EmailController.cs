@@ -17,7 +17,7 @@ namespace MonitoraSUS.Controllers
         {
             try
             {
-                await _emailService.SendEmailAsync("gabriel.sistemasjr@gmail.com", "MonitoraSUS", "Testando via controller");
+                await _emailService.SendEmailAsync("abraao1514@gmail.com", "MonitoraSUS", "Meu cunhado");
                 return RedirectToActionPermanent("Index", "Home", new { sendMail = "Sucesso" });
             }
             catch (Exception e)
