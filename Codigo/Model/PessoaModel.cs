@@ -5,7 +5,7 @@ namespace Model
 {
     public class PessoaModel
     {
-        public int Idpessoa { get; set; } 
+        public int Idpessoa { get; set; }
         [Required]
         [Display(Name = "CPF")]
         [StringLength(11)]

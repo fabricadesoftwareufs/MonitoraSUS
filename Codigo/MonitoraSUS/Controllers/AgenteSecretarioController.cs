@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Model;
-using Service.Interface;
-using MonitoraSUS.Utils;
 using Model.ViewModel;
+using MonitoraSUS.Utils;
+using Service.Interface;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace MonitoraSUS.Controllers
 {

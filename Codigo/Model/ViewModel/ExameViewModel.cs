@@ -5,7 +5,7 @@ namespace Model
 {
     public class ExameViewModel
     {
-        public ExameViewModel() 
+        public ExameViewModel()
         {
             IgM = "N";
             IgG = "N";
@@ -14,7 +14,7 @@ namespace Model
             IdVirusBacteria = new VirusBacteriaModel();
             IdPaciente = new PessoaModel();
             IdPaciente.Sexo = "Masculino";
-            DataExame = DateTime.Now; 
+            DataExame = DateTime.Now;
             DataInicioSintomas = DateTime.Now;
             IdEstado = 0;
             MunicipioId = 0;

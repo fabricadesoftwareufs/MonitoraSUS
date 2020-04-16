@@ -4,7 +4,6 @@ using Service.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Service
 {
@@ -67,7 +66,7 @@ namespace Service
                     Email = model.Email,
                     IdPessoa = model.IdPessoa
                 }).FirstOrDefault();
-      
+
 
         public bool Insert(UsuarioModel usuarioModel)
         {
