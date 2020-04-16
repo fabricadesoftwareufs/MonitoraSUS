@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Model;
 using Persistence;
 using Service;
 using Service.Interface;
@@ -31,7 +32,7 @@ namespace MonitoraSUS
             options.AccessDeniedPath = "/Login/AcessDenied";
 
         });
-          
+
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
@@ -43,15 +44,18 @@ namespace MonitoraSUS
                 options.UseMySQL(
                     Configuration.GetConnectionString("MySqlConnection")));
 
-            services.AddScoped<IVirusBacteriaService,VirusBacteriaService>();
+            services.AddScoped<IVirusBacteriaService, VirusBacteriaService>();
             services.AddScoped<IExameService, ExameService>();
             services.AddScoped<IPessoaService, PessoaService>();
             services.AddScoped<IEstadoService, EstadoService>();
-            services.AddScoped<ISituacaoVirusBacteriaService,SituacaoVirusBacteriaService>();
+            services.AddScoped<ISituacaoVirusBacteriaService, SituacaoVirusBacteriaService>();
             services.AddScoped<IMunicipioService, MunicipioService>();
             services.AddScoped<IPessoaTrabalhaMunicipioService, PessoaTrabalhaMunicipioService>();
             services.AddScoped<IPessoaTrabalhaEstadoService, PessoaTrabalhaEstadoService>();
-            services.AddScoped<IUsuarioService, UsuarioService>();           
+            services.AddScoped<IUsuarioService, UsuarioService>();
+
+            // Configuração de Envio de email.
+            services.AddScoped<IEmailService, EmailService>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
