@@ -11,5 +11,6 @@ namespace Service.Interface
         List<MunicipioModel> GetAll();
         List<MunicipioModel> GetByUFCode(string UFCode);
         MunicipioModel GetById(int id);
+        MunicipioModel GetByName(string name);
     }
 }

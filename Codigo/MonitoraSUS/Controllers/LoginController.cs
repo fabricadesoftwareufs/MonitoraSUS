@@ -7,8 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Model;
 using Model.ViewModel;
-using MonitoraSUS.Resources.Methods;
-using QueroTransporteWeb.Resources.Methods;
+using MonitoraSUS.Utils;
 using Service.Interface;
 
 namespace MonitoraSUS.Controllers
@@ -33,8 +32,9 @@ namespace MonitoraSUS.Controllers
         {
             if (ModelState.IsValid)
             {
-                var cpf = Utils.Methods.RemoveSpecialsCaracts(login.Cpf);
-                var senha = Utils.Criptography.GenerateHashPasswd(login.Senha);
+                var cpf = Methods.RemoveSpecialsCaracts(login.Cpf);
+                var senha = Criptography.GenerateHashPasswd(login.Senha);
+
                 var user = _usuarioService.GetByLogin(cpf, senha);
 
                 if (user != null)
@@ -86,8 +86,8 @@ namespace MonitoraSUS.Controllers
             if (ModelState.IsValid)
             {
                 // Informações do objeto
-                usuario.Cpf = MethodsUtils.RemoverCaracteresEspeciais(usuario.Cpf);
-                usuario.Senha = Criptografia.GerarHashSenha(usuario.Senha);
+                usuario.Cpf = Methods.RemoveSpecialsCaracts(usuario.Cpf);
+                usuario.Senha = Criptography.GenerateHashPasswd(usuario.Senha);
 
                 if (_usuarioService.Insert(usuario))
                     return RedirectToAction("SignIn", "Login");

@@ -1,0 +1,126 @@
+﻿@model Model.ExameViewModel
+
+@{
+    ViewData["Title"] = "Details";
+
+}
+
+<div class="main-content card-content" id="panel">
+
+    <div class="container-fluid mt--6">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-content">
+                    <div class="card-header bg-transparent">
+                        <div class="row align-items-center">
+
+
+                            <div class="col">
+                                <h5 class="card-title  text-muted mb-0">MonitoraSUS</h5>
+                                <h5 class="h3 mb-0">Detalhes do exame</h5>
+                            </div>
+                            <div class="col text-right">
+
+                                @Html.ActionLink("Editar", "Edit", new { id = Model.IdExame }, new { @class = "btn btn-info" })
+
+                                <a class="btn btn-default" asp-action="Index"> <i class="fas fa-arrow-left"></i> Voltar</a>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div>
+                        <br />
+
+                        <table class="table">
+                            <tr>
+                                <th>
+                                    Paciente
+                                </th>
+                                <th>
+                                    Data do Exame
+                                </th>
+                                <th>
+                                    Inicio dos Sintomas
+                                </th>
+                                <th>
+                                    Virus/Bacteria
+                                </th>
+                                <th>
+                                    Agente
+                                </th>
+                                <th></th>
+                            </tr>
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(model => model.IdPaciente.Nome)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(model => model.DataExame)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(model => model.DataInicioSintomas)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(model => model.IdVirusBacteria.Nome)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(model => model.IdAgenteSaude.Nome)
+                                </td>
+                            </tr>
+                        </table>
+
+                        <br />
+
+                        <table class="table">
+                            <tr>
+                                <th>
+                                    IgG
+                                </th>
+                                <th>
+                                    IgM
+                                </th>
+                                <th>
+                                    rt Pcr
+                                </th>
+                                <th>
+                                    Resultado
+                                </th>
+                                <th></th>
+                            </tr>
+                            <tr>
+                                <td>
+                                    @if (Model.IgG == "S")
+                                    {<div>POSITIVO</div>}
+                                    @if (Model.IgG == "N")
+                                    {<div>NEGATIVO</div>}
+                                    @if (Model.IgG == "I")
+                                    {<div>INDETERMINADO</div>}
+
+                                </td>
+                                <td>
+                                    @if (Model.IgM == "S")
+                                    {<div>POSITIVO</div>}
+                                    @if (Model.IgM == "N")
+                                    {<div>NEGATIVO</div>}
+                                    @if (Model.IgM == "I")
+                                    {<div>INDETERMINADO</div>}
+                                </td>
+                                <td>
+                                    @if (Model.Pcr == "S")
+                                    {<div>POSITIVO</div>}
+                                    @if (Model.Pcr == "N")
+                                    {<div>NEGATIVO</div>}
+                                    @if (Model.Pcr == "I")
+                                    {<div>INDETERMINADO</div>}
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(model => model.Resultado)
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

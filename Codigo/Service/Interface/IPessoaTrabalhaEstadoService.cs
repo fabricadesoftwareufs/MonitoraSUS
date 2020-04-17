@@ -1,7 +1,5 @@
 ﻿using Model;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Service.Interface
 {
@@ -11,8 +9,9 @@ namespace Service.Interface
         bool Update(PessoaTrabalhaEstadoModel pessoaTrabalhaEstadoModel);
         bool Delete(int id);
         List<PessoaTrabalhaEstadoModel> GetAll();
-        PessoaTrabalhaEstadoModel GetById(int id);
+        PessoaTrabalhaEstadoModel GetById(int idPessoa);
         List<PessoaTrabalhaEstadoModel> GetAllSecretariesPendents();
         List<PessoaTrabalhaEstadoModel> GetAllAgents();
+        PessoaTrabalhaEstadoModel GetSecretarioAtivoByIdPessoa(int idPessoa);
     }
 }

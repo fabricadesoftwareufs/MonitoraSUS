@@ -11,5 +11,6 @@ namespace Model
         public bool EhResponsavel { get; set; }
         public bool EhSecretario { get; set; }
         public string SituacaoCadastro { get; set; }
+        public int? IdEmpresaExame { get; set; }
     }
 }

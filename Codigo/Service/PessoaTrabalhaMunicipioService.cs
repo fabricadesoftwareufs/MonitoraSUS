@@ -59,10 +59,10 @@ namespace Service
                     SituacaoCadastro = p.SituacaoCadastro
                 }).ToList();
 
-        public PessoaTrabalhaMunicipioModel GetById(int id)
+        public PessoaTrabalhaMunicipioModel GetById(int idPessoa)
             => _context
                 .Pessoatrabalhamunicipio
-                .Where(p => p.IdPessoa == id)
+                .Where(p => p.IdPessoa == idPessoa)
                 .Select(p => new PessoaTrabalhaMunicipioModel
                 {
                     IdPessoa = p.IdPessoa,

@@ -1,0 +1,74 @@
+﻿@model IEnumerable<Model.ExameViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+
+<div class="main-content card-content" id="panel">
+    <div class="container-fluid mt--6">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-content">
+                    <div class="card-header bg-transparent">
+                        <div class="row align-items-center">
+
+                            <div class="col">
+                                <h5 class="card-title  text-muted mb-0">MonitoraSUS</h5>
+                                <h5 class="h3 mb-0">Resultados</h5>
+                            </div>
+                            <div class="col text-right">
+                                <a class="btn btn-success" asp-action="Create">Novo Exame</a>
+                                <a class="btn btn-default" asp-controller="Home" asp-action="Index"> <i class="fas fa-arrow-left"></i> Voltar</a>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.IdPaciente)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.DataExame)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Resultado)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.IdVirusBacteria)
+                                </th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.IdPaciente.Nome)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.DataExame)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Resultado)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.IdVirusBacteria.Nome)
+                                    </td>
+                                    <td>
+                                        <a href="@Url.Action("Details", "Exame", new { id = item.IdExame})" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> Detalhes </a>
+                                        <a href="@Url.Action("Edit", "Exame", new { id = item.IdExame })" class="btn btn-info btn-xs"><i class="fa fa-edit"></i> Editar </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

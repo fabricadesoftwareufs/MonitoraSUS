@@ -18,8 +18,9 @@ namespace Model
         public string IgG { get; set; }
         public string IgM { get; set; }
         public string Pcr { get; set; }
-        public int EstadoRealizacao { get; set; }
-        public int MunicipioId { get; set; }
+        public int IdEstado { get; set; }
+        public int? IdMunicipio { get; set; }
+        public int? IdEmpresaSaude { get; set; }
 
     }
 }

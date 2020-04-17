@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Model;
@@ -9,10 +8,11 @@ using Service.Interface;
 using MonitoraSUS.Utils;
 using Model.ViewModel;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MonitoraSUS.Controllers
 {
-
+    [Authorize(Roles = "2, 3")]
     public class AgenteSecretarioController : Controller
     {
         private readonly IMunicipioService _municipioService;
@@ -45,31 +45,46 @@ namespace MonitoraSUS.Controllers
 
             return View(secMuniEst);
         }
+
         /// <summary>
         /// Se for secretario poderá administrar o status do agente no sistema, A, I, S. 
+        /// Gerenciar autorização do agente de saúde
         /// </summary>
         /// <returns></returns>
-        // GET: Aprovacao do agente de saúde
-        []
+        // GET: Todos agentes de saúde
+
+        [Authorize(Roles = "3")]
         public ActionResult IndexApproveAgent()
         {
             // usuario logado
-            var usuario = Utils.Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
+            var usuario = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
 
-            List<>
-
-                var pessoaTrabalhaEstado = _pessoaTrabalhaEstadoService.GetById(usuario.IdPessoa);
+            var agentes = new List<AgenteMunicipioEstadoViewModel>();
+            var solicitantes = new List<SolictanteAprovacaoModelView>();
+            var pessoaTrabalhaEstado = _pessoaTrabalhaEstadoService.GetById(usuario.IdPessoa);
             if (pessoaTrabalhaEstado != null)
             {
                 var agentesEstado = _pessoaTrabalhaEstadoService.GetAllAgents();
+                agentesEstado.ForEach(item => agentes.Add(new AgenteMunicipioEstadoViewModel { Pessoa = _pessoaService.GetById(item.IdPessoa), PessoaEstado = item, Situacao = item.SituacaoCadastro }));
+              
             }
             else
             {
                 var agentesMunicipio = _pessoaTrabalhaMunicipioService.GetAllAgents();
+                agentesMunicipio.ForEach(item => agentes.Add(new AgenteMunicipioEstadoViewModel { Pessoa = _pessoaService.GetById(item.IdPessoa), PessoaMunicipio = item, Situacao = item.SituacaoCadastro }));
+
             }
 
+            agentes.ForEach(item => solicitantes.Add(new SolictanteAprovacaoModelView
+            {
+                Nome = item.Pessoa.Nome,
+                Cpf = item.Pessoa.Cpf,
+                Estado = item.Pessoa.Estado,
+                Cidade = item.Pessoa.Cidade,
+                Status = item.Situacao
+            }));
 
-
+            return View(solicitantes);
         }
 
         // GET: AgenteSecretario/Details/5
