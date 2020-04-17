@@ -3,7 +3,7 @@
     ViewData["Title"] = "Login";
 }
 
-<!-- Login -->
+
 <div class="container ">
     <div class="row justify-content-center">
         <div class="col-xl-10 col-lg-12 col-md-9">
@@ -22,22 +22,25 @@
                                 <hr>
                                 <form class="user" asp-action="SignIn" asp-controller="Login">
                                     <div class="form-group">
-                                        <input asp-for="Cpf" id="cpf" class="form-control form-control-user" data-inputmask="'mask' : '***.***.***-**'" name="cpf" value="" placeholder="CPF" required="required">
+                                        <input type="text" asp-for="Cpf" required class="form-control form-control-user cpf" name="cpf" id="cpf" value="" placeholder="CPF">
                                     </div>
                                     <div class="form-group">
-                                        <input asp-for="Senha" id="senha" type="password" class="form-control form-control-user" name="senha" placeholder="Senha" required="required">
+                                        <input type="password" asp-for="Senha" required class="form-control form-control-user" name="senha" id="senha" placeholder="Senha">
                                     </div>
                                     <hr>
                                     <!-- Div erro -->
                                     <div class="alert alert-danger" id="divErro" role="alert">
                                         Credenciais incorretas!
                                     </div>
-
+                                    <!-- Fim div erro -->
                                     <button type="submit" class="btn btn-primary btn-user btn-block">
                                         Entrar
                                     </button>
+                                    <div class="text-center" style="margin-top: 2px;">
+                                        <a href="#exampleModalCenter" data-toggle="modal" data-target="#modalRecSenha">Esqueceu sua senha?</a>
+                                    </div>
                                     <div class="info text-center">
-                                        <span>Resultado de Exame? </span><br><a href="#">Clique aqui</a>
+                                        <span>Aguardando Resultado de Exame? </span><br><a href="#">Clique aqui</a>
                                     </div>
                                 </form>
                                 <div class="card-register">
@@ -45,7 +48,7 @@
                                         <div class="col-6 card-button text-center">
                                             <a href="#">
                                                 <div class="card-button-body">
-                                                    <span>Secretaria ?</span>
+                                                    <span>Secretário de Saúde?</span>
                                                     <i class="fas fa-user-plus fa-3x"></i>
                                                     <span>Cadastre-se</span>
                                                 </div>
@@ -54,7 +57,7 @@
                                         <div class="col-6 card-button text-center">
                                             <a href="#">
                                                 <div class="card-button-body">
-                                                    <span>Profissional ?</span>
+                                                    <span>Agente de Saúde?</span>
                                                     <i class="fas fa-user-md fa-3x"></i>
                                                     <span>Cadastre-se</span>
                                                 </div>
@@ -70,19 +73,46 @@
         </div>
     </div>
 </div>
+<!-- End Login -->
+<!-- MODAL -->
+<div class="modal fade" id="modalRecSenha" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Recuperação de senha</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form asp-action="EmitirToken" asp-controller="Login">
+                <div class="modal-body">
+
+                    <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">Insira o seu CPF:</label>
+                        <input type="text" asp-for="Cpf" required class="form-control form-control-user cpf" name="cpf" id="cpf" value="" placeholder="CPF">
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Solicitar</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 @section Scripts {
-<!-- jQuery -->
-<script src="~/assets/vendor/jquery/dist/jquery.min.js"></script>
-<!-- Bootstrap -->
-<script src="~/assets/vendor/custom/bootstrap.min.js"></script>
-<!-- jquery.inputmask -->
-<script src="~/assets/vendor/custom/jquery.inputmask/dist/jquery.inputmask.bundle.js"></script>
-<!-- Custom Theme Scripts -->
-<script src="~/assets/vendor/custom/custom.min.js"></script>
+    <!-- Scripts -->
+    <script src="~/assets/js/plugins/jquery-3.4.1/jquery-3.4.1.min.js"></script>
+    <script src="~/assets/js/plugins/jquery-mask/dist/jquery.mask.min.js"></script>
+    <script src="~/assets/js/login.js"></script>
 
-<script>
-    let div = document.getElementById("divErro");
-    window.location.href.includes("msg=erro") ? div.hidden = false : div.hidden = true;
-</script>
+    <script>
+        let div = document.getElementById("divErro");
+        window.location.href.includes("msg=erro") ? div.hidden = false : div.hidden = true;
+    </script>
+
+    
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 }

@@ -52,8 +52,7 @@ namespace MonitoraSUS
             services.AddScoped<IPessoaTrabalhaMunicipioService, PessoaTrabalhaMunicipioService>();
             services.AddScoped<IPessoaTrabalhaEstadoService, PessoaTrabalhaEstadoService>();
             services.AddScoped<IUsuarioService, UsuarioService>();
-
-            // Configuração de Envio de email.
+            services.AddScoped<IRecuperarSenhaService, RecuperarSenhaService>();
             services.AddScoped<IEmailService, EmailService>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);

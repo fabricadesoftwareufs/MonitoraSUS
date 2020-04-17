@@ -34,7 +34,7 @@ namespace MonitoraSUS.Utils
         /// </summary>
         /// <param name="senha"> Senha em texto plano (sem aplicação de Hash ou Criptografia). </param>
         /// <returns> Hash da senha fornecida. </returns>
-        public static string GerarHashSenha(string senha)
+        public static string GerarHash(string senha)
         {
             var senhaCifrada = Encoding.UTF8.GetBytes(senha);
 

@@ -39,9 +39,21 @@ namespace Service
                     Email = model.Email
                 }).ToList();
 
+        public UsuarioModel GetByCpf(string cpf)
+            => _context
+                .Usuario
+                .Where(r => r.Cpf.Equals(cpf))
+                .Select(model => new UsuarioModel
+                {
+                    IdUsuario = model.IdUsuario,
+                    Cpf = model.Cpf,
+                    Senha = model.Senha,
+                    TipoUsuario = Convert.ToByte(model.TipoUsuario),
+                    Email = model.Email
+                }).FirstOrDefault();
 
         public UsuarioModel GetById(int id)
-       => _context
+            => _context
                 .Usuario
                 .Where(r => r.IdUsuario == id)
                 .Select(model => new UsuarioModel
