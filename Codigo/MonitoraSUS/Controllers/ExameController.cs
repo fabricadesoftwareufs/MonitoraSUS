@@ -247,11 +247,10 @@ namespace MonitoraSUS.Controllers
              *  pegando informações do agente de saúde logado no sistema 
              */
 
-            // var agente = _pessoaContext.GetById();
-             var agente = _pessoaContext.GetById(5);
+            var agente = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
 
-            var secretarioMunicipio = _pessoaTrabalhaMunicipioContext.GetByIdPessoa(agente.Idpessoa);
-            var secretarioEstado = _pessoaTrabalhaEstadoContext.GetByIdPessoa(agente.Idpessoa);
+            var secretarioMunicipio = _pessoaTrabalhaMunicipioContext.GetByIdPessoa(agente.usuarioModel.IdPessoa);
+            var secretarioEstado = _pessoaTrabalhaEstadoContext.GetByIdPessoa(agente.usuarioModel.IdPessoa);
 
             // verificando se o funcionario trabalha no municipio ou no estado
             if (secretarioMunicipio != null)
@@ -271,7 +270,7 @@ namespace MonitoraSUS.Controllers
                 }
             }
 
-            exame.IdAgenteSaude = agente.Idpessoa;
+            exame.IdAgenteSaude = agente.usuarioModel.IdPessoa;
 
             return exame;
         }
@@ -305,17 +304,16 @@ namespace MonitoraSUS.Controllers
              * os exames que ele pode ver
              */
 
-            //var usuario = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
-            var usuario = new UsuarioModel { IdUsuario = 0, IdPessoa = 5, TipoUsuario = 1 };
+            var usuario = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
 
             var exames = new List<ExameModel>();
-            if (usuario.TipoUsuario == 1)
+            if (usuario.RoleUsuario.Equals("AGENTE"))
             {
-                exames = _exameContext.GetByIdAgente(usuario.IdPessoa);
+                exames = _exameContext.GetByIdAgente(usuario.usuarioModel.IdPessoa);
             }
-            else if (usuario.TipoUsuario == 2 || usuario.TipoUsuario == 3)
+            else if (usuario.RoleUsuario.Equals("COORDENADOR") || usuario.RoleUsuario.Equals("SECRETARIO"))
             {
-                var secretarioMunicipio = _pessoaTrabalhaMunicipioContext.GetByIdPessoa(usuario.IdPessoa);
+                var secretarioMunicipio = _pessoaTrabalhaMunicipioContext.GetByIdPessoa(usuario.usuarioModel.IdPessoa);
 
                 // verificando se o funcionario trabalha no municipio ou no estado
                 if (secretarioMunicipio != null)
@@ -326,7 +324,7 @@ namespace MonitoraSUS.Controllers
                 }
                 else
                 {
-                    var secretarioEstado = _pessoaTrabalhaEstadoContext.GetByIdPessoa(usuario.IdPessoa);
+                    var secretarioEstado = _pessoaTrabalhaEstadoContext.GetByIdPessoa(usuario.usuarioModel.IdPessoa);
                     if (secretarioEstado != null)
                         exames = _exameContext.GetByIdEstado(secretarioEstado.IdEstado);
                 }

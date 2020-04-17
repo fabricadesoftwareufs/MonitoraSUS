@@ -49,12 +49,13 @@ namespace MonitoraSUS.Controllers
                     var claims = new List<Claim>
                     {
                         new Claim(ClaimTypes.SerialNumber, user.IdUsuario.ToString()),
-                        new Claim(ClaimTypes.NameIdentifier, person.Nome),
+                        new Claim(ClaimTypes.Name, person.Nome),
                         new Claim(ClaimTypes.StateOrProvince, person.Estado),
                         new Claim(ClaimTypes.Locality, person.Cidade),
                         new Claim(ClaimTypes.UserData, user.Cpf),
                         new Claim(ClaimTypes.Email, user.Email),
-                        new Claim(ClaimTypes.Role, role),
+                        new Claim(ClaimTypes.NameIdentifier, user.IdPessoa.ToString()),
+                        new Claim(ClaimTypes.Role, role)
                     };
                     // Adicionando uma identidade as claims.
                     var identidade = new ClaimsIdentity(claims, "login");
