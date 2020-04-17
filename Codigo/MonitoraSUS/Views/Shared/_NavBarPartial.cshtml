@@ -29,12 +29,11 @@
                 <i class="fa fa-user" aria-hidden="true"></i>@nome
             </span>
             <span>
-                <i class="fas fa-map-marker-alt"></i> @estado / @cidade
+                <i class="fas fa-map-marker-alt"></i> @cidade / @estado
             </span>
             <span style="margin-top: 15px;">
-                <i class="fas fa-sign-out-alt"><a href="@Url.Action("Logout", "Login")" /></i> Sair
+                <a href="@Url.Action("Logout", "Login")"><i class="fas fa-sign-out-alt"></i> Sair</a>
             </span>
         </div>
     </div>
 </nav>
-
