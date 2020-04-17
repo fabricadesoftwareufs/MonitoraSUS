@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace Model
@@ -13,8 +13,9 @@ namespace Model
             IdAgenteSaude = new PessoaModel();
             IdVirusBacteria = new VirusBacteriaModel();
             IdPaciente = new PessoaModel();
-            IdPaciente.Sexo = "Masculino";
-            DataExame = DateTime.Now;
+
+            IdPaciente.Sexo = "M";
+            DataExame = DateTime.Now; 
             DataInicioSintomas = DateTime.Now;
             IdEstado = 0;
             MunicipioId = 0;

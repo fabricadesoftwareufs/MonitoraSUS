@@ -1,8 +1,9 @@
 ﻿namespace Model.ViewModel
 {
-    class UsuarioViewModel
+    public class UsuarioViewModel
     {
-        UsuarioModel usuarioModel { get; set; }
-        PessoaModel pessoaModel { get; set; }
+        public UsuarioModel usuarioModel { get; set; }
+        public PessoaModel pessoaModel { get; set; }
+        public string RoleUsuario { get; set; }
     }
 }

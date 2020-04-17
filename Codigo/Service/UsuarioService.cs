@@ -36,7 +36,8 @@ namespace Service
                     Cpf = model.Cpf,
                     Senha = model.Senha,
                     TipoUsuario = Convert.ToByte(model.TipoUsuario),
-                    Email = model.Email
+                    Email = model.Email,
+                    IdPessoa = model.IdPessoa
                 }).ToList();
 
         public UsuarioModel GetByCpf(string cpf)
@@ -62,7 +63,8 @@ namespace Service
                     Cpf = model.Cpf,
                     Senha = model.Senha,
                     TipoUsuario = Convert.ToByte(model.TipoUsuario),
-                    Email = model.Email
+                    Email = model.Email,
+                    IdPessoa = model.IdPessoa
                 }).FirstOrDefault();
 
         public UsuarioModel GetByLogin(string cpf, string senha)

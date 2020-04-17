@@ -85,6 +85,18 @@ namespace Service
                 Uf = estado.Uf
             };
         }
+
+        public EstadoModel GetByUf(string uf)
+         => _context.Estado
+             .Where(estadoModel => estadoModel.Uf.Equals(uf))
+             .Select(e => new EstadoModel
+             {
+                 Id = e.Id,
+                 CodigoUf = e.CodigoUf,
+                 Nome = e.Nome,
+                 Regiao = e.Regiao,
+                 Uf = e.Uf
+             }).FirstOrDefault();
     }
 }
 
