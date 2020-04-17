@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Text.RegularExpressions;
-using MonitoraSUS.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Model;
+using MonitoraSUS.Utils;
 using Service;
 using Service.Interface;
 
@@ -20,7 +21,8 @@ namespace MonitoraSUS.Controllers
         private readonly IEstadoService _estadoContext;
         private readonly ISituacaoVirusBacteriaService _situacaoPessoaContext;
         private readonly IPessoaTrabalhaEstadoService _pessoaTrabalhaEstadoContext;
-
+        private readonly IEmpresaExameService _empresaExameContext;
+        private readonly IPessoaTrabalhaMunicipioService _pessoaTrabalhaMunicipioContext;
 
         public ExameController(IVirusBacteriaService virusBacteriaContext,
                                IExameService exameContext,
@@ -28,7 +30,8 @@ namespace MonitoraSUS.Controllers
                                IMunicipioService municicpioContext,
                                IEstadoService estadoContext,
                                ISituacaoVirusBacteriaService situacaoPessoaContext,
-                               IPessoaTrabalhaEstadoService pessoaTrabalhaEstado)
+                               IPessoaTrabalhaEstadoService pessoaTrabalhaEstado,
+                               IPessoaTrabalhaMunicipioService pessoaTrabalhaMunicipioContext)
         {
             _virusBacteriaContext = virusBacteriaContext;
             _exameContext = exameContext;
@@ -37,6 +40,7 @@ namespace MonitoraSUS.Controllers
             _estadoContext = estadoContext;
             _situacaoPessoaContext = situacaoPessoaContext;
             _pessoaTrabalhaEstadoContext = pessoaTrabalhaEstado;
+            _pessoaTrabalhaMunicipioContext = pessoaTrabalhaMunicipioContext;
         }
 
         public IActionResult Index()
@@ -70,8 +74,23 @@ namespace MonitoraSUS.Controllers
 
             try
             {
+                /*
+                 * Atualizando Exame
+                 */
                 _exameContext.Update(CreateExameModel(exame, false));
-                _situacaoPessoaContext.Update(CreateSituacaoPessoaModelByExame(exame, _situacaoPessoaContext.GetById(exame.IdPaciente.Idpessoa, exame.IdVirusBacteria.IdVirusBacteria)));
+
+                /*
+                 * Atualizando ou Inserindo situacao do usuario 
+                 */
+                var situacao = _situacaoPessoaContext.GetById(exame.IdPaciente.Idpessoa, exame.IdVirusBacteria.IdVirusBacteria);
+                if (situacao == null)
+                    _situacaoPessoaContext.Insert(CreateSituacaoPessoaModelByExame(exame, situacao));
+                else
+                    _situacaoPessoaContext.Update(CreateSituacaoPessoaModelByExame(exame, situacao));
+
+                /*
+                 * Atualizando as informações do paciente
+                 */
                 _pessoaContext.Update(CreatePessoaModelByExame(exame));
 
                 TempData["mensagemSucesso"] = "Notificação realizada com SUCESSO!";
@@ -81,8 +100,8 @@ namespace MonitoraSUS.Controllers
             }
             catch
             {
-                TempData["mensagemErro"] = "Houve um problema ao atualizar as informações, tente novamente ou " +
-                  "entre em contato com os desenvolvedores";
+                TempData["mensagemErro"] = "Houve um problema ao atualizar as informações, tente novamente." +
+                  " Se o erro persistir, entre em contato com a Fábrica de Software da UFS pelo email fabricadesoftware@ufs.br";
 
                 return View(exame);
             }
@@ -109,12 +128,23 @@ namespace MonitoraSUS.Controllers
                 var pessoa = _pessoaContext.GetByCpf(cpf);
 
                 if (pessoa != null)
+                {
                     exame.IdPaciente = pessoa;
+                    return View(exame);
+                }
                 else
+                {
                     TempData["resultadoPesquisa"] = "Paciente não cadastrado, preencha os campos para cadastra-lo!";
 
+                    /*
+                     * Limpando o objeto para enviar  
+                     * somente o cpf pesquisado
+                     */
+                    var exameVazio = new ExameViewModel();
+                    exameVazio.IdPaciente.Cpf = exame.IdPaciente.Cpf;
 
-                return View(exame);
+                    return View(exameVazio);
+                }
             }
             else
             {
@@ -130,9 +160,8 @@ namespace MonitoraSUS.Controllers
                 }
                 catch
                 {
-                    TempData["mensagemErro"] = "Cadastro não pode ser concluido pois houve um problema ao inserir/atualizar dados do paciente, " +
-                                               "verifique as informações e tente novamente ou entre em contato com os desenvolvedores.";
-
+                    TempData["mensagemErro"] = "Cadastro não pode ser concluido pois houve um problema ao inserir/atualizar dados do paciente, tente novamente. " +
+                                                " Se o erro persistir, entre em contato com a Fábrica de Software da UFS pelo email fabricadesoftware@ufs.br";
                     return View(exame);
                 }
 
@@ -151,8 +180,8 @@ namespace MonitoraSUS.Controllers
                 }
                 catch
                 {
-                    TempData["mensagemErro"] = "Cadastro não pode ser concluido pois houve um problema ao inserir/atualizar o resultado do exame, " +
-                                               "verifique as informações e tente novamente ou entre em contato com os desenvolvedores.";
+                    TempData["mensagemErro"] = "Cadastro não pode ser concluido pois houve um problema ao inserir/atualizar o resultado do exame, tente novamente" +
+                                                " Se o erro persistir, entre em contato com a Fábrica de Software da UFS pelo email fabricadesoftware@ufs.br";
                     return View(exame);
                 }
 
@@ -163,8 +192,9 @@ namespace MonitoraSUS.Controllers
                 }
                 catch
                 {
-                    TempData["mensagemErro"] = "Cadastro não pode ser concluido pois houve um problema ao inserir os dados do exame, " +
-                                               "verifique as informações e tente novamente ou entre em contato com os desenvolvedores.";
+                    TempData["mensagemErro"] = "Cadastro não pode ser concluido pois houve um problema ao inserir os dados do exame, tente novamente." +
+                                               " Se o erro persistir, entre em contato com a Fábrica de Software da UFS pelo email fabricadesoftware@ufs.br";
+
 
                     return View(exame);
                 }
@@ -213,21 +243,34 @@ namespace MonitoraSUS.Controllers
             exame.IdAgenteSaude = viewModel.IdAgenteSaude.Idpessoa;
             exame.IdEmpresaSaude = viewModel.IdEmpresaSaude;
 
-            // pegando informações do agente de saúde logado no sistema
-            // var agente = _pessoaContext.GetById(MethodsUtils.RetornLoggedUser((ClaimsIdentity)User.Identity).IdPessoa);
-            var agente = _pessoaContext.GetById(5);
+            /*
+             *  pegando informações do agente de saúde logado no sistema 
+             */
 
-            if (atualizarCidadeEstado)
+            var agente = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
+
+            var secretarioMunicipio = _pessoaTrabalhaMunicipioContext.GetByIdPessoa(agente.usuarioModel.IdPessoa);
+            var secretarioEstado = _pessoaTrabalhaEstadoContext.GetByIdPessoa(agente.usuarioModel.IdPessoa);
+
+            // verificando se o funcionario trabalha no municipio ou no estado
+            if (secretarioMunicipio != null)
             {
-                exame.IdEstado = _estadoContext.GetByName(agente.Estado).Id;
-                exame.IdMunicipio = _municicpioContext.GetByName(agente.Cidade).Id;
+                exame.IdMunicipio = secretarioMunicipio.IdMunicipio;
+                exame.IdEstado = _estadoContext.GetByUf(_municicpioContext.GetById(secretarioMunicipio.IdMunicipio).Uf).Id;
 
-                var pessoaEstado = _pessoaTrabalhaEstadoContext.GetSecretarioAtivoByIdPessoa(agente.Idpessoa);
-                if (pessoaEstado != null)
-                    exame.IdEmpresaSaude = pessoaEstado.IdEmpresaExame;
+                if (secretarioEstado != null)
+                    exame.IdEmpresaSaude = secretarioEstado.IdEmpresaExame;
+            }
+            else
+            {
+                if (secretarioEstado != null)
+                {
+                    exame.IdEstado = _estadoContext.GetByUf(_municicpioContext.GetById(secretarioMunicipio.IdMunicipio).Uf).Id;
+                    exame.IdEmpresaSaude = secretarioEstado.IdEmpresaExame;
+                }
             }
 
-            exame.IdAgenteSaude = agente.Idpessoa;
+            exame.IdAgenteSaude = agente.usuarioModel.IdPessoa;
 
             return exame;
         }
@@ -251,28 +294,40 @@ namespace MonitoraSUS.Controllers
             ex.DataInicioSintomas = exame.DataInicioSintomas;
             ex.DataExame = exame.DataExame;
 
-
-
             return ex;
         }
 
         public List<ExameViewModel> GetAllExamesViewModel()
         {
-            /*Pegando usuario logado*/
-            // var usuario = MethodsUtils.RetornLoggedUser((ClaimsIdentity)User.Identity);
-            var usuario = new UsuarioModel { IdUsuario = 0, IdPessoa = 5, TipoUsuario = 2 };
+            /*
+             * Pegando usuario logado e carregando 
+             * os exames que ele pode ver
+             */
+
+            var usuario = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
 
             var exames = new List<ExameModel>();
-            if (usuario.TipoUsuario == 1 || usuario.TipoUsuario == 3)
+            if (usuario.RoleUsuario.Equals("AGENTE"))
             {
-                exames = _exameContext.GetByIdAgente(usuario.IdPessoa);
+                exames = _exameContext.GetByIdAgente(usuario.usuarioModel.IdPessoa);
             }
-            else if (usuario.TipoUsuario == 2)
+            else if (usuario.RoleUsuario.Equals("COORDENADOR") || usuario.RoleUsuario.Equals("SECRETARIO"))
             {
-                var secretario = _pessoaTrabalhaEstadoContext.GetSecretarioAtivoByIdPessoa(usuario.IdPessoa);
+                var secretarioMunicipio = _pessoaTrabalhaMunicipioContext.GetByIdPessoa(usuario.usuarioModel.IdPessoa);
 
-                if (secretario != null)
-                    exames = _exameContext.GetByIdEstado(secretario.IdEstado);
+                // verificando se o funcionario trabalha no municipio ou no estado
+                if (secretarioMunicipio != null)
+                {
+                    var uf = _municicpioContext.GetById(secretarioMunicipio.IdMunicipio).Uf;
+                    var idEstado = _estadoContext.GetByUf(uf).Id;
+                    exames = _exameContext.GetByIdEstado(idEstado);
+                }
+                else
+                {
+                    var secretarioEstado = _pessoaTrabalhaEstadoContext.GetByIdPessoa(usuario.usuarioModel.IdPessoa);
+                    if (secretarioEstado != null)
+                        exames = _exameContext.GetByIdEstado(secretarioEstado.IdEstado);
+                }
             }
 
             var examesViewModel = new List<ExameViewModel>();
@@ -308,6 +363,7 @@ namespace MonitoraSUS.Controllers
             exame.IdPaciente.Cpf = Methods.RemoveSpecialsCaracts(exame.IdPaciente.Cpf);
             exame.IdPaciente.Cep = Methods.RemoveSpecialsCaracts(exame.IdPaciente.Cep);
             exame.IdPaciente.FoneCelular = Methods.RemoveSpecialsCaracts(exame.IdPaciente.FoneCelular);
+            exame.IdPaciente.Sexo = exame.IdPaciente.Sexo.Equals("M") ? "Masculino" : "Feminino";
 
             if (exame.IdPaciente.FoneFixo != null)
                 exame.IdPaciente.FoneFixo = Methods.RemoveSpecialsCaracts(exame.IdPaciente.FoneFixo);

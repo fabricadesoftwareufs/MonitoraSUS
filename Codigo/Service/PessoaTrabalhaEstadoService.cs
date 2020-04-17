@@ -60,7 +60,7 @@ namespace Service
                     IdEmpresaExame = p.IdEmpresaExame,
                 }).FirstOrDefault();
 
-        public PessoaTrabalhaEstadoModel GetSecretarioAtivoByIdPessoa(int idPessoa)
+        public PessoaTrabalhaEstadoModel GetByIdPessoa(int idPessoa)
         => _context
                 .Pessoatrabalhaestado
                 .Where(p => p.EhSecretario.Equals(1) && p.SituacaoCadastro.Equals("A") && p.Idpessoa ==  idPessoa)
