@@ -28,11 +28,10 @@
                                         <input type="password" asp-for="Senha" required class="form-control form-control-user" name="senha" id="senha" placeholder="Senha">
                                     </div>
                                     <hr>
-                                    <!-- Div erro -->
-                                    <div class="alert alert-danger" id="divErro" role="alert">
-                                        Credenciais incorretas!
-                                    </div>
-                                    <!-- Fim div erro -->
+                                    <!-- Divs Eventos -->
+                                    <!-- ERROS -->
+                                    <div hidden id="divMsg"></div>
+                                    <!-- Fim Divs Eventos -->
                                     <button type="submit" class="btn btn-primary btn-user btn-block">
                                         Entrar
                                     </button>
@@ -109,10 +108,57 @@
     <script src="~/assets/js/login.js"></script>
 
     <script>
-        let div = document.getElementById("divErro");
-        window.location.href.includes("msg=erro") ? div.hidden = false : div.hidden = true;
+        let div = document.getElementById("divMsg");
+
+        /* DIVS DE ERRO */
+        if (window.location.href.includes("msg=erro")) {
+            div.className = "alert alert-danger text-center";
+            div.hidden = false;
+            div.textContent = "Credenciais Incorretas!";
+        }
+        if (window.location.href.includes("msg=insertFail")) {
+            div.className = "alert alert-danger text-center";
+            div.hidden = false;
+            div.textContent = "Falha ao gerar solitação.";
+        }
+        if (window.location.href.includes("msg=invalidUser")) {
+            div.className = "alert alert-danger text-center";
+            div.hidden = false;
+            div.textContent = "CPF Invalido!";
+        }
+        if (window.location.href.includes("msg=invalidToken")) {
+            div.className = "alert alert-danger text-center";
+            div.hidden = false;
+            div.textContent = "Token Invalido!";
+        }
+        if (window.location.href.includes("msg=errorChange")) {
+            div.className = "alert alert-danger text-center";
+            div.hidden = false;
+            div.textContent = "Erro ao trocar senha, por favor entre em contato.";
+        }
+
+
+        /* DIVS DE ALERTA */
+        if (window.location.href.includes("msg=hasToken")) {
+            div.className = "alert alert-warning text-center";
+            div.hidden = false;
+            div.textContent = "Usuario já possui uma solicitação de alteração em aberto, verifique o e-mail.";
+        }
+
+
+        /* DIVS DE SUCESSO */
+        if (window.location.href.includes("msg=successSend")) {
+            div.className = "alert alert-success text-center";
+            div.hidden = false;
+            div.textContent = "Email enviado com sucesso!!";
+        }
+        if (window.location.href.includes("msg=sucessChange")) {
+            div.className = "alert alert-success text-center";
+            div.hidden = false;
+            div.textContent = "Senha alterada com sucesso!!";
+        }
     </script>
 
-    
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 }

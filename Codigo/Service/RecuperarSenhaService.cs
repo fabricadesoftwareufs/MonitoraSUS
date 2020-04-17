@@ -1,4 +1,5 @@
-﻿using Model;
+﻿using Microsoft.EntityFrameworkCore.Internal;
+using Model;
 using Persistence;
 using Service.Interface;
 using System;
@@ -53,11 +54,11 @@ namespace Service
         public bool IsTokenValid(string token)
             => _context
                 .Recuperarsenha
-                .Where(t => t.Token.Equals(token) && CheckValidateToken(t.InicioToken, t.FimToken))
+                .Where(t => t.Token.Equals(token) && CheckValidateToken(t.InicioToken, t.FimToken, t.EhValido))
                 .Select(t => true)
                 .FirstOrDefault();
 
-        public bool UserAlreadyHasToken(int idUser) => _context.Recuperarsenha.Where(t => t.IdUsuario == idUser && CheckValidateToken(t.InicioToken, t.FimToken)).Count() == 1 ? true : false;
+        public bool UserNotHasToken(int idUser) => _context.Recuperarsenha.Where(t => t.IdUsuario == idUser && CheckValidateToken(t.InicioToken, t.FimToken, t.EhValido)).Count() == 0 ? true : false;
 
         private Recuperarsenha ModelToEntity(RecuperarSenhaModel model, Recuperarsenha entity)
         {
@@ -71,12 +72,12 @@ namespace Service
             return entity;
         }
 
-        private bool CheckValidateToken(DateTime inicio, DateTime fim) => (DateTime.Now >= inicio && DateTime.Now < fim);
+        private bool CheckValidateToken(DateTime inicio, DateTime fim, byte situacaoToken) => (DateTime.Now >= inicio && DateTime.Now < fim) && situacaoToken == 1;
 
         public RecuperarSenhaModel GetByToken(string token)
             => _context
                 .Recuperarsenha
-                .Where(t => t.Token.Equals(token) && CheckValidateToken(t.InicioToken, t.FimToken))
+                .Where(t => t.Token.Equals(token) && CheckValidateToken(t.InicioToken, t.FimToken, t.EhValido))
                 .Select(t => new RecuperarSenhaModel
                 {
                     Id = t.Id,
@@ -87,5 +88,13 @@ namespace Service
                     IdUsuario = t.IdUsuario
                 })
                 .FirstOrDefault();
+
+        public void SetTokenInvalid(int idUser)
+        {
+            var token = _context.Recuperarsenha.Where(t => t.IdUsuario == idUser).FirstOrDefault();
+            token.EhValido = Convert.ToByte(false);
+            _context.Recuperarsenha.Update(token);
+            _context.SaveChanges();
+        }
     }
 }

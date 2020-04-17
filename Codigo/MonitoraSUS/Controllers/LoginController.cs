@@ -113,7 +113,7 @@ namespace MonitoraSUS.Controllers
             var user = _usuarioService.GetByCpf(Methods.RemoveSpecialsCaracts(cpf));
             if (user != null)
             {
-                if (!_recuperarSenhaService.UserAlreadyHasToken(user.IdUsuario))
+                if (_recuperarSenhaService.UserNotHasToken(user.IdUsuario))
                 {
                     // Objeto será criado e inserido apenas se o usuario não possuir Tokens validos cadastrados.
                     var recSenha = new RecuperarSenhaModel
@@ -131,18 +131,18 @@ namespace MonitoraSUS.Controllers
                         {
                             // Email só será disparado caso a inserção seja feita com sucesso.
                             await _emailService.SendEmailAsync(user.Email, "MonitoraSUS - Recuperacao de senha", Methods.MessageEmail(recSenha));
-                            return RedirectToActionPermanent("Index", "Login", new { sendMail = "Sucesso" });
+                            return RedirectToActionPermanent("Index", "Login", new { msg = "successSend" });
                         }
                         catch (Exception e)
                         {
                             throw e.InnerException;
                         }
                     }
-                    return RedirectToActionPermanent("Index", "Login", new { recPass = "insertFail" });
+                    return RedirectToActionPermanent("Index", "Login", new { msg = "insertFail" });
                 }
-                return RedirectToActionPermanent("Index", "Login", new { recPass = "hasToken" });
+                return RedirectToActionPermanent("Index", "Login", new { msg = "hasToken" });
             }
-            return RedirectToActionPermanent("Index", "Login", new { recPass = "invalidUser" });
+            return RedirectToActionPermanent("Index", "Login", new { msg = "invalidUser" });
         }
 
         [HttpGet("Login/RecuperarSenha/{token}")]
@@ -151,14 +151,23 @@ namespace MonitoraSUS.Controllers
             if (_recuperarSenhaService.IsTokenValid(token))
                 return View(_recuperarSenhaService.GetByToken(token));
 
-            return RedirectToActionPermanent("Index", "Login", new { recPass = "invalidToken" });
+            return RedirectToActionPermanent("Index", "Login", new { msg = "invalidToken" });
         }
 
         public ActionResult ChangePass(IFormCollection collection)
         {
-            var id = collection["IdUsuario"];
-            var senha = collection["senha"];
-            return RedirectToActionPermanent("Index", "Login", new { recPass = "sucessChange" });
+            var user = _usuarioService.GetById(Convert.ToInt32(collection["IdUsuario"]));
+            if (user != null)
+            {
+                user.Senha = Criptografia.GerarHash(collection["senha"]);
+                if (_usuarioService.Update(user))
+                {
+                    _recuperarSenhaService.SetTokenInvalid(user.IdUsuario);
+                    return RedirectToActionPermanent("Index", "Login", new { msg = "sucessChange" });
+                }
+            }
+
+            return RedirectToActionPermanent("Index", "Login", new { msg = "errorChange" });
         }
 
         private string ReturnRole(int userType)

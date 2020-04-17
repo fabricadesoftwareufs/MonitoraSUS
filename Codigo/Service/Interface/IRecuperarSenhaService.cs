@@ -9,6 +9,7 @@ namespace Service.Interface
     {
         bool Insert(RecuperarSenhaModel recuperarSenha);
         RecuperarSenhaModel GetByToken(string token);
+        void SetTokenInvalid(int idUser);
         RecuperarSenhaModel GetByUser(int idUser);
         /// <summary>
         /// Checa se o token é valido
@@ -22,6 +23,6 @@ namespace Service.Interface
         /// </summary>
         /// <param name="idUser">Id do usuario a ser checado.</param>
         /// <returns>True caso o usuario possua 1 token (valido) aberto, false caso não.</returns>
-        bool UserAlreadyHasToken(int idUser);
+        bool UserNotHasToken(int idUser);
     }
 }
