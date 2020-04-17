@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Mvc;
@@ -99,8 +100,8 @@ namespace MonitoraSUS.Controllers
             }
             catch
             {
-                TempData["mensagemErro"] = "Houve um problema ao atualizar as informações, tente novamente ou " +
-                  "entre em contato com os desenvolvedores";
+                TempData["mensagemErro"] = "Houve um problema ao atualizar as informações, tente novamente." +
+                  " Se o erro persistir, entre em contato com a Fábrica de Software da UFS pelo email fabricadesoftware@ufs.br";
 
                 return View(exame);
             }
@@ -159,9 +160,8 @@ namespace MonitoraSUS.Controllers
                 }
                 catch
                 {
-                    TempData["mensagemErro"] = "Cadastro não pode ser concluido pois houve um problema ao inserir/atualizar dados do paciente, " +
-                                               "verifique as informações e tente novamente ou entre em contato com os desenvolvedores.";
-
+                    TempData["mensagemErro"] = "Cadastro não pode ser concluido pois houve um problema ao inserir/atualizar dados do paciente, tente novamente. " +
+                                                " Se o erro persistir, entre em contato com a Fábrica de Software da UFS pelo email fabricadesoftware@ufs.br";
                     return View(exame);
                 }
 
@@ -180,8 +180,8 @@ namespace MonitoraSUS.Controllers
                 }
                 catch
                 {
-                    TempData["mensagemErro"] = "Cadastro não pode ser concluido pois houve um problema ao inserir/atualizar o resultado do exame, " +
-                                               "verifique as informações e tente novamente ou entre em contato com os desenvolvedores.";
+                    TempData["mensagemErro"] = "Cadastro não pode ser concluido pois houve um problema ao inserir/atualizar o resultado do exame, tente novamente" +
+                                                " Se o erro persistir, entre em contato com a Fábrica de Software da UFS pelo email fabricadesoftware@ufs.br";
                     return View(exame);
                 }
 
@@ -192,8 +192,9 @@ namespace MonitoraSUS.Controllers
                 }
                 catch
                 {
-                    TempData["mensagemErro"] = "Cadastro não pode ser concluido pois houve um problema ao inserir os dados do exame, " +
-                                               "verifique as informações e tente novamente ou entre em contato com os desenvolvedores.";
+                    TempData["mensagemErro"] = "Cadastro não pode ser concluido pois houve um problema ao inserir os dados do exame, tente novamente." +
+                                               " Se o erro persistir, entre em contato com a Fábrica de Software da UFS pelo email fabricadesoftware@ufs.br";
+
 
                     return View(exame);
                 }
@@ -246,8 +247,9 @@ namespace MonitoraSUS.Controllers
              *  pegando informações do agente de saúde logado no sistema 
              */
 
-            // var agente = _pessoaContext.GetById(MethodsUtils.RetornLoggedUser((ClaimsIdentity)User.Identity).IdPessoa);
-            var agente = _pessoaContext.GetById(5);
+            // var agente = _pessoaContext.GetById();
+             var agente = _pessoaContext.GetById(5);
+
             var secretarioMunicipio = _pessoaTrabalhaMunicipioContext.GetByIdPessoa(agente.Idpessoa);
             var secretarioEstado = _pessoaTrabalhaEstadoContext.GetByIdPessoa(agente.Idpessoa);
 
@@ -303,7 +305,7 @@ namespace MonitoraSUS.Controllers
              * os exames que ele pode ver
              */
 
-             //var usuario = MonitoraSUS.RetornLoggedUser((ClaimsIdentity)User.Identity);
+            //var usuario = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
             var usuario = new UsuarioModel { IdUsuario = 0, IdPessoa = 5, TipoUsuario = 1 };
 
             var exames = new List<ExameModel>();
