@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace MonitoraSUS.Controllers
 {
-    [Authorize(Roles = "2, 3")]
+    [Authorize(Roles = "AGENTE, SECRETARIO")]
     public class AgenteSecretarioController : Controller
     {
         private readonly IMunicipioService _municipioService;
@@ -53,7 +53,7 @@ namespace MonitoraSUS.Controllers
         /// <returns></returns>
         // GET: Todos agentes de saúde
 
-        [Authorize(Roles = "3")]
+        [Authorize(Roles = "SECRETARIO")]
         public ActionResult IndexApproveAgent()
         {
             // usuario logado
