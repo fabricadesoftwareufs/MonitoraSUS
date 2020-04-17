@@ -5,7 +5,7 @@ using System.Text;
 namespace Model
 {
     /// <summary>
-    /// Tipo de Usuario : 0- comum, 1- agente, 2- secretario
+    /// Tipo de Usuario : 0- comum, 1- agente, 2- coordenador, 3 - secretario, 4 - adms
     /// </summary>
     public class UsuarioModel
     {
