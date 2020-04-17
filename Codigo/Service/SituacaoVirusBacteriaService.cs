@@ -1,10 +1,8 @@
 ﻿using Model;
 using Persistence;
 using Service.Interface;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Service
 {
@@ -36,7 +34,7 @@ namespace Service
 
                 }).ToList();
 
-        public SituacaoPessoaVirusBacteriaModel GetById(int idPessoa,int idVirus)
+        public SituacaoPessoaVirusBacteriaModel GetById(int idPessoa, int idVirus)
        => _context.Situacaopessoavirusbacteria
                 .Where(situacaoPessoa => situacaoPessoa.IdVirusBacteria == idVirus && situacaoPessoa.Idpessoa == idPessoa)
                 .Select(situacao => new SituacaoPessoaVirusBacteriaModel

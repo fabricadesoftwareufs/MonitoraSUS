@@ -1,10 +1,8 @@
 ﻿using Model;
 using Persistence;
 using Service.Interface;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Service
 {
@@ -75,9 +73,11 @@ namespace Service
 
                 }).FirstOrDefault();
 
-        public Estado ModelToEntity(EstadoModel estado) {
+        public Estado ModelToEntity(EstadoModel estado)
+        {
 
-            return new Estado {
+            return new Estado
+            {
                 Id = estado.Id,
                 Nome = estado.Nome,
                 CodigoUf = estado.CodigoUf,

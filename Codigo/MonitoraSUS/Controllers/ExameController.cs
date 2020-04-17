@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -8,7 +8,9 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Model;
 using MonitoraSUS.Utils;
 using Service;
+
 using Service.Interface;
+using System.Collections.Generic;
 
 namespace MonitoraSUS.Controllers
 {

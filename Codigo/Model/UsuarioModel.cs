@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Model
+﻿namespace Model
 {
     /// <summary>
     /// Tipo de Usuario : 0- comum, 1- agente, 2- coordenador, 3 - secretario, 4 - adms
@@ -13,7 +9,7 @@ namespace Model
         public string Cpf { get; set; }
         public string Senha { get; set; }
         public string Email { get; set; }
-        public int TipoUsuario { get; set; }   
+        public int TipoUsuario { get; set; }
         public int IdPessoa { get; set; }
     }
 }
