@@ -60,10 +60,10 @@
                                 @Html.DisplayNameFor(model => model.DataExame)
                             </th>
                             <th>
-                                @Html.DisplayNameFor(model => model.Resultado)
+                                @Html.DisplayNameFor(model => model.IdVirusBacteria)
                             </th>
                             <th>
-                                @Html.DisplayNameFor(model => model.IdVirusBacteria)
+                                @Html.DisplayNameFor(model => model.Resultado)
                             </th>
                             <th></th>
                         </tr>
@@ -79,10 +79,10 @@
                                     @Html.DisplayFor(modelItem => item.DataExame)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.Resultado)
+                                    @Html.DisplayFor(modelItem => item.IdVirusBacteria.Nome)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.IdVirusBacteria.Nome)
+                                    @Html.DisplayFor(modelItem => item.Resultado)
                                 </td>
                                 <td>
                                     <a href="@Url.Action("Details", "Exame", new { id = item.IdExame})" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> Detalhes </a>
