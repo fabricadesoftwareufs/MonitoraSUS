@@ -45,11 +45,15 @@ namespace MonitoraSUS.Controllers
             _situacaoPessoaContext = situacaoPessoaContext;
             _pessoaTrabalhaEstadoContext = pessoaTrabalhaEstado;
             _pessoaTrabalhaMunicipioContext = pessoaTrabalhaMunicipioContext;
-        }
+        } 
 
-        public IActionResult Index()
+        public IActionResult Index(DateTime filtro)
         {
-            return View(GetAllExamesViewModel());
+            /*
+             * O tratamento da variavel filtro é feito dentro 
+             * do método GetAllExamesViewModel()
+             */
+            return View(GetAllExamesViewModel(filtro));
         }
 
         public IActionResult Details(int id)
@@ -350,7 +354,7 @@ namespace MonitoraSUS.Controllers
             return ex;
         }
 
-        public List<ExameViewModel> GetAllExamesViewModel()
+        public List<ExameViewModel> GetAllExamesViewModel(DateTime filtro)
         {
             /*
              * Pegando usuario logado e carregando 
@@ -385,6 +389,20 @@ namespace MonitoraSUS.Controllers
                         exames = _exameContext.GetByIdEstado(secretarioEstado.IdEstado);
                 }
             }
+
+            /* 
+             * Se o filtro for uma data válida, 
+             * ele faz a seleção
+             */
+            if (filtro != DateTime.MinValue && filtro != null)
+            {
+                exames = exames.Where(exameModel => DateTime.Compare(exameModel.DataExame, filtro) == 0).ToList();
+            }
+            else 
+            {
+                exames = exames.Where(exameModel => DateTime.Compare(exameModel.DataExame, DateTime.Today) == 0).ToList();
+            }
+
 
             var examesViewModel = new List<ExameViewModel>();
 

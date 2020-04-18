@@ -14,7 +14,7 @@
      * para filtrar quem ele pode remover
      */
 
-    var agente = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
+    //var agente = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
 
     /*
      * Usuario para testes, comente a linhda de cima e
@@ -22,8 +22,8 @@
      * id do usuario que quiser
      */
 
-    //var agente = new UsuarioViewModel();
-    //agente.usuarioModel = new Model.UsuarioModel { IdPessoa = 5 };
+    var agente = new UsuarioViewModel();
+    agente.usuarioModel = new Model.UsuarioModel { IdPessoa = 5 };
 
 
 
@@ -39,12 +39,26 @@
                     <div class="row align-items-center">
 
                         <div class="col">
-                            <h5 class="card-title  text-muted mb-0">MonitoraSUS</h5>
+                            <h5 class="card-title text-muted mb-0">MonitoraSUS</h5>
                             <h5 class="h3 mb-0">Resultados</h5>
                         </div>
                         <div class="col text-right">
                             <a class="btn btn-success" asp-action="Create">Novo Exame</a>
-                            <a class="btn btn-default" asp-controller="Home" asp-action="Index"> <i class="fas fa-arrow-left"></i> Voltar</a>
+                            <a class="btn btn-default" asp-controller="Home" asp-action="Index"> <i class="fas fa-arrow-left"></i> Voltar</a><br />
+                        </div>
+
+                    </div>
+                    <hr />
+                    <div class="row align-items-center" style="float: right">
+                        <div class="col text-right">
+                            <h5 class="card-title">Filtre Exames por Data</h5>
+                            <div class="form-inline">
+                                <form asp-controller="Exame" asp-action="Index">
+                                    <input type="date" required id="data-filtro" name="filtro" class=" form-control" />
+                                    <button type="submit" class="margin-left-10 btn btn-secondary">Filtrar</button>
+                                </form>
+                            </div>
+
                         </div>
 
                     </div>
@@ -53,6 +67,9 @@
                 <table class="table">
                     <thead>
                         <tr>
+                            <th>
+                                Cpf
+                            </th>
                             <th>
                                 @Html.DisplayNameFor(model => model.IdPaciente)
                             </th>
@@ -65,13 +82,18 @@
                             <th>
                                 @Html.DisplayNameFor(model => model.Resultado)
                             </th>
-                            <th></th>
+                            <th>
+                                Ações
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach (var item in Model)
                         {
                             <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.IdPaciente.Cpf)
+                                </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.IdPaciente.Nome)
                                 </td>
@@ -93,12 +115,12 @@
                                         <div class="modal fade bs-example-modal-sm" id="modal-confirmar-@item.IdExame" tabindex="-1" role="dialog" aria-hidden="true">
                                             <div class="modal-dialog modal-sm">
                                                 <div class="modal-content text-center" style="padding: 10pt">
-                                                    <h2> Confirmar Remoção do Exame ? </h2>
+                                                    <h4> Confirmar Remoção do Exame ? </h4>
 
                                                     <p class="text-left">
-                                                        <h3>Paciente:</h3> @item.IdPaciente.Nome <br />
-                                                        <h3>Resultado:</h3> @item.Resultado <br />
-                                                        <h3>Virus/Bacteria:</h3> @item.IdVirusBacteria.Nome <br />
+                                                        <h4>Paciente:</h4> @item.IdPaciente.Nome <br />
+                                                        <h4>Virus/Bacteria:</h4> @item.IdVirusBacteria.Nome <br />
+                                                        <h4>Resultado:</h4> @item.Resultado <br />
                                                     </p>
 
                                                     @using (Html.BeginForm("Delete", "Exame", new { id = item.IdExame }, FormMethod.Post))
@@ -111,7 +133,6 @@
                                         </div>
                                     }
                                 </td>
-                                <td></td>
                             </tr>
                         }
                     </tbody>
@@ -149,6 +170,16 @@
 
 
 <script>
+
+    var input = document.getElementById('data-filtro');
+
+    input.addEventListener("keyup", function () {
+        if (document.getElementById('data-filtro').value.length == 10) {
+
+            alert(document.getElementById('data-filtro').value);
+            //document.forms["form-exame"].submit();
+        }
+    });
 
     window.onload = function () {
         $('#modal-mensagem-retorno').modal('show');
