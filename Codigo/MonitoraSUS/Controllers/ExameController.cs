@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Text.RegularExpressions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Model;
+using Model.ViewModel;
 using MonitoraSUS.Utils;
 using Service;
 using Service.Interface;
@@ -50,8 +52,57 @@ namespace MonitoraSUS.Controllers
 
         public IActionResult Details(int id)
         {
-
             return View(GetExameViewModelById(id));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Delete(int id, IFormCollection collection)
+        {
+            
+            var exame = _exameContext.GetById(id);
+            var situacao = _situacaoPessoaContext.GetById(exame.IdPaciente, exame.IdVirusBacteria);
+            
+            /* 
+             * Removendo situação do paciente 
+             */
+            try
+            {
+                if(situacao != null)
+                    _situacaoPessoaContext.Delete(situacao.Idpessoa, situacao.IdVirusBacteria);
+            }
+            catch
+            {
+                TempData["mensagemErro"] = "Não foi possível excluir esse exame, tente novamente." +
+                                           " Se o erro persistir, entre em contato com a Fábrica de Software da UFS pelo email fabricadesoftware@ufs.br";
+                
+                return RedirectToAction(nameof(Index));
+            }
+
+            /* 
+             * Removendo exame do paciente 
+             */
+            try
+            {
+                _exameContext.Delete(id);
+            }
+            catch
+            {
+                /* Se o exame não puder ser removido, adicionar 
+                 * novamente a ultima situacao do paciente pra 
+                 * manter a consistência do banco de dados
+                 */
+                try { _situacaoPessoaContext.Insert(situacao); }
+                catch { }
+
+                TempData["mensagemErro"] = "Não foi possível excluir esse exame, tente novamente." +
+                                              " Se o erro persistir, entre em contato com a Fábrica de Software da UFS pelo email fabricadesoftware@ufs.br";
+                
+                return RedirectToAction(nameof(Index));
+            }
+
+            TempData["mensagemSucesso"] = "O Exame foi removido com sucesso!";
+            return RedirectToAction(nameof(Index));
         }
 
 
@@ -246,8 +297,8 @@ namespace MonitoraSUS.Controllers
             /*
              *  pegando informações do agente de saúde logado no sistema 
              */
-
             var agente = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
+            
 
             var secretarioMunicipio = _pessoaTrabalhaMunicipioContext.GetByIdPessoa(agente.usuarioModel.IdPessoa);
             var secretarioEstado = _pessoaTrabalhaEstadoContext.GetByIdPessoa(agente.usuarioModel.IdPessoa);
@@ -305,6 +356,7 @@ namespace MonitoraSUS.Controllers
              */
 
             var usuario = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
+            
 
             var exames = new List<ExameModel>();
             if (usuario.RoleUsuario.Equals("AGENTE"))
@@ -400,18 +452,19 @@ namespace MonitoraSUS.Controllers
             return resultado;
         }
 
+
         public string GetStatusExame(string status)
         {
 
 
             switch (status)
             {
-                case "I": return "IDETERMINADO";
+                case "I": return "INDETERMINADO";
                 case "N": return "NEGATIVO";
                 case "C": return "CURADO";
                 case "P": return "POSITIVO";
 
-                default: return "INDEFINIDO";
+                default: return "IDETERMINADO";
             }
 
 

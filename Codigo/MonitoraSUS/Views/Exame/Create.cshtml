@@ -334,26 +334,6 @@
                             <input asp-for="PesquisarCpf" id="PesquisarCpf" value="0" />
                         </div>
                         <hr class="my-4" />
-                        <div class="modal fade bs-example-modal-sm" id="modal-confirmar" tabindex="-1" role="dialog" aria-hidden="true">
-                            <div class="modal-dialog modal-sm">
-                                <div class="modal-content">
-                                    <div style="padding: 10pt;text-align: center">
-                                        <p id="titulo-confirmacao"> Confirmar Notificação do Resultado do Exame ? </p>
-                                        <p id="texto-confirmacao">  </p>
-
-                                        <div class="col text-center  form-group" id="acoes-model-form">
-                                            <button type="button" data-dismiss="modal" class="btn btn-danger">Não</button>
-                                            <button onclick="submitForm()" data-dismiss="modal" id="btn-submit" value="Sim" class="btn btn-success">Sim</button>
-                                        </div>
-
-                                        <div class="col text-center" id="ok-model-form">
-                                            <button type="button" data-dismiss="modal" class="btn btn-success">Ok</button>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </form>
                     <div class="row align-items-center">
                         <div class="col text-right">
@@ -365,6 +345,28 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade bs-example-modal-sm" id="modal-confirmar" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div style="padding: 10pt;text-align: center">
+                <p id="titulo-confirmacao"> Confirmar Notificação do Resultado do Exame ? </p>
+                <p id="texto-confirmacao">  </p>
+
+                <div class="col text-center  form-group" id="acoes-model-form">
+                    <button type="button" data-dismiss="modal" class="btn btn-danger">Não</button>
+                    <button onclick="submitForm()" data-dismiss="modal" id="btn-submit" value="Sim" class="btn btn-success">Sim</button>
+                </div>
+
+                <div class="col text-center" id="ok-model-form">
+                    <button type="button" data-dismiss="modal" class="btn btn-success">Ok</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <div class="modal fade bs-example-modal-sm" id="modal-espera" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-sm">

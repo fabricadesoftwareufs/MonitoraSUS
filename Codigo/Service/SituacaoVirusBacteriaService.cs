@@ -18,9 +18,9 @@ namespace Service
             _context = context;
         }
 
-        public bool Delete(int id)
+        public bool Delete(int idPessoa, int idVirusBacteria)
         {
-            var situacao = _context.Situacaopessoavirusbacteria.Find(id);
+            var situacao = ModelToEntity(GetById(idPessoa, idVirusBacteria));
             _context.Situacaopessoavirusbacteria.Remove(situacao);
             return _context.SaveChanges() == 1 ? true : false;
         }
