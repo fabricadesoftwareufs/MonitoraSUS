@@ -60,29 +60,41 @@ namespace MonitoraSUS.Controllers
             var usuario = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
 
             var agentes = new List<AgenteMunicipioEstadoViewModel>();
-            var solicitantes = new List<SolictanteAprovacaoModelView>();
-            var pessoaTrabalhaEstado = _pessoaTrabalhaEstadoService.GetById(usuario.IdPessoa);
+            var solicitantes = new List<SolicitanteAprovacaoModelView>();
+            var pessoaTrabalhaEstado = _pessoaTrabalhaEstadoService.GetByIdPessoa(usuario.UsuarioModel.IdPessoa);
             if (pessoaTrabalhaEstado != null)
             {
                 var agentesEstado = _pessoaTrabalhaEstadoService.GetAllAgents();
                 agentesEstado.ForEach(item => agentes.Add(new AgenteMunicipioEstadoViewModel { Pessoa = _pessoaService.GetById(item.IdPessoa), PessoaEstado = item, Situacao = item.SituacaoCadastro }));
-              
+
+                agentes.ForEach(item => solicitantes.Add(new SolicitanteAprovacaoModelView
+                {
+                    IdPessoa = item.Pessoa.Idpessoa,
+                    Nome = item.Pessoa.Nome,
+                    Cpf = Methods.PatternCpf(item.Pessoa.Cpf),
+                    Estado = _estadoService.GetById(item.PessoaEstado.IdEstado).Nome,
+                    Cidade = null,
+                    Status = item.Situacao,
+                    Situacao = ReturnStatus(item.Situacao)
+                }));
+
             }
             else
             {
                 var agentesMunicipio = _pessoaTrabalhaMunicipioService.GetAllAgents();
                 agentesMunicipio.ForEach(item => agentes.Add(new AgenteMunicipioEstadoViewModel { Pessoa = _pessoaService.GetById(item.IdPessoa), PessoaMunicipio = item, Situacao = item.SituacaoCadastro }));
+                agentes.ForEach(item => solicitantes.Add(new SolicitanteAprovacaoModelView
+                {
+                    IdPessoa = item.Pessoa.Idpessoa,
+                    Nome = item.Pessoa.Nome,
+                    Cpf = item.Pessoa.Cpf,
+                    Estado = _estadoService.GetByUf(_municipioService.GetById(item.PessoaMunicipio.IdMunicipio).Uf).Nome,
+                    Cidade = _municipioService.GetById(item.PessoaMunicipio.IdMunicipio).Nome,
+                    Status = item.Situacao,
+                    Situacao = ReturnStatus(item.Situacao)
 
+                }));
             }
-
-            agentes.ForEach(item => solicitantes.Add(new SolictanteAprovacaoModelView
-            {
-                Nome = item.Pessoa.Nome,
-                Cpf = item.Pessoa.Cpf,
-                Estado = item.Pessoa.Estado,
-                Cidade = item.Pessoa.Cidade,
-                Status = item.Situacao
-            }));
 
             return View(solicitantes);
         }
@@ -317,6 +329,18 @@ namespace MonitoraSUS.Controllers
             });
 
             return pessoa.Idpessoa;
+        }
+
+        private string ReturnStatus(string statusAbreviado)
+        {
+            switch (statusAbreviado)
+            {
+                case "I": return "Bloqueado";
+                case "A": return "Ativo";
+                case "S": return "Pedente";
+                default: return "Undefined";
+            }
+
         }
     }
 }

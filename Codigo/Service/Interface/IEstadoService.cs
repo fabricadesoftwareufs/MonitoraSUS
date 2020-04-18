@@ -11,5 +11,6 @@ namespace Service.Interface
         List<EstadoModel> GetAll();
         EstadoModel GetById(int id);
         EstadoModel GetByName(string name);
+        EstadoModel GetByUf(string uf);
     }
 }

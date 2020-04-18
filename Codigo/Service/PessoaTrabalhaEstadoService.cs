@@ -59,8 +59,22 @@ namespace Service
                     IdEmpresaExame = p.IdEmpresaExame
                 }).ToList();
 
-        public PessoaTrabalhaEstadoModel GetById(int idPessoa)
+        public PessoaTrabalhaEstadoModel GetById(int idPessoa, int idEstado)
             => _context
+                .Pessoatrabalhaestado
+                .Where(p => p.Idpessoa == idPessoa && p.IdEstado == idEstado)
+                .Select(p => new PessoaTrabalhaEstadoModel
+                {
+                    IdPessoa = p.Idpessoa,
+                    IdEstado = p.IdEstado,
+                    EhResponsavel = Convert.ToBoolean(p.EhResponsavel),
+                    EhSecretario = Convert.ToBoolean(p.EhSecretario),
+                    SituacaoCadastro = p.SituacaoCadastro,
+                    IdEmpresaExame = p.IdEmpresaExame
+                }).FirstOrDefault();
+
+        public PessoaTrabalhaEstadoModel GetByIdPessoa(int idPessoa)
+        => _context
                 .Pessoatrabalhaestado
                 .Where(p => p.Idpessoa == idPessoa)
                 .Select(p => new PessoaTrabalhaEstadoModel
@@ -74,9 +88,9 @@ namespace Service
                 }).FirstOrDefault();
 
         public PessoaTrabalhaEstadoModel GetSecretarioAtivoByIdPessoa(int idPessoa)
-        => _context
+             => _context
                 .Pessoatrabalhaestado
-                .Where(p => p.EhSecretario.Equals(1) && p.SituacaoCadastro.Equals("A") && p.Idpessoa ==  idPessoa)
+                .Where(p => p.EhSecretario.Equals(1) && p.SituacaoCadastro.Equals("A") && p.Idpessoa == idPessoa)
                 .Select(p => new PessoaTrabalhaEstadoModel
                 {
                     IdPessoa = p.Idpessoa,

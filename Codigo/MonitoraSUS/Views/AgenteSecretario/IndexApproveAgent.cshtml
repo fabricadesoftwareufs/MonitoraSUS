@@ -1,7 +1,11 @@
-﻿@model IEnumerable<Model.ViewModel.SolictanteAprovacaoModelView>
+﻿@model IEnumerable<Model.ViewModel.SolicitanteAprovacaoModelView>
 
 @{
     ViewData["Title"] = "IndexApproveAgent";
+
+    var bloquear = "Bloquear";
+    var ativar = "Ativar";
+    var descartar = "Descartar";
 }
 <!-- Page Content -->
 <div class="container-fluid mt--6">
@@ -15,7 +19,7 @@
                             <h5 class="h3 mb-0">Gerenciar Agentes de Saúde</h5>
                         </div>
                         <div class="col text-right">
-                            <a href="#" class="btn btn-sm btn-default">
+                            <a href="@Url.Action("Index", "AgenteSecretario")" class="btn btn-sm btn-default">
                                 <i class="fas fa-arrow-left"></i> Voltar
                             </a>
                         </div>
@@ -54,54 +58,59 @@
                                             @Html.DisplayFor(modelItem => item.Nome)
                                         </td>
                                         <td>
-                                            @Html.DisplayFor(modelItem => item.Cpf)
+                                            <a href="#">@Html.DisplayFor(modelItem => item.Cpf)</a>
                                         </td>
                                         <td>
                                             @Html.DisplayFor(modelItem => item.Estado)
                                         </td>
                                         <td>
-                                            @Html.DisplayFor(modelItem => item.Cidade)
+                                            @if (item.Cidade != null)
+                                            {
+                                                @Html.DisplayFor(modelItem => item.Cidade)
+                                            }
+                                            else
+                                            {
+                                                <span><b>N/A</b></span>
+                                            }
                                         </td>
                                         <td>
                                             <span class="badge badge-dot mr-4">
                                                 @if (item.Status.Equals("A"))
                                                 {
                                                     <i class="bg-success"></i>
-                                                    <span class="status">Ativo</span>
                                                 }
                                                 else if (item.Status.Equals("I"))
                                                 {
                                                     <i class="bg-danger"></i>
-                                                    <span class="status">Bloqueado</span>
                                                 }
                                                 else if (item.Status.Equals("S"))
                                                 {
                                                     <i class="bg-warning"></i>
-                                                    <span class="status">Pendente</span>
                                                 }
+                                                <span class="status">@Html.DisplayFor(itemModel => item.Situacao)</span>
                                             </span>
                                         </td>
                                         <td>
                                             @if (item.Status.Equals("S"))
                                             {
-                                                <button class="btn btn-icon btn-success btn-sm" title="Ativar" type="button">
+                                                <a href="@Url.Action("Details", "AgenteSecretario", new { id = item.IdPessoa })" class="btn btn-icon btn-success btn-sm" title="@ativar">
                                                     <span class="btn-inner--icon"><i class="fas fa-check"></i></span>
-                                                </button>
-                                                <button class="btn btn-icon btn-danger btn-sm" title="Descartar" type="button">
+                                                </a>
+                                                <a href="@Url.Action("Details", "AgenteSecretario", new { id = item.IdPessoa })" class="btn btn-icon btn-danger btn-sm" title="@descartar">
                                                     <span class="btn-inner--icon"><i class="fas fa-times"></i></span>
-                                                </button>
+                                                </a>
                                             }
                                             else if (item.Status.Equals("A"))
                                             {
-                                                <button class="btn btn-icon btn-warning btn-sm" title="Bloquear" type="button">
+                                                <a href="@Url.Action("Details", "AgenteSecretario", new { id = item.IdPessoa })" class="btn btn-icon btn-warning btn-sm" title="@bloquear">
                                                     <span class="btn-inner--icon"><i class="fas fa-ban"></i></span>
-                                                </button>
+                                                </a>
                                             }
                                             else if (item.Status.Equals("I"))
                                             {
-                                                <button class="btn btn-icon btn-success btn-sm" title="Ativar" type="button">
+                                                <a href="@Url.Action("Details", "AgenteSecretario", new { id = item.IdPessoa })" class="btn btn-icon btn-success btn-sm" title="@ativar">
                                                     <span class="btn-inner--icon"><i class="fas fa-check"></i></span>
-                                                </button>
+                                                </a>
                                             }
                                         </td>
                                     </tr>
