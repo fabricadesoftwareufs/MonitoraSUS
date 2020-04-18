@@ -4,7 +4,6 @@ using Service.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Service
 {
@@ -41,9 +40,21 @@ namespace Service
                     IdPessoa = model.IdPessoa
                 }).ToList();
 
+        public UsuarioModel GetByCpf(string cpf)
+            => _context
+                .Usuario
+                .Where(r => r.Cpf.Equals(cpf))
+                .Select(model => new UsuarioModel
+                {
+                    IdUsuario = model.IdUsuario,
+                    Cpf = model.Cpf,
+                    Senha = model.Senha,
+                    TipoUsuario = Convert.ToByte(model.TipoUsuario),
+                    Email = model.Email
+                }).FirstOrDefault();
 
         public UsuarioModel GetById(int id)
-       => _context
+            => _context
                 .Usuario
                 .Where(r => r.IdUsuario == id)
                 .Select(model => new UsuarioModel
@@ -69,7 +80,7 @@ namespace Service
                     Email = model.Email,
                     IdPessoa = model.IdPessoa
                 }).FirstOrDefault();
-      
+
 
         public bool Insert(UsuarioModel usuarioModel)
         {

@@ -144,7 +144,7 @@ namespace Service
             return entity;
         }
 
-       
+
 
 
         public PessoaModel GetByCpf(string cpf)

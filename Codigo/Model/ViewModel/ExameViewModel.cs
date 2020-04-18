@@ -1,11 +1,11 @@
-﻿using System;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace Model
 {
     public class ExameViewModel
     {
-        public ExameViewModel() 
+        public ExameViewModel()
         {
             IgM = "N";
             IgG = "N";
@@ -13,6 +13,7 @@ namespace Model
             IdAgenteSaude = new PessoaModel();
             IdVirusBacteria = new VirusBacteriaModel();
             IdPaciente = new PessoaModel();
+
             IdPaciente.Sexo = "M";
             DataExame = DateTime.Now; 
             DataInicioSintomas = DateTime.Now;

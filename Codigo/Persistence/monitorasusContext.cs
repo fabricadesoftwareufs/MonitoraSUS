@@ -1,6 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace Persistence
 {
@@ -22,11 +20,14 @@ namespace Persistence
         public virtual DbSet<Pessoa> Pessoa { get; set; }
         public virtual DbSet<Pessoatrabalhaestado> Pessoatrabalhaestado { get; set; }
         public virtual DbSet<Pessoatrabalhamunicipio> Pessoatrabalhamunicipio { get; set; }
+        public virtual DbSet<Recuperarsenha> Recuperarsenha { get; set; }
         public virtual DbSet<Situacaopessoavirusbacteria> Situacaopessoavirusbacteria { get; set; }
         public virtual DbSet<Usuario> Usuario { get; set; }
         public virtual DbSet<Virusbacteria> Virusbacteria { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -459,6 +460,40 @@ namespace Persistence
                     .HasConstraintName("fk_pessoa_has_municipio_pessoa1");
             });
 
+            modelBuilder.Entity<Recuperarsenha>(entity =>
+            {
+                entity.ToTable("recuperarsenha", "monitorasus");
+
+                entity.HasIndex(e => e.IdUsuario)
+                    .HasName("fk_recuperarsenha_usuario1_idx");
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("id")
+                    .HasColumnType("int unsigned");
+
+                entity.Property(e => e.EhValido)
+                    .HasColumnName("ehValido")
+                    .HasDefaultValueSql("1");
+
+                entity.Property(e => e.FimToken).HasColumnName("fimToken");
+
+                entity.Property(e => e.IdUsuario).HasColumnName("idUsuario");
+
+                entity.Property(e => e.InicioToken).HasColumnName("inicioToken");
+
+                entity.Property(e => e.Token)
+                    .IsRequired()
+                    .HasColumnName("token")
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.HasOne(d => d.IdUsuarioNavigation)
+                    .WithMany(p => p.Recuperarsenha)
+                    .HasForeignKey(d => d.IdUsuario)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_recuperarsenha_usuario1");
+            });
+
             modelBuilder.Entity<Situacaopessoavirusbacteria>(entity =>
             {
                 entity.HasKey(e => new { e.IdVirusBacteria, e.Idpessoa });
@@ -521,7 +556,7 @@ namespace Persistence
                 entity.Property(e => e.Senha)
                     .IsRequired()
                     .HasColumnName("senha")
-                    .HasMaxLength(45)
+                    .HasMaxLength(100)
                     .IsUnicode(false);
 
                 entity.Property(e => e.TipoUsuario).HasColumnName("tipoUsuario");

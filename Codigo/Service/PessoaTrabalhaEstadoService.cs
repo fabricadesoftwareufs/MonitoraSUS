@@ -4,7 +4,6 @@ using Service.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Service
 {
@@ -47,7 +46,7 @@ namespace Service
                     IdEmpresaExame = p.IdEmpresaExame,
                 }).ToList();
 
-        public PessoaTrabalhaEstadoModel GetById(int idPessoa,int idEstado)
+        public PessoaTrabalhaEstadoModel GetById(int idPessoa, int idEstado)
          => _context.Pessoatrabalhaestado
                 .Where(p => p.Idpessoa == idPessoa && p.IdEstado == idEstado)
                 .Select(p => new PessoaTrabalhaEstadoModel
@@ -63,7 +62,7 @@ namespace Service
         public PessoaTrabalhaEstadoModel GetByIdPessoa(int idPessoa)
         => _context
                 .Pessoatrabalhaestado
-                .Where(p => p.EhSecretario.Equals(1) && p.SituacaoCadastro.Equals("A") && p.Idpessoa ==  idPessoa)
+                .Where(p => p.EhSecretario.Equals(1) && p.SituacaoCadastro.Equals("A") && p.Idpessoa == idPessoa)
                 .Select(p => new PessoaTrabalhaEstadoModel
                 {
                     IdPessoa = p.Idpessoa,

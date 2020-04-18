@@ -9,7 +9,7 @@ namespace Service.Interface
         bool Update(SituacaoPessoaVirusBacteriaModel situacaoPessoaVirusBacteriaModel);
         bool Delete(int idPessoa, int idVirusBacteria);
         List<SituacaoPessoaVirusBacteriaModel> GetAll();
-        SituacaoPessoaVirusBacteriaModel GetById(int idPessoa,int idVirus);
+        SituacaoPessoaVirusBacteriaModel GetById(int idPessoa, int idVirus);
 
     }
 }

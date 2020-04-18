@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -10,7 +10,9 @@ using Model;
 using Model.ViewModel;
 using MonitoraSUS.Utils;
 using Service;
+
 using Service.Interface;
+using System.Collections.Generic;
 
 namespace MonitoraSUS.Controllers
 {
@@ -297,7 +299,7 @@ namespace MonitoraSUS.Controllers
             /*
              *  pegando informações do agente de saúde logado no sistema 
              */
-            var agente = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
+             var agente = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
             
 
             var secretarioMunicipio = _pessoaTrabalhaMunicipioContext.GetByIdPessoa(agente.usuarioModel.IdPessoa);
@@ -355,8 +357,10 @@ namespace MonitoraSUS.Controllers
              * os exames que ele pode ver
              */
 
-            var usuario = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
-            
+            //var usuario = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
+            var usuario = new UsuarioViewModel();
+            usuario.usuarioModel = new UsuarioModel { IdPessoa = 5 };
+            usuario.RoleUsuario = "SECRETARIO";
 
             var exames = new List<ExameModel>();
             if (usuario.RoleUsuario.Equals("AGENTE"))
