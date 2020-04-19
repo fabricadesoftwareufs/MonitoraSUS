@@ -1,14 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication;
+﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Model;
 using Model.ViewModel;
 using MonitoraSUS.Utils;
 using Service.Interface;
+using System;
+using System.Collections.Generic;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace MonitoraSUS.Controllers
 {
@@ -17,10 +18,14 @@ namespace MonitoraSUS.Controllers
     {
         private readonly IUsuarioService _usuarioService;
         private readonly IPessoaService _pessoaService;
-        public LoginController(IUsuarioService usuarioService, IPessoaService pessoaService)
+        private readonly IEmailService _emailService;
+        private readonly IRecuperarSenhaService _recuperarSenhaService;
+        public LoginController(IUsuarioService usuarioService, IPessoaService pessoaService, IEmailService emailService, IRecuperarSenhaService recuperarSenhaService)
         {
             _usuarioService = usuarioService;
             _pessoaService = pessoaService;
+            _emailService = emailService;
+            _recuperarSenhaService = recuperarSenhaService;
         }
         public IActionResult Index()
         {
@@ -117,6 +122,68 @@ namespace MonitoraSUS.Controllers
                 case 4: return "ADM";
                 default: return "UNDEFINED";
             }
+        }
+
+        public async Task<ActionResult> EmitirToken(string cpf)
+        {
+            var user = _usuarioService.GetByCpf(Methods.RemoveSpecialsCaracts(cpf));
+            if (user != null)
+            {
+                if (_recuperarSenhaService.UserNotHasToken(user.IdUsuario))
+                {
+                    // Objeto será criado e inserido apenas se o usuario não possuir Tokens validos cadastrados.
+                    var recSenha = new RecuperarSenhaModel
+                    {
+                        Token = Methods.GenerateToken(),
+                        InicioToken = DateTime.Now,
+                        FimToken = DateTime.Now.AddDays(1),
+                        EhValido = Convert.ToByte(true),
+                        IdUsuario = user.IdUsuario
+                    };
+
+                    if (_recuperarSenhaService.Insert(recSenha))
+                    {
+                        try
+                        {
+                            // Email só será disparado caso a inserção seja feita com sucesso.
+                            await _emailService.SendEmailAsync(user.Email, "MonitoraSUS - Recuperacao de senha", Methods.MessageEmail(recSenha));
+                            return RedirectToActionPermanent("Index", "Login", new { msg = "successSend" });
+                        }
+                        catch (Exception e)
+                        {
+                            throw e.InnerException;
+                        }
+                    }
+                    return RedirectToActionPermanent("Index", "Login", new { msg = "insertFail" });
+                }
+                return RedirectToActionPermanent("Index", "Login", new { msg = "hasToken" });
+            }
+            return RedirectToActionPermanent("Index", "Login", new { msg = "invalidUser" });
+        }
+
+        [HttpGet("Login/RecuperarSenha/{token}")]
+        public ActionResult RecuperarSenha(string token)
+        {
+            if (_recuperarSenhaService.IsTokenValid(token))
+                return View(_recuperarSenhaService.GetByToken(token));
+
+            return RedirectToActionPermanent("Index", "Login", new { msg = "invalidToken" });
+        }
+
+        public ActionResult ChangePass(IFormCollection collection)
+        {
+            var user = _usuarioService.GetById(Convert.ToInt32(collection["IdUsuario"]));
+            if (user != null)
+            {
+                user.Senha = Criptography.GenerateHashPasswd(collection["senha"]);
+                if (_usuarioService.Update(user))
+                {
+                    _recuperarSenhaService.SetTokenInvalid(user.IdUsuario);
+                    return RedirectToActionPermanent("Index", "Login", new { msg = "sucessChange" });
+                }
+            }
+
+            return RedirectToActionPermanent("Index", "Login", new { msg = "errorChange" });
         }
     }
 }

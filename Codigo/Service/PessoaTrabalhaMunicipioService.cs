@@ -4,7 +4,6 @@ using Service.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Service
 {
@@ -16,9 +15,11 @@ namespace Service
             _context = context;
         }
 
-        public bool Delete(int id)
+        public bool Delete(int idPessoa, int idMunicipio)
         {
-            throw new NotImplementedException();
+            var agente = _context.Pessoatrabalhamunicipio.Find(idPessoa, idMunicipio);
+            _context.Pessoatrabalhamunicipio.Remove(agente);
+            return _context.SaveChanges() == 1 ? true : false;
         }
 
         public List<PessoaTrabalhaMunicipioModel> GetAll()
@@ -91,7 +92,7 @@ namespace Service
             {
                 try
                 {
-                    _context.Pessoatrabalhamunicipio.Add(ModelToEntity(pessoaTrabalhaMunicipioModel, new Pessoatrabalhamunicipio()));
+                    _context.Pessoatrabalhamunicipio.Add(ModelToEntity(pessoaTrabalhaMunicipioModel));
                     return _context.SaveChanges() == 1 ? true : false;
                 }
                 catch (Exception e)
@@ -105,18 +106,21 @@ namespace Service
 
         public bool Update(PessoaTrabalhaMunicipioModel pessoaTrabalhaMunicipioModel)
         {
-            throw new NotImplementedException();
+         
+                _context.Update(ModelToEntity(pessoaTrabalhaMunicipioModel));
+                return _context.SaveChanges() == 1 ? true : false;
+            
         }
-
-        private Pessoatrabalhamunicipio ModelToEntity(PessoaTrabalhaMunicipioModel model, Pessoatrabalhamunicipio entity)
+        private Pessoatrabalhamunicipio ModelToEntity(PessoaTrabalhaMunicipioModel model)
         {
-            entity.IdMunicipio = model.IdMunicipio;
-            entity.IdPessoa = model.IdPessoa;
-            entity.EhResponsavel = Convert.ToByte(model.EhResponsavel);
-            entity.EhSecretario = Convert.ToByte(model.EhSecretario);
-            entity.SituacaoCadastro = model.SituacaoCadastro;
-
-            return entity;
+            return new Pessoatrabalhamunicipio
+            {
+                IdMunicipio = model.IdMunicipio,
+                IdPessoa = model.IdPessoa,
+                EhResponsavel = Convert.ToByte(model.EhResponsavel),
+                EhSecretario = Convert.ToByte(model.EhSecretario),
+                SituacaoCadastro = model.SituacaoCadastro
+            };
         }
     }
 }

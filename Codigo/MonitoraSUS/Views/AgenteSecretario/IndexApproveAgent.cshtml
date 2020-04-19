@@ -93,22 +93,22 @@
                                         <td>
                                             @if (item.Status.Equals("S"))
                                             {
-                                                <a href="@Url.Action("Details", "AgenteSecretario", new { id = item.IdPessoa })" class="btn btn-icon btn-success btn-sm" title="@ativar">
+                                                <a href="@Url.Action("ActivateAgent", "AgenteSecretario", new { id = item.IdPessoa })" class="btn btn-icon btn-success btn-sm" title="@ativar">
                                                     <span class="btn-inner--icon"><i class="fas fa-check"></i></span>
                                                 </a>
-                                                <a href="@Url.Action("Details", "AgenteSecretario", new { id = item.IdPessoa })" class="btn btn-icon btn-danger btn-sm" title="@descartar">
+                                                <a href="#" class="btn btn-icon btn-danger btn-sm" title="@descartar" data-toggle="modal" data-target="#agentModal" data-acao="@descartar" data-funcao="excludeAgent" data-id="@item.IdPessoa" data-nome="@item.Nome">
                                                     <span class="btn-inner--icon"><i class="fas fa-times"></i></span>
                                                 </a>
                                             }
                                             else if (item.Status.Equals("A"))
                                             {
-                                                <a href="@Url.Action("Details", "AgenteSecretario", new { id = item.IdPessoa })" class="btn btn-icon btn-warning btn-sm" title="@bloquear">
+                                                <a href="@Url.Action("BlockAgent", "AgenteSecretario", new { id = item.IdPessoa })" class="btn btn-icon btn-warning btn-sm" title="@bloquear">
                                                     <span class="btn-inner--icon"><i class="fas fa-ban"></i></span>
                                                 </a>
                                             }
                                             else if (item.Status.Equals("I"))
                                             {
-                                                <a href="@Url.Action("Details", "AgenteSecretario", new { id = item.IdPessoa })" class="btn btn-icon btn-success btn-sm" title="@ativar">
+                                                <a href="@Url.Action("ActivateAgent", "AgenteSecretario", new { id = item.IdPessoa })" class="btn btn-icon btn-success btn-sm" title="@ativar">
                                                     <span class="btn-inner--icon"><i class="fas fa-check"></i></span>
                                                 </a>
                                             }
@@ -123,3 +123,57 @@
         </div>
     </div>
 </div>
+
+<!-- Modal -->
+<div class="modal fade  bs-example-modal-sm" id="agentModal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">Realmente deseja <span id="modal-acao"></span> ?</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <span>Agente: </span> <span id="modal-nome"></span>
+                <span hidden id="modal-id"></span>
+                <span hidden id="modal-funcao"></span>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                <button onclick="action()" class="btn btn-success">Confirmar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+
+
+    <script type="text/javascript">
+
+        $('#agentModal').on('show.bs.modal', function(e) {
+            var id = e.relatedTarget.dataset.id;
+            var nome = e.relatedTarget.dataset.nome;
+            var acao = e.relatedTarget.dataset.acao;
+            var funcao = e.relatedTarget.dataset.funcao;
+            $(".modal-body #modal-id").text(id);
+            $(".modal-body #modal-nome").text(nome);
+            $(".modal-body #modal-funcao").text(funcao);
+            $(".modal-body #modal-acao").text(acao);
+        });
+
+        function action(){
+
+            var action = $("#modal-funcao").text();
+            var idPessoa = $("#modal-id").text();
+            if(action == 'excludeAgent')
+                var url = '@Url.Action("excludeAgent", "AgenteSecretario")';
+
+         window.location.href = url + '?id=' + idPessoa;
+   }
+
+    </script>
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+}

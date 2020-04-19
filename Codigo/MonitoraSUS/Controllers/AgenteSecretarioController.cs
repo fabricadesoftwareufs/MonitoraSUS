@@ -1,14 +1,14 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Model;
-using Service.Interface;
-using MonitoraSUS.Utils;
 using Model.ViewModel;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+using MonitoraSUS.Utils;
+using Service.Interface;
 
 namespace MonitoraSUS.Controllers
 {
@@ -20,16 +20,17 @@ namespace MonitoraSUS.Controllers
         private readonly IPessoaService _pessoaService;
         private readonly IPessoaTrabalhaEstadoService _pessoaTrabalhaEstadoService;
         private readonly IPessoaTrabalhaMunicipioService _pessoaTrabalhaMunicipioService;
-
+        private readonly IUsuarioService _usuarioService;
         public AgenteSecretarioController(IMunicipioService municipioService, IEstadoService estadoService,
             IPessoaService pessoaService, IPessoaTrabalhaMunicipioService pessoaTrabalhaMunicipioService,
-            IPessoaTrabalhaEstadoService pessoaTrabalhaEstadoService)
+            IPessoaTrabalhaEstadoService pessoaTrabalhaEstadoService, IUsuarioService usuarioService)
         {
             _municipioService = municipioService;
             _estadoService = estadoService;
             _pessoaService = pessoaService;
             _pessoaTrabalhaEstadoService = pessoaTrabalhaEstadoService;
             _pessoaTrabalhaMunicipioService = pessoaTrabalhaMunicipioService;
+            _usuarioService = usuarioService;
         }
         // GET: AgenteSecretario
         public ActionResult Index()
@@ -44,59 +45,6 @@ namespace MonitoraSUS.Controllers
             secretariosMunicipioPendente.ForEach(item => secMuniEst.Add(new SecretarioMunicipioEstadoViewModel { Pessoa = _pessoaService.GetById(item.IdPessoa), PessoaMunicipio = item, Situacao = 0 }));
 
             return View(secMuniEst);
-        }
-
-        /// <summary>
-        /// Se for secretario poderá administrar o status do agente no sistema, A, I, S. 
-        /// Gerenciar autorização do agente de saúde
-        /// </summary>
-        /// <returns></returns>
-        // GET: Todos agentes de saúde
-
-        [Authorize(Roles = "SECRETARIO")]
-        public ActionResult IndexApproveAgent()
-        {
-            // usuario logado
-            var usuario = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
-
-            var agentes = new List<AgenteMunicipioEstadoViewModel>();
-            var solicitantes = new List<SolicitanteAprovacaoModelView>();
-            var pessoaTrabalhaEstado = _pessoaTrabalhaEstadoService.GetByIdPessoa(usuario.UsuarioModel.IdPessoa);
-            if (pessoaTrabalhaEstado != null)
-            {
-                var agentesEstado = _pessoaTrabalhaEstadoService.GetAllAgents();
-                agentesEstado.ForEach(item => agentes.Add(new AgenteMunicipioEstadoViewModel { Pessoa = _pessoaService.GetById(item.IdPessoa), PessoaEstado = item, Situacao = item.SituacaoCadastro }));
-
-                agentes.ForEach(item => solicitantes.Add(new SolicitanteAprovacaoModelView
-                {
-                    IdPessoa = item.Pessoa.Idpessoa,
-                    Nome = item.Pessoa.Nome,
-                    Cpf = Methods.PatternCpf(item.Pessoa.Cpf),
-                    Estado = _estadoService.GetById(item.PessoaEstado.IdEstado).Nome,
-                    Cidade = null,
-                    Status = item.Situacao,
-                    Situacao = ReturnStatus(item.Situacao)
-                }));
-
-            }
-            else
-            {
-                var agentesMunicipio = _pessoaTrabalhaMunicipioService.GetAllAgents();
-                agentesMunicipio.ForEach(item => agentes.Add(new AgenteMunicipioEstadoViewModel { Pessoa = _pessoaService.GetById(item.IdPessoa), PessoaMunicipio = item, Situacao = item.SituacaoCadastro }));
-                agentes.ForEach(item => solicitantes.Add(new SolicitanteAprovacaoModelView
-                {
-                    IdPessoa = item.Pessoa.Idpessoa,
-                    Nome = item.Pessoa.Nome,
-                    Cpf = item.Pessoa.Cpf,
-                    Estado = _estadoService.GetByUf(_municipioService.GetById(item.PessoaMunicipio.IdMunicipio).Uf).Nome,
-                    Cidade = _municipioService.GetById(item.PessoaMunicipio.IdMunicipio).Nome,
-                    Status = item.Situacao,
-                    Situacao = ReturnStatus(item.Situacao)
-
-                }));
-            }
-
-            return View(solicitantes);
         }
 
         // GET: AgenteSecretario/Details/5
@@ -266,6 +214,126 @@ namespace MonitoraSUS.Controllers
             {
                 return View();
             }
+        }
+        //========================= AGENT CONTROL ACESS ====================
+        /// <summary>
+        /// Se for secretario poderá administrar o status do agente no sistema, A, I, S. 
+        /// Gerenciar autorização do agente de saúde
+        /// </summary>
+        /// <returns></returns>
+        // GET: Todos agentes de saúde
+
+        [Authorize(Roles = "SECRETARIO")]
+        public ActionResult IndexApproveAgent()
+        {
+            // usuario logado
+            var usuario = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
+
+            var agentes = new List<AgenteMunicipioEstadoViewModel>();
+            var solicitantes = new List<SolicitanteAprovacaoModelView>();
+            var pessoaTrabalhaEstado = _pessoaTrabalhaEstadoService.GetByIdPessoa(usuario.UsuarioModel.IdPessoa);
+            if (pessoaTrabalhaEstado != null)
+            {
+                var agentesEstado = _pessoaTrabalhaEstadoService.GetAllAgents();
+                agentesEstado.ForEach(item => agentes.Add(new AgenteMunicipioEstadoViewModel { Pessoa = _pessoaService.GetById(item.IdPessoa), PessoaEstado = item, Situacao = item.SituacaoCadastro }));
+
+                agentes.ForEach(item => solicitantes.Add(new SolicitanteAprovacaoModelView
+                {
+                    IdPessoa = item.Pessoa.Idpessoa,
+                    Nome = item.Pessoa.Nome,
+                    Cpf = Methods.PatternCpf(item.Pessoa.Cpf),
+                    Estado = _estadoService.GetById(item.PessoaEstado.IdEstado).Nome,
+                    Cidade = null,
+                    Status = item.Situacao,
+                    Situacao = ReturnStatus(item.Situacao)
+                }));
+
+            }
+            else
+            {
+                var agentesMunicipio = _pessoaTrabalhaMunicipioService.GetAllAgents();
+                agentesMunicipio.ForEach(item => agentes.Add(new AgenteMunicipioEstadoViewModel { Pessoa = _pessoaService.GetById(item.IdPessoa), PessoaMunicipio = item, Situacao = item.SituacaoCadastro }));
+                agentes.ForEach(item => solicitantes.Add(new SolicitanteAprovacaoModelView
+                {
+                    IdPessoa = item.Pessoa.Idpessoa,
+                    Nome = item.Pessoa.Nome,
+                    Cpf = item.Pessoa.Cpf,
+                    Estado = _estadoService.GetByUf(_municipioService.GetById(item.PessoaMunicipio.IdMunicipio).Uf).Nome,
+                    Cidade = _municipioService.GetById(item.PessoaMunicipio.IdMunicipio).Nome,
+                    Status = item.Situacao,
+                    Situacao = ReturnStatus(item.Situacao)
+
+                }));
+            }
+
+            return View(solicitantes);
+        }
+
+        // GET: AgenteSecretario/IndexApproveAgente/ExcludeAgent/id
+        public ActionResult ExcludeAgent(int id)
+        {
+            var agenteEstado = _pessoaTrabalhaEstadoService.GetByIdPessoa(id);
+            if (agenteEstado != null)
+            {
+                _pessoaTrabalhaEstadoService.Delete(agenteEstado.IdPessoa, agenteEstado.IdEstado);
+
+                var usuario = _usuarioService.GetByIdPessoa(agenteEstado.IdPessoa);
+                if (usuario != null)
+                    _usuarioService.Delete(usuario.IdUsuario);
+
+                _pessoaService.Delete(agenteEstado.IdPessoa);
+            
+            }
+            else
+            {
+                var agenteMunicipio = _pessoaTrabalhaMunicipioService.GetByIdPessoa(id);
+                _pessoaTrabalhaMunicipioService.Delete(agenteMunicipio.IdPessoa, agenteMunicipio.IdMunicipio);
+
+                var usuario = _usuarioService.GetByIdPessoa(agenteMunicipio.IdPessoa);
+                if (usuario != null)
+                    _usuarioService.Delete(usuario.IdUsuario);
+
+                _pessoaService.Delete(agenteMunicipio.IdPessoa);
+            }
+
+            return RedirectToAction(nameof(IndexApproveAgent));
+        }
+
+        // GET: AgenteSecretario/IndexApproveAgente/ActivateAgent/id
+        public ActionResult ActivateAgent(int id)
+        {
+            var agenteEstado = _pessoaTrabalhaEstadoService.GetByIdPessoa(id);
+            if (agenteEstado != null)
+            {
+                agenteEstado.SituacaoCadastro = "A";
+                _pessoaTrabalhaEstadoService.Update(agenteEstado);
+            }
+            else
+            {
+                var agenteMunicipio = _pessoaTrabalhaMunicipioService.GetByIdPessoa(id);
+                agenteMunicipio.SituacaoCadastro = "A";
+                _pessoaTrabalhaMunicipioService.Update(agenteMunicipio);
+            }
+            return RedirectToAction(nameof(IndexApproveAgent));
+        }
+
+        // GET: AgenteSecretario/IndexApproveAgente/BlockAgent/id
+        public ActionResult BlockAgent(int id)
+        {
+
+            var agenteEstado = _pessoaTrabalhaEstadoService.GetByIdPessoa(id);
+            if (agenteEstado != null)
+            {
+                agenteEstado.SituacaoCadastro = "I";
+                _pessoaTrabalhaEstadoService.Update(agenteEstado);
+            }
+            else
+            {
+                var agenteMunicipio = _pessoaTrabalhaMunicipioService.GetByIdPessoa(id);
+                agenteMunicipio.SituacaoCadastro = "I";
+                _pessoaTrabalhaMunicipioService.Update(agenteMunicipio);
+            }
+            return RedirectToAction(nameof(IndexApproveAgent));
         }
 
         // ======================== PRIVATE METHODS ========================

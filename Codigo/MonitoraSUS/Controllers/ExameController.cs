@@ -1,13 +1,10 @@
-﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
-using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Model;
 using MonitoraSUS.Utils;
-using Service;
+
 using Service.Interface;
 
 namespace MonitoraSUS.Controllers

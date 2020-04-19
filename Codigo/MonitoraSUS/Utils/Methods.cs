@@ -1,6 +1,7 @@
-﻿using Model;
-using Model.ViewModel;
+using Model;
 using System;
+using System.Text;
+using Model.ViewModel;
 using System.Linq;
 using System.Security.Claims;
 using System.Text.RegularExpressions;
@@ -12,6 +13,46 @@ namespace MonitoraSUS.Utils
     {
         public static string RemoveSpecialsCaracts(string poluatedString) => Regex.Replace(poluatedString, "[^0-9a-zA-Z]+", "");
 
+        public static string GenerateToken()
+        {
+            var frase = new StringBuilder();
+            var random = new Random();
+            int length = random.Next(30, 99);
+            char letra;
+
+            for (int i = 0; i < length; i++)
+            {
+                var flt = random.NextDouble();
+                var shift = Convert.ToInt32(Math.Floor(length * flt));
+                letra = Convert.ToChar(shift + length);
+                frase.Append(letra);
+            }
+
+            return Criptography.GenerateHashPasswd(frase.ToString());
+        }
+
+        public static string MessageEmail(RecuperarSenhaModel senhaModel, int finalidadeEmail = 0)
+        {
+            return "<html><body>" +
+                "Foi solicitado uma recuperação de senha, clique no link abaixo para iniciar o processo de recuperação.<br>" +
+                "<a href='https://localhost:5001/Login/RecuperarSenha/" +
+                senhaModel.Token +
+                "'>Clique aqui mudar a senha</a>";
+        }
+
+        public static string ReturnRole(int userType)
+        {
+            switch (userType)
+            {
+                case 0: return "USUARIO";
+                case 1: return "AGENTE";
+                case 2: return "COORDENADOR";
+                case 3: return "SECRETARIO";
+                case 4: return "ADM";
+                default: return "UNDEFINED";
+            }
+        }
+        
         /// <summary>
         /// Recebe o Usuario da sessão em questão e retorna os dados do mesmo em um objeto usuario.
         /// </summary>
@@ -37,7 +78,7 @@ namespace MonitoraSUS.Utils
         }
 
         /// <summary>
-        /// retrnar cpf com padrao de caracteres
+        /// retrnar cpf com padrao de caracteres - mask
         /// </summary>
         /// <param name="cpf"></param>
         /// <returns></returns>
