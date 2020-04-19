@@ -138,9 +138,9 @@ namespace MonitoraSUS.Controllers
                                 EhResponsavel = true
                             })
                         )
-                        return Ok();
+                        return RedirectToAction("Index", "Login", new { msg = "successCad" });
                     else
-                        return BadRequest();
+                        return RedirectToAction("Index", "Login", new { msg = "errorCad" });
 
                 if (atuacao.Equals("Estadual"))
                     if (_pessoaTrabalhaEstadoService
@@ -152,16 +152,16 @@ namespace MonitoraSUS.Controllers
                                 EhResponsavel = true
                             })
                         )
-                        return Ok();
+                        return RedirectToAction("Index", "Login", new { msg = "successCad" });
                     else
-                        return BadRequest();
+                        return RedirectToAction("Index", "Login", new { msg = "errorCad" });
 
                 // Redirecting
-                return RedirectToAction("Create");
+                return RedirectToAction("Index", "Login");
             }
             catch (Exception e)
             {
-                throw new Exception(e.Message);
+                throw e.InnerException;
             }
         }
 

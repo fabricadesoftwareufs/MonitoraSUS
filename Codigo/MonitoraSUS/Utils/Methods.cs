@@ -90,6 +90,9 @@ namespace MonitoraSUS.Utils
        
         public static bool ValidarCpf(string cpf)
         {
+            if (string.IsNullOrEmpty(cpf))
+                return false;
+            
             var multiplicador1 = new int[9] { 10, 9, 8, 7, 6, 5, 4, 3, 2 };
             var multiplicador2 = new int[10] { 11, 10, 9, 8, 7, 6, 5, 4, 3, 2 };
             string tempCpf;
