@@ -106,7 +106,7 @@
                                 <td>
                                     <a href="@Url.Action("Details", "Exame", new { id = item.IdExame})" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> Detalhes </a>
                                     <a href="@Url.Action("Edit", "Exame", new { id = item.IdExame })" class="btn btn-info btn-xs"><i class="fa fa-edit"></i> Editar </a>
-                                    @if (item.IdAgenteSaude.Idpessoa == agente.usuarioModel.IdPessoa)
+                                    @if (item.IdAgenteSaude.Idpessoa == agente.UsuarioModel.IdPessoa)
                                     {
                                         <a data-toggle="modal" data-target="#modal-confirmar-@item.IdExame" class="btn btn-danger btn-xs text-white"><i class="fa fa-trash "></i> Remover </a>
                                         <div class="modal fade bs-example-modal-sm" id="modal-confirmar-@item.IdExame" tabindex="-1" role="dialog" aria-hidden="true">

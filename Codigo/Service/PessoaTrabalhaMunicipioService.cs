@@ -15,14 +15,29 @@ namespace Service
             _context = context;
         }
 
-        public bool Delete(int id)
+        public bool Delete(int idPessoa, int idMunicipio)
         {
-            throw new NotImplementedException();
+            var agente = _context.Pessoatrabalhamunicipio.Find(idPessoa, idMunicipio);
+            _context.Pessoatrabalhamunicipio.Remove(agente);
+            return _context.SaveChanges() == 1 ? true : false;
         }
 
         public List<PessoaTrabalhaMunicipioModel> GetAll()
             => _context
                 .Pessoatrabalhamunicipio
+                .Select(p => new PessoaTrabalhaMunicipioModel
+                {
+                    IdPessoa = p.IdPessoa,
+                    IdMunicipio = p.IdMunicipio,
+                    EhResponsavel = Convert.ToBoolean(p.EhResponsavel),
+                    EhSecretario = Convert.ToBoolean(p.EhSecretario),
+                    SituacaoCadastro = p.SituacaoCadastro
+                }).ToList();
+
+        public List<PessoaTrabalhaMunicipioModel> GetAllAgents()
+            => _context
+                .Pessoatrabalhamunicipio
+                .Where(p => p.EhSecretario.Equals(0))
                 .Select(p => new PessoaTrabalhaMunicipioModel
                 {
                     IdPessoa = p.IdPessoa,
@@ -45,10 +60,18 @@ namespace Service
                     SituacaoCadastro = p.SituacaoCadastro
                 }).ToList();
 
-        public PessoaTrabalhaMunicipioModel GetById(int id)
-        {
-            throw new NotImplementedException();
-        }
+        public PessoaTrabalhaMunicipioModel GetById(int idPessoa, int idMunicipio)
+            => _context
+                .Pessoatrabalhamunicipio
+                .Where(p => p.IdPessoa == idPessoa && p.IdMunicipio == idMunicipio)
+                .Select(p => new PessoaTrabalhaMunicipioModel
+                {
+                    IdPessoa = p.IdPessoa,
+                    IdMunicipio = p.IdMunicipio,
+                    EhResponsavel = Convert.ToBoolean(p.EhResponsavel),
+                    EhSecretario = Convert.ToBoolean(p.EhSecretario),
+                    SituacaoCadastro = p.SituacaoCadastro
+                }).FirstOrDefault();
 
         public PessoaTrabalhaMunicipioModel GetByIdPessoa(int idPessoa)
          => _context
@@ -69,7 +92,7 @@ namespace Service
             {
                 try
                 {
-                    _context.Pessoatrabalhamunicipio.Add(ModelToEntity(pessoaTrabalhaMunicipioModel, new Pessoatrabalhamunicipio()));
+                    _context.Pessoatrabalhamunicipio.Add(ModelToEntity(pessoaTrabalhaMunicipioModel));
                     return _context.SaveChanges() == 1 ? true : false;
                 }
                 catch (Exception e)
@@ -83,18 +106,21 @@ namespace Service
 
         public bool Update(PessoaTrabalhaMunicipioModel pessoaTrabalhaMunicipioModel)
         {
-            throw new NotImplementedException();
+         
+                _context.Update(ModelToEntity(pessoaTrabalhaMunicipioModel));
+                return _context.SaveChanges() == 1 ? true : false;
+            
         }
-
-        private Pessoatrabalhamunicipio ModelToEntity(PessoaTrabalhaMunicipioModel model, Pessoatrabalhamunicipio entity)
+        private Pessoatrabalhamunicipio ModelToEntity(PessoaTrabalhaMunicipioModel model)
         {
-            entity.IdMunicipio = model.IdMunicipio;
-            entity.IdPessoa = model.IdPessoa;
-            entity.EhResponsavel = Convert.ToByte(model.EhResponsavel);
-            entity.EhSecretario = Convert.ToByte(model.EhSecretario);
-            entity.SituacaoCadastro = model.SituacaoCadastro;
-
-            return entity;
+            return new Pessoatrabalhamunicipio
+            {
+                IdMunicipio = model.IdMunicipio,
+                IdPessoa = model.IdPessoa,
+                EhResponsavel = Convert.ToByte(model.EhResponsavel),
+                EhSecretario = Convert.ToByte(model.EhSecretario),
+                SituacaoCadastro = model.SituacaoCadastro
+            };
         }
     }
 }

@@ -11,6 +11,7 @@ namespace Service.Interface
         List<UsuarioModel> GetAll();
         UsuarioModel GetById(int id);
         UsuarioModel GetByLogin(string cpf, string senha);
+        UsuarioModel GetByIdPessoa(int idPessoa);
         UsuarioModel GetByCpf(string cpf);
     }
 }

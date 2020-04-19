@@ -2,8 +2,8 @@
 {
     public class UsuarioViewModel
     {
-        public UsuarioModel usuarioModel { get; set; }
-        public PessoaModel pessoaModel { get; set; }
+        public UsuarioModel UsuarioModel { get; set; }
+        public PessoaModel PessoaModel { get; set; }
         public string RoleUsuario { get; set; }
     }
 }

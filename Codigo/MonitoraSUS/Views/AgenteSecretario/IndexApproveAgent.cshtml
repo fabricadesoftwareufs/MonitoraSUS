@@ -1,0 +1,179 @@
+﻿@model IEnumerable<Model.ViewModel.SolicitanteAprovacaoModelView>
+
+@{
+    ViewData["Title"] = "IndexApproveAgent";
+
+    var bloquear = "Bloquear";
+    var ativar = "Ativar";
+    var descartar = "Descartar";
+}
+<!-- Page Content -->
+<div class="container-fluid mt--6">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card card-content">
+                <div class="card-header bg-transparent">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h5 class="card-title  text-muted mb-0">MonitoraSUS</h5>
+                            <h5 class="h3 mb-0">Gerenciar Agentes de Saúde</h5>
+                        </div>
+                        <div class="col text-right">
+                            <a href="@Url.Action("Index", "AgenteSecretario")" class="btn btn-sm btn-default">
+                                <i class="fas fa-arrow-left"></i> Voltar
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body ">
+                    <div class="table-responsive">
+                        <table class="table align-items-center table-flush">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th scope="col" class="sort" data-sort="nome">
+                                        @Html.DisplayNameFor(model => model.Nome)
+                                    </th>
+                                    <th scope="col" class="sort" data-sort="cpf">
+                                        @Html.DisplayNameFor(model => model.Cpf)
+                                    </th>
+                                    <th scope="col" class="sort" data-sort="estado">
+                                        @Html.DisplayNameFor(model => model.Estado)
+                                    </th>
+                                    <th scope="col" class="sort" data-sort="cidade">
+                                        @Html.DisplayNameFor(model => model.Cidade)
+                                    </th>
+                                    <th scope="col" class="sort" data-sort="status">
+                                        @Html.DisplayNameFor(model => model.Status)
+                                    </th>
+                                    <th scope="col" class="sort" data-sort="acoes">
+                                        Ações
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="list">
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Nome)
+                                        </td>
+                                        <td>
+                                            <a href="#">@Html.DisplayFor(modelItem => item.Cpf)</a>
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Estado)
+                                        </td>
+                                        <td>
+                                            @if (item.Cidade != null)
+                                            {
+                                                @Html.DisplayFor(modelItem => item.Cidade)
+                                            }
+                                            else
+                                            {
+                                                <span><b>N/A</b></span>
+                                            }
+                                        </td>
+                                        <td>
+                                            <span class="badge badge-dot mr-4">
+                                                @if (item.Status.Equals("A"))
+                                                {
+                                                    <i class="bg-success"></i>
+                                                }
+                                                else if (item.Status.Equals("I"))
+                                                {
+                                                    <i class="bg-danger"></i>
+                                                }
+                                                else if (item.Status.Equals("S"))
+                                                {
+                                                    <i class="bg-warning"></i>
+                                                }
+                                                <span class="status">@Html.DisplayFor(itemModel => item.Situacao)</span>
+                                            </span>
+                                        </td>
+                                        <td>
+                                            @if (item.Status.Equals("S"))
+                                            {
+                                                <a href="@Url.Action("ActivateAgent", "AgenteSecretario", new { id = item.IdPessoa })" class="btn btn-icon btn-success btn-sm" title="@ativar">
+                                                    <span class="btn-inner--icon"><i class="fas fa-check"></i></span>
+                                                </a>
+                                                <a href="#" class="btn btn-icon btn-danger btn-sm" title="@descartar" data-toggle="modal" data-target="#agentModal" data-acao="@descartar" data-funcao="excludeAgent" data-id="@item.IdPessoa" data-nome="@item.Nome">
+                                                    <span class="btn-inner--icon"><i class="fas fa-times"></i></span>
+                                                </a>
+                                            }
+                                            else if (item.Status.Equals("A"))
+                                            {
+                                                <a href="@Url.Action("BlockAgent", "AgenteSecretario", new { id = item.IdPessoa })" class="btn btn-icon btn-warning btn-sm" title="@bloquear">
+                                                    <span class="btn-inner--icon"><i class="fas fa-ban"></i></span>
+                                                </a>
+                                            }
+                                            else if (item.Status.Equals("I"))
+                                            {
+                                                <a href="@Url.Action("ActivateAgent", "AgenteSecretario", new { id = item.IdPessoa })" class="btn btn-icon btn-success btn-sm" title="@ativar">
+                                                    <span class="btn-inner--icon"><i class="fas fa-check"></i></span>
+                                                </a>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade  bs-example-modal-sm" id="agentModal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">Realmente deseja <span id="modal-acao"></span> ?</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <span>Agente: </span> <span id="modal-nome"></span>
+                <span hidden id="modal-id"></span>
+                <span hidden id="modal-funcao"></span>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                <button onclick="action()" class="btn btn-success">Confirmar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+
+
+    <script type="text/javascript">
+
+        $('#agentModal').on('show.bs.modal', function(e) {
+            var id = e.relatedTarget.dataset.id;
+            var nome = e.relatedTarget.dataset.nome;
+            var acao = e.relatedTarget.dataset.acao;
+            var funcao = e.relatedTarget.dataset.funcao;
+            $(".modal-body #modal-id").text(id);
+            $(".modal-body #modal-nome").text(nome);
+            $(".modal-body #modal-funcao").text(funcao);
+            $(".modal-body #modal-acao").text(acao);
+        });
+
+        function action(){
+
+            var action = $("#modal-funcao").text();
+            var idPessoa = $("#modal-id").text();
+            if(action == 'excludeAgent')
+                var url = '@Url.Action("excludeAgent", "AgenteSecretario")';
+
+         window.location.href = url + '?id=' + idPessoa;
+   }
+
+    </script>
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+}

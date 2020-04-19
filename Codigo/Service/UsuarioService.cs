@@ -67,8 +67,22 @@ namespace Service
                     IdPessoa = model.IdPessoa
                 }).FirstOrDefault();
 
+        public UsuarioModel GetByIdPessoa(int idPessoa)
+           => _context
+               .Usuario
+               .Where(r => r.IdPessoa == idPessoa)
+               .Select(model => new UsuarioModel
+               {
+                   IdUsuario = model.IdUsuario,
+                   Cpf = model.Cpf,
+                   Senha = model.Senha,
+                   TipoUsuario = Convert.ToByte(model.TipoUsuario),
+                   Email = model.Email,
+                   IdPessoa = model.IdPessoa
+               }).FirstOrDefault();
+
         public UsuarioModel GetByLogin(string cpf, string senha)
-         => _context
+            => _context
                 .Usuario
                 .Where(model => model.Cpf.Equals(cpf) && model.Senha.Equals(senha))
                 .Select(model => new UsuarioModel
