@@ -1,72 +1,190 @@
 ﻿@model IEnumerable<Model.ExameViewModel>
+@using System.Security.Claims;
+@using Model.ViewModel;
+@using MonitoraSUS.Utils;
+
+
 
 @{
     ViewData["Title"] = "Index";
+
+
+    /*
+     * Recuperando o agente logado
+     * para filtrar quem ele pode remover
+     */
+
+    var agente = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
+
+    /*
+     * Usuario para testes, comente a linhda de cima e
+     * descomente as lihas de baixo e altere o id para o
+     * id do usuario que quiser
+     */
+
+    // var agente = new UsuarioViewModel();
+    // agente.usuarioModel = new Model.UsuarioModel { IdPessoa = 5 };
+
+
+
+
 }
 
 
-    <div class="container-fluid mt--6">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="card card-content">
-                    <div class="card-header bg-transparent">
-                        <div class="row align-items-center">
+<div class="container-fluid mt--6">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card card-content">
+                <div class="card-header bg-transparent">
+                    <div class="row align-items-center">
 
-                            <div class="col">
-                                <h5 class="card-title  text-muted mb-0">MonitoraSUS</h5>
-                                <h5 class="h3 mb-0">Resultados</h5>
-                            </div>
-                            <div class="col text-right">
-                                <a class="btn btn-success" asp-action="Create">Novo Exame</a>
-                                <a class="btn btn-default" asp-controller="Home" asp-action="Index"> <i class="fas fa-arrow-left"></i> Voltar</a>
+                        <div class="col">
+                            <h5 class="card-title text-muted mb-0">MonitoraSUS</h5>
+                            <h5 class="h3 mb-0">Resultados</h5>
+                        </div>
+                        <div class="col text-right">
+                            <a class="btn btn-success" asp-action="Create">Novo Exame</a>
+                            <a class="btn btn-default" asp-controller="Home" asp-action="Index"> <i class="fas fa-arrow-left"></i> Voltar</a><br />
+                        </div>
+
+                    </div>
+                    <hr />
+                    <div class="row align-items-center" style="float: right">
+                        <div class="col text-right">
+                            <h5 class="card-title">Filtre Exames por Data</h5>
+                            <div class="form-inline">
+                                <form asp-controller="Exame" asp-action="Index">
+                                    <input type="date" required id="data-filtro" name="filtro" class=" form-control" />
+                                    <button type="submit" class="margin-left-10 btn btn-secondary">Filtrar</button>
+                                </form>
                             </div>
 
                         </div>
-                    </div>
 
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.IdPaciente)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.DataExame)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.Resultado)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.IdVirusBacteria)
-                                </th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var item in Model)
-                            {
-                                <tr>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.IdPaciente.Nome)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.DataExame)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Resultado)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.IdVirusBacteria.Nome)
-                                    </td>
-                                    <td>
-                                        <a href="@Url.Action("Details", "Exame", new { id = item.IdExame})" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> Detalhes </a>
-                                        <a href="@Url.Action("Edit", "Exame", new { id = item.IdExame })" class="btn btn-info btn-xs"><i class="fa fa-edit"></i> Editar </a>
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
+                    </div>
                 </div>
+
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>
+                                Cpf
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.IdPaciente)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.DataExame)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.IdVirusBacteria)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Resultado)
+                            </th>
+                            <th>
+                                Ações
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.IdPaciente.Cpf)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.IdPaciente.Nome)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DataExame)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.IdVirusBacteria.Nome)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Resultado)
+                                </td>
+                                <td>
+                                    <a href="@Url.Action("Details", "Exame", new { id = item.IdExame})" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> Detalhes </a>
+                                    <a href="@Url.Action("Edit", "Exame", new { id = item.IdExame })" class="btn btn-info btn-xs"><i class="fa fa-edit"></i> Editar </a>
+                                    @if (item.IdAgenteSaude.Idpessoa == agente.usuarioModel.IdPessoa)
+                                    {
+                                        <a data-toggle="modal" data-target="#modal-confirmar-@item.IdExame" class="btn btn-danger btn-xs text-white"><i class="fa fa-trash "></i> Remover </a>
+                                        <div class="modal fade bs-example-modal-sm" id="modal-confirmar-@item.IdExame" tabindex="-1" role="dialog" aria-hidden="true">
+                                            <div class="modal-dialog modal-sm">
+                                                <div class="modal-content text-center" style="padding: 10pt">
+                                                    <h4> Confirmar Remoção do Exame ? </h4>
+
+                                                    <p class="text-left">
+                                                        <h4>Paciente:</h4> @item.IdPaciente.Nome <br />
+                                                        <h4>Virus/Bacteria:</h4> @item.IdVirusBacteria.Nome <br />
+                                                        <h4>Resultado:</h4> @item.Resultado <br />
+                                                    </p>
+
+                                                    @using (Html.BeginForm("Delete", "Exame", new { id = item.IdExame }, FormMethod.Post))
+                                                    {
+                                                        <a class="btn btn-danger text-white">Cancelar</a>
+                                                        <button type="submit" value="Remover" class="btn btn-success btn-xs">Confimar</button>
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
+</div>
+
+@if (TempData["mensagemErro"] != null || TempData["mensagemSucesso"] != null)
+{
+
+    <div class="modal fade bs-example-modal-sm" id="modal-mensagem-retorno" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content" style="padding: 10pt">
+                <div class="text-center">
+                    <br />
+                    @if (TempData["mensagemErro"] != null)
+                    {
+                        <p>@TempData["mensagemErro"]</p>
+                    }
+                    else
+                    {
+                        <p>@TempData["mensagemSucesso"]</p>
+                    }
+
+                    <button data-dismiss="modal" class="btn btn-success">Ok</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+}
+
+
+<script>
+
+    var input = document.getElementById('data-filtro');
+
+    input.addEventListener("keyup", function () {
+        if (document.getElementById('data-filtro').value.length == 10) {
+
+            alert(document.getElementById('data-filtro').value);
+            //document.forms["form-exame"].submit();
+        }
+    });
+
+    window.onload = function () {
+        $('#modal-mensagem-retorno').modal('show');
+    };
+
+</script>
+
+

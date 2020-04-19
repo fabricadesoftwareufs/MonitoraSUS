@@ -27,6 +27,7 @@
 @if (!User.Identity.IsAuthenticated)
 {
     <body class="bg-gradient-primary">
+        <!-- Scripts -->
         @RenderBody()
 
         @RenderSection("Scripts", required: false)
