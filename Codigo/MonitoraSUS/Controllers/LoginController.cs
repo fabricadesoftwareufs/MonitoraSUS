@@ -42,7 +42,7 @@ namespace MonitoraSUS.Controllers
         {
             if (ModelState.IsValid)
             {
-                var cpf = Methods.RemoveSpecialsCaracts(login.Cpf);
+                var cpf = Methods.ValidarCpf(login.Cpf) ? Methods.RemoveSpecialsCaracts(login.Cpf) : throw new Exception("CPF Invalido!!");
                 var senha = Criptografia.GerarHash(login.Senha);
                 var user = _usuarioService.GetByLogin(cpf, senha);
 
@@ -96,7 +96,7 @@ namespace MonitoraSUS.Controllers
             if (ModelState.IsValid)
             {
                 // Informações do objeto
-                usuario.Cpf = Methods.RemoveSpecialsCaracts(usuario.Cpf);
+                usuario.Cpf = Methods.ValidarCpf(usuario.Cpf) ? Methods.RemoveSpecialsCaracts(usuario.Cpf) : throw new Exception("CPF Invalido!!");
                 usuario.Senha = Criptografia.GerarHash(usuario.Senha);
 
                 if (_usuarioService.Insert(usuario))
@@ -104,6 +104,8 @@ namespace MonitoraSUS.Controllers
             }
             return View(usuario);
         }
+
+        public bool ValidaCpf(string cpf) => Methods.ValidarCpf(cpf);
 
         [Authorize]
         public ActionResult AcessDenied()
@@ -113,37 +115,40 @@ namespace MonitoraSUS.Controllers
 
         public async Task<ActionResult> EmitirToken(string cpf)
         {
-            var user = _usuarioService.GetByCpf(Methods.RemoveSpecialsCaracts(cpf));
-            if (user != null)
+            if (Methods.ValidarCpf(cpf))
             {
-                if (_recuperarSenhaService.UserNotHasToken(user.IdUsuario))
+                var user = _usuarioService.GetByCpf(Methods.RemoveSpecialsCaracts(cpf));
+                if (user != null)
                 {
-                    // Objeto será criado e inserido apenas se o usuario não possuir Tokens validos cadastrados.
-                    var recSenha = new RecuperarSenhaModel
+                    if (_recuperarSenhaService.UserNotHasToken(user.IdUsuario))
                     {
-                        Token = Methods.GenerateToken(),
-                        InicioToken = DateTime.Now,
-                        FimToken = DateTime.Now.AddDays(1),
-                        EhValido = Convert.ToByte(true),
-                        IdUsuario = user.IdUsuario
-                    };
+                        // Objeto será criado e inserido apenas se o usuario não possuir Tokens validos cadastrados.
+                        var recSenha = new RecuperarSenhaModel
+                        {
+                            Token = Methods.GenerateToken(),
+                            InicioToken = DateTime.Now,
+                            FimToken = DateTime.Now.AddDays(1),
+                            EhValido = Convert.ToByte(true),
+                            IdUsuario = user.IdUsuario
+                        };
 
-                    if (_recuperarSenhaService.Insert(recSenha))
-                    {
-                        try
+                        if (_recuperarSenhaService.Insert(recSenha))
                         {
-                            // Email só será disparado caso a inserção seja feita com sucesso.
-                            await _emailService.SendEmailAsync(user.Email, "MonitoraSUS - Recuperacao de senha", Methods.MessageEmail(recSenha));
-                            return RedirectToActionPermanent("Index", "Login", new { msg = "successSend" });
+                            try
+                            {
+                                // Email só será disparado caso a inserção seja feita com sucesso.
+                                await _emailService.SendEmailAsync(user.Email, "MonitoraSUS - Recuperacao de senha", Methods.MessageEmail(recSenha));
+                                return RedirectToActionPermanent("Index", "Login", new { msg = "successSend" });
+                            }
+                            catch (Exception e)
+                            {
+                                throw e.InnerException;
+                            }
                         }
-                        catch (Exception e)
-                        {
-                            throw e.InnerException;
-                        }
+                        return RedirectToActionPermanent("Index", "Login", new { msg = "insertFail" });
                     }
-                    return RedirectToActionPermanent("Index", "Login", new { msg = "insertFail" });
+                    return RedirectToActionPermanent("Index", "Login", new { msg = "hasToken" });
                 }
-                return RedirectToActionPermanent("Index", "Login", new { msg = "hasToken" });
             }
             return RedirectToActionPermanent("Index", "Login", new { msg = "invalidUser" });
         }

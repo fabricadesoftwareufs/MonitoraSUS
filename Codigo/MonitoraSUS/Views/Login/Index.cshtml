@@ -22,7 +22,8 @@
                                 <hr>
                                 <form class="user" asp-action="SignIn" asp-controller="Login" autocomplete="off">
                                     <div class="form-group">
-                                        <input type="text" asp-for="Cpf" required class="form-control form-control-user cpf" name="cpf" id="cpf" value="" placeholder="CPF">
+                                        <input type="text" asp-for="Cpf" required class="form-control form-control-user cpf" oninput="validaCpf()" name="cpf" id="cpf" value="" placeholder="CPF">
+                                        <span id="spanInvalidCpf" hidden class="text-danger text-center" style="padding: 10px">CPF Invalido!!</span>
                                     </div>
                                     <div class="form-group">
                                         <input type="password" asp-for="Senha" required class="form-control form-control-user" name="senha" id="senha" placeholder="Senha">
@@ -88,7 +89,7 @@
 
                     <div class="form-group">
                         <label for="recipient-name" class="col-form-label">Insira o seu CPF:</label>
-                        <input type="text" asp-for="Cpf" required class="form-control form-control-user cpf" name="cpf" id="cpf" value="" placeholder="CPF">
+                        <input type="text" asp-for="Cpf" required class="form-control form-control-user cpf" oninput="validaCpf()" name="cpf" id="cpf" value="" placeholder="CPF">
                     </div>
 
                 </div>
@@ -166,6 +167,27 @@
             div.className = "alert alert-success text-center";
             div.hidden = false;
             div.textContent = "Cadastro realizado com sucesso, aguarde email de confirmação!";
+        }
+    </script>
+
+    <script>
+        function validaCpf() {
+            let cpf = document.getElementById('cpf')
+            let span = document.getElementById('spanInvalidCpf')
+
+            let url = "Login/ValidaCpf";
+
+            $.post(url, { cpf: cpf.value }, function (data) {
+                if (!data) {
+                    cpf.className = "form-control form-control-user border-danger cpf";
+                    cpf.style = "border-width: 2px;";
+                    span.hidden = false;
+                } else {
+                    cpf.className = "form-control form-control-user cpf";
+                    cpf.style = "";
+                    span.hidden = true;
+                }
+            })
         }
     </script>
 

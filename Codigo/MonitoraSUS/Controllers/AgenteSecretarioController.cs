@@ -224,7 +224,7 @@ namespace MonitoraSUS.Controllers
         private int PeopleInserted(IFormCollection collection)
         {
             // Info Pessoal
-            var cpf = Methods.RemoveSpecialsCaracts(collection["Cpf"]);
+            var cpf = Methods.ValidarCpf(collection["Cpf"]) ? Methods.RemoveSpecialsCaracts(collection["Cpf"]) : throw new Exception("Cpf invalido!");
             var nome = collection["Nome"];
             var dataNascimento = collection["DataNascimento"];
             var sexo = collection["sexo"];
