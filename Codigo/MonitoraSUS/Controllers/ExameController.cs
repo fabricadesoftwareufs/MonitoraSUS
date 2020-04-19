@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Text.RegularExpressions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -12,10 +13,10 @@ using MonitoraSUS.Utils;
 using Service;
 
 using Service.Interface;
-using System.Collections.Generic;
 
 namespace MonitoraSUS.Controllers
 {
+    [Authorize]
     public class ExameController : Controller
     {
         private readonly IVirusBacteriaService _virusBacteriaContext;
@@ -361,11 +362,8 @@ namespace MonitoraSUS.Controllers
              * os exames que ele pode ver
              */
 
-            //var usuario = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
-            var usuario = new UsuarioViewModel();
-            usuario.usuarioModel = new UsuarioModel { IdPessoa = 5 };
-            usuario.RoleUsuario = "SECRETARIO";
-
+            var usuario = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
+            
             var exames = new List<ExameModel>();
             if (usuario.RoleUsuario.Equals("AGENTE"))
             {
