@@ -1,14 +1,18 @@
 using System.Collections.Generic;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Model;
 using MonitoraSUS.Utils;
-
 using Service.Interface;
+using System;
+using System.Linq;
 
 namespace MonitoraSUS.Controllers
 {
+    [Authorize]
     public class ExameController : Controller
     {
         private readonly IVirusBacteriaService _virusBacteriaContext;
@@ -18,7 +22,6 @@ namespace MonitoraSUS.Controllers
         private readonly IEstadoService _estadoContext;
         private readonly ISituacaoVirusBacteriaService _situacaoPessoaContext;
         private readonly IPessoaTrabalhaEstadoService _pessoaTrabalhaEstadoContext;
-        private readonly IEmpresaExameService _empresaExameContext;
         private readonly IPessoaTrabalhaMunicipioService _pessoaTrabalhaMunicipioContext;
 
         public ExameController(IVirusBacteriaService virusBacteriaContext,
@@ -40,17 +43,70 @@ namespace MonitoraSUS.Controllers
             _pessoaTrabalhaMunicipioContext = pessoaTrabalhaMunicipioContext;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(DateTime filtro)
         {
-            return View(GetAllExamesViewModel());
+            /*
+             * O tratamento da variavel filtro é feito dentro 
+             * do método GetAllExamesViewModel()
+             */
+            return View(GetAllExamesViewModel(filtro));
         }
 
         public IActionResult Details(int id)
         {
-
             return View(GetExameViewModelById(id));
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Delete(int id, IFormCollection collection)
+        {
+
+            var exame = _exameContext.GetById(id);
+            var situacao = _situacaoPessoaContext.GetById(exame.IdPaciente, exame.IdVirusBacteria);
+
+            /* 
+             * Removendo situação do paciente 
+             */
+            try
+            {
+                if (situacao != null)
+                    _situacaoPessoaContext.Delete(situacao.Idpessoa, situacao.IdVirusBacteria);
+            }
+            catch
+            {
+                TempData["mensagemErro"] = "Não foi possível excluir esse exame, tente novamente." +
+                                           " Se o erro persistir, entre em contato com a Fábrica de Software da UFS pelo email fabricadesoftware@ufs.br";
+
+                return RedirectToAction(nameof(Index));
+            }
+
+            /* 
+             * Removendo exame do paciente 
+             */
+            try
+            {
+                _exameContext.Delete(id);
+            }
+            catch
+            {
+                /*
+                 * Se o exame não puder ser removido, adicionar 
+                 * novamente a ultima situacao do paciente pra 
+                 * manter a consistência do banco de dados
+                 */
+                try { _situacaoPessoaContext.Insert(situacao); }
+                catch { }
+
+                TempData["mensagemErro"] = " Não foi possível excluir esse exame, tente novamente." +
+                                           " Se o erro persistir, entre em contato com a Fábrica de Software da UFS pelo email fabricadesoftware@ufs.br";
+
+                return RedirectToAction(nameof(Index));
+            }
+
+            TempData["mensagemSucesso"] = "O Exame foi removido com sucesso!";
+            return RedirectToAction(nameof(Index));
+        }
 
         public IActionResult Edit(int id)
         {
@@ -118,89 +174,106 @@ namespace MonitoraSUS.Controllers
         {
             ViewBag.VirusBacteria = new SelectList(_virusBacteriaContext.GetAll(), "IdVirusBacteria", "Nome");
 
-            if (exame.PesquisarCpf == 1) // pesquisar usuario por cpf 
+            if (Methods.ValidarCpf(exame.IdPaciente.Cpf))
             {
-                var cpf = Methods.RemoveSpecialsCaracts(exame.IdPaciente.Cpf); // cpf sem caracteres especiais
-
-                var pessoa = _pessoaContext.GetByCpf(cpf);
-
-                if (pessoa != null)
+                /* 
+                 * verificando se é pra pesquisar ou inserir um novo exame 
+                 */
+                if (exame.PesquisarCpf == 1)
                 {
-                    exame.IdPaciente = pessoa;
-                    return View(exame);
+                    var cpf = Methods.RemoveSpecialsCaracts(exame.IdPaciente.Cpf); // cpf sem caracteres especiais
+
+                    var pessoa = _pessoaContext.GetByCpf(cpf);
+
+                    if (pessoa != null)
+                    {
+                        exame.IdPaciente = pessoa;
+                        return View(exame);
+                    }
+                    else
+                    {
+                        TempData["resultadoPesquisa"] = "Paciente não cadastrado, preencha os campos para cadastra-lo!";
+
+                        /*
+                         * Limpando o objeto para enviar  
+                         * somente o cpf pesquisado
+                         */
+                        var exameVazio = new ExameViewModel();
+                        exameVazio.IdPaciente.Cpf = exame.IdPaciente.Cpf;
+
+                        return View(exameVazio);
+                    }
                 }
                 else
                 {
-                    TempData["resultadoPesquisa"] = "Paciente não cadastrado, preencha os campos para cadastra-lo!";
 
-                    /*
-                     * Limpando o objeto para enviar  
-                     * somente o cpf pesquisado
-                     */
-                    var exameVazio = new ExameViewModel();
-                    exameVazio.IdPaciente.Cpf = exame.IdPaciente.Cpf;
+                    try
+                    {
+                        var pessoa = CreatePessoaModelByExame(exame);
+                        // inserindo ou atualizando o paciente
+                        if (_pessoaContext.GetByCpf(pessoa.Cpf) == null)
+                            _pessoaContext.Insert(pessoa);
+                        else
+                            _pessoaContext.Update(pessoa);
+                    }
+                    catch
+                    {
+                        TempData["mensagemErro"] = "Cadastro não pode ser concluido pois houve um problema ao inserir/atualizar dados do paciente, tente novamente. " +
+                                                    " Se o erro persistir, entre em contato com a Fábrica de Software da UFS pelo email fabricadesoftware@ufs.br";
+                        return View(exame);
+                    }
 
-                    return View(exameVazio);
+
+                    try
+                    {
+                        // inserindo o resultado do exame (situacao da pessoa)                  
+                        var cpf = Methods.RemoveSpecialsCaracts(exame.IdPaciente.Cpf);
+                        var idPessoa = _pessoaContext.GetByCpf(cpf).Idpessoa;
+                        var situacaoPessoa = _situacaoPessoaContext.GetById(idPessoa, exame.IdVirusBacteria.IdVirusBacteria);
+
+                        if (situacaoPessoa == null)
+                            _situacaoPessoaContext.Insert(CreateSituacaoPessoaModelByExame(exame, situacaoPessoa));
+                        else
+                            _situacaoPessoaContext.Update(CreateSituacaoPessoaModelByExame(exame, situacaoPessoa));
+                    }
+                    catch
+                    {
+                        TempData["mensagemErro"] = "Cadastro não pode ser concluido pois houve um problema ao inserir/atualizar o resultado do exame, tente novamente" +
+                                                    " Se o erro persistir, entre em contato com a Fábrica de Software da UFS pelo email fabricadesoftware@ufs.br";
+                        return View(exame);
+                    }
+
+                    try
+                    {
+                        // inserindo o exame
+                        _exameContext.Insert(CreateExameModel(exame, true));
+                    }
+                    catch
+                    {
+                        TempData["mensagemErro"] = "Cadastro não pode ser concluido pois houve um problema ao inserir os dados do exame, tente novamente." +
+                                                   " Se o erro persistir, entre em contato com a Fábrica de Software da UFS pelo email fabricadesoftware@ufs.br";
+
+
+                        return View(exame);
+                    }
+
+                    // codigo para realizar notificacao 
+
+                    TempData["mensagemSucesso"] = "Notificação realizada com SUCESSO!";
+
+                    return View(new ExameViewModel());
                 }
             }
             else
             {
-
-                try
-                {
-                    var pessoa = CreatePessoaModelByExame(exame);
-                    // inserindo ou atualizando o paciente
-                    if (_pessoaContext.GetByCpf(pessoa.Cpf) == null)
-                        _pessoaContext.Insert(pessoa);
-                    else
-                        _pessoaContext.Update(pessoa);
-                }
-                catch
-                {
-                    TempData["mensagemErro"] = "Cadastro não pode ser concluido pois houve um problema ao inserir/atualizar dados do paciente, tente novamente. " +
-                                                " Se o erro persistir, entre em contato com a Fábrica de Software da UFS pelo email fabricadesoftware@ufs.br";
-                    return View(exame);
-                }
-
-
-                try
-                {
-                    // inserindo o resultado do exame (situacao da pessoa)                  
-                    var cpf = Methods.RemoveSpecialsCaracts(exame.IdPaciente.Cpf);
-                    var idPessoa = _pessoaContext.GetByCpf(cpf).Idpessoa;
-                    var situacaoPessoa = _situacaoPessoaContext.GetById(idPessoa, exame.IdVirusBacteria.IdVirusBacteria);
-
-                    if (situacaoPessoa == null)
-                        _situacaoPessoaContext.Insert(CreateSituacaoPessoaModelByExame(exame, situacaoPessoa));
-                    else
-                        _situacaoPessoaContext.Update(CreateSituacaoPessoaModelByExame(exame, situacaoPessoa));
-                }
-                catch
-                {
-                    TempData["mensagemErro"] = "Cadastro não pode ser concluido pois houve um problema ao inserir/atualizar o resultado do exame, tente novamente" +
-                                                " Se o erro persistir, entre em contato com a Fábrica de Software da UFS pelo email fabricadesoftware@ufs.br";
-                    return View(exame);
-                }
-
-                try
-                {
-                    // inserindo o exame
-                    _exameContext.Insert(CreateExameModel(exame, true));
-                }
-                catch
-                {
-                    TempData["mensagemErro"] = "Cadastro não pode ser concluido pois houve um problema ao inserir os dados do exame, tente novamente." +
-                                               " Se o erro persistir, entre em contato com a Fábrica de Software da UFS pelo email fabricadesoftware@ufs.br";
-
-
-                    return View(exame);
-                }
-
-                // codigo para realizar notificacao 
-
-                TempData["mensagemSucesso"] = "Notificação realizada com SUCESSO!";
-
-                return View(new ExameViewModel());
+                TempData["resultadoPesquisa"] = "Esse esse cpf não é válido!";
+                /*  
+                 * Limpando o objeto para enviar  
+                 * somente o cpf pesquisado
+                 */
+                var exameVazio = new ExameViewModel();
+                exameVazio.IdPaciente.Cpf = exame.IdPaciente.Cpf;
+                return View(exameVazio);
             }
         }
 
@@ -243,7 +316,6 @@ namespace MonitoraSUS.Controllers
             /*
              *  pegando informações do agente de saúde logado no sistema 
              */
-
             var agente = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
 
             var secretarioMunicipio = _pessoaTrabalhaMunicipioContext.GetByIdPessoa(agente.UsuarioModel.IdPessoa);
@@ -294,13 +366,12 @@ namespace MonitoraSUS.Controllers
             return ex;
         }
 
-        public List<ExameViewModel> GetAllExamesViewModel()
+        public List<ExameViewModel> GetAllExamesViewModel(DateTime filtro)
         {
             /*
              * Pegando usuario logado e carregando 
              * os exames que ele pode ver
              */
-
             var usuario = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
 
             var exames = new List<ExameModel>();
@@ -326,6 +397,20 @@ namespace MonitoraSUS.Controllers
                         exames = _exameContext.GetByIdEstado(secretarioEstado.IdEstado);
                 }
             }
+
+            /* 
+             * Se o filtro for uma data válida, 
+             * ele faz a seleção
+             */
+            if (filtro != DateTime.MinValue && filtro != null)
+            {
+                exames = exames.Where(exameModel => DateTime.Compare(exameModel.DataExame, filtro) == 0).ToList();
+            }
+            else
+            {
+                exames = exames.Where(exameModel => DateTime.Compare(exameModel.DataExame, DateTime.Today) == 0).ToList();
+            }
+
 
             var examesViewModel = new List<ExameViewModel>();
 
@@ -397,18 +482,19 @@ namespace MonitoraSUS.Controllers
             return resultado;
         }
 
+
         public string GetStatusExame(string status)
         {
 
 
             switch (status)
             {
-                case "I": return "IDETERMINADO";
+                case "I": return "INDETERMINADO";
                 case "N": return "NEGATIVO";
                 case "C": return "CURADO";
                 case "P": return "POSITIVO";
 
-                default: return "INDEFINIDO";
+                default: return "IDETERMINADO";
             }
 
 

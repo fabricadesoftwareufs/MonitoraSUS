@@ -24,8 +24,8 @@ namespace Model
         public string Estado { get; set; }
         public string Numero { get; set; }
         public string Complemento { get; set; }
-        public decimal Latitude { get; set; }
-        public decimal Longitude { get; set; }
+        public string Latitude { get; set; }
+        public string Longitude { get; set; }
         public string FoneCelular { get; set; }
         public string FoneFixo { get; set; }
         public string Email { get; set; }

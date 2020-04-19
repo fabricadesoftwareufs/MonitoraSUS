@@ -28,7 +28,7 @@ namespace Service
 
                 var mail = new MailMessage
                 {
-                    From = new MailAddress(_configuration["EmailSettings:Email"], "Fabrica de Software"),
+                    From = new MailAddress(_configuration["EmailSettings:Email"], "Monitora SUS"),
                 };
                 mail.To.Add(new MailAddress(email));
 

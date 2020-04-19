@@ -7,6 +7,7 @@
     var typeCad = ViewBag.userType == 1 ? "Secretário" : "Agente";
     var caseController = typeCad == "Agente" ? "CreateAgent" : "CreateSec";
     var listaDeEstados = ViewBag.estados as List<Model.PessoaModel>;
+    var googleKey = ViewBag.googleKey;
 }
 
 
@@ -27,20 +28,21 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <form asp-controller="AgenteSecretario" asp-action="@caseController">
+                    <form asp-controller="AgenteSecretario" asp-action="@caseController" autocomplete="off">
                         <h6 class="heading-small text-muted mb-4">Dados Pessoais</h6>
                         <div class="pl-lg-4">
                             <div class="row">
                                 <div class="col-md-2">
                                     <div class="form-group">
                                         <label class="form-control-label" for="input-cpf">CPF</label>
-                                        <input type="text" id="input-cpf" asp-for="Cpf" onfocus="loadEstados()" required class="form-control" placeholder="000.000.000-00">
+                                        <input type="text" id="input-cpf" asp-for="Cpf" onfocus="loadEstados()" oninput="validaCpf()" required class="form-control" placeholder="000.000.000-00">
+                                        <span id="spanInvalidCpf" hidden class="text-danger text-center" style="padding: 10px">CPF Invalido!!</span>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label class="form-control-label" for="input-nome">Nome</label>
-                                        <input type="text" id="input-nome" asp-for="Nome" required class="form-control" placeholder="Nome Completo">
+                                        <input type="search" id="input-nome" asp-for="Nome" required class="form-control" placeholder="Nome Completo">
                                     </div>
                                 </div>
                                 <div class="col-md-2">
@@ -71,7 +73,7 @@
                                 <div class="col-lg-12">
                                     <div class="form-group">
                                         <label class="form-control-label" for="input-pesquisa">Pesquisa Endereço</label>
-                                        <input type="text" id="input-pesquisa" required class="form-control" placeholder="Pesquise pelo CEP, Rua, Bairro, Número">
+                                        <input type="search" id="input-pesquisa" required class="form-control" placeholder="Pesquise pelo CEP, Rua, Bairro, Número" autocomplete="off">
                                         <input type="hidden" id="longitude" asp-for="Longitude" />
                                         <input type="hidden" id="latitude" asp-for="Latitude" />
                                     </div>
@@ -359,7 +361,26 @@
                 }
             })
         }
+
+        function validaCpf() {
+            let cpf = document.getElementById('input-cpf')
+            let span = document.getElementById('spanInvalidCpf')
+
+            let url = "/Login/ValidaCpf";
+
+            $.post(url, { cpf: cpf.value }, function (data) {
+                if (!data) {
+                    cpf.className = "form-control form-control-user border-danger cpf";
+                    cpf.style = "border-width: 2px;";
+                    span.hidden = false;
+                } else {
+                    cpf.className = "form-control form-control-user cpf";
+                    cpf.style = "";
+                    span.hidden = true;
+                }
+            })
+        }
     </script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCbtYabZNfEWTf5nvsDe4QkBbz_PUPv2Uk&libraries=places&callback=initAutocomplete&language=pt-BR"
+    <script src="https://maps.googleapis.com/maps/api/js?key=@googleKey&libraries=places&callback=initAutocomplete&language=pt-BR"
             async defer></script>
 }
