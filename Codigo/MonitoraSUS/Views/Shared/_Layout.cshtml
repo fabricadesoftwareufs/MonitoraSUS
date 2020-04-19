@@ -26,13 +26,16 @@
 </head>
 @if (!User.Identity.IsAuthenticated)
 {
-    <body class="bg-gradient-primary">
-        <!-- Scripts -->
-        @RenderBody()
+<body class="bg-gradient-primary">
+    <!-- Scripts -->
+    @RenderBody()
 
-        @RenderSection("Scripts", required: false)
-
-    </body>
+    @RenderSection("Scripts", required: false)
+    <script src="~/assets/js/plugins/jquery-3.4.1/jquery-3.4.1.min.js"></script>
+    <script src="~/assets/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/assets/js/plugins/jquery-mask/dist/jquery.mask.min.js"></script>
+    <script src="~/assets/js/custom.js"></script>
+</body>
 }
 else
 {

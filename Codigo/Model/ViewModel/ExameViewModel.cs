@@ -15,7 +15,7 @@ namespace Model
             IdPaciente = new PessoaModel();
 
             IdPaciente.Sexo = "M";
-            DataExame = DateTime.Now; 
+            DataExame = DateTime.Now;
             DataInicioSintomas = DateTime.Now;
             IdEstado = 0;
             MunicipioId = 0;

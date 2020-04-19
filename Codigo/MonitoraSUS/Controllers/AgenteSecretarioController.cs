@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Model;
 using Model.ViewModel;
 using MonitoraSUS.Utils;
@@ -19,17 +20,20 @@ namespace MonitoraSUS.Controllers
         private readonly IPessoaService _pessoaService;
         private readonly IPessoaTrabalhaEstadoService _pessoaTrabalhaEstadoService;
         private readonly IPessoaTrabalhaMunicipioService _pessoaTrabalhaMunicipioService;
+        private readonly IConfiguration _configuration;
 
         public AgenteSecretarioController(IMunicipioService municipioService, IEstadoService estadoService,
             IPessoaService pessoaService, IPessoaTrabalhaMunicipioService pessoaTrabalhaMunicipioService,
-            IPessoaTrabalhaEstadoService pessoaTrabalhaEstadoService)
+            IPessoaTrabalhaEstadoService pessoaTrabalhaEstadoService, IConfiguration configuration)
         {
             _municipioService = municipioService;
             _estadoService = estadoService;
             _pessoaService = pessoaService;
             _pessoaTrabalhaEstadoService = pessoaTrabalhaEstadoService;
             _pessoaTrabalhaMunicipioService = pessoaTrabalhaMunicipioService;
+            _configuration = configuration;
         }
+
         // GET: AgenteSecretario
         public ActionResult Index()
         {
@@ -51,17 +55,17 @@ namespace MonitoraSUS.Controllers
             return View();
         }
 
-        [AllowAnonymous]
         // GET: AgenteSecretario/Create
+        [AllowAnonymous]
         public ActionResult Create(int userType)
         {
             ViewBag.userType = userType;
+            ViewBag.googleKey = _configuration["GOOGLE_KEY"];
             return View();
         }
 
         // POST: AgenteSecretario/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        [HttpPost, ValidateAntiForgeryToken, AllowAnonymous]
         public ActionResult CreateAgent(IFormCollection collection)
         {
             try
@@ -81,9 +85,9 @@ namespace MonitoraSUS.Controllers
                                 EhResponsavel = false
                             })
                         )
-                        return Ok();
+                        return RedirectToAction("Index", "Login", new { msg = "successCad" });
                     else
-                        return BadRequest();
+                        return RedirectToAction("Index", "Login", new { msg = "errorCad" });
 
                 if (atuacao.Equals("Estadual"))
                     if (_pessoaTrabalhaEstadoService
@@ -95,22 +99,22 @@ namespace MonitoraSUS.Controllers
                                 EhResponsavel = false
                             })
                         )
-                        return Ok();
+                        return RedirectToAction("Index", "Login", new { msg = "successCad" });
                     else
-                        return BadRequest();
+                        return RedirectToAction("Index", "Login", new { msg = "errorCad" });
 
                 // Redirecting
-                return RedirectToAction("Create");
+                return RedirectToAction("Index", "Login");
+
             }
-            catch
+            catch (Exception e)
             {
-                return View();
+                throw e.InnerException;
             }
         }
 
         // POST: AgenteSecretario/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        [HttpPost, AllowAnonymous, ValidateAntiForgeryToken]
         public ActionResult CreateSec(IFormCollection collection)
         {
             try
@@ -167,6 +171,7 @@ namespace MonitoraSUS.Controllers
                 return NoContent();
         }
 
+        [AllowAnonymous]
         public ActionResult ReturnStates() => Ok(_estadoService.GetAll());
 
         // GET: AgenteSecretario/Edit/5
@@ -264,8 +269,8 @@ namespace MonitoraSUS.Controllers
                 Cidade = cidade,
                 Estado = estado,
                 Complemento = complemento,
-                Latitude = Convert.ToDecimal(latitude),
-                Longitude = Convert.ToDecimal(longitude),
+                Latitude = latitude,
+                Longitude = longitude,
                 Hipertenso = hipertenso.Contains("true") ? true : false,
                 Cardiopatia = cardiopata.Contains("true") ? true : false,
                 Cancer = cancer.Contains("true") ? true : false,

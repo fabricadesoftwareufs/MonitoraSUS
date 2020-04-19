@@ -83,7 +83,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form asp-action="EmitirToken" asp-controller="Login">
+            <form asp-action="EmitirToken" asp-controller="Login" autocomplete="off">
                 <div class="modal-body">
 
                     <div class="form-group">
@@ -136,6 +136,11 @@
             div.hidden = false;
             div.textContent = "Erro ao trocar senha, por favor entre em contato.";
         }
+        if (window.location.href.includes("msg=errorCad")) {
+            div.className = "alert alert-danger text-center";
+            div.hidden = false;
+            div.textContent = "Falha ao realizar cadastro, por favor entre em contato.";
+        }
 
 
         /* DIVS DE ALERTA */
@@ -156,6 +161,11 @@
             div.className = "alert alert-success text-center";
             div.hidden = false;
             div.textContent = "Senha alterada com sucesso!!";
+        }
+        if (window.location.href.includes("msg=successCad")) {
+            div.className = "alert alert-success text-center";
+            div.hidden = false;
+            div.textContent = "Cadastro realizado com sucesso, aguarde email de confirmação!";
         }
     </script>
 

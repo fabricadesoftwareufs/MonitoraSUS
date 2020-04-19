@@ -1,11 +1,9 @@
 using Model;
-using System;
-using System.Text;
 using Model.ViewModel;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using System.Text;
 using System.Text.RegularExpressions;
 
 
@@ -55,7 +53,7 @@ namespace MonitoraSUS.Utils
                 default: return "UNDEFINED";
             }
         }
-        
+
         /// <summary>
         /// Recebe o Usuario da sessão em questão e retorna os dados do mesmo em um objeto usuario.
         /// </summary>
@@ -64,12 +62,12 @@ namespace MonitoraSUS.Utils
         public static UsuarioViewModel RetornLoggedUser(ClaimsIdentity claimsIdentity)
         {
             var usuario = new UsuarioModel
-                 {
-                     IdUsuario = int.Parse(claimsIdentity.Claims.Where(s => s.Type == ClaimTypes.SerialNumber).Select(s => s.Value).FirstOrDefault()),
-                     Cpf = claimsIdentity.Claims.Where(s => s.Type == ClaimTypes.UserData).Select(s => s.Value).FirstOrDefault(),
-                     Email = claimsIdentity.Claims.Where(s => s.Type == ClaimTypes.Email).Select(s => s.Value).FirstOrDefault(),
-                     IdPessoa = int.Parse(claimsIdentity.Claims.Where(s => s.Type == ClaimTypes.NameIdentifier).Select(s => s.Value).FirstOrDefault())
-                 };
+            {
+                IdUsuario = int.Parse(claimsIdentity.Claims.Where(s => s.Type == ClaimTypes.SerialNumber).Select(s => s.Value).FirstOrDefault()),
+                Cpf = claimsIdentity.Claims.Where(s => s.Type == ClaimTypes.UserData).Select(s => s.Value).FirstOrDefault(),
+                Email = claimsIdentity.Claims.Where(s => s.Type == ClaimTypes.Email).Select(s => s.Value).FirstOrDefault(),
+                IdPessoa = int.Parse(claimsIdentity.Claims.Where(s => s.Type == ClaimTypes.NameIdentifier).Select(s => s.Value).FirstOrDefault())
+            };
 
             var usuarioViewModel = new UsuarioViewModel
             {
