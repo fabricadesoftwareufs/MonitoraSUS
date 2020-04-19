@@ -124,7 +124,7 @@ namespace MonitoraSUS.Controllers
         public IActionResult Edit(ExameViewModel exame)
         {
             ViewBag.VirusBacteria = new SelectList(_virusBacteriaContext.GetAll(), "IdVirusBacteria", "Nome");
-            
+
             try
             {
                 /*
@@ -179,7 +179,7 @@ namespace MonitoraSUS.Controllers
                 /* 
                  * verificando se é pra pesquisar ou inserir um novo exame 
                  */
-                if (exame.PesquisarCpf == 1)  
+                if (exame.PesquisarCpf == 1)
                 {
                     var cpf = Methods.RemoveSpecialsCaracts(exame.IdPaciente.Cpf); // cpf sem caracteres especiais
 
@@ -267,7 +267,13 @@ namespace MonitoraSUS.Controllers
             else
             {
                 TempData["resultadoPesquisa"] = "Esse esse cpf não é válido!";
-                return View(exame);
+                /*  
+                 * Limpando o objeto para enviar  
+                 * somente o cpf pesquisado
+                 */
+                var exameVazio = new ExameViewModel();
+                exameVazio.IdPaciente.Cpf = exame.IdPaciente.Cpf;
+                return View(exameVazio);
             }
         }
 
