@@ -12,7 +12,7 @@
     if (claimsIdentity != null)
     {
         idUsuario = int.Parse(claimsIdentity.Claims.Where(s => s.Type == ClaimTypes.SerialNumber).Select(s => s.Value).FirstOrDefault());
-        nome = claimsIdentity.Claims.Where(s => s.Type == ClaimTypes.NameIdentifier).Select(s => s.Value).FirstOrDefault();
+        nome = claimsIdentity.Claims.Where(s => s.Type == ClaimTypes.Name).Select(s => s.Value).FirstOrDefault();
         estado = claimsIdentity.Claims.Where(s => s.Type == ClaimTypes.StateOrProvince).Select(s => s.Value).FirstOrDefault();
         cidade = claimsIdentity.Claims.Where(s => s.Type == ClaimTypes.Locality).Select(s => s.Value).FirstOrDefault();
 

@@ -32,8 +32,10 @@ namespace MonitoraSUS.Controllers
             return View();
         }
 
-        [HttpGet("Login/RetornaSenha/{senha}")]
+        /*
+        [HttpGet("Login/RetornaSenha/{senha}"), Authorize]
         public string RetornaSenha(string senha) => Criptografia.GerarHash(senha);
+        */
 
         [HttpPost]
         public async Task<IActionResult> SignIn(LoginViewModel login)

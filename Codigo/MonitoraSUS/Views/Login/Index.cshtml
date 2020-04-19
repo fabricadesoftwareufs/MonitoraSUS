@@ -20,7 +20,7 @@
                                     <h1 class="h4 text-gray-900 mb-4">MonitoraSUS</h1>
                                 </div>
                                 <hr>
-                                <form class="user" asp-action="SignIn" asp-controller="Login">
+                                <form class="user" asp-action="SignIn" asp-controller="Login" autocomplete="off">
                                     <div class="form-group">
                                         <input type="text" asp-for="Cpf" required class="form-control form-control-user cpf" name="cpf" id="cpf" value="" placeholder="CPF">
                                     </div>
@@ -45,7 +45,7 @@
                                 <div class="card-register">
                                     <div class="row">
                                         <div class="col-6 card-button text-center">
-                                            <a href="#">
+                                            <a href="@Url.Action("Create", "AgenteSecretario", new { userType = 1 })">
                                                 <div class="card-button-body">
                                                     <span>Secretário de Saúde?</span>
                                                     <i class="fas fa-user-plus fa-3x"></i>
@@ -54,7 +54,7 @@
                                             </a>
                                         </div>
                                         <div class="col-6 card-button text-center">
-                                            <a href="#">
+                                            <a href="@Url.Action("Create", "AgenteSecretario")">
                                                 <div class="card-button-body">
                                                     <span>Agente de Saúde?</span>
                                                     <i class="fas fa-user-md fa-3x"></i>

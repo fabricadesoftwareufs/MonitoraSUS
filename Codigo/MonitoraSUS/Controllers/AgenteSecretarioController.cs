@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Model;
 using Model.ViewModel;
@@ -10,6 +11,7 @@ using System.Linq;
 
 namespace MonitoraSUS.Controllers
 {
+    [Authorize]
     public class AgenteSecretarioController : Controller
     {
         private readonly IMunicipioService _municipioService;
@@ -49,6 +51,7 @@ namespace MonitoraSUS.Controllers
             return View();
         }
 
+        [AllowAnonymous]
         // GET: AgenteSecretario/Create
         public ActionResult Create(int userType)
         {
@@ -154,7 +157,7 @@ namespace MonitoraSUS.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpPost, AllowAnonymous]
         public IActionResult ReturnCities(string UF)
         {
             var listOfCities = _municipioService.GetByUFCode(UF);
