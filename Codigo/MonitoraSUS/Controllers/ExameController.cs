@@ -1,18 +1,14 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Model;
-using Model.ViewModel;
 using MonitoraSUS.Utils;
-using Service;
-
 using Service.Interface;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
 
 namespace MonitoraSUS.Controllers
 {
@@ -26,7 +22,6 @@ namespace MonitoraSUS.Controllers
         private readonly IEstadoService _estadoContext;
         private readonly ISituacaoVirusBacteriaService _situacaoPessoaContext;
         private readonly IPessoaTrabalhaEstadoService _pessoaTrabalhaEstadoContext;
-        private readonly IEmpresaExameService _empresaExameContext;
         private readonly IPessoaTrabalhaMunicipioService _pessoaTrabalhaMunicipioContext;
 
         public ExameController(IVirusBacteriaService virusBacteriaContext,
@@ -46,7 +41,7 @@ namespace MonitoraSUS.Controllers
             _situacaoPessoaContext = situacaoPessoaContext;
             _pessoaTrabalhaEstadoContext = pessoaTrabalhaEstado;
             _pessoaTrabalhaMunicipioContext = pessoaTrabalhaMunicipioContext;
-        } 
+        }
 
         public IActionResult Index(DateTime filtro)
         {
@@ -66,23 +61,23 @@ namespace MonitoraSUS.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Delete(int id, IFormCollection collection)
         {
-            
+
             var exame = _exameContext.GetById(id);
             var situacao = _situacaoPessoaContext.GetById(exame.IdPaciente, exame.IdVirusBacteria);
-            
+
             /* 
              * Removendo situação do paciente 
              */
             try
             {
-                if(situacao != null)
+                if (situacao != null)
                     _situacaoPessoaContext.Delete(situacao.Idpessoa, situacao.IdVirusBacteria);
             }
             catch
             {
                 TempData["mensagemErro"] = "Não foi possível excluir esse exame, tente novamente." +
                                            " Se o erro persistir, entre em contato com a Fábrica de Software da UFS pelo email fabricadesoftware@ufs.br";
-                
+
                 return RedirectToAction(nameof(Index));
             }
 
@@ -104,7 +99,7 @@ namespace MonitoraSUS.Controllers
 
                 TempData["mensagemErro"] = "Não foi possível excluir esse exame, tente novamente." +
                                               " Se o erro persistir, entre em contato com a Fábrica de Software da UFS pelo email fabricadesoftware@ufs.br";
-                
+
                 return RedirectToAction(nameof(Index));
             }
 
@@ -304,8 +299,8 @@ namespace MonitoraSUS.Controllers
             /*
              *  pegando informações do agente de saúde logado no sistema 
              */
-             var agente = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
-            
+            var agente = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
+
 
             var secretarioMunicipio = _pessoaTrabalhaMunicipioContext.GetByIdPessoa(agente.usuarioModel.IdPessoa);
             var secretarioEstado = _pessoaTrabalhaEstadoContext.GetByIdPessoa(agente.usuarioModel.IdPessoa);
@@ -363,7 +358,7 @@ namespace MonitoraSUS.Controllers
              */
 
             var usuario = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
-            
+
             var exames = new List<ExameModel>();
             if (usuario.RoleUsuario.Equals("AGENTE"))
             {
@@ -396,7 +391,7 @@ namespace MonitoraSUS.Controllers
             {
                 exames = exames.Where(exameModel => DateTime.Compare(exameModel.DataExame, filtro) == 0).ToList();
             }
-            else 
+            else
             {
                 exames = exames.Where(exameModel => DateTime.Compare(exameModel.DataExame, DateTime.Today) == 0).ToList();
             }

@@ -329,12 +329,18 @@ namespace Persistence
                     .HasDefaultValueSql("0");
 
                 entity.Property(e => e.Latitude)
+                    .IsRequired()
                     .HasColumnName("latitude")
-                    .HasColumnType("decimal(10,8)");
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasDefaultValueSql("0");
 
                 entity.Property(e => e.Longitude)
+                    .IsRequired()
                     .HasColumnName("longitude")
-                    .HasColumnType("decimal(10,8)");
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasDefaultValueSql("0");
 
                 entity.Property(e => e.Nome)
                     .IsRequired()

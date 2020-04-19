@@ -50,7 +50,7 @@ CREATE TABLE IF NOT EXISTS `estado` (
   PRIMARY KEY (`Id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=82 DEFAULT CHARSET=utf8;
 
--- Copiando dados para a tabela monitorasus.estado: ~0 rows (aproximadamente)
+-- Copiando dados para a tabela monitorasus.estado: ~54 rows (aproximadamente)
 /*!40000 ALTER TABLE `estado` DISABLE KEYS */;
 INSERT INTO `estado` (`Id`, `CodigoUf`, `Nome`, `Uf`, `Regiao`) VALUES
 	(28, 11, 'Rondônia', 'RO', 1),
@@ -151,7 +151,7 @@ CREATE TABLE IF NOT EXISTS `municipio` (
   PRIMARY KEY (`Id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5571 DEFAULT CHARSET=utf8;
 
--- Copiando dados para a tabela monitorasus.municipio: ~0 rows (aproximadamente)
+-- Copiando dados para a tabela monitorasus.municipio: ~5.570 rows (aproximadamente)
 /*!40000 ALTER TABLE `municipio` DISABLE KEYS */;
 INSERT INTO `municipio` (`Id`, `Codigo`, `Nome`, `Uf`) VALUES
 	(1, 5200050, 'Abadia de Goiás', '52'),
@@ -5739,8 +5739,8 @@ CREATE TABLE IF NOT EXISTS `pessoa` (
   `estado` varchar(50) NOT NULL,
   `numero` varchar(20) DEFAULT NULL,
   `complemento` varchar(100) DEFAULT NULL,
-  `latitude` decimal(10,8) NOT NULL,
-  `longitude` decimal(10,8) NOT NULL,
+  `latitude` varchar(50) NOT NULL DEFAULT '0',
+  `longitude` varchar(50) NOT NULL DEFAULT '0',
   `foneCelular` varchar(15) NOT NULL,
   `foneFixo` varchar(15) DEFAULT NULL,
   `email` varchar(60) DEFAULT NULL,
@@ -5753,13 +5753,14 @@ CREATE TABLE IF NOT EXISTS `pessoa` (
   `cancer` tinyint NOT NULL DEFAULT '0',
   `doencaRespiratoria` tinyint NOT NULL DEFAULT '0',
   PRIMARY KEY (`idpessoa`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
--- Copiando dados para a tabela monitorasus.pessoa: ~0 rows (aproximadamente)
+-- Copiando dados para a tabela monitorasus.pessoa: ~2 rows (aproximadamente)
 /*!40000 ALTER TABLE `pessoa` DISABLE KEYS */;
 INSERT INTO `pessoa` (`idpessoa`, `cpf`, `nome`, `sexo`, `cep`, `rua`, `bairro`, `cidade`, `estado`, `numero`, `complemento`, `latitude`, `longitude`, `foneCelular`, `foneFixo`, `email`, `dataNascimento`, `hipertenso`, `diabetes`, `obeso`, `cardiopatia`, `imunodeprimido`, `cancer`, `doencaRespiratoria`) VALUES
-	(2, '00000000000', 'Gabriel Santan', 'M', '49200000', 'Rua João Francisco da Silva', 'Centro', 'Estância', 'Sergipe', '234', '', -99.99999999, -99.99999999, '79999914349', '', 'gabriel@hmtil.com', '1996-10-15', 1, 0, 1, 0, 0, 1, 0),
-	(3, '00000000001', 'Gabriel Santana Cruz', 'M', '49200000', 'Rua João Francisco da Silva', 'Centro', 'Estância', 'Sergipe', '234', 'Casa', -99.99999999, -99.99999999, '79999914349', '', 'gabriel.sistemasjr@gmail.com', '1996-10-15', 1, 0, 1, 1, 0, 0, 0);
+	(2, '00000000000', 'Gabriel Santan', 'M', '49200000', 'Rua João Francisco da Silva', 'Centro', 'Estância', 'Sergipe', '234', '', '-99.99999999', '-99.99999999', '79999914349', '', 'gabriel@hmtil.com', '1996-10-15', 1, 0, 1, 0, 0, 1, 0),
+	(3, '06579861517', 'Gabriel Santana Cruz', 'M', '49200000', 'Rua João Francisco da Silva', 'Centro', 'Estância', 'Sergipe', '234', 'Casa', '-99.99999999', '-99.99999999', '79999914349', '', 'gabriel.sistemasjr@gmail.com', '1996-10-15', 1, 0, 1, 1, 0, 0, 0),
+	(4, '00000000001', 'bruninho o furão', 'M', '49200000', 'Rua João Francisco da Silva', 'Centro', 'Estância', 'Sergipe', '234', '', '-11.2720296', '-37.4356362', '79999999999', '', 'gabriel@hmtil.com', '0123-12-15', 0, 0, 0, 0, 0, 0, 0);
 /*!40000 ALTER TABLE `pessoa` ENABLE KEYS */;
 
 -- Copiando estrutura para tabela monitorasus.pessoatrabalhaestado
@@ -5782,7 +5783,8 @@ CREATE TABLE IF NOT EXISTS `pessoatrabalhaestado` (
 -- Copiando dados para a tabela monitorasus.pessoatrabalhaestado: ~0 rows (aproximadamente)
 /*!40000 ALTER TABLE `pessoatrabalhaestado` DISABLE KEYS */;
 INSERT INTO `pessoatrabalhaestado` (`idpessoa`, `idEstado`, `ehResponsavel`, `ehSecretario`, `situacaoCadastro`, `idEmpresaExame`) VALUES
-	(3, 28, 1, 1, 'S', NULL);
+	(3, 28, 1, 1, 'S', NULL),
+	(4, 28, 0, 0, 'S', NULL);
 /*!40000 ALTER TABLE `pessoatrabalhaestado` ENABLE KEYS */;
 
 -- Copiando estrutura para tabela monitorasus.pessoatrabalhamunicipio
@@ -5805,6 +5807,23 @@ INSERT INTO `pessoatrabalhamunicipio` (`idPessoa`, `idMunicipio`, `ehResponsavel
 	(3, 2214, 1, 1, 'S');
 /*!40000 ALTER TABLE `pessoatrabalhamunicipio` ENABLE KEYS */;
 
+-- Copiando estrutura para tabela monitorasus.recuperarsenha
+CREATE TABLE IF NOT EXISTS `recuperarsenha` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `token` varchar(100) NOT NULL,
+  `inicioToken` datetime NOT NULL,
+  `fimToken` datetime NOT NULL,
+  `ehValido` tinyint NOT NULL DEFAULT '1',
+  `idUsuario` int NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_recuperarsenha_usuario1_idx` (`idUsuario`),
+  CONSTRAINT `fk_recuperarsenha_usuario1` FOREIGN KEY (`idUsuario`) REFERENCES `usuario` (`idUsuario`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+
+-- Copiando dados para a tabela monitorasus.recuperarsenha: ~2 rows (aproximadamente)
+/*!40000 ALTER TABLE `recuperarsenha` DISABLE KEYS */;
+/*!40000 ALTER TABLE `recuperarsenha` ENABLE KEYS */;
+
 -- Copiando estrutura para tabela monitorasus.situacaopessoavirusbacteria
 CREATE TABLE IF NOT EXISTS `situacaopessoavirusbacteria` (
   `idVirusBacteria` int NOT NULL,
@@ -5825,19 +5844,19 @@ CREATE TABLE IF NOT EXISTS `situacaopessoavirusbacteria` (
 CREATE TABLE IF NOT EXISTS `usuario` (
   `idUsuario` int NOT NULL AUTO_INCREMENT,
   `cpf` varchar(45) NOT NULL,
-  `senha` varchar(45) NOT NULL,
+  `senha` varchar(100) NOT NULL,
   `email` varchar(45) DEFAULT NULL,
   `tipoUsuario` tinyint NOT NULL,
   `idPessoa` int NOT NULL,
   PRIMARY KEY (`idUsuario`),
   KEY `fk_usuario_pessoa1_idx` (`idPessoa`),
   CONSTRAINT `fk_usuario_pessoa1` FOREIGN KEY (`idPessoa`) REFERENCES `pessoa` (`idpessoa`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 -- Copiando dados para a tabela monitorasus.usuario: ~0 rows (aproximadamente)
 /*!40000 ALTER TABLE `usuario` DISABLE KEYS */;
 INSERT INTO `usuario` (`idUsuario`, `cpf`, `senha`, `email`, `tipoUsuario`, `idPessoa`) VALUES
-	(1, '07334824571', '1234', 'ab@gmail.com', 0, 0);
+	(2, '06579861517', '60BFAA61E12B4FD3DAD35586B11387689E35645279C6103495F019AAA0C1FCF3', 'gabriel.sistemasjr@gmail.com', 4, 3);
 /*!40000 ALTER TABLE `usuario` ENABLE KEYS */;
 
 -- Copiando estrutura para tabela monitorasus.virusbacteria
