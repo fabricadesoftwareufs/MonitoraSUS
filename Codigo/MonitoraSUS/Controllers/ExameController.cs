@@ -9,10 +9,11 @@ using MonitoraSUS.Utils;
 using Service.Interface;
 using System;
 using System.Linq;
+using Model.ViewModel;
 
 namespace MonitoraSUS.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class ExameController : Controller
     {
         private readonly IVirusBacteriaService _virusBacteriaContext;
@@ -130,7 +131,7 @@ namespace MonitoraSUS.Controllers
                 /*
                  * Atualizando Exame
                  */
-                _exameContext.Update(CreateExameModel(exame, false));
+                _exameContext.Update(CreateExameModel(exame));
 
                 /*
                  * Atualizando ou Inserindo situacao do usuario 
@@ -246,14 +247,12 @@ namespace MonitoraSUS.Controllers
                     try
                     {
                         // inserindo o exame
-                        _exameContext.Insert(CreateExameModel(exame, true));
+                        _exameContext.Insert(CreateExameModel(exame));
                     }
                     catch
                     {
                         TempData["mensagemErro"] = "Cadastro não pode ser concluido pois houve um problema ao inserir os dados do exame, tente novamente." +
                                                    " Se o erro persistir, entre em contato com a Fábrica de Software da UFS pelo email fabricadesoftware@ufs.br";
-
-
                         return View(exame);
                     }
 
@@ -296,7 +295,7 @@ namespace MonitoraSUS.Controllers
             return situacao;
         }
 
-        public ExameModel CreateExameModel(ExameViewModel viewModel, bool atualizarCidadeEstado)
+        public ExameModel CreateExameModel(ExameViewModel viewModel)
         {
             ExameModel exame = new ExameModel();
 
@@ -317,6 +316,7 @@ namespace MonitoraSUS.Controllers
              *  pegando informações do agente de saúde logado no sistema 
              */
             var agente = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
+            
 
             var secretarioMunicipio = _pessoaTrabalhaMunicipioContext.GetByIdPessoa(agente.UsuarioModel.IdPessoa);
             var secretarioEstado = _pessoaTrabalhaEstadoContext.GetByIdPessoa(agente.UsuarioModel.IdPessoa);
@@ -325,7 +325,7 @@ namespace MonitoraSUS.Controllers
             if (secretarioMunicipio != null)
             {
                 exame.IdMunicipio = secretarioMunicipio.IdMunicipio;
-                exame.IdEstado = _estadoContext.GetByUf(_municicpioContext.GetById(secretarioMunicipio.IdMunicipio).Uf).Id;
+                exame.IdEstado = Convert.ToInt32(_municicpioContext.GetById(secretarioMunicipio.IdMunicipio).Uf);
 
                 if (secretarioEstado != null)
                     exame.IdEmpresaSaude = secretarioEstado.IdEmpresaExame;
@@ -334,7 +334,7 @@ namespace MonitoraSUS.Controllers
             {
                 if (secretarioEstado != null)
                 {
-                    exame.IdEstado = _estadoContext.GetByUf(_municicpioContext.GetById(secretarioMunicipio.IdMunicipio).Uf).Id;
+                    exame.IdEstado = Convert.ToInt32(_municicpioContext.GetById(secretarioMunicipio.IdMunicipio).Uf);
                     exame.IdEmpresaSaude = secretarioEstado.IdEmpresaExame;
                 }
             }
@@ -373,6 +373,8 @@ namespace MonitoraSUS.Controllers
              * os exames que ele pode ver
              */
             var usuario = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
+           
+
 
             var exames = new List<ExameModel>();
             if (usuario.RoleUsuario.Equals("AGENTE"))
@@ -386,8 +388,7 @@ namespace MonitoraSUS.Controllers
                 // verificando se o funcionario trabalha no municipio ou no estado
                 if (secretarioMunicipio != null)
                 {
-                    var uf = _municicpioContext.GetById(secretarioMunicipio.IdMunicipio).Uf;
-                    var idEstado = _estadoContext.GetByUf(uf).Id;
+                    var idEstado = Convert.ToInt32(_municicpioContext.GetById(secretarioMunicipio.IdMunicipio).Uf);
                     exames = _exameContext.GetByIdEstado(idEstado);
                 }
                 else
