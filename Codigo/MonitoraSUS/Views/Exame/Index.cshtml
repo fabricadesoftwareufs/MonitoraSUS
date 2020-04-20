@@ -14,7 +14,7 @@
      * para filtrar quem ele pode remover
      */
 
-    var agente = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
+     var agente = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
 
     /*
      * Usuario para testes, comente a linhda de cima e
@@ -23,7 +23,7 @@
      */
 
     //var agente = new UsuarioViewModel();
-    //agente.usuarioModel = new Model.UsuarioModel { IdPessoa = 5 };
+    //agente.UsuarioModel = new Model.UsuarioModel { IdPessoa = 5 };
 
 }
 
@@ -62,29 +62,29 @@
                 </div>
 
                 <table class="table">
-                    <thead>
+                    <thead class="thead-light">
                         <tr>
-                            <th>
+                            <th scope="col" class="sort" data-sort="cpf">
                                 Cpf
                             </th>
-                            <th>
+                            <th scope="col" class="sort" data-sort="nome-paciente">
                                 @Html.DisplayNameFor(model => model.IdPaciente)
                             </th>
-                            <th>
+                            <th scope="col" class="sort" data-sort="data-exame">
                                 @Html.DisplayNameFor(model => model.DataExame)
                             </th>
-                            <th>
+                            <th scope="col" class="sort" data-sort="virus">
                                 @Html.DisplayNameFor(model => model.IdVirusBacteria)
                             </th>
-                            <th>
+                            <th scope="col" class="sort" data-sort="resultado">
                                 @Html.DisplayNameFor(model => model.Resultado)
                             </th>
-                            <th>
+                            <th scope="col" class="sort" data-sort="acoes">
                                 Ações
                             </th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="list">
                         @foreach (var item in Model)
                         {
                             <tr>

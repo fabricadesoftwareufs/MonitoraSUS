@@ -13,6 +13,8 @@
     var complemento = Model.IdPaciente.Complemento;
     string numero = Model.IdPaciente.Numero;
     string estado = Model.IdPaciente.Estado;
+    var latitude = Model.IdPaciente.Latitude;
+    var longitude = Model.IdPaciente.Longitude;
     string email = Model.IdPaciente.Email;
     string foneCelular = Model.IdPaciente.FoneCelular;
     string foneFixo = Model.IdPaciente.FoneFixo;
@@ -145,13 +147,13 @@
                                 <div class="col-lg-4" hidden>
                                     <div class="form-group">
                                         <label class="form-control-label" for="input-latitude">Latitude</label>
-                                        <input asp-for="IdPaciente.Latitude" id="input-latitude" class="form-control" placeholder="" value="19">
+                                        <input asp-for="IdPaciente.Latitude" id="input-latitude" class="form-control" placeholder="" value="@latitude">
                                     </div>
                                 </div>
                                 <div class="col-lg-4" hidden>
                                     <div class="form-group">
                                         <label class="form-control-label" for="input-longitude">Longitude</label>
-                                        <input asp-for="IdPaciente.Longitude" id="input-longitude" class="form-control" placeholder="" value="21">
+                                        <input asp-for="IdPaciente.Longitude" id="input-longitude" class="form-control" placeholder="" value="@longitude">
                                     </div>
                                 </div>
                                 <div class="col-lg-4">
