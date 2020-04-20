@@ -87,12 +87,12 @@ namespace MonitoraSUS.Utils
             cpf = cpf.Substring(0, 3) + "." + cpf.Substring(3, 3) + "." + cpf.Substring(6, 3) + "-" + cpf.Substring(9, 2);
             return cpf;
         }
-       
+
         public static bool ValidarCpf(string cpf)
         {
             if (string.IsNullOrEmpty(cpf))
                 return false;
-            
+
             var multiplicador1 = new int[9] { 10, 9, 8, 7, 6, 5, 4, 3, 2 };
             var multiplicador2 = new int[10] { 11, 10, 9, 8, 7, 6, 5, 4, 3, 2 };
             string tempCpf;

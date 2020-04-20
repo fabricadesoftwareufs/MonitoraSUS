@@ -1,15 +1,15 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Model;
 using Model.ViewModel;
-using System.Security.Claims;
 using MonitoraSUS.Utils;
 using Service.Interface;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
 
 namespace MonitoraSUS.Controllers
 {
@@ -290,7 +290,7 @@ namespace MonitoraSUS.Controllers
                     _usuarioService.Delete(usuario.IdUsuario);
 
                 _pessoaService.Delete(agenteEstado.IdPessoa);
-            
+
             }
             else
             {
