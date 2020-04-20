@@ -49,7 +49,7 @@ namespace MonitoraSUS.Controllers
                 var cpf = Methods.ValidarCpf(login.Cpf) ? Methods.RemoveSpecialsCaracts(login.Cpf) : throw new Exception("CPF Invalido!!");
                 var senha = Criptography.GenerateHashPasswd(login.Senha);
 
-        var user = _usuarioService.GetByLogin(cpf, senha);
+                var user = _usuarioService.GetByLogin(cpf, senha);
 
                 if (user != null)
                 {
