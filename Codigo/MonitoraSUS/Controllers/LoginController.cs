@@ -32,12 +32,9 @@ namespace MonitoraSUS.Controllers
             return View();
         }
 
+        /*
         [HttpGet("Login/RetornaSenha/{senha}")]
         public string RetornaSenha(string senha) => Criptography.GenerateHashPasswd(senha);
-
-        /*
-        [HttpGet("Login/RetornaSenha/{senha}"), Authorize]
-        public string RetornaSenha(string senha) => Criptografia.GerarHash(senha);
         */
 
         [HttpPost]
@@ -55,7 +52,7 @@ namespace MonitoraSUS.Controllers
                 {
                     // informaçoes pessoais do usuario | adicionar as claims o dado que mais precisar
                     var person = _pessoaService.GetById(user.IdPessoa);
-                    var role = ReturnRole(user.TipoUsuario);
+                    var role = Methods.ReturnRole(user.TipoUsuario);
 
                     var claims = new List<Claim>
                     {
@@ -117,19 +114,6 @@ namespace MonitoraSUS.Controllers
         public ActionResult AcessDenied()
         {
             return View();
-        }
-
-        private string ReturnRole(int userType)
-        {
-            switch (userType)
-            {
-                case 0: return "USUARIO";
-                case 1: return "AGENTE";
-                case 2: return "COORDENADOR";
-                case 3: return "SECRETARIO";
-                case 4: return "ADM";
-                default: return "UNDEFINED";
-            }
         }
 
         public async Task<ActionResult> EmitirToken(string cpf)

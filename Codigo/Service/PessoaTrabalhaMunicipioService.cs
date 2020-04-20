@@ -106,10 +106,10 @@ namespace Service
 
         public bool Update(PessoaTrabalhaMunicipioModel pessoaTrabalhaMunicipioModel)
         {
-         
-                _context.Update(ModelToEntity(pessoaTrabalhaMunicipioModel));
-                return _context.SaveChanges() == 1 ? true : false;
-            
+
+            _context.Update(ModelToEntity(pessoaTrabalhaMunicipioModel));
+            return _context.SaveChanges() == 1 ? true : false;
+
         }
         private Pessoatrabalhamunicipio ModelToEntity(PessoaTrabalhaMunicipioModel model)
         {

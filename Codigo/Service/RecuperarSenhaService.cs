@@ -88,9 +88,12 @@ namespace Service
 
         public void SetTokenInvalid(int idUser)
         {
-            var token = _context.Recuperarsenha.Where(t => t.IdUsuario == idUser).FirstOrDefault();
-            token.EhValido = Convert.ToByte(false);
-            _context.Recuperarsenha.Update(token);
+            var tokens = _context.Recuperarsenha.Where(t => t.IdUsuario == idUser).ToList();
+            tokens.ForEach(token =>
+            {
+                token.EhValido = Convert.ToByte(false);
+                _context.Recuperarsenha.Update(token);
+            });
             _context.SaveChanges();
         }
     }
