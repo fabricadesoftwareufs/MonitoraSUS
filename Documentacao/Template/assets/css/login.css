@@ -10583,8 +10583,12 @@ a:focus {
   }
 }
 
+.bg-login{
+	background-color: #007bff0f;
+}
+
 .bg-login-image {
-    background: url('../img/background-iot.jpg');
+    background: url('../img/background-login.jpg');
     background-position: center;
     background-size: cover;
 }
@@ -10608,6 +10612,10 @@ a:focus {
 .card-button span{
     /* font-weight: lighter; */
     display: block;
+}
+
+.card-button a:link{
+    text-decoration:none;
 }
 
 .card-button .card-button-body{
