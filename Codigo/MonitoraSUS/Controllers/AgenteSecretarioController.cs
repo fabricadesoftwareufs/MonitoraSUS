@@ -358,11 +358,11 @@ namespace MonitoraSUS.Controllers
 
             // Localização
             var cep = Methods.RemoveSpecialsCaracts(collection["Cep"]);
-            var rua = collection["Rua"];
+            var rua = collection["Logradouro"];
             var numero = collection["Numero"];
             var bairro = collection["Bairro"];
-            var cidade = collection["Cidade"];
-            var estado = collection["Estado"];
+            var cidade = collection["Localidade"];
+            var estado = collection["UF"];
             var complemento = collection["Complemento"];
             var latitude = collection["Latitude"];
             var longitude = collection["Longitude"];
