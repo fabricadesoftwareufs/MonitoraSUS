@@ -44,8 +44,8 @@ namespace MonitoraSUS.Controllers
             var pessoas = _pessoaService.GetAll();
             var secMuniEst = new List<SecretarioMunicipioEstadoViewModel>();
 
-            var secretariosEstadoPendentes = _pessoaTrabalhaEstadoService.GetAllSecretariesPendents();
-            var secretariosMunicipioPendente = _pessoaTrabalhaMunicipioService.GetAllSecretariesPendents();
+            var secretariosEstadoPendentes = _pessoaTrabalhaEstadoService.GetAllGestores();
+            var secretariosMunicipioPendente = _pessoaTrabalhaMunicipioService.GetAllGestores();
 
             secretariosEstadoPendentes.ForEach(item => secMuniEst.Add(new SecretarioMunicipioEstadoViewModel { Pessoa = _pessoaService.GetById(item.IdPessoa), PessoaEstado = item, Situacao = 0 }));
             secretariosMunicipioPendente.ForEach(item => secMuniEst.Add(new SecretarioMunicipioEstadoViewModel { Pessoa = _pessoaService.GetById(item.IdPessoa), PessoaMunicipio = item, Situacao = 0 }));

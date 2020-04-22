@@ -47,10 +47,10 @@ namespace Service
                     IdEmpresaExame = p.IdEmpresaExame
                 }).ToList();
 
-        public List<PessoaTrabalhaEstadoModel> GetAllSecretariesPendents()
+        public List<PessoaTrabalhaEstadoModel> GetAllGestores()
             => _context
                 .Pessoatrabalhaestado
-                .Where(p => p.EhSecretario.Equals(1) && p.SituacaoCadastro.Equals("S"))
+                .Where(p => p.EhResponsavel.Equals(1))
                 .Select(p => new PessoaTrabalhaEstadoModel
                 {
                     IdPessoa = p.Idpessoa,
