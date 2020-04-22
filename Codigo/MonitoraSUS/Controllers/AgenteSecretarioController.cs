@@ -14,7 +14,7 @@ using System.Security.Claims;
 namespace MonitoraSUS.Controllers
 {
 
-    [Authorize(Roles = "AGENTE, SECRETARIO")]
+    [Authorize(Roles = "AGENTE, SECRETARIO, ADMS")]
     public class AgenteSecretarioController : Controller
     {
         private readonly IMunicipioService _municipioService;
@@ -44,8 +44,8 @@ namespace MonitoraSUS.Controllers
             var pessoas = _pessoaService.GetAll();
             var secMuniEst = new List<SecretarioMunicipioEstadoViewModel>();
 
-            var secretariosEstadoPendentes = _pessoaTrabalhaEstadoService.GetAllSecretariesPendents();
-            var secretariosMunicipioPendente = _pessoaTrabalhaMunicipioService.GetAllSecretariesPendents();
+            var secretariosEstadoPendentes = _pessoaTrabalhaEstadoService.GetAllGestores();
+            var secretariosMunicipioPendente = _pessoaTrabalhaMunicipioService.GetAllGestores();
 
             secretariosEstadoPendentes.ForEach(item => secMuniEst.Add(new SecretarioMunicipioEstadoViewModel { Pessoa = _pessoaService.GetById(item.IdPessoa), PessoaEstado = item, Situacao = 0 }));
             secretariosMunicipioPendente.ForEach(item => secMuniEst.Add(new SecretarioMunicipioEstadoViewModel { Pessoa = _pessoaService.GetById(item.IdPessoa), PessoaMunicipio = item, Situacao = 0 }));
@@ -134,7 +134,7 @@ namespace MonitoraSUS.Controllers
                             {
                                 IdPessoa = idPessoaInserida,
                                 IdMunicipio = Convert.ToInt32(collection["select-Cidade"]),
-                                EhSecretario = true,
+                                EhSecretario = false,
                                 EhResponsavel = true
                             })
                         )
@@ -148,7 +148,7 @@ namespace MonitoraSUS.Controllers
                             {
                                 IdPessoa = idPessoaInserida,
                                 IdEstado = Convert.ToInt32(collection["select-Estado"]),
-                                EhSecretario = true,
+                                EhSecretario = false,
                                 EhResponsavel = true
                             })
                         )
@@ -231,7 +231,7 @@ namespace MonitoraSUS.Controllers
         /// <returns></returns>
         // GET: Todos agentes de saúde
 
-        [Authorize(Roles = "SECRETARIO")]
+        [Authorize(Roles = "SECRETARIO, COORDENADOR, ADMS")]
         public ActionResult IndexApproveAgent()
         {
             // usuario logado
@@ -358,11 +358,11 @@ namespace MonitoraSUS.Controllers
 
             // Localização
             var cep = Methods.RemoveSpecialsCaracts(collection["Cep"]);
-            var rua = collection["Rua"];
+            var rua = collection["Logradouro"];
             var numero = collection["Numero"];
             var bairro = collection["Bairro"];
-            var cidade = collection["Cidade"];
-            var estado = collection["Estado"];
+            var cidade = collection["Localidade"];
+            var estado = collection["UF"];
             var complemento = collection["Complemento"];
             var latitude = collection["Latitude"];
             var longitude = collection["Longitude"];

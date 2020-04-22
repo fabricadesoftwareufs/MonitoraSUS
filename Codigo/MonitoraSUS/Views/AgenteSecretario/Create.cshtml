@@ -2,12 +2,13 @@
 @using System.Collections.Generic
 
 @{
-    ViewData["Title"] = "Create";
+	ViewData["Title"] = "Create";
 
-    var typeCad = ViewBag.userType == 1 ? "Secretário" : "Agente";
-    var caseController = typeCad == "Agente" ? "CreateAgent" : "CreateSec";
-    var listaDeEstados = ViewBag.estados as List<Model.PessoaModel>;
-    var googleKey = ViewBag.googleKey;
+	var typeCad = ViewBag.userType == 1 ? "Gestor de Saúde" : "Responsável pela Notificação de Exames";
+	var perguntaVinculo = ViewBag.userType == 1 ? "Qual estado/município você é gestor de saúde?" : "Em qual estado/município irá notificar resultados de exames?";
+	var caseController = typeCad == "Agente" ? "CreateAgent" : "CreateSec";
+	var listaDeEstados = ViewBag.estados as List<Model.PessoaModel>;
+	var googleKey = ViewBag.googleKey;
 }
 
 
@@ -20,7 +21,7 @@
                     <div class="row align-items-center">
                         <div class="col">
                             <h6 class="text-uppercase text-muted ls-1 mb-1">MonitoraSUS</h6>
-                            <h5 class="h3 mb-0">Cadastro de @typeCad de Saúde</h5>
+                            <h5 class="h3 mb-0">Cadastro de @typeCad</h5>
                         </div>
                         <a asp-controller="AgenteSecretario" asp-action="Index" class="btn btn-sm btn-default">
                             <i class="fas fa-arrow-left"></i> Voltar
@@ -73,7 +74,8 @@
                                 <div class="col-lg-12">
                                     <div class="form-group">
                                         <label class="form-control-label" for="input-pesquisa">Pesquisa Endereço</label>
-                                        <input type="search" id="input-pesquisa" required class="form-control" placeholder="Pesquise pelo CEP, Rua, Bairro, Número" autocomplete="off">
+                                        <input type="search" id="input-pesquisa" required class="form-control" oninput="PreencheForm()" placeholder="Pesquise pelo CEP, Rua, Bairro, Número" autocomplete="off">
+                                        <span id="spanInvalidCep" hidden class="text-danger text-center" style="padding: 10px">Cep Invalido!!</span>
                                         <input type="hidden" id="longitude" asp-for="Longitude" />
                                         <input type="hidden" id="latitude" asp-for="Latitude" />
                                     </div>
@@ -87,7 +89,7 @@
                                 <div class="col-lg-5">
                                     <div class="form-group">
                                         <label class="form-control-label" for="input-logradouro">Logradouro</label>
-                                        <input type="text" id="route" required class="form-control" asp-for="Rua" name="Rua" placeholder="Rua, Av, Travessa">
+                                        <input type="text" id="route" required class="form-control" asp-for="Rua" name="Logradouro" placeholder="Rua, Av, Travessa">
                                     </div>
                                 </div>
                                 <div class="col-lg-1">
@@ -105,13 +107,13 @@
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label class="form-control-label" for="input-cidade">Cidade</label>
-                                        <input type="text" id="administrative_area_level_2" required class="form-control" asp-for="Cidade" name="Cidade" placeholder="Cidade">
+                                        <input type="text" id="administrative_area_level_2" required class="form-control" asp-for="Cidade" name="Localidade" placeholder="Cidade">
                                     </div>
                                 </div>
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label class="form-control-label" for="input-estado">Estado</label>
-                                        <input type="text" id="administrative_area_level_1" class="form-control" asp-for="Estado" name="Estado" placeholder="Estado">
+                                        <input type="text" id="administrative_area_level_1" class="form-control" asp-for="Estado" name="UF" placeholder="Estado">
                                     </div>
                                 </div>
                                 <div class="col-lg-4">
@@ -123,19 +125,19 @@
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label class="form-control-label" for="input-celular">Celular</label>
-                                        <input type="text" id="input-celular" required class="form-control" asp-for="FoneCelular" placeholder=" (79) 55555 5555">
+                                        <input type="text" id="input-celular" required class="form-control" asp-for="FoneCelular" placeholder=" (99) 99999 9999">
                                     </div>
                                 </div>
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label class="form-control-label" for="input-telefone">Telefone</label>
-                                        <input type="text" id="input-telefone" class="form-control" asp-for="FoneFixo" placeholder=" (79) 3000 6000">
+                                        <input type="text" id="input-telefone" class="form-control" asp-for="FoneFixo" placeholder=" (99) 9999 9999">
                                     </div>
                                 </div>
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label class="form-control-label" for="input-email">E-mail</label>
-                                        <input type="email" id="input-email" class="form-control" asp-for="Email" placeholder="email@example.com">
+                                        <input type="email" id="input-email" class="form-control" required asp-for="Email" placeholder="email@example.com">
                                     </div>
                                 </div>
                             </div>
@@ -191,7 +193,7 @@
                             </div>
                         </div>
                         <hr class="my-4" />
-                        <h6 class="heading-small text-muted mb-4">Qual estado e/ou município é responsável?</h6>
+                        <h6 class="heading-small text-muted mb-4">@perguntaVinculo</h6>
                         <div class="pl-lg-4">
                             <div class="row">
                                 <div class="col-lg-6">
@@ -211,7 +213,7 @@
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <label class="form-control-label" for="nivel-atuacao">Secretário</label><br>
+                                        <label class="form-control-label" for="nivel-atuacao">Nível de Atuação:</label><br>
                                         <div class="custom-control custom-radio custom-control-inline">
                                             <input type="radio" id="input-atuacao-estadual" name="areaAtuacao" checked value="Estadual" required class="custom-control-input">
                                             <label class="custom-control-label" for="input-atuacao-estadual">Estadual</label>
@@ -250,7 +252,7 @@
         var componentForm = {
             route: 'long_name',
             street_number: 'short_name',
-            administrative_area_level_1: 'long_name',
+            administrative_area_level_1: 'short_name',
             administrative_area_level_2: 'long_name',
             postal_code: 'short_name'
         };
@@ -266,18 +268,7 @@
         function fillInAddress() {
             var place = autocomplete.getPlace();
 
-            geocoder.geocode({ 'address': inputHtml.value }, function (results, status) {
-                if (status === 'OK') {
-                    let latitude = document.getElementById('latitude');
-                    let longitude = document.getElementById('longitude');
-
-                    // SETTING VALUES
-                    latitude.value = results[0].geometry.location.lat();
-                    longitude.value = results[0].geometry.location.lng();
-                } else {
-                    alert('ERRO AO INICIALIZAR O GEOCODE: ' + status);
-                }
-            });
+            ProcuraEndereco(inputHtml.value);
 
             for (var component in componentForm) {
                 document.getElementById(component).value = '';
@@ -311,8 +302,22 @@
                 });
             }
         }
-    </script>
 
+        function ProcuraEndereco(endereco) {
+            geocoder.geocode({ 'address': endereco }, function (results, status) {
+                if (status === 'OK') {
+                    let latitude = document.getElementById('latitude');
+                    let longitude = document.getElementById('longitude');
+
+                    // SETTING VALUES
+                    latitude.value = results[0].geometry.location.lat();
+                    longitude.value = results[0].geometry.location.lng();
+                } else {
+                    alert('ERRO AO INICIALIZAR O GEOCODE: ' + status);
+                }
+            });
+        }
+    </script>
 
     <!-- PERSONAL SCRIPTS -->
     <script>
@@ -379,6 +384,43 @@
                     span.hidden = true;
                 }
             })
+        }
+    </script>
+    <script>
+        function PreencheForm() {
+            let input = document.getElementById('input-pesquisa');
+            let span = document.getElementById('spanInvalidCep');
+
+            if (!isNaN(input.value) && input.value !== '' && input.value.length == 8) {
+                let url = `https://viacep.com.br/ws/${input.value}/json/`;
+
+                $.get(url, null, function (data) {
+                    let formCep = {
+                        cep: document.getElementById('postal_code'),
+                        complemento: document.getElementById('input-complemento'),
+                        bairro: document.getElementById('input-bairro'),
+                        localidade: document.getElementById('administrative_area_level_2'),
+                        uf: document.getElementById('administrative_area_level_1'),
+                        logradouro: document.getElementById('route')
+                    };
+
+                    if (!data.erro) {
+                        for (let input in formCep) {
+                            span.hidden = true;
+                            formCep[input].value = '';
+                            for (let value in data) {
+                                if (formCep[input].name.toLowerCase() == value) {
+                                    formCep[input].value = data[value];
+                                    formCep[input].setAttribute('readonly', 'true');
+                                }
+                            }
+                        }
+
+                        ProcuraEndereco(formCep.logradouro.value);
+                    } else
+                        span.hidden = false;
+                })
+            }
         }
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=@googleKey&libraries=places&callback=initAutocomplete&language=pt-BR"

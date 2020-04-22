@@ -41,11 +41,9 @@
                             <h5 class="card-title  text-muted mb-0">MonitoraSUS</h5>
                             <h5 class="h3 mb-0">Notificar Resultado</h5>
                         </div>
-                        <div class="col text-right">
-                            <a asp-action="Index" class="btn btn-sm btn-default">
-                                <i class="fas fa-arrow-left"></i> Voltar
-                            </a>
-                        </div>
+						<div class="col text-right">
+							<a class="btn btn-default" asp-controller="Home" asp-action="Index"> <i class="fas fa-arrow-left"></i> Voltar</a><br />
+						</div>
                     </div>
                 </div>
 
@@ -165,13 +163,13 @@
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label class="form-control-label" for="input-celular">Celular</label>
-                                        <input asp-for="IdPaciente.FoneCelular" id="input-celular" required class="form-control" placeholder=" (79) 55555 5555" value="@foneCelular">
+                                        <input asp-for="IdPaciente.FoneCelular" id="input-celular" required class="form-control" placeholder=" (99) 99999 9999" value="@foneCelular">
                                     </div>
                                 </div>
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label class="form-control-label" for="input-telefone">Telefone</label>
-                                        <input asp-for="IdPaciente.FoneFixo" id="input-telefone" class="form-control" placeholder=" (79) 3000 6000" value="@foneFixo">
+                                        <input asp-for="IdPaciente.FoneFixo" id="input-telefone" class="form-control" placeholder=" (99) 9999 9999" value="@foneFixo">
                                     </div>
                                 </div>
                             </div>
@@ -396,7 +394,7 @@
                     </g>
                 </svg>
 
-                <p>Aguarde enquanto verificamos se esse paciente já existe...</p>
+                <p>Estamos notificando o resultado do exame...</p>
             </div>
         </div>
     </div>
@@ -414,9 +412,7 @@
                         <p> @TempData["mensagemSucesso"] </p>
 
                         <p>
-                            Foi enviada uma mensagem de Email/SMS/Whatsapp
-                            para o celular cadastrado para notificá-lo do resultado
-                            do exame.
+                            Resultado do Exame notificado com SUCESSO!
                         </p>
                         <a class="btn btn-success" asp-action="Index">Ok</a>
                     }

@@ -9,7 +9,7 @@ namespace Service.Interface
         bool Update(PessoaTrabalhaMunicipioModel pessoaTrabalhaMunicipioModel);
         bool Delete(int idPessoa, int idMunicipio);
         List<PessoaTrabalhaMunicipioModel> GetAll();
-        List<PessoaTrabalhaMunicipioModel> GetAllSecretariesPendents();
+        List<PessoaTrabalhaMunicipioModel> GetAllGestores();
         List<PessoaTrabalhaMunicipioModel> GetAllAgents();
         PessoaTrabalhaMunicipioModel GetById(int idPessoa, int idMunicipio);
         PessoaTrabalhaMunicipioModel GetByIdPessoa(int idPessoa);

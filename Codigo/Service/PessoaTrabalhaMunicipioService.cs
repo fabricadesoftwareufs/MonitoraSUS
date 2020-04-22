@@ -47,10 +47,10 @@ namespace Service
                     SituacaoCadastro = p.SituacaoCadastro
                 }).ToList();
 
-        public List<PessoaTrabalhaMunicipioModel> GetAllSecretariesPendents()
+        public List<PessoaTrabalhaMunicipioModel> GetAllGestores()
             => _context
                 .Pessoatrabalhamunicipio
-                .Where(p => p.EhSecretario.Equals(1) && p.SituacaoCadastro.Contains('S'))
+                .Where(p => p.EhResponsavel.Equals(1))
                 .Select(p => new PessoaTrabalhaMunicipioModel
                 {
                     IdPessoa = p.IdPessoa,
