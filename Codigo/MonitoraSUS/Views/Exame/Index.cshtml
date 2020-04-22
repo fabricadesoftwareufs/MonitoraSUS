@@ -23,7 +23,7 @@
      */
 
     //var agente = new UsuarioViewModel();
-    //agente.UsuarioModel = new Model.UsuarioModel { IdPessoa = 5 };
+    //agente.UsuarioModel = new Model.UsuarioModel { IdPessoa = 3 };
 
 }
 
@@ -51,7 +51,7 @@
                             <h5 class="card-title">Filtre Exames por Data</h5>
                             <div class="form-inline">
                                 <form asp-controller="Exame" asp-action="Index">
-                                    <input type="date" required id="data-filtro" name="filtro" class=" form-control" />
+                                    <input type="date" required value="null" id="data-filtro" name="filtro" class=" form-control"/>
                                     <button type="submit" class="margin-left-10 btn btn-secondary">Filtrar</button>
                                 </form>
                             </div>

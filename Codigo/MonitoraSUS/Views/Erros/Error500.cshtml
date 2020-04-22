@@ -1,0 +1,25 @@
+﻿
+@{
+    ViewData["Title"] = "HandleErrorCode";
+}
+
+<table class="table">
+    <tr>
+        <th scope="col" class="sort">
+            <img src="~/assets/img/link_quebrado.png" alt="Smiley face" width="300" height="300">
+        </th>
+        <th scope="col" class="sort">
+            <br />
+            <br>
+            <h2>@ViewBag.ErrorMessage</h2>
+            <hr />
+            <h3>
+                @ViewBag.MensagemOrientacao <a href="mailto:fabricadesoftware@ufs.br?subject=EXCEÇÃO LANÇADA" title="">fabricadesoftware@ufs.br</a>
+            </h3>
+            <br />
+            <a class="btn btn-success" asp-controller="Home" asp-action="Index">Voltar ao Inicio</a>
+        </th>
+    </tr>
+</table>
+
+
