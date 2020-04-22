@@ -14,7 +14,7 @@ using System.Security.Claims;
 namespace MonitoraSUS.Controllers
 {
 
-    [Authorize(Roles = "AGENTE, SECRETARIO")]
+    [Authorize(Roles = "AGENTE, SECRETARIO, ADMS")]
     public class AgenteSecretarioController : Controller
     {
         private readonly IMunicipioService _municipioService;
@@ -134,7 +134,7 @@ namespace MonitoraSUS.Controllers
                             {
                                 IdPessoa = idPessoaInserida,
                                 IdMunicipio = Convert.ToInt32(collection["select-Cidade"]),
-                                EhSecretario = true,
+                                EhSecretario = false,
                                 EhResponsavel = true
                             })
                         )
@@ -148,7 +148,7 @@ namespace MonitoraSUS.Controllers
                             {
                                 IdPessoa = idPessoaInserida,
                                 IdEstado = Convert.ToInt32(collection["select-Estado"]),
-                                EhSecretario = true,
+                                EhSecretario = false,
                                 EhResponsavel = true
                             })
                         )
@@ -231,7 +231,7 @@ namespace MonitoraSUS.Controllers
         /// <returns></returns>
         // GET: Todos agentes de saúde
 
-        [Authorize(Roles = "SECRETARIO")]
+        [Authorize(Roles = "SECRETARIO, COORDENADOR, ADMS")]
         public ActionResult IndexApproveAgent()
         {
             // usuario logado
