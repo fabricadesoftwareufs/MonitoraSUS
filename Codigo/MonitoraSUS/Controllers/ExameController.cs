@@ -1,7 +1,9 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Model;
+using Model.ViewModel;
 using MonitoraSUS.Utils;
 using Service.Interface;
 using System;
@@ -11,7 +13,7 @@ using System.Security.Claims;
 
 namespace MonitoraSUS.Controllers
 {
-    //[Authorize]
+    [Authorize]
     public class ExameController : Controller
     {
         private readonly IVirusBacteriaService _virusBacteriaContext;
@@ -314,7 +316,7 @@ namespace MonitoraSUS.Controllers
              *  pegando informações do agente de saúde logado no sistema 
              */
             var agente = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
-
+          
 
             var secretarioMunicipio = _pessoaTrabalhaMunicipioContext.GetByIdPessoa(agente.UsuarioModel.IdPessoa);
             var secretarioEstado = _pessoaTrabalhaEstadoContext.GetByIdPessoa(agente.UsuarioModel.IdPessoa);
@@ -371,8 +373,7 @@ namespace MonitoraSUS.Controllers
              * os exames que ele pode ver
              */
             var usuario = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
-
-
+           
 
             var exames = new List<ExameModel>();
             if (usuario.RoleUsuario.Equals("AGENTE"))

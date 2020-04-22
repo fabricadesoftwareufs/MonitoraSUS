@@ -61,15 +61,22 @@ namespace MonitoraSUS
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
+
+            app.UseExceptionHandler("/Error/500");
+            app.UseStatusCodePagesWithReExecute("/Error/{0}");
+
+
+
+
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
