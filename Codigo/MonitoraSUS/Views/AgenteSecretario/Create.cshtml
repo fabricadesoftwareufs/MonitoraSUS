@@ -7,6 +7,8 @@
 	var typeCad = ViewBag.userType == 1 ? "Gestor de Saúde" : "Responsável pela Notificação de Exames";
 	var perguntaVinculo = ViewBag.userType == 1 ? "Qual estado/município você é gestor de saúde?" : "Em qual estado/município irá notificar resultados de exames?";
 
+	var perguntaVinculo = ViewBag.userType == 1 ? "Qual estado/município você é gestor de saúde?" : "Em qual estado/município irá notificar resultados de exames?";
+
 	var caseController = typeCad == "Agente" ? "CreateAgent" : "CreateSec";
 	var listaDeEstados = ViewBag.estados as List<Model.PessoaModel>;
 	var googleKey = ViewBag.googleKey;
