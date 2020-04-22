@@ -410,18 +410,12 @@
                     @if (TempData["mensagemSucesso"] != null)
                     {
                         <p> @TempData["mensagemSucesso"] </p>
-
-                        <p>
-                            Resultado do Exame notificado com SUCESSO!
-                        </p>
-                        <a class="btn btn-success" asp-action="Index">Ok</a>
                     }
                     else
                     {
                         <p> @TempData["mensagemErro"] </p>
-                        <button type="button" data-dismiss="modal" class="btn btn-success">Ok</button>
-
                     }
+                    <button type="button" data-dismiss="modal" class="btn btn-success">Ok</button>
                 </div>
             </div>
         </div>
