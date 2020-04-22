@@ -36,7 +36,7 @@ namespace Service
         public List<PessoaTrabalhaEstadoModel> GetAllAgents()
             => _context
                 .Pessoatrabalhaestado
-                .Where(p => p.EhSecretario.Equals(0))
+                .Where(p => p.EhSecretario.Equals(0) && p.EhResponsavel.Equals(0))
                 .Select(p => new PessoaTrabalhaEstadoModel
                 {
                     IdPessoa = p.Idpessoa,

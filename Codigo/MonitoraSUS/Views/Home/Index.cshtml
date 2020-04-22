@@ -143,7 +143,7 @@
                                 </a>
                             </div>
                             <div class="col-xl-2 col-md-4">
-                                <a asp-controller="AgenteSecretario" asp-action="IndexApproveAgent">
+                                <a asp-controller="AgenteSecretario" asp-action="IndexApproveAgent" asp-route-ehResponsavel="0">
                                     <div class="card card-stats ">
                                         <div class="card-body card-round card-button bg-gradient-primary">
                                             <div class="row">
@@ -264,7 +264,7 @@
                                 </a>
                             </div>
                             <div class="col-xl-2 col-md-4">
-                                <a asp-controller="AgenteSecretario" asp-action="Index">
+                                <a asp-controller="AgenteSecretario" asp-action="IndexApproveAgent" asp-route-ehResponsavel="1">
                                     <div class="card card-stats ">
                                         <div class="card-body card-round card-button  bg-gradient-primary">
                                             <div class="row">
@@ -286,7 +286,7 @@
                                 </a>
                             </div>
                             <div class="col-xl-2 col-md-4">
-                                <a asp-controller="AgenteSecretario" asp-action="IndexApproveAgent">
+                                <a asp-controller="AgenteSecretario" asp-action="IndexApproveAgent" asp-route-ehResponsavel="0">
                                     <div class="card card-stats ">
                                         <div class="card-body card-round card-button bg-gradient-primary">
                                             <div class="row">
@@ -349,26 +349,26 @@
                         }
                         else if (User.IsInRole("ADM"))
                         {
-                            <div class="col-xl-2 col-md-4">
-                                <a asp-action="Index" asp-controller="AgenteSecretario">
-                                    <div class="card card-stats ">
-                                        <div class="card-body card-round card-button  bg-gradient-primary">
-                                            <div class="row">
+                    <div class="col-xl-2 col-md-4">
+                        <a asp-controller="AgenteSecretario" asp-action="IndexApproveAgent" asp-route-ehResponsavel="1">
+                            <div class="card card-stats ">
+                                <div class="card-body card-round card-button  bg-gradient-primary">
+                                    <div class="row">
 
-                                                <div class="col-auto">
-                                                    <div class="icon icon-shape bg-translucent-white text-white rounded-circle shadow">
-                                                        <i class="fas fa-users-cog"></i>
+                                        <div class="col-auto">
+                                            <div class="icon icon-shape bg-translucent-white text-white rounded-circle shadow">
+                                                <i class="fas fa-users-cog"></i>
 
-                                                    </div>
-                                                </div>
-                                                <div class="col">
-                                                    <h5 class="card-title text-uppercase text-muted-white mb-0">Autorizar Gestores de Saúde</h5>
-                                                </div>
                                             </div>
                                         </div>
+                                        <div class="col">
+                                            <h5 class="card-title text-uppercase text-muted-white mb-0">Autorizar Gestores de Saúde</h5>
+                                        </div>
                                     </div>
-                                </a>
+                                </div>
                             </div>
+                        </a>
+                    </div>
                             <!--div class="col-xl-2 col-md-4">
                                 <a href="@Url.Action("Create", "AgenteSecretario", new { userType = 1 })">
                                     <div class="card card-stats ">

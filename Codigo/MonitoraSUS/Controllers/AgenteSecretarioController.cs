@@ -223,16 +223,19 @@ namespace MonitoraSUS.Controllers
                 return View();
             }
         }
-        //========================= AGENT CONTROL ACESS ====================
-        /// <summary>
-        /// Se for secretario poderá administrar o status do agente no sistema, A, I, S. 
-        /// Gerenciar autorização do agente de saúde
-        /// </summary>
-        /// <returns></returns>
-        // GET: Todos agentes de saúde
 
+        //========================= AGENT, GEST CONTROL ACESS ====================
+        /// <summary>
+        /// Se for secretario poderá administrar o status do agente/gestor no sistema, A, I, S. 
+        /// Gerenciar autorização do agente/gestor de saúde
+        /// </summary>
+        /// <param name="ehResponsavel">Se for 0 é agente e se for 1 é gestor</param>
+        /// <returns></returns>
         [Authorize(Roles = "SECRETARIO, COORDENADOR, ADMS")]
-        public ActionResult IndexApproveAgent()
+
+        // GET: AgenteSecretario/IndexApproveAgent/ehResponsavel
+        [HttpGet("[controller]/[action]/{ehResponsavel}")]
+        public ActionResult IndexApproveAgent(int ehResponsavel)
         {
             // usuario logado
             var usuario = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
@@ -242,7 +245,12 @@ namespace MonitoraSUS.Controllers
             var pessoaTrabalhaEstado = _pessoaTrabalhaEstadoService.GetByIdPessoa(usuario.UsuarioModel.IdPessoa);
             if (pessoaTrabalhaEstado != null)
             {
-                var agentesEstado = _pessoaTrabalhaEstadoService.GetAllAgents();
+                var agentesEstado = new List<PessoaTrabalhaEstadoModel>();
+                if (ehResponsavel == 0)
+                    agentesEstado = _pessoaTrabalhaEstadoService.GetAllAgents();
+                else
+                    agentesEstado = _pessoaTrabalhaEstadoService.GetAllGestores();
+
                 agentesEstado.ForEach(item => agentes.Add(new AgenteMunicipioEstadoViewModel { Pessoa = _pessoaService.GetById(item.IdPessoa), PessoaEstado = item, Situacao = item.SituacaoCadastro }));
 
                 agentes.ForEach(item => solicitantes.Add(new SolicitanteAprovacaoModelView
@@ -259,8 +267,14 @@ namespace MonitoraSUS.Controllers
             }
             else
             {
-                var agentesMunicipio = _pessoaTrabalhaMunicipioService.GetAllAgents();
+                var agentesMunicipio = new List<PessoaTrabalhaMunicipioModel>();
+                if (ehResponsavel == 0)
+                    agentesMunicipio = _pessoaTrabalhaMunicipioService.GetAllAgents();
+                else
+                    agentesMunicipio = _pessoaTrabalhaMunicipioService.GetAllGestores();
+
                 agentesMunicipio.ForEach(item => agentes.Add(new AgenteMunicipioEstadoViewModel { Pessoa = _pessoaService.GetById(item.IdPessoa), PessoaMunicipio = item, Situacao = item.SituacaoCadastro }));
+
                 agentes.ForEach(item => solicitantes.Add(new SolicitanteAprovacaoModelView
                 {
                     IdPessoa = item.Pessoa.Idpessoa,
@@ -274,13 +288,19 @@ namespace MonitoraSUS.Controllers
                 }));
             }
 
+            if (ehResponsavel == 0)
+                ViewBag.entidade = "Agente";
+            else
+                ViewBag.entidade = "Gestor";
+
             return View(solicitantes);
         }
 
-        // GET: AgenteSecretario/IndexApproveAgente/ExcludeAgent/id
-        public ActionResult ExcludeAgent(int id)
+        // GET: AgenteSecretario/ExcludeAgent/{agente|gestor}/id
+        [HttpGet("[controller]/[action]/{entidade}/{idPessoa}")]
+        public ActionResult ExcludeAgent(string entidade, int idPessoa)
         {
-            var agenteEstado = _pessoaTrabalhaEstadoService.GetByIdPessoa(id);
+            var agenteEstado = _pessoaTrabalhaEstadoService.GetByIdPessoa(idPessoa);
             if (agenteEstado != null)
             {
                 _pessoaTrabalhaEstadoService.Delete(agenteEstado.IdPessoa, agenteEstado.IdEstado);
@@ -294,7 +314,7 @@ namespace MonitoraSUS.Controllers
             }
             else
             {
-                var agenteMunicipio = _pessoaTrabalhaMunicipioService.GetByIdPessoa(id);
+                var agenteMunicipio = _pessoaTrabalhaMunicipioService.GetByIdPessoa(idPessoa);
                 _pessoaTrabalhaMunicipioService.Delete(agenteMunicipio.IdPessoa, agenteMunicipio.IdMunicipio);
 
                 var usuario = _usuarioService.GetByIdPessoa(agenteMunicipio.IdPessoa);
@@ -304,13 +324,20 @@ namespace MonitoraSUS.Controllers
                 _pessoaService.Delete(agenteMunicipio.IdPessoa);
             }
 
-            return RedirectToAction(nameof(IndexApproveAgent));
+            int responsavel;
+            if (entidade.Equals("Agente"))
+                responsavel = 0;
+            else
+                responsavel = 1;
+
+            return RedirectToAction(nameof(IndexApproveAgent), new { ehResponsavel = responsavel });
         }
 
-        // GET: AgenteSecretario/IndexApproveAgente/ActivateAgent/id
-        public ActionResult ActivateAgent(int id)
+        // GET: AgenteSecretario/ActivateAgent/{agente|gestor}/id
+        [HttpGet("[controller]/[action]/{entidade}/{idPessoa}")]
+        public ActionResult ActivateAgent(string entidade, int idPessoa)
         {
-            var agenteEstado = _pessoaTrabalhaEstadoService.GetByIdPessoa(id);
+            var agenteEstado = _pessoaTrabalhaEstadoService.GetByIdPessoa(idPessoa);
             if (agenteEstado != null)
             {
                 agenteEstado.SituacaoCadastro = "A";
@@ -318,18 +345,26 @@ namespace MonitoraSUS.Controllers
             }
             else
             {
-                var agenteMunicipio = _pessoaTrabalhaMunicipioService.GetByIdPessoa(id);
+                var agenteMunicipio = _pessoaTrabalhaMunicipioService.GetByIdPessoa(idPessoa);
                 agenteMunicipio.SituacaoCadastro = "A";
                 _pessoaTrabalhaMunicipioService.Update(agenteMunicipio);
             }
-            return RedirectToAction(nameof(IndexApproveAgent));
+
+            int responsavel;
+            if (entidade.Equals("Agente"))
+                responsavel = 0;
+            else
+                responsavel = 1;
+
+            return RedirectToAction(nameof(IndexApproveAgent), new { ehResponsavel = responsavel});
         }
 
-        // GET: AgenteSecretario/IndexApproveAgente/BlockAgent/id
-        public ActionResult BlockAgent(int id)
+        // GET: AgenteSecretario/BlockAgent/{agente|gestor}/id
+        [HttpGet("[controller]/[action]/{entidade}/{idPessoa}")]
+        public ActionResult BlockAgent(string entidade, int idPessoa)
         {
 
-            var agenteEstado = _pessoaTrabalhaEstadoService.GetByIdPessoa(id);
+            var agenteEstado = _pessoaTrabalhaEstadoService.GetByIdPessoa(idPessoa);
             if (agenteEstado != null)
             {
                 agenteEstado.SituacaoCadastro = "I";
@@ -337,11 +372,18 @@ namespace MonitoraSUS.Controllers
             }
             else
             {
-                var agenteMunicipio = _pessoaTrabalhaMunicipioService.GetByIdPessoa(id);
+                var agenteMunicipio = _pessoaTrabalhaMunicipioService.GetByIdPessoa(idPessoa);
                 agenteMunicipio.SituacaoCadastro = "I";
                 _pessoaTrabalhaMunicipioService.Update(agenteMunicipio);
             }
-            return RedirectToAction(nameof(IndexApproveAgent));
+
+            int responsavel;
+            if (entidade.Equals("Agente"))
+                responsavel = 0;
+            else
+                responsavel = 1;
+
+            return RedirectToAction(nameof(IndexApproveAgent), new { ehResponsavel = responsavel });
         }
 
         // ======================== PRIVATE METHODS ========================
