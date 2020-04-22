@@ -14,7 +14,7 @@ using System.Security.Claims;
 namespace MonitoraSUS.Controllers
 {
 
-    [Authorize(Roles = "AGENTE, SECRETARIO, ADMS")]
+    [Authorize(Roles = "AGENTE, SECRETARIO, ADM")]
     public class AgenteSecretarioController : Controller
     {
         private readonly IMunicipioService _municipioService;
@@ -231,8 +231,7 @@ namespace MonitoraSUS.Controllers
         /// </summary>
         /// <param name="ehResponsavel">Se for 0 é agente e se for 1 é gestor</param>
         /// <returns></returns>
-        [Authorize(Roles = "SECRETARIO, COORDENADOR, ADMS")]
-
+        [Authorize(Roles = "SECRETARIO, ADM")]
         // GET: AgenteSecretario/IndexApproveAgent/ehResponsavel
         [HttpGet("[controller]/[action]/{ehResponsavel}")]
         public ActionResult IndexApproveAgent(int ehResponsavel)
