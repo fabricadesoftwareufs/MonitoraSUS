@@ -14,7 +14,7 @@
      * para filtrar quem ele pode remover
      */
 
-     var agente = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
+     // var agente = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
 
     /*
      * Usuario para testes, comente a linhda de cima e
@@ -22,8 +22,8 @@
      * id do usuario que quiser
      */
 
-    //var agente = new UsuarioViewModel();
-    //agente.UsuarioModel = new Model.UsuarioModel { IdPessoa = 5 };
+    var agente = new UsuarioViewModel();
+    agente.UsuarioModel = new Model.UsuarioModel { IdPessoa = 5 };
 
 }
 
@@ -51,7 +51,7 @@
                             <h5 class="card-title">Filtre Exames por Data</h5>
                             <div class="form-inline">
                                 <form asp-controller="Exame" asp-action="Index">
-                                    <input type="date" required id="data-filtro" name="filtro" class=" form-control" />
+                                    <input type="date" required value="null" id="data-filtro" name="filtro" class=" form-control"/>
                                     <button type="submit" class="margin-left-10 btn btn-secondary">Filtrar</button>
                                 </form>
                             </div>

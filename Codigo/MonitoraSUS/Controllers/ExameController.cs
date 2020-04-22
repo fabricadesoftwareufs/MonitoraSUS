@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Model;
+using Model.ViewModel;
 using MonitoraSUS.Utils;
 using Service.Interface;
 using System;
@@ -313,8 +314,9 @@ namespace MonitoraSUS.Controllers
             /*
              *  pegando informações do agente de saúde logado no sistema 
              */
-            var agente = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
-
+            // var agente = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
+            var agente = new UsuarioViewModel();
+            agente.UsuarioModel = new UsuarioModel { IdPessoa = 5};
 
             var secretarioMunicipio = _pessoaTrabalhaMunicipioContext.GetByIdPessoa(agente.UsuarioModel.IdPessoa);
             var secretarioEstado = _pessoaTrabalhaEstadoContext.GetByIdPessoa(agente.UsuarioModel.IdPessoa);
@@ -370,9 +372,10 @@ namespace MonitoraSUS.Controllers
              * Pegando usuario logado e carregando 
              * os exames que ele pode ver
              */
-            var usuario = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
-
-
+            // var usuario = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
+            var usuario = new UsuarioViewModel();
+            usuario.UsuarioModel = new UsuarioModel { IdPessoa = 5 };
+            usuario.RoleUsuario = "COORDENADOR";
 
             var exames = new List<ExameModel>();
             if (usuario.RoleUsuario.Equals("AGENTE"))

@@ -1,13 +1,13 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace MonitoraSUS.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class HomeController : Controller
     {
         public IActionResult Index()
         {
+            ViewData["Message"] = "Your contact page.";
             return View();
         }
 
@@ -21,8 +21,9 @@ namespace MonitoraSUS.Controllers
         public IActionResult Contact()
         {
             ViewData["Message"] = "Your contact page.";
+            Response.StatusCode = 404;
+            return View("PaginaNaoEncontrada");
 
-            return View();
         }
 
         public IActionResult Privacy()
