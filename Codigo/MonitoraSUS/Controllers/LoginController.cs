@@ -16,10 +16,10 @@ namespace MonitoraSUS.Controllers
     [AllowAnonymous]
     public class LoginController : Controller
     {
-        private readonly IUsuarioService _usuarioService;
+        private static IUsuarioService _usuarioService;
         private readonly IPessoaService _pessoaService;
-        private readonly IEmailService _emailService;
-        private readonly IRecuperarSenhaService _recuperarSenhaService;
+        private static IEmailService _emailService;
+        private static IRecuperarSenhaService _recuperarSenhaService;
         public LoginController(IUsuarioService usuarioService, IPessoaService pessoaService, IEmailService emailService, IRecuperarSenhaService recuperarSenhaService)
         {
             _usuarioService = usuarioService;
@@ -118,6 +118,12 @@ namespace MonitoraSUS.Controllers
 
         public async Task<ActionResult> EmitirToken(string cpf, int finalidade = 0)
         {
+            (bool check1, bool check2, bool check3) = await GenerateToken(cpf, finalidade);
+            return (check1 && check2 && check3) ? RedirectToAction("Se funcionar") : RedirectToAction("Se não");
+        }
+
+        public static async Task<(bool, bool, bool)> GenerateToken(string cpf, int finalidade)
+        {
             if (Methods.ValidarCpf(cpf))
             {
                 var user = _usuarioService.GetByCpf(Methods.RemoveSpecialsCaracts(cpf));
@@ -139,21 +145,20 @@ namespace MonitoraSUS.Controllers
                         {
                             try
                             {
-                                // Email só será disparado caso a inserção seja feita com sucesso.
-                                await _emailService.SendEmailAsync(user.Email, "MonitoraSUS - Recuperacao de senha", Methods.MessageEmail(recSenha, finalidade));
-                                return RedirectToActionPermanent("Index", "Login", new { msg = "successSend" });
+                                await _emailService.SendEmailAsync(user.Email, "MonitoraSUS - Alteração de senha", Methods.MessageEmail(recSenha, finalidade));
+                                return (true, true, true);
                             }
                             catch (Exception e)
                             {
                                 throw e.InnerException;
                             }
                         }
-                        return RedirectToActionPermanent("Index", "Login", new { msg = "insertFail" });
+                        return (true, true, false);
                     }
-                    return RedirectToActionPermanent("Index", "Login", new { msg = "hasToken" });
+                    return (true, false, false);
                 }
             }
-            return RedirectToActionPermanent("Index", "Login", new { msg = "invalidUser" });
+            return (false, false, false);
         }
 
         [HttpGet("Login/RecuperarSenha/{token}")]

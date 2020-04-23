@@ -310,10 +310,6 @@ namespace MonitoraSUS.Controllers
             {
                 _pessoaTrabalhaEstadoService.Delete(agenteEstado.IdPessoa, agenteEstado.IdEstado);
 
-                var usuario = _usuarioService.GetByIdPessoa(agenteEstado.IdPessoa);
-                if (usuario != null)
-                    _usuarioService.Delete(usuario.IdUsuario);
-
                 _pessoaService.Delete(agenteEstado.IdPessoa);
 
             }
@@ -321,10 +317,6 @@ namespace MonitoraSUS.Controllers
             {
                 var agenteMunicipio = _pessoaTrabalhaMunicipioService.GetByIdPessoa(idPessoa);
                 _pessoaTrabalhaMunicipioService.Delete(agenteMunicipio.IdPessoa, agenteMunicipio.IdMunicipio);
-
-                var usuario = _usuarioService.GetByIdPessoa(agenteMunicipio.IdPessoa);
-                if (usuario != null)
-                    _usuarioService.Delete(usuario.IdUsuario);
 
                 _pessoaService.Delete(agenteMunicipio.IdPessoa);
             }
@@ -340,7 +332,7 @@ namespace MonitoraSUS.Controllers
 
         // GET: AgenteSecretario/ActivateAgent/{agente|gestor}/id
         [HttpGet("[controller]/[action]/{entidade}/{idPessoa}")]
-        public ActionResult ActivateAgent(string entidade, int idPessoa)
+        public async Task<ActionResult> ActivateAgent(string entidade, int idPessoa)
         {
             var agenteEstado = _pessoaTrabalhaEstadoService.GetByIdPessoa(idPessoa);
             if (agenteEstado != null)
@@ -359,7 +351,7 @@ namespace MonitoraSUS.Controllers
                         TipoUsuario = Methods.ReturnRoleId(entidade)
                     };
                     _usuarioService.Insert(usuario);
-                    emitirToken();
+                    (bool nCpf, bool nUsuario, bool nToken) = await LoginController.GenerateToken(usuario.Cpf, 1);
                 }
 
                 agenteEstado.SituacaoCadastro = "A";
@@ -383,6 +375,8 @@ namespace MonitoraSUS.Controllers
                         TipoUsuario = Methods.ReturnRoleId(entidade)
                     };
                     _usuarioService.Insert(usuario);
+                    (bool nCpf, bool nUsuario, bool nToken) = await LoginController.GenerateToken(usuario.Cpf, 1);
+                    
                 }
 
                 agenteMunicipio.SituacaoCadastro = "A";
