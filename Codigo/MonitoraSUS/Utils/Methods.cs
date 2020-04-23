@@ -28,16 +28,23 @@ namespace MonitoraSUS.Utils
                 frase.Append(letra);
             }
 
-            return Criptography.GenerateHashPasswd(frase.ToString());
+            return Criptography.GenerateHashString(frase.ToString());
         }
 
         public static string MessageEmail(RecuperarSenhaModel senhaModel, int finalidadeEmail = 0)
         {
-            return "<html><body>" +
-                "Foi solicitado uma recuperação de senha, clique no link abaixo para iniciar o processo de recuperação.<br>" +
-                "<a href='https://localhost:5001/Login/RecuperarSenha/" +
-                senhaModel.Token +
-                "'>Clique aqui mudar a senha</a>";
+            var uri = new Uri("http://www.monitorasus.ufs.br/");
+            switch (finalidadeEmail)
+            {
+                case 0:
+                    return "<html><body>" +
+                        "Foi solicitado uma recuperação de senha, clique no link abaixo para iniciar o processo de recuperação.<br>" +
+                        "<a href='https://localhost:5001/Login/RecuperarSenha/" +
+                            senhaModel.Token +
+                        "'>Clique aqui mudar a senha</a>";
+
+                default: return null;
+            }
         }
 
         public static string ReturnRole(int userType)

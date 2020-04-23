@@ -44,7 +44,7 @@ namespace MonitoraSUS.Controllers
             {
 
                 var cpf = Methods.ValidarCpf(login.Cpf) ? Methods.RemoveSpecialsCaracts(login.Cpf) : throw new Exception("CPF Invalido!!");
-                var senha = Criptography.GenerateHashPasswd(login.Senha);
+                var senha = Criptography.GenerateHashString(login.Senha);
 
                 var user = _usuarioService.GetByLogin(cpf, senha);
 
@@ -100,7 +100,7 @@ namespace MonitoraSUS.Controllers
             {
                 // Informações do objeto
                 usuario.Cpf = Methods.ValidarCpf(usuario.Cpf) ? Methods.RemoveSpecialsCaracts(usuario.Cpf) : throw new Exception("CPF Invalido!!");
-                usuario.Senha = Criptography.GenerateHashPasswd(usuario.Senha);
+                usuario.Senha = Criptography.GenerateHashString(usuario.Senha);
 
                 if (_usuarioService.Insert(usuario))
                     return RedirectToAction("SignIn", "Login");
@@ -170,7 +170,7 @@ namespace MonitoraSUS.Controllers
             var user = _usuarioService.GetById(Convert.ToInt32(collection["IdUsuario"]));
             if (user != null)
             {
-                user.Senha = Criptography.GenerateHashPasswd(collection["senha"]);
+                user.Senha = Criptography.GenerateHashString(collection["senha"]);
                 if (_usuarioService.Update(user))
                 {
                     _recuperarSenhaService.SetTokenInvalid(user.IdUsuario);

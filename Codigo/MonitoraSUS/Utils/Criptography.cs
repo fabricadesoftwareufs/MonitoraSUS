@@ -32,24 +32,24 @@ namespace MonitoraSUS.Utils
         /// <summary>
         /// Método GerarHashSenha - Gera um hash específico utilizado para gerar senhas.
         /// </summary>
-        /// <param name="senha"> Senha em texto plano (sem aplicação de Hash ou Criptografia). </param>
+        /// <param name="strToBeHashed"> Senha em texto plano (sem aplicação de Hash ou Criptografia). </param>
         /// <returns> Hash da senha fornecida. </returns>
-        public static string GenerateHashPasswd(string senha)
+        public static string GenerateHashString(string strToBeHashed)
         {
-            var senhaCifrada = Encoding.UTF8.GetBytes(senha);
+            var hashedString = Encoding.UTF8.GetBytes(strToBeHashed);
 
             // Aplicação da sequência MD5, SHA256, MD5, SHA256.
             AlgoritmoFactory(ALGORITMS.MD5);
-            senhaCifrada = Algoritm.ComputeHash(senhaCifrada);
+            hashedString = Algoritm.ComputeHash(hashedString);
             AlgoritmoFactory(ALGORITMS.SHA256);
-            senhaCifrada = Algoritm.ComputeHash(senhaCifrada);
+            hashedString = Algoritm.ComputeHash(hashedString);
             AlgoritmoFactory(ALGORITMS.MD5);
-            senhaCifrada = Algoritm.ComputeHash(senhaCifrada);
+            hashedString = Algoritm.ComputeHash(hashedString);
             AlgoritmoFactory(ALGORITMS.SHA256);
-            senhaCifrada = Algoritm.ComputeHash(senhaCifrada);
+            hashedString = Algoritm.ComputeHash(hashedString);
 
             var stringSenha = new StringBuilder();
-            foreach (var caractere in senhaCifrada)
+            foreach (var caractere in hashedString)
                 stringSenha.Append(caractere.ToString("X2"));
 
             return stringSenha.ToString();

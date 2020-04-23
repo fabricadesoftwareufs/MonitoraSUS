@@ -5743,7 +5743,7 @@ CREATE TABLE IF NOT EXISTS `pessoa` (
   `longitude` varchar(50) NOT NULL DEFAULT '0',
   `foneCelular` varchar(15) NOT NULL,
   `foneFixo` varchar(15) DEFAULT NULL,
-  `email` varchar(60) DEFAULT NULL,
+  `email` varchar(60) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `dataNascimento` date NOT NULL,
   `hipertenso` tinyint NOT NULL DEFAULT '0',
   `diabetes` tinyint NOT NULL DEFAULT '0',
@@ -5755,7 +5755,7 @@ CREATE TABLE IF NOT EXISTS `pessoa` (
   PRIMARY KEY (`idpessoa`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
--- Copiando dados para a tabela monitorasus.pessoa: ~2 rows (aproximadamente)
+-- Copiando dados para a tabela monitorasus.pessoa: ~3 rows (aproximadamente)
 /*!40000 ALTER TABLE `pessoa` DISABLE KEYS */;
 INSERT INTO `pessoa` (`idpessoa`, `cpf`, `nome`, `sexo`, `cep`, `rua`, `bairro`, `cidade`, `estado`, `numero`, `complemento`, `latitude`, `longitude`, `foneCelular`, `foneFixo`, `email`, `dataNascimento`, `hipertenso`, `diabetes`, `obeso`, `cardiopatia`, `imunodeprimido`, `cancer`, `doencaRespiratoria`) VALUES
 	(2, '00000000000', 'Gabriel Santan', 'M', '49200000', 'Rua João Francisco da Silva', 'Centro', 'Estância', 'Sergipe', '234', '', '-99.99999999', '-99.99999999', '79999914349', '', 'gabriel@hmtil.com', '1996-10-15', 1, 0, 1, 0, 0, 1, 0),
@@ -5780,7 +5780,7 @@ CREATE TABLE IF NOT EXISTS `pessoatrabalhaestado` (
   CONSTRAINT `fk_pessoatrabalhaestado_empresaexame1` FOREIGN KEY (`idEmpresaExame`) REFERENCES `empresaexame` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- Copiando dados para a tabela monitorasus.pessoatrabalhaestado: ~0 rows (aproximadamente)
+-- Copiando dados para a tabela monitorasus.pessoatrabalhaestado: ~2 rows (aproximadamente)
 /*!40000 ALTER TABLE `pessoatrabalhaestado` DISABLE KEYS */;
 INSERT INTO `pessoatrabalhaestado` (`idpessoa`, `idEstado`, `ehResponsavel`, `ehSecretario`, `situacaoCadastro`, `idEmpresaExame`) VALUES
 	(3, 28, 1, 1, 'S', NULL),
@@ -5818,10 +5818,13 @@ CREATE TABLE IF NOT EXISTS `recuperarsenha` (
   PRIMARY KEY (`id`),
   KEY `fk_recuperarsenha_usuario1_idx` (`idUsuario`),
   CONSTRAINT `fk_recuperarsenha_usuario1` FOREIGN KEY (`idUsuario`) REFERENCES `usuario` (`idUsuario`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 
 -- Copiando dados para a tabela monitorasus.recuperarsenha: ~2 rows (aproximadamente)
 /*!40000 ALTER TABLE `recuperarsenha` DISABLE KEYS */;
+INSERT INTO `recuperarsenha` (`id`, `token`, `inicioToken`, `fimToken`, `ehValido`, `idUsuario`) VALUES
+	(11, '5EFA9BF514EA68A61A9E3739DD7E84008013E0B6A612D4328361E9B99D4B9715', '2020-04-20 11:18:23', '2020-04-21 11:18:23', 0, 2),
+	(12, 'EA7DBCAA8961D0EED5F8A260426880295D629B29AD4323018F3AD69F55EAB461', '2020-04-20 11:19:44', '2020-04-21 11:19:44', 0, 2);
 /*!40000 ALTER TABLE `recuperarsenha` ENABLE KEYS */;
 
 -- Copiando estrutura para tabela monitorasus.situacaopessoavirusbacteria
@@ -5845,7 +5848,7 @@ CREATE TABLE IF NOT EXISTS `usuario` (
   `idUsuario` int NOT NULL AUTO_INCREMENT,
   `cpf` varchar(45) NOT NULL,
   `senha` varchar(100) NOT NULL,
-  `email` varchar(45) DEFAULT NULL,
+  `email` varchar(45) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `tipoUsuario` tinyint NOT NULL,
   `idPessoa` int NOT NULL,
   PRIMARY KEY (`idUsuario`),
