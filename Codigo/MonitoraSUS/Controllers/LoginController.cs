@@ -118,6 +118,12 @@ namespace MonitoraSUS.Controllers
 
         public async Task<ActionResult> EmitirToken(string cpf)
         {
+            (bool check1, bool check2, bool check3) = await GenerateToken(cpf);
+            return (check1 && check2 && check3) ? RedirectToAction("Se funcionar") : RedirectToAction("Se não");
+        }
+
+        public async Task<(bool, bool, bool)> GenerateToken(string cpf)
+        {
             if (Methods.ValidarCpf(cpf))
             {
                 var user = _usuarioService.GetByCpf(Methods.RemoveSpecialsCaracts(cpf));
@@ -141,19 +147,19 @@ namespace MonitoraSUS.Controllers
                             {
                                 // Email só será disparado caso a inserção seja feita com sucesso.
                                 await _emailService.SendEmailAsync(user.Email, "MonitoraSUS - Recuperacao de senha", Methods.MessageEmail(recSenha));
-                                return RedirectToActionPermanent("Index", "Login", new { msg = "successSend" });
+                                return (true, true, true);
                             }
                             catch (Exception e)
                             {
                                 throw e.InnerException;
                             }
                         }
-                        return RedirectToActionPermanent("Index", "Login", new { msg = "insertFail" });
+                        return (true, true, false);
                     }
-                    return RedirectToActionPermanent("Index", "Login", new { msg = "hasToken" });
+                    return (true, false, false);
                 }
             }
-            return RedirectToActionPermanent("Index", "Login", new { msg = "invalidUser" });
+            return (false, false, false);
         }
 
         [HttpGet("Login/RecuperarSenha/{token}")]
