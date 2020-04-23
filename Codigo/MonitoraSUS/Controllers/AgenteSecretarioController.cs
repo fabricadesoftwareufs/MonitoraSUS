@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace MonitoraSUS.Controllers
 {
@@ -24,10 +25,13 @@ namespace MonitoraSUS.Controllers
         private readonly IPessoaTrabalhaMunicipioService _pessoaTrabalhaMunicipioService;
         private readonly IUsuarioService _usuarioService;
         private readonly IConfiguration _configuration;
+        private readonly IRecuperarSenhaService _recuperarSenhaService;
+        private readonly IEmailService _emailService;
 
         public AgenteSecretarioController(IMunicipioService municipioService, IEstadoService estadoService,
             IPessoaService pessoaService, IPessoaTrabalhaMunicipioService pessoaTrabalhaMunicipioService,
-            IPessoaTrabalhaEstadoService pessoaTrabalhaEstadoService, IUsuarioService usuarioService, IConfiguration configuration)
+            IPessoaTrabalhaEstadoService pessoaTrabalhaEstadoService, IUsuarioService usuarioService, IConfiguration configuration,
+            IRecuperarSenhaService recuperarSenhaService, IEmailService emailService)
         {
             _municipioService = municipioService;
             _estadoService = estadoService;
@@ -36,6 +40,8 @@ namespace MonitoraSUS.Controllers
             _pessoaTrabalhaMunicipioService = pessoaTrabalhaMunicipioService;
             _usuarioService = usuarioService;
             _configuration = configuration;
+            _recuperarSenhaService = recuperarSenhaService;
+            _emailService = emailService;
         }
 
         // GET: AgenteSecretario
@@ -339,12 +345,46 @@ namespace MonitoraSUS.Controllers
             var agenteEstado = _pessoaTrabalhaEstadoService.GetByIdPessoa(idPessoa);
             if (agenteEstado != null)
             {
+                //se o ator tiver o cadstro solicitado, será gerado um novo usuario pra ele 
+                if (agenteEstado.SituacaoCadastro.Equals("S"))
+                {
+                    var pessoa = _pessoaService.GetById(agenteEstado.IdPessoa);
+
+                    var usuario = new UsuarioModel
+                    {
+                        IdPessoa = pessoa.Idpessoa,
+                        Cpf = pessoa.Cpf,
+                        Email = pessoa.Email,
+                        Senha = Methods.GenerateToken(),           
+                        TipoUsuario = Methods.ReturnRoleId(entidade)
+                    };
+                    _usuarioService.Insert(usuario);
+                    emitirToken();
+                }
+
                 agenteEstado.SituacaoCadastro = "A";
                 _pessoaTrabalhaEstadoService.Update(agenteEstado);
             }
             else
             {
                 var agenteMunicipio = _pessoaTrabalhaMunicipioService.GetByIdPessoa(idPessoa);
+               
+                //se o ator tiver o cadstro solicitado, será gerado um novo usuario pra ele 
+                if (agenteMunicipio.SituacaoCadastro.Equals("S"))
+                {
+                    var pessoa = _pessoaService.GetById(agenteMunicipio.IdPessoa);
+
+                    var usuario = new UsuarioModel
+                    {
+                        IdPessoa = pessoa.Idpessoa,
+                        Cpf = pessoa.Cpf,
+                        Email = pessoa.Email,
+                        Senha = Methods.GenerateToken(),
+                        TipoUsuario = Methods.ReturnRoleId(entidade)
+                    };
+                    _usuarioService.Insert(usuario);
+                }
+
                 agenteMunicipio.SituacaoCadastro = "A";
                 _pessoaTrabalhaMunicipioService.Update(agenteMunicipio);
             }

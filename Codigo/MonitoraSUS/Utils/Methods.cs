@@ -31,7 +31,7 @@ namespace MonitoraSUS.Utils
             return Criptography.GenerateHashString(frase.ToString());
         }
 
-        public static string MessageEmail(RecuperarSenhaModel senhaModel, int finalidadeEmail = 0)
+        public static string MessageEmail(RecuperarSenhaModel senhaModel, int finalidadeEmail)
         {
             var uri = new Uri("http://www.monitorasus.ufs.br/");
             switch (finalidadeEmail)
@@ -42,6 +42,12 @@ namespace MonitoraSUS.Utils
                         "<a href='https://localhost:5001/Login/RecuperarSenha/" +
                             senhaModel.Token +
                         "'>Clique aqui mudar a senha</a>";
+
+                case 1: return "<html><body>" +
+                        "Seu cadastro foi aprovado e para fazer o login terá que criar uma senha, clique no link abaixo para criar uma nova senha.<br>" +
+                        "<a href='https://localhost:5001/Login/RecuperarSenha/" +
+                            senhaModel.Token +
+                        "'>Clique aqui para criar uma senha</a>";
 
                 default: return null;
             }
@@ -57,6 +63,19 @@ namespace MonitoraSUS.Utils
                 case 3: return "SECRETARIO";
                 case 4: return "ADM";
                 default: return "UNDEFINED";
+            }
+        }
+
+        public static int ReturnRoleId(string userType)
+        {
+            switch (userType.ToUpper())
+            {
+                case "USUARIO": return 0;
+                case "AGENTE": return 1;
+                case "GESTOR": return 2;
+                case "SECRETARIO": return 3;
+                case "ADM": return 4;
+                default: return -1;
             }
         }
 

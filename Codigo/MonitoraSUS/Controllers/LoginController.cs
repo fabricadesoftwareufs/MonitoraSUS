@@ -116,7 +116,7 @@ namespace MonitoraSUS.Controllers
             return View();
         }
 
-        public async Task<ActionResult> EmitirToken(string cpf)
+        public async Task<ActionResult> EmitirToken(string cpf, int finalidade = 0)
         {
             if (Methods.ValidarCpf(cpf))
             {
@@ -140,7 +140,7 @@ namespace MonitoraSUS.Controllers
                             try
                             {
                                 // Email só será disparado caso a inserção seja feita com sucesso.
-                                await _emailService.SendEmailAsync(user.Email, "MonitoraSUS - Recuperacao de senha", Methods.MessageEmail(recSenha));
+                                await _emailService.SendEmailAsync(user.Email, "MonitoraSUS - Recuperacao de senha", Methods.MessageEmail(recSenha, finalidade));
                                 return RedirectToActionPermanent("Index", "Login", new { msg = "successSend" });
                             }
                             catch (Exception e)
