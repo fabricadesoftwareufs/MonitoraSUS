@@ -1,12 +1,23 @@
 ﻿var placeSearch, autocomplete, inputHtml, geocoder;
 inputHtml = document.getElementById('input-pesquisa');
 
+var span = document.getElementById('spanInvalidCep');
+
+// Objects forms
 var componentForm = {
     route: 'long_name',
     street_number: 'short_name',
     administrative_area_level_1: 'short_name',
     administrative_area_level_2: 'long_name',
     postal_code: 'short_name'
+};
+
+var formCep = {
+    cep: document.getElementById('postal_code'),
+    bairro: document.getElementById('input-bairro'),
+    localidade: document.getElementById('administrative_area_level_2'),
+    uf: document.getElementById('administrative_area_level_1'),
+    logradouro: document.getElementById('route')
 };
 
 function initAutocomplete() {
@@ -134,37 +145,31 @@ function validaCpf() {
 }
 
 function PreencheForm() {
-    let span = document.getElementById('spanInvalidCep');
-
     if ((!isNaN(inputHtml.value) || inputHtml.value.toString().match(/\d{5}-\d{3}/))
         && inputHtml.value !== ''
         && (inputHtml.value.length == 8 || inputHtml.value.length == 9)
     ) {
-        let url = `https://viacep.com.br/ws/${inputHtml.value}/json/`;
+        BuscaViaCep(inputHtml.value);
+    }
+}
 
-        $.get(url, null, function (data) {
-            let formCep = {
-                cep: document.getElementById('postal_code'),
-                bairro: document.getElementById('input-bairro'),
-                localidade: document.getElementById('administrative_area_level_2'),
-                uf: document.getElementById('administrative_area_level_1'),
-                logradouro: document.getElementById('route')
-            };
+function BuscaViaCep(cep) {
+    let url = `https://viacep.com.br/ws/${cep}/json/`;
 
-            if (!data.erro) {
-                for (let input in formCep) {
-                    span.hidden = true;
-                    formCep[input].value = '';
-                    for (let value in data) {
-                        if (formCep[input].name.toLowerCase() == value) {
-                            formCep[input].value = data[value];
-                            formCep[input].setAttribute('readonly', 'true');
-                        }
+    $.get(url, null, function (data) {
+        if (!data.erro) {
+            for (let input in formCep) {
+                span.hidden = true;
+                formCep[input].value = '';
+                for (let value in data) {
+                    if (formCep[input].name.toLowerCase() == value) {
+                        formCep[input].value = data[value];
+                        formCep[input].setAttribute('readonly', 'true');
                     }
                 }
-                ProcuraEndereco(formCep.logradouro.value);
-            } else
-                span.hidden = false;
-        })
-    }
+            }
+            ProcuraEndereco(formCep.logradouro.value);
+        } else
+            span.hidden = false;
+    })
 }
