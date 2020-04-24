@@ -128,7 +128,7 @@ namespace Service
             entity.Senha = model.Senha;
             entity.TipoUsuario = Convert.ToByte(model.TipoUsuario);
             entity.Email = model.Email;
-
+            entity.IdPessoa = model.IdPessoa;
             return entity;
         }
     }

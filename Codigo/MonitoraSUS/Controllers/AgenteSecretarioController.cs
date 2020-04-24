@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace MonitoraSUS.Controllers
 {
@@ -24,10 +25,12 @@ namespace MonitoraSUS.Controllers
         private readonly IPessoaTrabalhaMunicipioService _pessoaTrabalhaMunicipioService;
         private readonly IUsuarioService _usuarioService;
         private readonly IConfiguration _configuration;
-
+        private readonly IRecuperarSenhaService _recuperarSenhaService;
+        private readonly IEmailService _emailService;
         public AgenteSecretarioController(IMunicipioService municipioService, IEstadoService estadoService,
             IPessoaService pessoaService, IPessoaTrabalhaMunicipioService pessoaTrabalhaMunicipioService,
-            IPessoaTrabalhaEstadoService pessoaTrabalhaEstadoService, IUsuarioService usuarioService, IConfiguration configuration)
+            IPessoaTrabalhaEstadoService pessoaTrabalhaEstadoService, IUsuarioService usuarioService, IConfiguration configuration,
+            IRecuperarSenhaService recuperarSenhaService, IEmailService emailService)
         {
             _municipioService = municipioService;
             _estadoService = estadoService;
@@ -36,21 +39,14 @@ namespace MonitoraSUS.Controllers
             _pessoaTrabalhaMunicipioService = pessoaTrabalhaMunicipioService;
             _usuarioService = usuarioService;
             _configuration = configuration;
+            _recuperarSenhaService = recuperarSenhaService;
+            _emailService = emailService;
         }
 
         // GET: AgenteSecretario
         public ActionResult Index()
         {
-            var pessoas = _pessoaService.GetAll();
-            var secMuniEst = new List<SecretarioMunicipioEstadoViewModel>();
-
-            var secretariosEstadoPendentes = _pessoaTrabalhaEstadoService.GetAllGestores();
-            var secretariosMunicipioPendente = _pessoaTrabalhaMunicipioService.GetAllGestores();
-
-            secretariosEstadoPendentes.ForEach(item => secMuniEst.Add(new SecretarioMunicipioEstadoViewModel { Pessoa = _pessoaService.GetById(item.IdPessoa), PessoaEstado = item, Situacao = 0 }));
-            secretariosMunicipioPendente.ForEach(item => secMuniEst.Add(new SecretarioMunicipioEstadoViewModel { Pessoa = _pessoaService.GetById(item.IdPessoa), PessoaMunicipio = item, Situacao = 0 }));
-
-            return View(secMuniEst);
+            return View();
         }
 
         // GET: AgenteSecretario/Details/5
@@ -224,7 +220,7 @@ namespace MonitoraSUS.Controllers
             }
         }
 
-        //========================= AGENT, GEST CONTROL ACESS ====================
+        //========================= AGENTE, GESTOR CONTROL ACESS ====================
         /// <summary>
         /// Se for secretario poderá administrar o status do agente/gestor no sistema, A, I, S. 
         /// Gerenciar autorização do agente/gestor de saúde
@@ -246,9 +242,9 @@ namespace MonitoraSUS.Controllers
             {
                 var agentesEstado = new List<PessoaTrabalhaEstadoModel>();
                 if (ehResponsavel == 0)
-                    agentesEstado = _pessoaTrabalhaEstadoService.GetAllAgents();
+                    agentesEstado = _pessoaTrabalhaEstadoService.GetAllAgentsEstado(pessoaTrabalhaEstado.IdEstado);
                 else
-                    agentesEstado = _pessoaTrabalhaEstadoService.GetAllGestores();
+                    agentesEstado = _pessoaTrabalhaEstadoService.GetAllGestoresEstado(pessoaTrabalhaEstado.IdEstado);
 
                 agentesEstado.ForEach(item => agentes.Add(new AgenteMunicipioEstadoViewModel { Pessoa = _pessoaService.GetById(item.IdPessoa), PessoaEstado = item, Situacao = item.SituacaoCadastro }));
 
@@ -266,11 +262,12 @@ namespace MonitoraSUS.Controllers
             }
             else
             {
+                var pessoaTrabalhaMunicipio = _pessoaTrabalhaMunicipioService.GetByIdPessoa(usuario.UsuarioModel.IdPessoa);
                 var agentesMunicipio = new List<PessoaTrabalhaMunicipioModel>();
                 if (ehResponsavel == 0)
-                    agentesMunicipio = _pessoaTrabalhaMunicipioService.GetAllAgents();
+                    agentesMunicipio = _pessoaTrabalhaMunicipioService.GetAllAgentsMunicipio(pessoaTrabalhaMunicipio.IdMunicipio);
                 else
-                    agentesMunicipio = _pessoaTrabalhaMunicipioService.GetAllGestores();
+                    agentesMunicipio = _pessoaTrabalhaMunicipioService.GetAllGestoresMunicipio(pessoaTrabalhaMunicipio.IdMunicipio);
 
                 agentesMunicipio.ForEach(item => agentes.Add(new AgenteMunicipioEstadoViewModel { Pessoa = _pessoaService.GetById(item.IdPessoa), PessoaMunicipio = item, Situacao = item.SituacaoCadastro }));
 
@@ -304,10 +301,6 @@ namespace MonitoraSUS.Controllers
             {
                 _pessoaTrabalhaEstadoService.Delete(agenteEstado.IdPessoa, agenteEstado.IdEstado);
 
-                var usuario = _usuarioService.GetByIdPessoa(agenteEstado.IdPessoa);
-                if (usuario != null)
-                    _usuarioService.Delete(usuario.IdUsuario);
-
                 _pessoaService.Delete(agenteEstado.IdPessoa);
 
             }
@@ -315,10 +308,6 @@ namespace MonitoraSUS.Controllers
             {
                 var agenteMunicipio = _pessoaTrabalhaMunicipioService.GetByIdPessoa(idPessoa);
                 _pessoaTrabalhaMunicipioService.Delete(agenteMunicipio.IdPessoa, agenteMunicipio.IdMunicipio);
-
-                var usuario = _usuarioService.GetByIdPessoa(agenteMunicipio.IdPessoa);
-                if (usuario != null)
-                    _usuarioService.Delete(usuario.IdUsuario);
 
                 _pessoaService.Delete(agenteMunicipio.IdPessoa);
             }
@@ -334,19 +323,80 @@ namespace MonitoraSUS.Controllers
 
         // GET: AgenteSecretario/ActivateAgent/{agente|gestor}/id
         [HttpGet("[controller]/[action]/{entidade}/{idPessoa}")]
-        public ActionResult ActivateAgent(string entidade, int idPessoa)
+        public async Task<ActionResult> ActivateAgent(string entidade, int idPessoa)
         {
+            bool sucess = true;
+
             var agenteEstado = _pessoaTrabalhaEstadoService.GetByIdPessoa(idPessoa);
             if (agenteEstado != null)
             {
-                agenteEstado.SituacaoCadastro = "A";
-                _pessoaTrabalhaEstadoService.Update(agenteEstado);
+                //se o ator tiver o cadstro solicitado, será gerado um novo usuario pra ele 
+                if (agenteEstado.SituacaoCadastro.Equals("S"))
+                {
+                    var pessoa = _pessoaService.GetById(agenteEstado.IdPessoa);
+
+                    var usuario = new UsuarioModel
+                    {
+                        IdPessoa = pessoa.Idpessoa,
+                        Cpf = pessoa.Cpf,
+                        Email = pessoa.Email,
+                        Senha = Methods.GenerateToken(),           
+                        TipoUsuario = Methods.ReturnRoleId(entidade)
+                    };
+                    if (_usuarioService.GetByCpf(pessoa.Cpf) == null)
+                        _usuarioService.Insert(usuario);
+
+                    (bool nCpf, bool nUsuario, bool nToken) =
+                                            await new LoginController(_usuarioService, _pessoaService, _emailService, _recuperarSenhaService).GenerateToken(usuario.Cpf, 1);
+
+                    if (!(nCpf && nUsuario && nToken))
+                    {
+                        _usuarioService.Delete(usuario.IdUsuario);
+                        sucess = false;
+                    }
+
+                }
+                if (sucess)
+                {
+                    agenteEstado.SituacaoCadastro = "A";
+                    _pessoaTrabalhaEstadoService.Update(agenteEstado);
+                }
             }
             else
             {
                 var agenteMunicipio = _pessoaTrabalhaMunicipioService.GetByIdPessoa(idPessoa);
-                agenteMunicipio.SituacaoCadastro = "A";
-                _pessoaTrabalhaMunicipioService.Update(agenteMunicipio);
+               
+                //se o ator tiver o cadstro solicitado, será gerado um novo usuario pra ele 
+                if (agenteMunicipio.SituacaoCadastro.Equals("S"))
+                {
+                    var pessoa = _pessoaService.GetById(agenteMunicipio.IdPessoa);
+
+                    var usuario = new UsuarioModel
+                    {
+                        IdPessoa = pessoa.Idpessoa,
+                        Cpf = pessoa.Cpf,
+                        Email = pessoa.Email,
+                        Senha = Methods.GenerateToken(),
+                        TipoUsuario = Methods.ReturnRoleId(entidade)
+                    };
+                    if (_usuarioService.GetByCpf(pessoa.Cpf) == null)
+                        _usuarioService.Insert(usuario);
+
+                    (bool nCpf, bool nUsuario, bool nToken) = 
+                        await new LoginController(_usuarioService, _pessoaService, _emailService, _recuperarSenhaService).GenerateToken(usuario.Cpf, 1);
+
+                    if (!(nCpf && nUsuario && nToken))
+                    {
+                        _usuarioService.Delete(usuario.IdUsuario);
+                        sucess = false;
+                    }
+
+                }
+                if (sucess)
+                {
+                    agenteMunicipio.SituacaoCadastro = "A";
+                    _pessoaTrabalhaMunicipioService.Update(agenteMunicipio);
+                }
             }
 
             int responsavel;
