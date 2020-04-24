@@ -220,7 +220,7 @@ namespace MonitoraSUS.Controllers
             }
         }
 
-        //========================= AGENT, GEST CONTROL ACESS ====================
+        //========================= AGENTE, GESTOR CONTROL ACESS ====================
         /// <summary>
         /// Se for secretario poderá administrar o status do agente/gestor no sistema, A, I, S. 
         /// Gerenciar autorização do agente/gestor de saúde
