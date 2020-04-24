@@ -26,8 +26,7 @@ namespace Persistence
         public virtual DbSet<Virusbacteria> Virusbacteria { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-        }
+        { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -154,13 +153,9 @@ namespace Persistence
 
                 entity.Property(e => e.IdExame).HasColumnName("idExame");
 
-                entity.Property(e => e.DataExame)
-                    .HasColumnName("dataExame")
-                    .HasColumnType("date");
+                entity.Property(e => e.DataExame).HasColumnName("dataExame");
 
-                entity.Property(e => e.DataInicioSintomas)
-                    .HasColumnName("dataInicioSintomas")
-                    .HasColumnType("date");
+                entity.Property(e => e.DataInicioSintomas).HasColumnName("dataInicioSintomas");
 
                 entity.Property(e => e.IdAgenteSaude).HasColumnName("idAgenteSaude");
 
@@ -299,6 +294,7 @@ namespace Persistence
                     .HasDefaultValueSql("0");
 
                 entity.Property(e => e.Email)
+                    .IsRequired()
                     .HasColumnName("email")
                     .HasMaxLength(60)
                     .IsUnicode(false);
@@ -356,6 +352,11 @@ namespace Persistence
                 entity.Property(e => e.Obeso)
                     .HasColumnName("obeso")
                     .HasDefaultValueSql("0");
+
+                entity.Property(e => e.OutrasComorbidades)
+                    .HasColumnName("outrasComorbidades")
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
 
                 entity.Property(e => e.Rua)
                     .IsRequired()
@@ -553,6 +554,7 @@ namespace Persistence
                     .IsUnicode(false);
 
                 entity.Property(e => e.Email)
+                    .IsRequired()
                     .HasColumnName("email")
                     .HasMaxLength(45)
                     .IsUnicode(false);

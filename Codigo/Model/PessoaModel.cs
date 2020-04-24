@@ -41,5 +41,6 @@ namespace Model
         public bool Imunodeprimido { get; set; }
         public bool Cancer { get; set; }
         public bool DoencaRespiratoria { get; set; }
+        public string OutrasComorbidades { get; set; }
     }
 }

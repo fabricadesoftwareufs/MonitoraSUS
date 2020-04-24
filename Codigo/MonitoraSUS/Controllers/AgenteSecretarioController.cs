@@ -340,7 +340,7 @@ namespace MonitoraSUS.Controllers
                         IdPessoa = pessoa.Idpessoa,
                         Cpf = pessoa.Cpf,
                         Email = pessoa.Email,
-                        Senha = Methods.GenerateToken(),           
+                        Senha = Methods.GenerateToken(),
                         TipoUsuario = Methods.ReturnRoleId(entidade)
                     };
                     if (_usuarioService.GetByCpf(pessoa.Cpf) == null)
@@ -365,7 +365,7 @@ namespace MonitoraSUS.Controllers
             else
             {
                 var agenteMunicipio = _pessoaTrabalhaMunicipioService.GetByIdPessoa(idPessoa);
-               
+
                 //se o ator tiver o cadstro solicitado, será gerado um novo usuario pra ele 
                 if (agenteMunicipio.SituacaoCadastro.Equals("S"))
                 {
@@ -382,7 +382,7 @@ namespace MonitoraSUS.Controllers
                     if (_usuarioService.GetByCpf(pessoa.Cpf) == null)
                         _usuarioService.Insert(usuario);
 
-                    (bool nCpf, bool nUsuario, bool nToken) = 
+                    (bool nCpf, bool nUsuario, bool nToken) =
                         await new LoginController(_usuarioService, _pessoaService, _emailService, _recuperarSenhaService).GenerateToken(usuario.Cpf, 1);
 
                     if (!(nCpf && nUsuario && nToken))
@@ -405,7 +405,7 @@ namespace MonitoraSUS.Controllers
             else
                 responsavel = 1;
 
-            return RedirectToAction(nameof(IndexApproveAgent), new { ehResponsavel = responsavel});
+            return RedirectToAction(nameof(IndexApproveAgent), new { ehResponsavel = responsavel });
         }
 
         // GET: AgenteSecretario/BlockAgent/{agente|gestor}/id
@@ -466,6 +466,7 @@ namespace MonitoraSUS.Controllers
             var imunoDepri = collection["Imunodeprimido"];
             var cancer = collection["Cancer"];
             var doencaResp = collection["DoencaRespiratoria"];
+            var outrasComorbidades = collection["OutrasComorbidades"];
 
             // Inserção e recebendo o objeto inserido (ID)
             var pessoa = _pessoaService.Insert(new PessoaModel
@@ -492,7 +493,8 @@ namespace MonitoraSUS.Controllers
                 Diabetes = diabetes.Contains("true") ? true : false,
                 DoencaRespiratoria = doencaResp.Contains("true") ? true : false,
                 Imunodeprimido = imunoDepri.Contains("true") ? true : false,
-                Obeso = obeso.Contains("true") ? true : false
+                Obeso = obeso.Contains("true") ? true : false,
+                OutrasComorbidades = outrasComorbidades
             });
 
             return pessoa.Idpessoa;
