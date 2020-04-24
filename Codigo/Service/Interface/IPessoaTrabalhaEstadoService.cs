@@ -10,8 +10,8 @@ namespace Service.Interface
         bool Delete(int idPessoa, int idEstado);
         List<PessoaTrabalhaEstadoModel> GetAll();
         PessoaTrabalhaEstadoModel GetById(int idPessoa, int idEstado);
-        List<PessoaTrabalhaEstadoModel> GetAllGestores();
-        List<PessoaTrabalhaEstadoModel> GetAllAgents();
+        List<PessoaTrabalhaEstadoModel> GetAllGestoresEstado(int idEstado);
+        List<PessoaTrabalhaEstadoModel> GetAllAgentsEstado(int idEstado);
         PessoaTrabalhaEstadoModel GetSecretarioAtivoByIdPessoa(int idPessoa);
         PessoaTrabalhaEstadoModel GetByIdPessoa(int idPessoa);
     }

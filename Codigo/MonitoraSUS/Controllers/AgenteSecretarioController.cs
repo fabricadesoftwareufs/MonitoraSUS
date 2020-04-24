@@ -27,7 +27,6 @@ namespace MonitoraSUS.Controllers
         private readonly IConfiguration _configuration;
         private readonly IRecuperarSenhaService _recuperarSenhaService;
         private readonly IEmailService _emailService;
-
         public AgenteSecretarioController(IMunicipioService municipioService, IEstadoService estadoService,
             IPessoaService pessoaService, IPessoaTrabalhaMunicipioService pessoaTrabalhaMunicipioService,
             IPessoaTrabalhaEstadoService pessoaTrabalhaEstadoService, IUsuarioService usuarioService, IConfiguration configuration,
@@ -47,16 +46,7 @@ namespace MonitoraSUS.Controllers
         // GET: AgenteSecretario
         public ActionResult Index()
         {
-            var pessoas = _pessoaService.GetAll();
-            var secMuniEst = new List<SecretarioMunicipioEstadoViewModel>();
-
-            var secretariosEstadoPendentes = _pessoaTrabalhaEstadoService.GetAllGestores();
-            var secretariosMunicipioPendente = _pessoaTrabalhaMunicipioService.GetAllGestores();
-
-            secretariosEstadoPendentes.ForEach(item => secMuniEst.Add(new SecretarioMunicipioEstadoViewModel { Pessoa = _pessoaService.GetById(item.IdPessoa), PessoaEstado = item, Situacao = 0 }));
-            secretariosMunicipioPendente.ForEach(item => secMuniEst.Add(new SecretarioMunicipioEstadoViewModel { Pessoa = _pessoaService.GetById(item.IdPessoa), PessoaMunicipio = item, Situacao = 0 }));
-
-            return View(secMuniEst);
+            return View();
         }
 
         // GET: AgenteSecretario/Details/5
@@ -252,9 +242,9 @@ namespace MonitoraSUS.Controllers
             {
                 var agentesEstado = new List<PessoaTrabalhaEstadoModel>();
                 if (ehResponsavel == 0)
-                    agentesEstado = _pessoaTrabalhaEstadoService.GetAllAgents();
+                    agentesEstado = _pessoaTrabalhaEstadoService.GetAllAgentsEstado(pessoaTrabalhaEstado.IdEstado);
                 else
-                    agentesEstado = _pessoaTrabalhaEstadoService.GetAllGestores();
+                    agentesEstado = _pessoaTrabalhaEstadoService.GetAllGestoresEstado(pessoaTrabalhaEstado.IdEstado);
 
                 agentesEstado.ForEach(item => agentes.Add(new AgenteMunicipioEstadoViewModel { Pessoa = _pessoaService.GetById(item.IdPessoa), PessoaEstado = item, Situacao = item.SituacaoCadastro }));
 
@@ -272,11 +262,12 @@ namespace MonitoraSUS.Controllers
             }
             else
             {
+                var pessoaTrabalhaMunicipio = _pessoaTrabalhaMunicipioService.GetByIdPessoa(usuario.UsuarioModel.IdPessoa);
                 var agentesMunicipio = new List<PessoaTrabalhaMunicipioModel>();
                 if (ehResponsavel == 0)
-                    agentesMunicipio = _pessoaTrabalhaMunicipioService.GetAllAgents();
+                    agentesMunicipio = _pessoaTrabalhaMunicipioService.GetAllAgentsMunicipio(pessoaTrabalhaMunicipio.IdMunicipio);
                 else
-                    agentesMunicipio = _pessoaTrabalhaMunicipioService.GetAllGestores();
+                    agentesMunicipio = _pessoaTrabalhaMunicipioService.GetAllGestoresMunicipio(pessoaTrabalhaMunicipio.IdMunicipio);
 
                 agentesMunicipio.ForEach(item => agentes.Add(new AgenteMunicipioEstadoViewModel { Pessoa = _pessoaService.GetById(item.IdPessoa), PessoaMunicipio = item, Situacao = item.SituacaoCadastro }));
 
@@ -334,6 +325,8 @@ namespace MonitoraSUS.Controllers
         [HttpGet("[controller]/[action]/{entidade}/{idPessoa}")]
         public async Task<ActionResult> ActivateAgent(string entidade, int idPessoa)
         {
+            bool sucess = true;
+
             var agenteEstado = _pessoaTrabalhaEstadoService.GetByIdPessoa(idPessoa);
             if (agenteEstado != null)
             {
@@ -350,12 +343,24 @@ namespace MonitoraSUS.Controllers
                         Senha = Methods.GenerateToken(),           
                         TipoUsuario = Methods.ReturnRoleId(entidade)
                     };
-                    _usuarioService.Insert(usuario);
-                    (bool nCpf, bool nUsuario, bool nToken) = await LoginController.GenerateToken(usuario.Cpf, 1);
-                }
+                    if (_usuarioService.GetByCpf(pessoa.Cpf) == null)
+                        _usuarioService.Insert(usuario);
 
-                agenteEstado.SituacaoCadastro = "A";
-                _pessoaTrabalhaEstadoService.Update(agenteEstado);
+                    (bool nCpf, bool nUsuario, bool nToken) =
+                                            await new LoginController(_usuarioService, _pessoaService, _emailService, _recuperarSenhaService).GenerateToken(usuario.Cpf, 1);
+
+                    if (!(nCpf && nUsuario && nToken))
+                    {
+                        _usuarioService.Delete(usuario.IdUsuario);
+                        sucess = false;
+                    }
+
+                }
+                if (sucess)
+                {
+                    agenteEstado.SituacaoCadastro = "A";
+                    _pessoaTrabalhaEstadoService.Update(agenteEstado);
+                }
             }
             else
             {
@@ -374,13 +379,24 @@ namespace MonitoraSUS.Controllers
                         Senha = Methods.GenerateToken(),
                         TipoUsuario = Methods.ReturnRoleId(entidade)
                     };
-                    _usuarioService.Insert(usuario);
-                    (bool nCpf, bool nUsuario, bool nToken) = await LoginController.GenerateToken(usuario.Cpf, 1);
-                    
-                }
+                    if (_usuarioService.GetByCpf(pessoa.Cpf) == null)
+                        _usuarioService.Insert(usuario);
 
-                agenteMunicipio.SituacaoCadastro = "A";
-                _pessoaTrabalhaMunicipioService.Update(agenteMunicipio);
+                    (bool nCpf, bool nUsuario, bool nToken) = 
+                        await new LoginController(_usuarioService, _pessoaService, _emailService, _recuperarSenhaService).GenerateToken(usuario.Cpf, 1);
+
+                    if (!(nCpf && nUsuario && nToken))
+                    {
+                        _usuarioService.Delete(usuario.IdUsuario);
+                        sucess = false;
+                    }
+
+                }
+                if (sucess)
+                {
+                    agenteMunicipio.SituacaoCadastro = "A";
+                    _pessoaTrabalhaMunicipioService.Update(agenteMunicipio);
+                }
             }
 
             int responsavel;

@@ -16,10 +16,10 @@ namespace MonitoraSUS.Controllers
     [AllowAnonymous]
     public class LoginController : Controller
     {
-        private static IUsuarioService _usuarioService;
+        private readonly IUsuarioService _usuarioService;
         private readonly IPessoaService _pessoaService;
-        private static IEmailService _emailService;
-        private static IRecuperarSenhaService _recuperarSenhaService;
+        private readonly IEmailService _emailService;
+        private readonly IRecuperarSenhaService _recuperarSenhaService;
         public LoginController(IUsuarioService usuarioService, IPessoaService pessoaService, IEmailService emailService, IRecuperarSenhaService recuperarSenhaService)
         {
             _usuarioService = usuarioService;
@@ -122,7 +122,7 @@ namespace MonitoraSUS.Controllers
             return (check1 && check2 && check3) ? RedirectToAction("Se funcionar") : RedirectToAction("Se não");
         }
 
-        public static async Task<(bool, bool, bool)> GenerateToken(string cpf, int finalidade)
+        public async Task<(bool, bool, bool)> GenerateToken(string cpf, int finalidade)
         {
             if (Methods.ValidarCpf(cpf))
             {

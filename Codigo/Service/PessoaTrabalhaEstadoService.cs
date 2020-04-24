@@ -33,10 +33,10 @@ namespace Service
                     IdEmpresaExame = p.IdEmpresaExame
                 }).ToList();
 
-        public List<PessoaTrabalhaEstadoModel> GetAllAgents()
+        public List<PessoaTrabalhaEstadoModel> GetAllAgentsEstado(int idEstado)
             => _context
                 .Pessoatrabalhaestado
-                .Where(p => p.EhSecretario.Equals(0) && p.EhResponsavel.Equals(0))
+                .Where(p => p.EhSecretario.Equals(0) && p.EhResponsavel.Equals(0) && p.IdEstado.Equals(idEstado))
                 .Select(p => new PessoaTrabalhaEstadoModel
                 {
                     IdPessoa = p.Idpessoa,
@@ -47,10 +47,10 @@ namespace Service
                     IdEmpresaExame = p.IdEmpresaExame
                 }).ToList();
 
-        public List<PessoaTrabalhaEstadoModel> GetAllGestores()
+        public List<PessoaTrabalhaEstadoModel> GetAllGestoresEstado(int idEstado)
             => _context
                 .Pessoatrabalhaestado
-                .Where(p => p.EhResponsavel.Equals(1))
+                .Where(p => p.EhResponsavel.Equals(1) && p.IdEstado.Equals(idEstado))
                 .Select(p => new PessoaTrabalhaEstadoModel
                 {
                     IdPessoa = p.Idpessoa,

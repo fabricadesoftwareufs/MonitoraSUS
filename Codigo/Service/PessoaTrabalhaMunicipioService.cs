@@ -34,10 +34,10 @@ namespace Service
                     SituacaoCadastro = p.SituacaoCadastro
                 }).ToList();
 
-        public List<PessoaTrabalhaMunicipioModel> GetAllAgents()
+        public List<PessoaTrabalhaMunicipioModel> GetAllAgentsMunicipio(int idMunicipio)
             => _context
                 .Pessoatrabalhamunicipio
-                .Where(p => p.EhSecretario.Equals(0) && p.EhResponsavel.Equals(0))
+                .Where(p => p.EhSecretario.Equals(0) && p.EhResponsavel.Equals(0) && p.IdMunicipio.Equals(idMunicipio))
                 .Select(p => new PessoaTrabalhaMunicipioModel
                 {
                     IdPessoa = p.IdPessoa,
@@ -47,10 +47,10 @@ namespace Service
                     SituacaoCadastro = p.SituacaoCadastro
                 }).ToList();
 
-        public List<PessoaTrabalhaMunicipioModel> GetAllGestores()
+        public List<PessoaTrabalhaMunicipioModel> GetAllGestoresMunicipio(int idMunicipio)
             => _context
                 .Pessoatrabalhamunicipio
-                .Where(p => p.EhResponsavel.Equals(1))
+                .Where(p => p.EhResponsavel.Equals(1) && p.IdMunicipio.Equals(idMunicipio))
                 .Select(p => new PessoaTrabalhaMunicipioModel
                 {
                     IdPessoa = p.IdPessoa,
