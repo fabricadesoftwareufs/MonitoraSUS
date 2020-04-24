@@ -118,8 +118,19 @@ namespace MonitoraSUS.Controllers
 
         public async Task<ActionResult> EmitirToken(string cpf, int finalidade = 0)
         {
-            (bool check1, bool check2, bool check3) = await GenerateToken(cpf, finalidade);
-            return (check1 && check2 && check3) ? RedirectToAction("Se funcionar") : RedirectToAction("Se não");
+            (bool invalidCpf, bool invalidUser, bool failInsertOrUserHasToken) = await GenerateToken(cpf, finalidade);
+
+            if (!invalidCpf && !invalidUser && !failInsertOrUserHasToken)
+                return RedirectToActionPermanent("Index", "Login", new { msg = "invalidUser" });
+
+            if (!invalidUser && !failInsertOrUserHasToken)
+                return RedirectToActionPermanent("Index", "Login", new { msg = "hasToken" });
+
+            if (!failInsertOrUserHasToken)
+                return RedirectToActionPermanent("Index", "Login", new { msg = "insertFail" });
+
+            // Se der tudo bem.
+            return RedirectToActionPermanent("Index", "Login", new { msg = "successSend" });
         }
 
         public async Task<(bool, bool, bool)> GenerateToken(string cpf, int finalidade)
@@ -153,8 +164,9 @@ namespace MonitoraSUS.Controllers
                                 throw e.InnerException;
                             }
                         }
-                        return (true, true, false);
+                        return (true, true, false); // Falha na inserção do recuperarSenha
                     }
+                    // User válido porém tem token.
                     return (true, false, false);
                 }
             }
