@@ -34,20 +34,20 @@ namespace MonitoraSUS.Utils
         public static string MessageEmail(RecuperarSenhaModel senhaModel, int finalidadeEmail)
         {
             var uri = new Uri("http://www.monitorasus.ufs.br/");
+
+            var link = "<a href='" + uri.Scheme + "://" + uri.Host + ":" + uri.Port + "/Login/RecuperarSenha/";
+
             switch (finalidadeEmail)
             {
                 case 0:
                     return "<html><body>" +
                         "Foi solicitado uma recuperação de senha, clique no link abaixo para iniciar o processo de recuperação.<br>" +
-                        "<a href='https://localhost:5001/Login/RecuperarSenha/" +
-                            senhaModel.Token +
-                        "'>Clique aqui mudar a senha</a>";
+                        link + senhaModel.Token + "'>Clique aqui mudar a senha</a>";
 
-                case 1: return "<html><body>" +
-                        "Seu cadastro foi aprovado e para fazer o login terá que criar uma senha, clique no link abaixo para criar uma nova senha.<br>" +
-                        "<a href='https://localhost:5001/Login/RecuperarSenha/" +
-                            senhaModel.Token +
-                        "'>Clique aqui para criar uma senha</a>";
+                case 1:
+                    return "<html><body>" +
+                    "Seu cadastro foi aprovado e para fazer o login terá que criar uma senha, clique no link abaixo para criar uma nova senha.<br>" +
+                    link + senhaModel.Token + "'>Clique aqui para criar uma senha</a>";
 
                 default: return null;
             }

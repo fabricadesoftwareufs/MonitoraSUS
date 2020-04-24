@@ -5752,15 +5752,16 @@ CREATE TABLE IF NOT EXISTS `pessoa` (
   `imunodeprimido` tinyint NOT NULL DEFAULT '0',
   `cancer` tinyint NOT NULL DEFAULT '0',
   `doencaRespiratoria` tinyint NOT NULL DEFAULT '0',
+  `outrasComorbidades` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`idpessoa`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 -- Copiando dados para a tabela monitorasus.pessoa: ~3 rows (aproximadamente)
 /*!40000 ALTER TABLE `pessoa` DISABLE KEYS */;
-INSERT INTO `pessoa` (`idpessoa`, `cpf`, `nome`, `sexo`, `cep`, `rua`, `bairro`, `cidade`, `estado`, `numero`, `complemento`, `latitude`, `longitude`, `foneCelular`, `foneFixo`, `email`, `dataNascimento`, `hipertenso`, `diabetes`, `obeso`, `cardiopatia`, `imunodeprimido`, `cancer`, `doencaRespiratoria`) VALUES
-	(2, '00000000000', 'Gabriel Santan', 'M', '49200000', 'Rua João Francisco da Silva', 'Centro', 'Estância', 'Sergipe', '234', '', '-99.99999999', '-99.99999999', '79999914349', '', 'gabriel@hmtil.com', '1996-10-15', 1, 0, 1, 0, 0, 1, 0),
-	(3, '06579861517', 'Gabriel Santana Cruz', 'M', '49200000', 'Rua João Francisco da Silva', 'Centro', 'Estância', 'Sergipe', '234', 'Casa', '-99.99999999', '-99.99999999', '79999914349', '', 'gabriel.sistemasjr@gmail.com', '1996-10-15', 1, 0, 1, 1, 0, 0, 0),
-	(4, '00000000001', 'bruninho o furão', 'M', '49200000', 'Rua João Francisco da Silva', 'Centro', 'Estância', 'Sergipe', '234', '', '-11.2720296', '-37.4356362', '79999999999', '', 'gabriel@hmtil.com', '0123-12-15', 0, 0, 0, 0, 0, 0, 0);
+INSERT INTO `pessoa` (`idpessoa`, `cpf`, `nome`, `sexo`, `cep`, `rua`, `bairro`, `cidade`, `estado`, `numero`, `complemento`, `latitude`, `longitude`, `foneCelular`, `foneFixo`, `email`, `dataNascimento`, `hipertenso`, `diabetes`, `obeso`, `cardiopatia`, `imunodeprimido`, `cancer`, `doencaRespiratoria`, `outrasComorbidades`) VALUES
+	(2, '00000000000', 'Gabriel Santan', 'M', '49200000', 'Rua João Francisco da Silva', 'Centro', 'Estância', 'Sergipe', '234', '', '-99.99999999', '-99.99999999', '79999914349', '', 'gabriel@hmtil.com', '1996-10-15', 1, 0, 1, 0, 0, 1, 0, NULL),
+	(3, '06579861517', 'Gabriel Santana Cruz', 'M', '49200000', 'Rua João Francisco da Silva', 'Centro', 'Estância', 'Sergipe', '234', 'Casa', '-99.99999999', '-99.99999999', '79999914349', '', 'gabriel.sistemasjr@gmail.com', '1996-10-15', 1, 0, 1, 1, 0, 0, 0, NULL),
+	(4, '00000000001', 'bruninho o furão', 'M', '49200000', 'Rua João Francisco da Silva', 'Centro', 'Estância', 'Sergipe', '234', '', '-11.2720296', '-37.4356362', '79999999999', '', 'gabriel@hmtil.com', '0123-12-15', 0, 0, 0, 0, 0, 0, 0, NULL);
 /*!40000 ALTER TABLE `pessoa` ENABLE KEYS */;
 
 -- Copiando estrutura para tabela monitorasus.pessoatrabalhaestado
@@ -5818,13 +5819,10 @@ CREATE TABLE IF NOT EXISTS `recuperarsenha` (
   PRIMARY KEY (`id`),
   KEY `fk_recuperarsenha_usuario1_idx` (`idUsuario`),
   CONSTRAINT `fk_recuperarsenha_usuario1` FOREIGN KEY (`idUsuario`) REFERENCES `usuario` (`idUsuario`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- Copiando dados para a tabela monitorasus.recuperarsenha: ~2 rows (aproximadamente)
+-- Copiando dados para a tabela monitorasus.recuperarsenha: ~0 rows (aproximadamente)
 /*!40000 ALTER TABLE `recuperarsenha` DISABLE KEYS */;
-INSERT INTO `recuperarsenha` (`id`, `token`, `inicioToken`, `fimToken`, `ehValido`, `idUsuario`) VALUES
-	(11, '5EFA9BF514EA68A61A9E3739DD7E84008013E0B6A612D4328361E9B99D4B9715', '2020-04-20 11:18:23', '2020-04-21 11:18:23', 0, 2),
-	(12, 'EA7DBCAA8961D0EED5F8A260426880295D629B29AD4323018F3AD69F55EAB461', '2020-04-20 11:19:44', '2020-04-21 11:19:44', 0, 2);
 /*!40000 ALTER TABLE `recuperarsenha` ENABLE KEYS */;
 
 -- Copiando estrutura para tabela monitorasus.situacaopessoavirusbacteria
@@ -5856,7 +5854,7 @@ CREATE TABLE IF NOT EXISTS `usuario` (
   CONSTRAINT `fk_usuario_pessoa1` FOREIGN KEY (`idPessoa`) REFERENCES `pessoa` (`idpessoa`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
--- Copiando dados para a tabela monitorasus.usuario: ~0 rows (aproximadamente)
+-- Copiando dados para a tabela monitorasus.usuario: ~1 rows (aproximadamente)
 /*!40000 ALTER TABLE `usuario` DISABLE KEYS */;
 INSERT INTO `usuario` (`idUsuario`, `cpf`, `senha`, `email`, `tipoUsuario`, `idPessoa`) VALUES
 	(2, '06579861517', '60BFAA61E12B4FD3DAD35586B11387689E35645279C6103495F019AAA0C1FCF3', 'gabriel.sistemasjr@gmail.com', 4, 3);
