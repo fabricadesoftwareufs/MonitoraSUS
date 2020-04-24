@@ -26,26 +26,28 @@
 </head>
 @if (!User.Identity.IsAuthenticated)
 {
-<body class="bg-login">
-    <!-- Scripts -->
-    @RenderBody()
+    <body class="bg-login">
+        <!-- Scripts -->
+        @RenderBody()
 
-    @RenderSection("Scripts", required: false)
-    <script src="~/assets/js/plugins/jquery-3.4.1/jquery-3.4.1.min.js"></script>
-    <script src="~/assets/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/assets/js/plugins/jquery-mask/dist/jquery.mask.min.js"></script>
-    <script src="~/assets/js/custom.js"></script>
-</body>
+        @RenderSection("Scripts", required: false)
+        <script src="~/assets/js/plugins/jquery-3.4.1/jquery-3.4.1.min.js"></script>
+        <script src="~/assets/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="~/assets/js/plugins/jquery-mask/dist/jquery.mask.min.js"></script>
+        <script src="~/assets/js/custom.js"></script>
+    </body>
 }
 else
 {
     <body>
         <!-- Main content -->
         <div class="main-content" id="panel">
-            <!-- Top Nav-->
-            <partial name="_NavBarPartial" />
-            <!-- Header -->
-            <partial name="_Header" />
+            <div id="container">
+                <!-- Top Nav-->
+                <partial name="_NavBarPartial" />
+                <!-- Header -->
+                <partial name="_Header" />
+            </div>
 
             <div class="main-content card-content" id="panel">
                 <!-- Page Content -->
