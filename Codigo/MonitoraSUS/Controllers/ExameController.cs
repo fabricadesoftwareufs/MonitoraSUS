@@ -14,7 +14,7 @@ using System.Security.Claims;
 
 namespace MonitoraSUS.Controllers
 {
-    //[Authorize]
+    [Authorize]
     public class ExameController : Controller
     {
         private readonly IVirusBacteriaService _virusBacteriaContext;
@@ -324,12 +324,8 @@ namespace MonitoraSUS.Controllers
             /*
              *  pegando informações do agente de saúde logado no sistema 
              */
-            //var agente = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
-            var agente = new UsuarioViewModel();
-            agente.UsuarioModel = new UsuarioModel { IdPessoa = 3 };
-            agente.RoleUsuario = "COORDENADOR";
-
-
+            var agente = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
+          
             var secretarioMunicipio = _pessoaTrabalhaMunicipioContext.GetByIdPessoa(agente.UsuarioModel.IdPessoa);
             var secretarioEstado = _pessoaTrabalhaEstadoContext.GetByIdPessoa(agente.UsuarioModel.IdPessoa);
 
@@ -384,10 +380,8 @@ namespace MonitoraSUS.Controllers
              * Pegando usuario logado e carregando 
              * os exames que ele pode ver
              */
-            //var usuario = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
-            var usuario = new UsuarioViewModel();
-            usuario.UsuarioModel = new UsuarioModel { IdPessoa = 3 };
-            usuario.RoleUsuario = "COORDENADOR";
+            var usuario = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
+           
 
             var exames = new List<ExameModel>();
             if (usuario.RoleUsuario.Equals("AGENTE"))
