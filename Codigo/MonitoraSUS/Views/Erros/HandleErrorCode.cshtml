@@ -1,38 +1,36 @@
 ﻿
 @{
-    ViewData["Title"] = "HandleErrorCode";
+    ViewData["Title"] = "Exceção";
 }
+
+<link href="~/assets/css/excecoes.css" rel="stylesheet" type="text/css">
 
 <div class="container-fluid mt--6">
     <div class="row">
         <div class="col-md-12">
             <div class="card card-content">
-
-                <table class="table">
-                    <tr>
-                        <th scope="col" class="sort" data-sort="imagem">
-                            <img src="~/assets/img/link_quebrado.png" alt="Smiley face" width="300" height="300">
-                        </th>
-                        <th scope="col" class="sort" data-sort="texto">
-                            <br />
-                            <br>
-                            <h2>@ViewBag.ErrorMessage</h2>
-                            <hr />
-                            <h3>
-                                @ViewBag.MensagemOrientacao <a href="mailto:fabricadesoftware@ufs.br?subject=EXCEÇÃO LANÇADA" title="">fabricadesoftware@ufs.br</a>
-                            </h3>
-                            <br />
-                            <a class="btn btn-success" asp-controller="Home" asp-action="Index">Voltar ao Inicio</a>
-                        </th>
-                    </tr>
-                </table>
+                <br />
+                <div class="dislay-padding-10">
+                    <div class="display-inline"> <img src="~/assets/img/link_quebrado.png" alt="Smiley face" width="300" height="300"></div>
+                   
+                    <div class="display-inline">
+                        <h2 class="text-justify">@ViewBag.ErrorMessage</h2>
+                        <hr />
+                        <h3>@ViewBag.MensagemOrientacao <a href="mailto:fabricadesoftware@ufs.br?subject=EXCEÇÃO LANÇADA" title="">fabricadesoftware@ufs.br</a></h3>
+                        <br />
+                        <a class="btn btn-success" asp-controller="Home" asp-action="Index">Voltar ao Inicio</a>
+                    </div>
+                </div>
+               
             </div>
         </div>
     </div>
 </div>
 
 
+<script>
+    window.onload = function () {
+        $("#container").hide();
+    };
 
-
-
-
+</script>

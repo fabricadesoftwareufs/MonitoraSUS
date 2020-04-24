@@ -47,6 +47,12 @@ function fillInAddress() {
                 document.getElementById(addressType).setAttribute('readonly', 'true');
         }
     }
+
+    if ($('#postal_code').val() == "")
+        $('#postal_code').focus();
+    else
+        $('#street_number').focus();
+
 }
 
 function geolocate() {
