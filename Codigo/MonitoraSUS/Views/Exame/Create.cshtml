@@ -27,6 +27,8 @@
     bool imunodeprimido = Model.IdPaciente.Imunodeprimido;
     string dataExame = Model.DataExame == null ? Model.DataExame.ToString("yyyy-MM-dd") : DateTime.Now.ToString("yyyy-MM-dd");
     string DataInicioSintomas = Model.DataInicioSintomas == null ? Model.DataInicioSintomas.ToString("yyyy-MM-dd") : DateTime.Now.ToString("yyyy-MM-dd");
+    var googleKey = ViewBag.googleKey;
+
 }
 
 
@@ -41,9 +43,9 @@
                             <h5 class="card-title  text-muted mb-0">MonitoraSUS</h5>
                             <h5 class="h3 mb-0">Notificar Resultado</h5>
                         </div>
-						<div class="col text-right">
-							<a class="btn btn-default" asp-controller="Home" asp-action="Index"> <i class="fas fa-arrow-left"></i> Voltar</a><br />
-						</div>
+                        <div class="col text-right">
+                            <a class="btn btn-default" asp-controller="Home" asp-action="Index"> <i class="fas fa-arrow-left"></i> Voltar</a><br />
+                        </div>
                     </div>
                 </div>
 
@@ -56,7 +58,7 @@
                                 <div class="col-md-2">
                                     <div class="form-group">
                                         <label class="form-control-label" for="input-cpf">CPF</label>
-                                        <input asp-for="IdPaciente.Cpf" id="input-cpf" placeholder="000.000.000-00" value="@cpf" class="form-control"/>
+                                        <input asp-for="IdPaciente.Cpf" id="input-cpf" placeholder="000.000.000-00" value="@cpf" class="form-control" />
                                         @if (TempData["resultadoPesquisa"] != null)
                                         {
                                             <h6 class="heading-small text-danger">@TempData["resultadoPesquisa"]</h6>
@@ -97,7 +99,8 @@
                                 <div class="col-lg-12">
                                     <div class="form-group">
                                         <label class="form-control-label" for="input-pesquisa">Pesquisa Endereço</label>
-                                        <input type="search" id="input-pesquisa" autocomplete="off" required class="form-control" placeholder="Pesquise pelo CEP, Rua, Bairro, Número">
+                                        <input type="search" id="input-pesquisa" required class="form-control" oninput="PreencheForm()" placeholder="Pesquise pelo CEP, Rua, Bairro, Número" autocomplete="off">
+                                        <span id="spanInvalidCep" hidden class="text-danger text-center" style="padding: 10px">Cep Invalido!!</span>
                                     </div>
                                 </div>
                                 <div class="col-lg-2">
@@ -255,13 +258,13 @@
                         <hr class="my-4" />
                         <h6 class="heading-small text-muted mb-4">RESULTADO</h6>
                         <div class="pl-lg-4">
-                            <div class="row">
+                            <div class="row" name="cad-exame">
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label class="form-control-label" for="input-atuacao-estado">Exame</label>
                                         <label asp-for="IdVirusBacteria.IdVirusBacteria" class="control-label"></label>
                                         @Html.DropDownListFor(model => model.IdVirusBacteria.IdVirusBacteria, ViewBag.VirusBacteria as SelectList, new
-                                        { @class = "form-control" })
+                                        { @class = "form-control", @id="input-virus-bacteria" })
                                     </div>
                                 </div>
                                 <div class="col-lg-4">
@@ -423,181 +426,11 @@
 }
 
 @section Scripts {
+    <script src="~/assets/js/resultado-exame.js"></script>
 
-
-    <!-- GOOGLE SETING SCRIPTS -->
-    <script>
-        var placeSearch, autocomplete, inputHtml, geocoder;
-        inputHtml = document.getElementById('input-pesquisa');
-
-        var componentForm = {
-            route: 'long_name',
-            street_number: 'short_name',
-            administrative_area_level_1: 'long_name',
-            administrative_area_level_2: 'long_name',
-            postal_code: 'short_name'
-        };
-
-        function initAutocomplete() {
-            autocomplete = new google.maps.places.Autocomplete(inputHtml, { types: ['geocode'] });
-            geocoder = new google.maps.Geocoder();
-
-            autocomplete.setFields(['address_component']);
-            autocomplete.addListener('place_changed', fillInAddress);
-        }
-
-        function fillInAddress() {
-            var place = autocomplete.getPlace();
-
-            geocoder.geocode({ 'address': inputHtml.value }, function (results, status) {
-                if (status === 'OK') {
-                    let latitude = document.getElementById('input-latitude');
-                    let longitude = document.getElementById('input-longitude');
-
-                    // SETTING VALUES
-                    latitude.value = results[0].geometry.location.lat();
-                    longitude.value = results[0].geometry.location.lng();
-                } else {
-                    alert('ERRO AO INICIALIZAR O GEOCODE: ' + status);
-                }
-            });
-
-            for (var component in componentForm) {
-                document.getElementById(component).value = '';
-            }
-
-            for (var i = 0; i < place.address_components.length; i++) {
-                var addressType = place.address_components[i].types[0];
-                if (componentForm[addressType]) {
-                    var val = place.address_components[i][componentForm[addressType]];
-                    document.getElementById(addressType).value = val;
-
-                    // DISABLE ONLY INPUTS THAT RECEIVED A VALID VALUE
-                    if (val != '')
-                        document.getElementById(addressType).setAttribute('readonly', 'true');
-                }
-            }
-        }
-
-        // Bias the autocomplete object to the user's geographical location,
-        // as supplied by the browser's 'navigator.geolocation' object.
-        function geolocate() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(function (position) {
-                    var geolocation = {
-                        lat: position.coords.latitude,
-                        lng: position.coords.longitude
-                    };
-                    var circle = new google.maps.Circle(
-                        { center: geolocation, radius: position.coords.accuracy });
-                    autocomplete.setBounds(circle.getBounds());
-                });
-            }
-        }
-    </script>
-
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCbtYabZNfEWTf5nvsDe4QkBbz_PUPv2Uk&libraries=places&callback=initAutocomplete&language=pt-BR"
+    <script src="~/assets/js/PersonalScripts.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=@googleKey&libraries=places&callback=initAutocomplete&language=pt-BR"
             async defer></script>
-
-
-    <script>
-        // Mostra modal com mensagem de erro
-        window.onload = function () {
-            $('#modal-mensagem-retorno').modal('show');
-        };
-        // Pegando o cpf enquanto o usuario digita e submetendo quando terminar
-        var input = document.getElementById('input-cpf');
-        input.addEventListener("keyup", function () {
-            if (document.getElementById('input-cpf').value.length == 14) {
-                $('#modal-espera').modal('show');
-                document.getElementById('PesquisarCpf').value = 1;
-                document.forms["form-exame"].submit();
-            }
-        });
-        // submete o formulário completo
-        function submitForm() {
-            $('#modal-espera').modal('show');
-            document.forms["form-exame"].submit();
-        }
-        // mostra modal de confirmaocao
-        function mensagemResultado() {
-            var mensagem = verificaCampoRequired();
-            $('#texto-confirmacao').text(mensagem);
-            $('#modal-confirmar').modal('show');
-        }
-        // verifica se todos os campos estão preenchidos (diretiva required parou de funcionar)
-        function verificaCampoRequired() {
-            var cpf = document.getElementById('input-cpf').value;
-            var nome = document.getElementById('input-nome').value;
-            var dataNasc = document.getElementById('input-data-nascimento').value;
-            var cep = document.getElementById('postal_code').value;
-            var numero = document.getElementById('street_number').value;
-            var rua = document.getElementById('route').value;
-            var bairro = document.getElementById('input-bairro').value;
-            var cidade = document.getElementById('administrative_area_level_2').value;
-            var estado = document.getElementById('administrative_area_level_1').value;
-            var foneCelular = document.getElementById('input-celular').value;
-            var dataExame = document.getElementById('input-data-exame').value;
-            var dataSintomas = document.getElementById('input-data-exame').value;
-            var mensagem = "Os demais campos precisam ser preenchidos ";
-            $('#ok-model-form').hide();
-            $('#acoes-model-form').hide();
-            if (cpf === "" || nome === "" || dataNasc === "" || cep === "" ||
-                rua === "" || bairro === "" || cidade === "" || estado === "" ||
-                foneCelular === "" || dataExame === "" || dataSintomas === "" || numero === "") {
-                if (cpf === "")
-                    mensagem += "- CPF ";
-                if (nome === "")
-                    mensagem += "- NOME ";
-                if (dataNasc === "")
-                    mensagem += "- DATA DE NASCIMENTO ";
-                if (cep === "")
-                    mensagem += "- CEP ";
-                if (rua === "")
-                    mensagem += "- RUA ";
-                if (numero === "")
-                    mensagem += "- NUMERO";
-                if (bairro === "")
-                    mensagem += "- BAIRRO ";
-                if (cidade === "")
-                    mensagem += "- CIDADE ";
-                if (estado === "")
-                    mensagem += "- ESTADO ";
-                if (foneCelular === "")
-                    mensagem += "- CELULAR ";
-                if (dataExame === "")
-                    mensagem += "- DATA DO EXAME ";
-                if (dataSintomas === "")
-                    mensagem += "- DATA DOS SINTOMAS ";
-                $('#ok-model-form').show();
-            } else {
-                var mensagem = "Cpf: " + cpf + "\n" +
-                    "Paciente: " + nome + "\n" +
-                    "Resultado: " + resultadoExame();
-                $('#acoes-model-form').show();
-            }
-            return mensagem;
-        }
-        // Calcula o resultado do exame
-        function resultadoExame() {
-            var igg = $("input[name='IgG']:checked").val();
-            var igm = $("input[name='IgM']:checked").val();
-            var pcr = $("input[name='Pcr']:checked").val();
-            var resultado = "Indetermiando";
-            if (pcr === "S" || igm === "S") {
-                resultado = "Positivo";
-            } else if (pcr === "I" || igm === "I") {
-                resultado = "Indeterminado";
-            } else if (igg === "S") {
-                resultado = "Curado";
-            } else if (pcr === "N" || igm === "N") {
-                resultado = "Negativo";
-            }
-
-            return resultado;
-        }
-    </script>
-
 
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
