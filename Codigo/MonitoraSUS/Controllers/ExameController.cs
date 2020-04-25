@@ -401,7 +401,10 @@ namespace MonitoraSUS.Controllers
                 else
                 {
                     var secretarioEstado = _pessoaTrabalhaEstadoContext.GetByIdPessoa(usuario.UsuarioModel.IdPessoa);
-                    if (secretarioEstado != null)
+                    
+                    if (secretarioEstado.IdEmpresaExame != null)
+                        exames = _exameContext.GetByIdEmpresa(secretarioEstado.IdEmpresaExame);
+                    else
                         exames = _exameContext.GetByIdEstado(secretarioEstado.IdEstado);
                 }
             }
