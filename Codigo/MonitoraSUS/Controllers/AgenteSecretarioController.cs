@@ -435,6 +435,30 @@ namespace MonitoraSUS.Controllers
             return RedirectToAction(nameof(IndexApproveAgent), new { ehResponsavel = responsavel });
         }
 
+        // GET: AgenteSecretario/DownToAgent/{agente|gestor}/id
+        [HttpGet("[controller]/[action]/{idPessoa}")]
+        public ActionResult DownToAgent(int idPessoa)
+        {
+
+            var agenteEstado = _pessoaTrabalhaEstadoService.GetByIdPessoa(idPessoa);
+            if (agenteEstado != null)
+            {
+                agenteEstado.EhResponsavel = false;
+                agenteEstado.SituacaoCadastro = "I";
+                _pessoaTrabalhaEstadoService.Update(agenteEstado);
+            }
+            else
+            {
+                var agenteMunicipio = _pessoaTrabalhaMunicipioService.GetByIdPessoa(idPessoa);
+                agenteEstado.EhResponsavel = false;
+                agenteMunicipio.SituacaoCadastro = "I";
+                _pessoaTrabalhaMunicipioService.Update(agenteMunicipio);
+            }
+
+            int responsavel = 1;
+
+            return RedirectToAction(nameof(IndexApproveAgent), new { ehResponsavel = responsavel });
+        }
         // ======================== PRIVATE METHODS ========================
         private int PeopleInserted(IFormCollection collection)
         {

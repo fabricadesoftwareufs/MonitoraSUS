@@ -105,6 +105,12 @@
                                                 <a href="@Url.Action("BlockAgent", "AgenteSecretario",  new { entidade = @ViewBag.entidade, idPessoa = item.IdPessoa })" class="btn btn-icon btn-warning btn-sm" title="@bloquear">
                                                     <span class="btn-inner--icon"><i class="fas fa-ban"></i></span>
                                                 </a>
+                                                if (ViewBag.entidade.Equals("Gestor"))
+                                                {
+                                                    <a href="@Url.Action("DownToAgent", "AgenteSecretario", new { idPessoa = item.IdPessoa })" class="btn btn-icon btn-danger btn-sm" title="@descartar">
+                                                        <span class="btn-inner--icon"><i class="fas fa-times"></i></span>
+                                                    </a>
+                                                }
                                             }
                                             else if (item.Status.Equals("I"))
                                             {
