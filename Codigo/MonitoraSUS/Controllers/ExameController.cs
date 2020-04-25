@@ -450,8 +450,6 @@ namespace MonitoraSUS.Controllers
 
         public PessoaModel CreatePessoaModelByExame(ExameViewModel exame)
         {
-
-
             exame.IdPaciente.Cpf = Methods.RemoveSpecialsCaracts(exame.IdPaciente.Cpf);
             exame.IdPaciente.Cep = Methods.RemoveSpecialsCaracts(exame.IdPaciente.Cep);
             exame.IdPaciente.FoneCelular = Methods.RemoveSpecialsCaracts(exame.IdPaciente.FoneCelular);
