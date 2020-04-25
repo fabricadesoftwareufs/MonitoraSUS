@@ -80,7 +80,7 @@ namespace MonitoraSUS.Controllers
 
         public void sendMessage(string mensagem)
         {
-            _emailService.SendEmailAsync("monitorasus.ufs@gmail.com", "MonitoraSUS - LANÇAMENTO DE EXCEÇÃO NO APLICATIVO", mensagem);
+            _emailService.SendEmailAsync("monitorasus.ufs.excecao@gmail.com", "MonitoraSUS - LANÇAMENTO DE EXCEÇÃO NO APLICATIVO", mensagem);
         }
     }
 }
