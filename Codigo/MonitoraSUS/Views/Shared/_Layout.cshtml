@@ -10,26 +10,28 @@
     <link href="~/assets/fonts/fontawesome-free-5.13.0-web/css/all.min.css" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700">
 
-    @if (!User.Identity.IsAuthenticated)
+    @if (!User.Identity.IsAuthenticated && @Context.Request.Path.ToString().CompareTo("/Login") == 0)
     {
         <!-- Login Styles -->
         <link href="~/assets/css/app.css" rel="stylesheet">
         <link href="~/assets/css/login.css" rel="stylesheet">
+        <link rel="stylesheet" href="~/assets/js/plugins/sweetalert2/dist/css/sweetalert2.min.css">
     }
     else
     {
-        <!-- Styles -->
         <link rel="stylesheet" href="~/assets/css/argon.css?v=1.2.0" type="text/css">
         <link rel="stylesheet" href="~/assets/css/custom.css" type="text/css">
+        <!-- Styles -->
         <link rel="stylesheet" href="~/assets/js/plugins/sweetalert2/dist/css/sweetalert2.min.css">
     }
 </head>
-@if (!User.Identity.IsAuthenticated)
+@if (!User.Identity.IsAuthenticated && @Context.Request.Path.ToString().CompareTo("/Login") == 0)
 {
     <body class="bg-login">
         <!-- Scripts -->
-        @RenderBody()
-
+        <div class="main-content card-content" id="panel">
+            @RenderBody()
+        </div>
         @RenderSection("Scripts", required: false)
         <script src="~/assets/js/plugins/jquery-3.4.1/jquery-3.4.1.min.js"></script>
         <script src="~/assets/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
@@ -42,13 +44,15 @@ else
     <body>
         <!-- Main content -->
         <div class="main-content" id="panel">
-            <div id="container">
-                <!-- Top Nav-->
-                <partial name="_NavBarPartial" />
-                <!-- Header -->
-                <partial name="_Header" />
-            </div>
-
+            @if (User.Identity.IsAuthenticated)
+            {
+                <div id="container">
+                    <!-- Top Nav-->
+                    <partial name="_NavBarPartial" />
+                    <!-- Header -->
+                    <partial name="_Header" />
+                </div>
+            }
             <div class="main-content card-content" id="panel">
                 <!-- Page Content -->
                 @RenderBody()
