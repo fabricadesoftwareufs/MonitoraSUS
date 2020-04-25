@@ -489,6 +489,7 @@ namespace MonitoraSUS.Controllers
             var imunoDepri = collection["Imunodeprimido"];
             var cancer = collection["Cancer"];
             var doencaResp = collection["DoencaRespiratoria"];
+            var outrasComorbidades = collection["OutrasComorbidades"];
 
             // Inserção e recebendo o objeto inserido (ID)
             var pessoa = _pessoaService.Insert(new PessoaModel
@@ -515,7 +516,8 @@ namespace MonitoraSUS.Controllers
                 Diabetes = diabetes.Contains("true") ? true : false,
                 DoencaRespiratoria = doencaResp.Contains("true") ? true : false,
                 Imunodeprimido = imunoDepri.Contains("true") ? true : false,
-                Obeso = obeso.Contains("true") ? true : false
+                Obeso = obeso.Contains("true") ? true : false,
+                OutrasComorbidades = outrasComorbidades
             });
 
             return pessoa.Idpessoa;

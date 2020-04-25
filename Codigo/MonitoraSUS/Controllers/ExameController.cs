@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Configuration;
 using Model;
-using Model.ViewModel;
 using MonitoraSUS.Utils;
 using Service.Interface;
 using System;
@@ -325,7 +324,7 @@ namespace MonitoraSUS.Controllers
              *  pegando informações do agente de saúde logado no sistema 
              */
             var agente = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
-          
+
             var secretarioMunicipio = _pessoaTrabalhaMunicipioContext.GetByIdPessoa(agente.UsuarioModel.IdPessoa);
             var secretarioEstado = _pessoaTrabalhaEstadoContext.GetByIdPessoa(agente.UsuarioModel.IdPessoa);
 
@@ -381,7 +380,7 @@ namespace MonitoraSUS.Controllers
              * os exames que ele pode ver
              */
             var usuario = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
-           
+
 
             var exames = new List<ExameModel>();
             if (usuario.RoleUsuario.Equals("AGENTE"))

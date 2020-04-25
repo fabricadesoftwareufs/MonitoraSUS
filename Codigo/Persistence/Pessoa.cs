@@ -39,6 +39,7 @@ namespace Persistence
         public byte Imunodeprimido { get; set; }
         public byte Cancer { get; set; }
         public byte DoencaRespiratoria { get; set; }
+        public string OutrasComorbidades { get; set; }
 
         public ICollection<Exame> ExameIdAgenteSaudeNavigation { get; set; }
         public ICollection<Exame> ExameIdPacienteNavigation { get; set; }
