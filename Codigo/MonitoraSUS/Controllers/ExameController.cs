@@ -400,7 +400,10 @@ namespace MonitoraSUS.Controllers
                 else
                 {
                     var secretarioEstado = _pessoaTrabalhaEstadoContext.GetByIdPessoa(usuario.UsuarioModel.IdPessoa);
-                    if (secretarioEstado != null)
+                    
+                    if (secretarioEstado.IdEmpresaExame != null)
+                        exames = _exameContext.GetByIdEmpresa(secretarioEstado.IdEmpresaExame);
+                    else
                         exames = _exameContext.GetByIdEstado(secretarioEstado.IdEstado);
                 }
             }
@@ -447,8 +450,6 @@ namespace MonitoraSUS.Controllers
 
         public PessoaModel CreatePessoaModelByExame(ExameViewModel exame)
         {
-
-
             exame.IdPaciente.Cpf = Methods.RemoveSpecialsCaracts(exame.IdPaciente.Cpf);
             exame.IdPaciente.Cep = Methods.RemoveSpecialsCaracts(exame.IdPaciente.Cep);
             exame.IdPaciente.FoneCelular = Methods.RemoveSpecialsCaracts(exame.IdPaciente.FoneCelular);

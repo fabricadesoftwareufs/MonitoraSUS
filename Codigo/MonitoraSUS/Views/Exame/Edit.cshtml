@@ -34,6 +34,8 @@
     var idEmpresaSaude = Model.IdEmpresaSaude;
     var idPaciente = Model.IdPaciente.Idpessoa;
     var googleKey = ViewBag.googleKey;
+    var outrasComorbidades = Model.IdPaciente.OutrasComorbidades;
+
 
 }
 
@@ -254,6 +256,11 @@
                                                 <label class="custom-control-label" for="customCheck7">Doença Respiratória</label>
                                             </label>
                                         </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <input type="search" id="input-outrasComorbidades" class="form-control" style="margin-top: 1px;" asp-for="IdPaciente.OutrasComorbidades" placeholder="Outras comorbidades" value="@outrasComorbidades">
                                     </div>
                                 </div>
                             </div>

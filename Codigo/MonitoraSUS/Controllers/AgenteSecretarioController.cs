@@ -76,6 +76,7 @@ namespace MonitoraSUS.Controllers
                 // ===================== OTHERS ENTITIES =====================
                 var atuacao = collection["areaAtuacao"];
                 if (atuacao.Equals("Municipal"))
+                {
                     if (_pessoaTrabalhaMunicipioService
                             .Insert(new PessoaTrabalhaMunicipioModel
                             {
@@ -83,13 +84,19 @@ namespace MonitoraSUS.Controllers
                                 IdMunicipio = Convert.ToInt32(collection["select-Cidade"]),
                                 EhSecretario = false,
                                 EhResponsavel = false
-                            })
-                        )
-                        return RedirectToAction("Index", "Login", new { msg = "successCad" });
+                            }))
+                    {
+                        TempData["mensagemSucesso"] = "Solicitação de cadastro realizado com sucesso! Por favor, receba um e-mail" +
+                                 "de permissão de acesso ao MonitoraSUS que será executado pelo gestor de saúde. E volta para a tela de login.";
+                    }
                     else
-                        return RedirectToAction("Index", "Login", new { msg = "errorCad" });
+                        TempData["mensagemErro"] = "Não foi possível concluir seu cadastro. Por favor, tente novamente";
+
+                    return RedirectToAction("Create", "AgenteSecretario");
+                }
 
                 if (atuacao.Equals("Estadual"))
+                {
                     if (_pessoaTrabalhaEstadoService
                             .Insert(new PessoaTrabalhaEstadoModel
                             {
@@ -97,11 +104,16 @@ namespace MonitoraSUS.Controllers
                                 IdEstado = Convert.ToInt32(collection["select-Estado"]),
                                 EhSecretario = false,
                                 EhResponsavel = false
-                            })
-                        )
-                        return RedirectToAction("Index", "Login", new { msg = "successCad" });
+                            }))
+                    {
+                        TempData["mensagemSucesso"] = "Solicitação de cadastro realizado com sucesso! Por favor, receba um e-mail" +
+                                 "de permissão de acesso ao MonitoraSUS que será executado pelo gestor de saúde. E volta para a tela de login.";
+                    }
                     else
-                        return RedirectToAction("Index", "Login", new { msg = "errorCad" });
+                        TempData["mensagemErro"] = "Não foi possível concluir seu cadastro. Por favor, tente novamente";
+
+                    return RedirectToAction("Create", "AgenteSecretario");
+                }
 
                 // Redirecting
                 return RedirectToAction("Index", "Login");
@@ -125,6 +137,7 @@ namespace MonitoraSUS.Controllers
                 // ===================== OTHERS ENTITIES =====================
                 var atuacao = collection["areaAtuacao"];
                 if (atuacao.Equals("Municipal"))
+                {
                     if (_pessoaTrabalhaMunicipioService
                             .Insert(new PessoaTrabalhaMunicipioModel
                             {
@@ -132,13 +145,19 @@ namespace MonitoraSUS.Controllers
                                 IdMunicipio = Convert.ToInt32(collection["select-Cidade"]),
                                 EhSecretario = false,
                                 EhResponsavel = true
-                            })
-                        )
-                        return RedirectToAction("Index", "Login", new { msg = "successCad" });
+                            }))
+                    {
+                        TempData["mensagemSucesso"] = "Solicitação de cadastro realizado com sucesso! Por favor, receba um e-mail" +
+                                 "de permissão de acesso ao MonitoraSUS que será executado pelo gestor de saúde. E volta para a tela de login.";
+                    }
                     else
-                        return RedirectToAction("Index", "Login", new { msg = "errorCad" });
+                        TempData["mensagemErro"] = "Não foi possível concluir seu cadastro. Por favor, tente novamente";
+
+                    return RedirectToAction("Create", "AgenteSecretario");
+                }
 
                 if (atuacao.Equals("Estadual"))
+                {
                     if (_pessoaTrabalhaEstadoService
                             .Insert(new PessoaTrabalhaEstadoModel
                             {
@@ -146,12 +165,16 @@ namespace MonitoraSUS.Controllers
                                 IdEstado = Convert.ToInt32(collection["select-Estado"]),
                                 EhSecretario = false,
                                 EhResponsavel = true
-                            })
-                        )
-                        return RedirectToAction("Index", "Login", new { msg = "successCad" });
+                            }))
+                    {
+                        TempData["mensagemSucesso"] = "Solicitação de cadastro realizado com sucesso! Por favor, receba um e-mail" +
+                                 "de permissão de acesso ao MonitoraSUS que será executado pelo gestor de saúde. E volta para a tela de login.";
+                    }
                     else
-                        return RedirectToAction("Index", "Login", new { msg = "errorCad" });
+                        TempData["mensagemErro"] = "Não foi possível concluir seu cadastro. Por favor, tente novamente";
 
+                    return RedirectToAction("Create", "AgenteSecretario");
+                }
                 // Redirecting
                 return RedirectToAction("Index", "Login");
             }
