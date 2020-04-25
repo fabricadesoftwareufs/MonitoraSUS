@@ -153,7 +153,7 @@ namespace MonitoraSUS.Controllers
                  */
                 _pessoaContext.Update(CreatePessoaModelByExame(exame));
 
-                TempData["mensagemSucesso"] = "Notificação realizada com SUCESSO!";
+                TempData["mensagemSucesso"] = "Edição realizada com SUCESSO!";
 
                 return View(new ExameViewModel());
 
@@ -339,11 +339,9 @@ namespace MonitoraSUS.Controllers
             }
             else
             {
-                if (secretarioEstado != null)
-                {
-                    exame.IdEstado = Convert.ToInt32(_municicpioContext.GetById(secretarioMunicipio.IdMunicipio).Uf);
+                exame.IdEstado = secretarioEstado.IdEstado;
+                if (secretarioEstado.IdEmpresaExame.HasValue)
                     exame.IdEmpresaSaude = secretarioEstado.IdEmpresaExame;
-                }
             }
 
             exame.IdAgenteSaude = agente.UsuarioModel.IdPessoa;
@@ -400,9 +398,9 @@ namespace MonitoraSUS.Controllers
                 else
                 {
                     var secretarioEstado = _pessoaTrabalhaEstadoContext.GetByIdPessoa(usuario.UsuarioModel.IdPessoa);
-                    
-                    if (secretarioEstado.IdEmpresaExame != null)
-                        exames = _exameContext.GetByIdEmpresa(secretarioEstado.IdEmpresaExame);
+
+                    if (secretarioEstado.IdEmpresaExame.HasValue)
+                        exames = _exameContext.GetByIdEmpresa(secretarioEstado.IdEmpresaExame.Value);
                     else
                         exames = _exameContext.GetByIdEstado(secretarioEstado.IdEstado);
                 }

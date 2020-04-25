@@ -1,36 +1,4 @@
-﻿window.onload = function () {
-
-    if ($('#input-cpf').val() == "") {
-        $('#input-cpf').focus();
-    }
-
-    $('#modal-mensagem-retorno').modal('show');
-};
-
-$('#btn-solicitar').on('click', function () {
-
-    var cpf = $('#input-cpf').val();
-    var nome = $('#input-nome').val();
-    var dataNasc = $('#input-data-nascimento').val();
-    var cep = $('#postal_code').val();
-    var numero = $('#street_number').val();
-    var rua = $('#route').val();
-    var bairro = $('#input-bairro').val();
-    var cidade = $('#administrative_area_level_2').val();
-    var estado = $('#administrative_area_level_1').val();
-    var foneCelular = $('#input-celular').val();
-    var email = $('#input-email').val();
-
-    if (!(cpf === "" || nome === "" || dataNasc === "" || cep === "" ||
-        rua === "" || bairro === "" || cidade === "" || estado === "" ||
-        foneCelular === "" || numero === "" || email === "")) {
-        $('#modal-espera').modal('show');
-
-    }
-});
-
-
-var placeSearch, autocomplete, inputHtml, geocoder;
+﻿var placeSearch, autocomplete, inputHtml, geocoder;
 inputHtml = document.getElementById('input-pesquisa');
 
 var span = document.getElementById('spanInvalidCep');
@@ -211,3 +179,36 @@ function BuscaViaCep(cep) {
             span.hidden = false;
     })
 }
+
+window.onload = function () {
+
+    if ($('#input-cpf').val() == "") {
+        $('#input-cpf').focus();
+    }
+
+    $('#modal-mensagem-retorno').modal('show');
+};
+
+$('#btn-solicitar').on('click', function () {
+
+    var cpf = $('#input-cpf').val();
+    var nome = $('#input-nome').val();
+    var dataNasc = $('#input-data-nascimento').val();
+    var cep = $('#postal_code').val();
+    var numero = $('#street_number').val();
+    var rua = $('#route').val();
+    var bairro = $('#input-bairro').val();
+    var cidade = $('#administrative_area_level_2').val();
+    var estado = $('#administrative_area_level_1').val();
+    var foneCelular = $('#input-celular').val();
+    var email = $('#input-email').val();
+    var outrasComorbidades = $('#input-outrasComorbidades').val();
+    
+
+    if (!(cpf === "" || nome === "" || dataNasc === "" || cep === "" ||
+        rua === "" || bairro === "" || cidade === "" || estado === "" ||
+        foneCelular === "" || numero === "" || email === "" || outrasComorbidades === "")) {
+        $('#modal-espera').modal('show');
+
+    }
+});

@@ -104,7 +104,7 @@
                                 <div class="col-lg-12">
                                     <div class="form-group">
                                         <label class="form-control-label" for="input-pesquisa">Pesquisa Endereço</label>
-                                        <input type="search" id="input-pesquisa" required class="form-control" oninput="PreencheForm()" placeholder="Pesquise pelo CEP, Rua, Bairro, Número" autocomplete="off">
+                                        <input type="search" id="input-pesquisa" class="form-control" oninput="PreencheForm()" placeholder="Pesquise pelo CEP, Rua, Bairro, Número" autocomplete="off">
                                         <span id="spanInvalidCep" hidden class="text-danger text-center" style="padding: 10px">Cep Invalido!!</span>
                                     </div>
                                 </div>
@@ -274,7 +274,7 @@
                                         <label class="form-control-label" for="input-atuacao-estado">Exame</label>
                                         <label asp-for="IdVirusBacteria.IdVirusBacteria" class="control-label"></label>
                                         @Html.DropDownListFor(model => model.IdVirusBacteria.IdVirusBacteria, ViewBag.VirusBacteria as SelectList, new
-                                        { @class = "form-control", @id="input-virus-bacteria" })
+                                        { @class = "form-control", @id = "input-virus-bacteria" })
                                     </div>
                                 </div>
                                 <div class="col-lg-4">
@@ -352,6 +352,26 @@
                             <input asp-for="IdEmpresaSaude" id="empresa-saude" class="form-control" value="@idEmpresaSaude" />
                         </div>
                         <hr class="my-4" />
+                        <div class="modal fade bs-example-modal-sm" id="modal-confirmar" tabindex="-1" role="dialog" aria-hidden="true">
+                            <div class="modal-dialog modal-sm">
+                                <div class="modal-content">
+                                    <div style="padding: 10pt;text-align: center">
+                                        <p id="titulo-confirmacao"> Confirmar alteração ? </p>
+                                        <p id="texto-confirmacao"></p>
+
+                                        <div class="col text-center form-group" id="acoes-model-form">
+                                            <a data-dismiss="modal" class="btn btn-danger">Não</a>
+
+                                            <button id="btn-submit" value="Notificar" class="btn btn-success"> Sim</button>
+                                        </div>
+
+                                        <div class="col text-center" id="ok-model-form">
+                                            <a data-dismiss="modal" class="btn btn-success">Ok</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </form>
                     <div class="row align-items-center">
                         <div class="col text-right">
@@ -364,26 +384,6 @@
     </div>
 </div>
 
-
-<div class="modal fade bs-example-modal-sm" id="modal-confirmar" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-sm">
-        <div class="modal-content">
-            <div style="padding: 10pt;text-align: center">
-                <p id="titulo-confirmacao"> Confirmar alteração ? </p>
-                <p id="texto-confirmacao"></p>
-
-                <div class="col text-center  form-group" id="acoes-model-form">
-                    <button type="button" data-dismiss="modal" class="btn btn-danger">Não</button>
-                    <button onclick="submitForm()" data-dismiss="modal" id="acoes-model-form" value="Sim" class="btn btn-success">Sim</button>
-                </div>
-
-                <div class="col text-center" id="ok-model-form">
-                    <button type="button" data-dismiss="modal" class="btn btn-success">Ok</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
 <div class="modal fade bs-example-modal-sm" id="modal-espera" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-sm">
@@ -411,7 +411,7 @@
                     </g>
                 </svg>
 
-                <p>Aguarde enquanto verificamos se esse paciente já existe...</p>
+                <p>Aguarde um momento enquanto processamos sua requisição...</p>
             </div>
         </div>
     </div>
@@ -428,11 +428,6 @@
                     {
                         <p> @TempData["mensagemSucesso"] </p>
 
-                        <p>
-                            Foi enviada uma mensagem de Email/SMS/Whatsapp
-                            para o celular cadastrado para notificá-lo da alteração
-                            do resultado do exame.
-                        </p>
                         <a asp-action="Index" class="btn btn-success">Ok</a>
 
                     }

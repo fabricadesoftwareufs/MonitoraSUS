@@ -129,7 +129,7 @@ namespace Service
                     IdEmpresaSaude = exame.IdEmpresaSaude,
                 }).ToList();
 
-        public List<ExameModel> GetByIdEmpresa(int? idEempresa)
+        public List<ExameModel> GetByIdEmpresa(int idEempresa)
         => _context.Exame
                .Where(exameModel => exameModel.IdEmpresaSaude == idEempresa)
                .Select(exame => new ExameModel
