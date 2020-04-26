@@ -23,8 +23,6 @@ namespace MonitoraSUS.Controllers
             if (exceptionFeature != null)
             {
                 ViewBag.ErrorMessage = "Alguma coisa deu errado no servidor";
-                ViewBag.MensagemOrientacao = "Ocorreu um erro inesperado, por favor tente executar a operação novamente. " +
-                           " Se o erro persistir, por favor, entre em contato com a Fábrica de Software da UFS pelo email ";
 
                 mensagem = " Exceção: " + exceptionFeature.Error.Message + "\n" +
                  " - " + exceptionFeature.Error.StackTrace + "\n" +
@@ -45,26 +43,16 @@ namespace MonitoraSUS.Controllers
             {
                 case 401:
                     ViewBag.ErrorMessage = "Você não tem permissão para acessar essa página";
-                    ViewBag.MensagemOrientacao = "Caso seja necessário acessar essa página, por favor, entre em contato com a " +
-                                                 "Fábrica de Software da UFS pelo email ";
-
                     break;
                 case 404:
                     ViewBag.ErrorMessage = "A página requisitada não foi encontrada";
-                    ViewBag.MensagemOrientacao = "Ocorreu um erro inesperado, por favor tente executar a operação novamente. " +
-                               " Se o erro persistir, por favor, entre em contato com a Fábrica de Software da UFS pelo email ";
-
                     break;
                 case 500:
                     ViewBag.ErrorMessage = "Alguma coisa deu errado no servidor";
-                    ViewBag.MensagemOrientacao = "Ocorreu um erro inesperado, por favor tente executar a operação novamente. " +
-                               " Se o erro persistir, por favor, entre em contato com a Fábrica de Software da UFS pelo email ";
                     break;
 
                 default:
                     ViewBag.ErrorMessage = "Alguma coisa deu errado no sistema";
-                    ViewBag.MensagemOrientacao = "Ocorreu um erro inesperado, por favor tente executar a operação novamente. " +
-                               " Se o erro persistir, por favor, entre em contato com a Fábrica de Software da UFS pelo email ";
                     break;
             }
 

@@ -15,5 +15,6 @@ namespace Service.Interface
         PessoaTrabalhaEstadoModel GetSecretarioAtivoByIdPessoa(int idPessoa);
         PessoaTrabalhaEstadoModel GetAgentEstadoByIdPessoa(int idPessoa, int idEstado);
         PessoaTrabalhaEstadoModel GetByIdPessoa(int idPessoa);
+        List<PessoaTrabalhaEstadoModel> GetByIdEmpresa(int idEmpresa);
     }
 }
