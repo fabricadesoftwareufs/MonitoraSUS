@@ -312,6 +312,9 @@ namespace MonitoraSUS.Controllers
             else
                 ViewBag.entidade = "Gestor";
 
+            if (TempData["responseUp"] != null)
+                ViewBag.responseUp = TempData["responseUp"];
+
             return View(solicitantes);
         }
 
@@ -454,6 +457,81 @@ namespace MonitoraSUS.Controllers
                 responsavel = 0;
             else
                 responsavel = 1;
+
+            return RedirectToAction(nameof(IndexApproveAgent), new { ehResponsavel = responsavel });
+        }
+
+        // GET: AgenteSecretario/DownToAgent/{agente|gestor}/id
+        [HttpGet("[controller]/[action]/{idPessoa}")]
+        public ActionResult DownToAgent(int idPessoa)
+        {
+            var agenteEstado = _pessoaTrabalhaEstadoService.GetByIdPessoa(idPessoa);
+            if (agenteEstado != null)
+            {
+                agenteEstado.EhResponsavel = false;
+                agenteEstado.SituacaoCadastro = "I";
+                _pessoaTrabalhaEstadoService.Update(agenteEstado);
+            }
+            else
+            {
+                var agenteMunicipio = _pessoaTrabalhaMunicipioService.GetByIdPessoa(idPessoa);
+                agenteEstado.EhResponsavel = false;
+                agenteMunicipio.SituacaoCadastro = "I";
+                _pessoaTrabalhaMunicipioService.Update(agenteMunicipio);
+            }
+
+            int responsavel = 1;
+
+            return RedirectToAction(nameof(IndexApproveAgent), new { ehResponsavel = responsavel });
+        }
+
+        /// <summary>
+        /// Promove agente à gestor
+        /// </summary>
+        /// <param name="cpf">cpf do agente que será promovido</param>
+        /// <returns></returns>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult UpToGestor(string cpf, string entidade)
+        {
+            // usuario logado
+            var usuario = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
+            var pessoaTrabalhaEstado = _pessoaTrabalhaEstadoService.GetByIdPessoa(usuario.UsuarioModel.IdPessoa);
+
+            var pessoa = _pessoaService.GetByCpf(Methods.RemoveSpecialsCaracts(cpf));
+
+            if (pessoa != null)
+            {
+                var agenteEstado = _pessoaTrabalhaEstadoService.GetAgentEstadoByIdPessoa(pessoa.Idpessoa, pessoaTrabalhaEstado.IdEstado);
+
+                if (agenteEstado != null)
+                {
+                    agenteEstado.EhResponsavel = true;
+                    agenteEstado.SituacaoCadastro = "A";
+                    _pessoaTrabalhaEstadoService.Update(agenteEstado);
+                }
+
+                else
+                {
+                    var pessoaTrabalhaMunicipio = _pessoaTrabalhaMunicipioService.GetByIdPessoa(usuario.UsuarioModel.IdPessoa);
+
+                    var agenteMunicipio = _pessoaTrabalhaMunicipioService.GetAgentMunicipioByIdPessoa(pessoa.Idpessoa, pessoaTrabalhaMunicipio.IdMunicipio);
+
+                    if (agenteMunicipio != null)
+                    {
+                        agenteEstado.EhResponsavel = true;
+                        agenteMunicipio.SituacaoCadastro = "A";
+                        _pessoaTrabalhaMunicipioService.Update(agenteMunicipio);
+                    }
+                    else
+                        TempData["responseUp"] = "Notificador não encontrado!";
+
+                }
+            }
+            else
+                TempData["responseUp"] = "Notificador não encontrado!";
+
+            int responsavel = 1;
 
             return RedirectToAction(nameof(IndexApproveAgent), new { ehResponsavel = responsavel });
         }

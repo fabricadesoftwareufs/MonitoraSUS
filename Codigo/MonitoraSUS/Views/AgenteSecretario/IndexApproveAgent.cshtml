@@ -24,6 +24,28 @@
                             </a>
                         </div>
                     </div>
+
+                     @if (ViewBag.entidade.Equals("Gestor"))
+                     {
+                        <hr />
+                        <div class="row align-items-center" style="float: left">
+                            <div class="col text-left">
+                                <h6 class="heading-small text-muted pl-lg-4">Promover Notificador à Gestor</h6>
+                                <div class="form-inline">
+                                    <form asp-controller="AgenteSecretario" asp-action="UpToGestor">
+                                        <input type="text" required class="form-control form-control-user cpf" oninput="validaCpf()" name="cpf" id="input-cpf" value="" placeholder="CPF">
+                                        <input hidden type="text" required class="form-control form-control-user" name="entidade" id="entidade" value="@ViewBag.entidade">
+                                        <button type="submit" class="margin-left-10 btn btn-success">Adicionar</button>
+                                    </form>
+                                </div>
+                                @if (ViewBag.responseUp != null)
+                                {
+                                    <span class="mb-4 text-danger text-center">@ViewBag.responseUp</span>
+                                }
+                            </div>
+                        </div>
+                      }
+
                 </div>
                 <div class="card-body ">
                     <div class="table-responsive">
@@ -105,6 +127,12 @@
                                                 <a href="@Url.Action("BlockAgent", "AgenteSecretario",  new { entidade = @ViewBag.entidade, idPessoa = item.IdPessoa })" class="btn btn-icon btn-warning btn-sm" title="@bloquear">
                                                     <span class="btn-inner--icon"><i class="fas fa-ban"></i></span>
                                                 </a>
+                                                if (ViewBag.entidade.Equals("Gestor"))
+                                                {
+                                                    <a href="@Url.Action("DownToAgent", "AgenteSecretario", new { idPessoa = item.IdPessoa })" class="btn btn-icon btn-danger btn-sm" title="@descartar">
+                                                        <span class="btn-inner--icon"><i class="fas fa-times"></i></span>
+                                                    </a>
+                                                }
                                             }
                                             else if (item.Status.Equals("I"))
                                             {
@@ -174,6 +202,8 @@
         }
 
     </script>
+
+    <script src="~/assets/js/PersonalScripts.js"></script>
 
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 

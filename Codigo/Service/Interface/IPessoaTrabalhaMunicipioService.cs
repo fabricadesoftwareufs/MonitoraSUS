@@ -12,6 +12,7 @@ namespace Service.Interface
         List<PessoaTrabalhaMunicipioModel> GetAllGestoresMunicipio(int idMunicipio);
         List<PessoaTrabalhaMunicipioModel> GetAllAgentsMunicipio(int idMunicipio);
         PessoaTrabalhaMunicipioModel GetById(int idPessoa, int idMunicipio);
+        PessoaTrabalhaMunicipioModel GetAgentMunicipioByIdPessoa(int idPessoa, int idMunicipio);
         PessoaTrabalhaMunicipioModel GetByIdPessoa(int idPessoa);
     }
 }
