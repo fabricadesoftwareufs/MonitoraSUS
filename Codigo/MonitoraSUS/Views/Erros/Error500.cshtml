@@ -17,7 +17,10 @@
                     <div class="display-inline">
                         <h2 class="text-justify">@ViewBag.ErrorMessage</h2>
                         <hr />
-                        <h3>@ViewBag.MensagemOrientacao <a href="mailto:fabricadesoftware@ufs.br?subject=EXCEÇÃO LANÇADA" title="">fabricadesoftware@ufs.br</a></h3>
+                        <h3>
+                            Ocorreu um erro inesperado, por favor tente executar a operação novamente. <br />
+                            Se o erro persistir, por favor, entre em contato com a Fábrica de Software da UFS pelo email<a href="mailto:fabricadesoftware@ufs.br?subject=EXCEÇÃO LANÇADA" title="">fabricadesoftware@ufs.br</a>
+                        </h3>
                         <br />
                         <a class="btn btn-success" asp-controller="Home" asp-action="Index">Voltar ao Inicio</a>
                     </div>

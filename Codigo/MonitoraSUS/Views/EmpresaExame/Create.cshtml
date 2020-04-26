@@ -1,0 +1,245 @@
+﻿@model Model.EmpresaExameModel
+
+@{
+    ViewData["Title"] = "Create";
+
+    var googleKey = ViewBag.googleKey;
+}
+
+
+<!-- Page Content -->
+<div class="container-fluid mt--6">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card card-content">
+                <div class="card-header bg-transparent">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h5 class="card-title  text-muted mb-0">MonitoraSUS</h5>
+                            <h5 class="h3 mb-0">Cadastrar Laboratório</h5>
+                        </div>
+                        <div class="col text-right">
+                            <a class="btn btn-default" asp-controller="Home" asp-action="Index"> <i class="fas fa-arrow-left"></i> Voltar</a><br />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <form asp-action="Create" name="form-exame" id="form-exame" autocomplete="off">
+                        <h6 class="heading-small text-muted mb-4">Dados da Organização</h6>
+                        <div class="pl-lg-4">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="input-cpf">CNPJ</label>
+                                        <input asp-for="Cnpj" required id="input-cnpj" placeholder="00.000.000/0000-00" class="form-control" />
+                                        @if (TempData["MensagemCnpj"] != null)
+                                        {
+                                            <h6 class="heading-small text-danger">@TempData["MensagemCnpj"]</h6>
+                                        }
+                                    </div>
+                                </div>
+                                <div class="col-md-10">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="input-nome">Razão Social</label>
+                                        <input asp-for="Nome" required id="input-nome" placeholder="Razão social" class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr class="my-4" />
+                        <h6 class="heading-small text-muted mb-4">Informações de Contato</h6>
+                        <div class="pl-lg-4">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="input-pesquisa">Pesquisa Endereço</label>
+                                        <input type="search" id="input-pesquisa" class="form-control" oninput="PreencheForm()" placeholder="Pesquise pelo CEP, Rua, Bairro, Número" autocomplete="off">
+                                        <span id="spanInvalidCep" hidden class="text-danger text-center" style="padding: 10px">Cep Invalido!!</span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-2">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="postal_code">CEP</label>
+                                        <input asp-for="Cep" id="postal_code" class="form-control" required placeholder="CEP">
+                                    </div>
+                                </div>
+                                <div class="col-lg-5">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="route">Logradouro</label>
+                                        <input asp-for="Rua" id="route" required class="form-control" placeholder="Rua, Av, Travessa">
+                                    </div>
+                                </div>
+                                <div class="col-lg-1">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="street_number">Número</label>
+                                        <input asp-for="Numero" id="street_number" class="form-control" placeholder="">
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="input-bairro">Bairro</label>
+                                        <input asp-for="Bairro" id="input-bairro" required class="form-control" placeholder="Bairro">
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="administrative_area_level_2">Cidade</label>
+                                        <input asp-for="Cidade" id="administrative_area_level_2" required class="form-control" placeholder="Cidade">
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="administrative_area_level_1">Estado</label>
+                                        <input asp-for="Estado" id="administrative_area_level_1" class="form-control" placeholder="Estado">
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="input-complemento">Complemento</label>
+                                        <input asp-for="Complemento" id="input-complemento" class="form-control" placeholder="Complemento">
+                                    </div>
+                                </div>
+                                <div class="col-lg-4" hidden>
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="input-latitude">Latitude</label>
+                                        <input asp-for="Latitude" id="input-latitude" class="form-control" placeholder="">
+                                    </div>
+                                </div>
+                                <div class="col-lg-4" hidden>
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="input-longitude">Longitude</label>
+                                        <input asp-for="Longitude" id="input-longitude" class="form-control" placeholder="">
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="input-celular">Celular</label>
+                                        <input asp-for="FoneCelular" id="input-celular" required class="form-control" placeholder=" (99) 99999 9999">
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="input-telefone">Telefone</label>
+                                        <input asp-for="FoneFixo" id="input-telefone" class="form-control" placeholder=" (99) 9999 9999">
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="input-email">E-mail</label>
+                                        <input asp-for="Email" id="input-email" class="form-control" placeholder="email@example.com">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr class="my-4" />
+                        <div class="row align-items-center">
+                            <div class="col text-right">
+                                <button value="Cadastrar" id="btn-cadastrar-empresa" class="btn btn-success">Cadastrar</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade bs-example-modal-sm" id="modal-espera" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="loading-spinner" style="padding: 20pt;text-align: center">
+                <svg id="hourglass" width='64px' height='64px' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" class="uil-hourglass">
+                    <rect x="0" y="0" width="100" height="100" fill="none" class="bk"></rect>
+                    <g>
+                        <path fill="none" stroke="#007282" stroke-width="5" stroke-miterlimit="10" d="M58.4,51.7c-0.9-0.9-1.4-2-1.4-2.3s0.5-0.4,1.4-1.4 C70.8,43.8,79.8,30.5,80,15.5H70H30H20c0.2,15,9.2,28.1,21.6,32.3c0.9,0.9,1.4,1.2,1.4,1.5s-0.5,1.6-1.4,2.5 C29.2,56.1,20.2,69.5,20,85.5h10h40h10C79.8,69.5,70.8,55.9,58.4,51.7z" class="glass"></path>
+                        <clipPath id="uil-hourglass-clip1">
+                            <rect x="15" y="20" width="70" height="25" class="clip">
+                                <animate attributeName="height" from="25" to="0" dur="1s" repeatCount="indefinite" vlaues="25;0;0" keyTimes="0;0.5;1"></animate>
+                                <animate attributeName="y" from="20" to="45" dur="1s" repeatCount="indefinite" vlaues="20;45;45" keyTimes="0;0.5;1"></animate>
+                            </rect>
+                        </clipPath>
+                        <clipPath id="uil-hourglass-clip2">
+                            <rect x="15" y="55" width="70" height="25" class="clip">
+                                <animate attributeName="height" from="0" to="25" dur="1s" repeatCount="indefinite" vlaues="0;25;25" keyTimes="0;0.5;1"></animate>
+                                <animate attributeName="y" from="80" to="55" dur="1s" repeatCount="indefinite" vlaues="80;55;55" keyTimes="0;0.5;1"></animate>
+                            </rect>
+                        </clipPath>
+                        <path d="M29,23c3.1,11.4,11.3,19.5,21,19.5S67.9,34.4,71,23H29z" clip-path="url(#uil-hourglass-clip1)" fill="#ffab00" class="sand"></path>
+                        <path d="M71.6,78c-3-11.6-11.5-20-21.5-20s-18.5,8.4-21.5,20H71.6z" clip-path="url(#uil-hourglass-clip2)" fill="#ffab00" class="sand"></path>
+                        <animateTransform attributeName="transform" type="rotate" from="0 50 50" to="180 50 50" repeatCount="indefinite" dur="1s" values="0 50 50;0 50 50;180 50 50" keyTimes="0;0.7;1"></animateTransform>
+                    </g>
+                </svg>
+
+                <p>Aguarde um momento por favor...</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@if (TempData["mensagemSucesso"] != null || TempData["mensagemErro"] != null)
+{
+    <div class="modal fade bs-example-modal-sm" id="modal-mensagem-retorno" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div style="padding: 20pt;text-align: center">
+                    @if (TempData["mensagemSucesso"] != null)
+                    {
+                        <p> @TempData["mensagemSucesso"] </p>
+                        <a asp-action="Index" asp-controller="Home" class="btn btn-success">Ok</a>
+
+                    }
+                    else
+                    {
+                        <p> @TempData["mensagemErro"] </p>
+                        <button type="button" data-dismiss="modal" class="btn btn-success">Ok</button>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+
+
+@section Scripts {
+
+    <script>
+
+        window.onload = function () {
+            $('#modal-mensagem-retorno').modal('show');
+        };
+
+        //quando o usuario der submit no cadastro de empresa
+        $('#btn-cadastrar-empresa').on('click', function () {
+
+            var cnpj = $('#input-cnpj').val();
+            var nome = $('#input-nome').val();
+            var cep = $('#postal_code').val();
+            var rua = $('#route').val();
+            var bairro = $('#input-bairro').val();
+            var cidade = $('#administrative_area_level_2').val();
+            var estado = $('#administrative_area_level_1').val();
+            var foneCelular = $('#input-celular').val();
+
+            if (!(cnpj === "" || nome === "" || cep === "" || rua === "" ||
+                bairro === "" || cidade === "" || estado === "" || foneCelular === "")) {
+
+                $('#modal-espera').modal('show');
+            }
+
+        });
+
+    </script>
+
+    <script src="~/assets/js/PersonalScripts.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=@googleKey&libraries=places&callback=initAutocomplete&language=pt-BR"
+            async defer></script>
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+

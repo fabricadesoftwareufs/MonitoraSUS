@@ -19,7 +19,7 @@ input.addEventListener("keyup", function () {
     }
 });
 
-//quando o usuario der submit
+//quando o usuario der submit no exame
 $('#btn-submit').on('click', function () {
 
     $('#modal-confirmar').modal('hide');

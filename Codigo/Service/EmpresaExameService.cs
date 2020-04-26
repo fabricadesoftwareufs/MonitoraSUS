@@ -101,5 +101,27 @@ namespace Service
                 Email = empresa.Email
             }).FirstOrDefault();
 
+        public EmpresaExameModel GetByCnpj(string cnpj)
+         => _context.Empresaexame
+            .Where(empresaExame => empresaExame.Cnpj.Equals(cnpj))
+            .Select(empresa => new EmpresaExameModel
+            {
+                Id = empresa.Id,
+                Cnpj = empresa.Cnpj,
+                Nome = empresa.Nome,
+                Cep = empresa.Cep,
+                Rua = empresa.Rua,
+                Bairro = empresa.Bairro,
+                Cidade = empresa.Cidade,
+                Estado = empresa.Estado,
+                Numero = empresa.Numero,
+                Complemento = empresa.Complemento,
+                Latitude = empresa.Latitude,
+                Longitude = empresa.Longitude,
+                FoneCelular = empresa.FoneCelular,
+                FoneFixo = empresa.FoneFixo,
+                Email = empresa.Email
+            }).FirstOrDefault();
+
     }
 }

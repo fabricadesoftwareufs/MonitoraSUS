@@ -103,6 +103,20 @@ namespace Service
                     IdEmpresaExame = p.IdEmpresaExame
                 }).FirstOrDefault();
 
+        public List<PessoaTrabalhaEstadoModel> GetByIdEmpresa(int idEmpresa)
+           => _context
+               .Pessoatrabalhaestado
+               .Where(p => p.IdEmpresaExame == idEmpresa)
+               .Select(p => new PessoaTrabalhaEstadoModel
+               {
+                   IdPessoa = p.Idpessoa,
+                   IdEstado = p.IdEstado,
+                   EhResponsavel = Convert.ToBoolean(p.EhResponsavel),
+                   EhSecretario = Convert.ToBoolean(p.EhSecretario),
+                   SituacaoCadastro = p.SituacaoCadastro,
+                   IdEmpresaExame = p.IdEmpresaExame
+               }).ToList();
+
         public PessoaTrabalhaEstadoModel GetSecretarioAtivoByIdPessoa(int idPessoa)
              => _context
                 .Pessoatrabalhaestado

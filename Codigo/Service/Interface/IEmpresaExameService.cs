@@ -10,5 +10,6 @@ namespace Service.Interface
         bool Delete(int id);
         List<EmpresaExameModel> GetAll();
         EmpresaExameModel GetById(int id);
+        EmpresaExameModel GetByCnpj(string cnpj);
     }
 }

@@ -54,6 +54,7 @@ namespace MonitoraSUS
             services.AddScoped<IUsuarioService, UsuarioService>();
             services.AddScoped<IRecuperarSenhaService, RecuperarSenhaService>();
             services.AddScoped<IEmailService, EmailService>();
+            services.AddScoped<IEmpresaExameService, EmpresaExameService>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }

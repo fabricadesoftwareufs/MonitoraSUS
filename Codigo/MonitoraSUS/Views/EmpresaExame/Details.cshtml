@@ -1,0 +1,113 @@
+﻿@model Model.EmpresaExameModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<div class="container-fluid mt--6">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card card-content">
+                <div class="card-header bg-transparent">
+                    <div class="row align-items-center">
+
+                        <div class="col">
+                            <h5 class="card-title text-muted mb-0">MonitoraSUS</h5>
+                            <h5 class="h3 mb-0">Laboratório</h5>
+                        </div>
+                        <div class="col text-right">
+                            <!--a class="btn btn-success" asp-action="Create">Novo Exame</!--a-->
+                            <a class="btn btn-default" asp-controller="Home" asp-action="Index"> <i class="fas fa-arrow-left"></i> Voltar</a><br />
+                        </div>
+
+                    </div>
+                    <hr />
+
+                    <div>
+                        <dl class="dl-horizontal">
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Id)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.Id)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Cnpj)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.Cnpj)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Nome)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.Nome)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Cep)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.Cep)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Rua)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.Rua)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Bairro)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.Bairro)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Cidade)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.Cidade)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Estado)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.Estado)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Numero)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.Numero)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Complemento)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.Complemento)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.FoneCelular)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.FoneCelular)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.FoneFixo)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.FoneFixo)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Email)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.Email)
+                            </dd>
+                        </dl>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
