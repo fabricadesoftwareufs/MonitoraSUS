@@ -70,7 +70,7 @@
                                     <td>
                                         <a href="@Url.Action("Details", "EmpresaExame", new { id = item.Id})" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> Detalhes </a>
                                         <a href="@Url.Action("Edit", "EmpresaExame", new { id = item.Id })" class="btn btn-info btn-xs"><i class="fa fa-edit"></i> Editar </a>
-                                        @if (usuario.RoleUsuario.Equals("COORDENADOR"))
+                                        @if (usuario.RoleUsuario.Equals("COORDENADOR") || usuario.RoleUsuario.Equals("SECRETARIO"))
                                         {
                                             <a data-toggle="modal" data-target="#modal-confirmar-@item.Id" class="btn btn-danger btn-xs text-white"><i class="fa fa-trash "></i> Remover </a>
                                             <div class="modal fade bs-example-modal-sm" id="modal-confirmar-@item.Id" tabindex="-1" role="dialog" aria-hidden="true">
