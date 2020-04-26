@@ -59,7 +59,7 @@
                                 <div class="col-md-2">
                                     <div class="form-group">
                                         <label class="form-control-label" for="input-cpf">CPF</label>
-                                        <input asp-for="IdPaciente.Cpf" id="input-cpf" placeholder="000.000.000-00" value="@cpf" class="form-control" />
+                                        <input asp-for="IdPaciente.Cpf" required id="input-cpf" placeholder="000.000.000-00" value="@cpf" class="form-control" />
                                         @if (TempData["resultadoPesquisa"] != null)
                                         {
                                             <h6 class="heading-small text-danger">@TempData["resultadoPesquisa"]</h6>
@@ -69,7 +69,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label class="form-control-label" for="input-nome">Paciente</label>
-                                        <input asp-for="IdPaciente.Nome" id="input-nome" placeholder="Nome Completo" class="form-control" value="@nome" />
+                                        <input asp-for="IdPaciente.Nome" required id="input-nome" placeholder="Nome Completo" class="form-control" value="@nome" />
                                     </div>
                                 </div>
                                 <div class="col-md-2">
