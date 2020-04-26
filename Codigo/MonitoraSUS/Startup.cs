@@ -75,13 +75,8 @@ namespace MonitoraSUS
             app.UseExceptionHandler("/Error/500");
             app.UseStatusCodePagesWithReExecute("/Error/{0}");
 
-
-
-
-
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            app.UseCookiePolicy();
 
             app.UseAuthentication();
 
@@ -91,6 +86,8 @@ namespace MonitoraSUS
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            app.UseCookiePolicy();
         }
     }
 }

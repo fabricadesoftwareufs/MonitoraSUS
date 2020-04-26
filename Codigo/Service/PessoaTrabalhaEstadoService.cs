@@ -20,6 +20,20 @@ namespace Service
             return _context.SaveChanges() == 1 ? true : false;
         }
 
+        public PessoaTrabalhaEstadoModel GetAgentEstadoByIdPessoa(int idPessoa, int idEstado)
+        => _context
+                .Pessoatrabalhaestado
+                .Where(p => p.Idpessoa == idPessoa && p.IdEstado == idEstado && p.EhSecretario.Equals(0) && p.EhResponsavel.Equals(0))
+                .Select(p => new PessoaTrabalhaEstadoModel
+                {
+                    IdPessoa = p.Idpessoa,
+                    IdEstado = p.IdEstado,
+                    EhResponsavel = Convert.ToBoolean(p.EhResponsavel),
+                    EhSecretario = Convert.ToBoolean(p.EhSecretario),
+                    SituacaoCadastro = p.SituacaoCadastro,
+                    IdEmpresaExame = p.IdEmpresaExame
+                }).FirstOrDefault();
+
         public List<PessoaTrabalhaEstadoModel> GetAll()
             => _context
                 .Pessoatrabalhaestado

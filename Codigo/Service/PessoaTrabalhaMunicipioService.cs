@@ -22,6 +22,19 @@ namespace Service
             return _context.SaveChanges() == 1 ? true : false;
         }
 
+        public PessoaTrabalhaMunicipioModel GetAgentMunicipioByIdPessoa(int idPessoa, int idMunicipio)
+        => _context
+                .Pessoatrabalhamunicipio
+                .Where(p => p.IdPessoa == idPessoa && p.IdMunicipio == idMunicipio && p.EhSecretario.Equals(0) && p.EhResponsavel.Equals(0))
+                .Select(p => new PessoaTrabalhaMunicipioModel
+                {
+                    IdPessoa = p.IdPessoa,
+                    IdMunicipio = p.IdMunicipio,
+                    EhResponsavel = Convert.ToBoolean(p.EhResponsavel),
+                    EhSecretario = Convert.ToBoolean(p.EhSecretario),
+                    SituacaoCadastro = p.SituacaoCadastro
+                }).FirstOrDefault();
+
         public List<PessoaTrabalhaMunicipioModel> GetAll()
             => _context
                 .Pessoatrabalhamunicipio
