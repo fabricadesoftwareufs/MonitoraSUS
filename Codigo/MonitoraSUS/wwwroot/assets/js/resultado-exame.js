@@ -8,6 +8,7 @@ window.onload = function () {
         window.location.href = "#input-virus-bacteria";
     }
 };
+
 // Pegando o cpf enquanto o usuario digita e submetendo quando terminar
 var input = document.getElementById('input-cpf');
 input.addEventListener("keyup", function () {
@@ -17,6 +18,36 @@ input.addEventListener("keyup", function () {
         document.forms["form-exame"].submit();
     }
 });
+
+//quando o usuario der submit
+$('#btn-submit').on('click', function () {
+
+    $('#modal-confirmar').modal('hide');
+
+    var cpf = $('#input-cpf').val();
+    var nome = $('#input-nome').val();
+    var dataNasc = $('#input-data-nascimento').val();
+    var cep = $('#postal_code').val();
+    var numero = $('#street_number').val();
+    var rua = $('#route').val();
+    var bairro = $('#input-bairro').val();
+    var cidade = $('#administrative_area_level_2').val();
+    var estado = $('#administrative_area_level_1').val();
+    var foneCelular = $('#input-celular').val();
+    var email = $('#input-email').val();
+    var dataExame = $('#input-data-exame').val();
+    var dataSintomas = $('#input-data-sintomas').val();
+    var outrasComorbidades = $('#input-outrasComorbidades').val();
+
+    if (!(cpf === "" || nome === "" || dataNasc === "" || cep === "" || rua === "" || bairro === "" ||
+          cidade === "" || estado === "" || foneCelular === "" || outrasComorbidades === "" ||
+          numero === "" || email === "" || dataExame === "" || dataSintomas === "" )) {
+
+        $('#modal-espera').modal('show');
+    }
+
+});
+
 // submete o formulário completo
 function submitForm() {
     $('#modal-espera').modal('show');
