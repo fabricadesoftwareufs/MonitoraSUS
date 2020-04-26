@@ -72,11 +72,16 @@ namespace MonitoraSUS.Controllers
 			{
 				// INSERTING A USER AND RETURNING THE ID.
 				var idPessoaInserida = PeopleInserted(collection);
-
 				// ===================== OTHERS ENTITIES =====================
 				var atuacao = collection["areaAtuacao"];
 				if (atuacao.Equals("Municipal"))
 				{
+					if (idPessoaInserida == 0)
+					{
+						TempData["mensagemErro"] = "Você já possui um cadastro no sistema. Solicite ao "
+							 + "gestor de saúde municipal sua inclusão como notificador.";
+						return RedirectToAction("Create", "AgenteSecretario");
+					}
 					if (_pessoaTrabalhaMunicipioService
 							.Insert(new PessoaTrabalhaMunicipioModel
 							{
@@ -96,6 +101,12 @@ namespace MonitoraSUS.Controllers
 
 				if (atuacao.Equals("Estadual"))
 				{
+					if (idPessoaInserida == 0)
+					{
+						TempData["mensagemErro"] = "Você já possui um cadastro no sistema. Solicite ao "
+							 + "gestor de saúde estadual sua inclusão como notificador.";
+						return RedirectToAction("Create", "AgenteSecretario");
+					}
 					if (_pessoaTrabalhaEstadoService
 							.Insert(new PessoaTrabalhaEstadoModel
 							{
@@ -136,6 +147,13 @@ namespace MonitoraSUS.Controllers
 				var atuacao = collection["areaAtuacao"];
 				if (atuacao.Equals("Municipal"))
 				{
+
+					if (idPessoaInserida == 0)
+					{
+						TempData["mensagemErro"] = "Você já possui um cadastro no sistema. Solicite ao "
+							 + "gestor de saúde municipal sua inclusão como gestor.";
+						return RedirectToAction("Create", "AgenteSecretario");
+					}
 					if (_pessoaTrabalhaMunicipioService
 							.Insert(new PessoaTrabalhaMunicipioModel
 							{
@@ -155,6 +173,12 @@ namespace MonitoraSUS.Controllers
 
 				if (atuacao.Equals("Estadual"))
 				{
+					if (idPessoaInserida == 0)
+					{
+						TempData["mensagemErro"] = "Você já possui um cadastro no sistema. Solicite ao "
+							 + "gestor de saúde estadual sua inclusão como gestor.";
+						return RedirectToAction("Create", "AgenteSecretario");
+					}
 					if (_pessoaTrabalhaEstadoService
 							.Insert(new PessoaTrabalhaEstadoModel
 							{
@@ -272,7 +296,7 @@ namespace MonitoraSUS.Controllers
 					IdPessoa = item.Pessoa.Idpessoa,
 					Nome = item.Pessoa.Nome,
 					Cpf = Methods.PatternCpf(item.Pessoa.Cpf),
-					Estado = _estadoService.GetById(item.PessoaEstado.IdEstado).Nome,
+					Estado = _estadoService.GetByCodUf(item.PessoaEstado.IdEstado).Nome,
 					Cidade = null,
 					Status = item.Situacao,
 					Situacao = ReturnStatus(item.Situacao)
@@ -565,8 +589,13 @@ namespace MonitoraSUS.Controllers
 			var doencaResp = collection["DoencaRespiratoria"];
 			var outrasComorbidades = collection["OutrasComorbidades"];
 
+			var pessoa = _pessoaService.GetByCpf(cpf);
+			// Se pessoa existe retorna 0 para indicar que a pessoa já tem cadastro
+			if (pessoa != null)
+				return 0;
+
 			// Inserção e recebendo o objeto inserido (ID)
-			var pessoa = _pessoaService.Insert(new PessoaModel
+			pessoa = _pessoaService.Insert(new PessoaModel
 			{
 				Cpf = cpf,
 				Nome = nome,
