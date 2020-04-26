@@ -192,7 +192,7 @@
                                 </div>
                                 <div class="col-lg-3">
                                     <div class="form-group">
-                                        <input type="search" id="input-outrasComorbidades" class="form-control" style="margin-top: 1px;" required asp-for="OutrasComorbidades" placeholder="Outras comorbidades">
+                                        <input type="search" id="input-outrasComorbidades" class="form-control" style="margin-top: 1px;" asp-for="OutrasComorbidades" placeholder="Outras comorbidades">
                                     </div>
                                 </div>
                             </div>
@@ -284,20 +284,18 @@
     <div class="modal fade bs-example-modal-sm" id="modal-mensagem-retorno" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-sm">
             <div class="modal-content">
-                <div style="padding: 20pt;text-align: center">
-                    @if (TempData["mensagemSucesso"] != null)
-                    {
-                        <p> @TempData["mensagemSucesso"] </p>
-                        <a asp-action="Index" asp-controller="Login" class="btn btn-success">Ok</a>
-                    }
-                    else
-                    {
-                        <p> @TempData["mensagemErro"] </p>
-                        <a data-dismiss="modal" class="btn btn-success">Ok</a>
-                    }
-
-
-                </div>
+				<div style="padding: 20pt;text-align: center">
+					@if (TempData["mensagemSucesso"] != null)
+					{
+						<p> @TempData["mensagemSucesso"] </p>
+						<a asp-action="Index" asp-controller="Login" class="btn btn-success">Ok</a>
+					}
+					else
+					{
+						<p> @TempData["mensagemErro"] </p>
+						<a data-dismiss="modal" class="btn btn-success">Ok</a>
+					}
+				</div>
             </div>
         </div>
     </div>
