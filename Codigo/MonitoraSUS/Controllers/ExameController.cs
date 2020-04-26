@@ -381,7 +381,7 @@ namespace MonitoraSUS.Controllers
 
 
             var exames = new List<ExameModel>();
-            if (usuario.RoleUsuario.Equals("AGENTE"))
+            if (usuario.RoleUsuario.Equals("AGENTE") || usuario.RoleUsuario.Equals("ADM"))
             {
                 exames = _exameContext.GetByIdAgente(usuario.UsuarioModel.IdPessoa);
             }
