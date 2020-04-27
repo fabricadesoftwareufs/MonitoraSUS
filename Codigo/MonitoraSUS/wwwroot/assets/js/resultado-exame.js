@@ -1,13 +1,13 @@
 // Mostra modal com mensagem de erro
-window.onload = function () {
-    $('#modal-mensagem-retorno').modal('show');
-
+$(document).ready(function () {
     if ($('#input-cpf').val() == "") {
         $('#input-cpf').focus();
     } else if ($('#input-cpf').val() != "" && $('#input-nome').val() != "") {
         window.location.href = "#input-virus-bacteria";
     }
-};
+
+    $('#modal-mensagem-retorno').modal('show');
+});
 
 // Pegando o cpf enquanto o usuario digita e submetendo quando terminar
 var input = document.getElementById('input-cpf');
