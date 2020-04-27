@@ -83,6 +83,9 @@ function ProcuraEndereco(endereco) {
             alert('ERRO AO INICIALIZAR O GEOCODE: ' + status);
         }
     });
+
+    $('#street_number').focus();
+
 }
 
 function clearSelect() {
@@ -168,7 +171,10 @@ function BuscaViaCep(cep) {
                 span.hidden = true;
                 formCep[input].value = '';
                 for (let value in data) {
-                    if (formCep[input].name.toLowerCase() == value) {
+                    if (formCep[input].name.toLowerCase() == value ||
+                        formCep[input].name == nameInputExame(value) ||
+                        formCep[input].name == nameInputEmpresaExame(value)) {
+
                         formCep[input].value = data[value];
                         formCep[input].setAttribute('readonly', 'true');
                     }
@@ -178,6 +184,44 @@ function BuscaViaCep(cep) {
         } else
             span.hidden = false;
     })
+}
+
+function nameInputExame(s) {
+    switch (s) {
+        case 'cep':
+            return 'IdPaciente.Cep';
+            break;
+        case 'bairro':
+            return 'IdPaciente.Bairro';
+            break;
+        case 'localidade':
+            return 'IdPaciente.Cidade';
+            break;
+        case 'uf':
+            return 'IdPaciente.Estado';
+            break;
+        case 'logradouro':
+            return 'IdPaciente.Rua';
+    }
+}
+
+function nameInputEmpresaExame(s) {
+    switch (s) {
+        case 'cep':
+            return 'Cep';
+            break;
+        case 'bairro':
+            return 'Bairro';
+            break;
+        case 'localidade':
+            return 'Cidade';
+            break;
+        case 'uf':
+            return 'Estado';
+            break;
+        case 'logradouro':
+            return 'Rua';
+    }
 }
 
 window.onload = function () {
