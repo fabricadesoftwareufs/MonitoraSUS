@@ -98,17 +98,17 @@ namespace Service
                  Uf = e.Uf
              }).FirstOrDefault();
 
-		public EstadoModel GetByCodUf(int codigoUf)
-		 => _context.Estado
-			 .Where(estadoModel => estadoModel.CodigoUf.Equals(codigoUf))
-			 .Select(e => new EstadoModel
-			 {
-				 Id = e.Id,
-				 CodigoUf = e.CodigoUf,
-				 Nome = e.Nome,
-				 Regiao = e.Regiao,
-				 Uf = e.Uf
-			 }).FirstOrDefault();
-	}
+        public EstadoModel GetByCodUf(int codigoUf)
+         => _context.Estado
+             .Where(estadoModel => estadoModel.CodigoUf.Equals(codigoUf))
+             .Select(e => new EstadoModel
+             {
+                 Id = e.Id,
+                 CodigoUf = e.CodigoUf,
+                 Nome = e.Nome,
+                 Regiao = e.Regiao,
+                 Uf = e.Uf
+             }).FirstOrDefault();
+    }
 }
 

@@ -26,7 +26,8 @@ namespace Service
                 .Select(virusbacteria => new VirusBacteriaModel
                 {
                     IdVirusBacteria = virusbacteria.IdVirusBacteria,
-                    Nome = virusbacteria.Nome
+                    Nome = virusbacteria.Nome,
+                    DiasRecuperacao = virusbacteria.DiasRecuperacao
                 }).ToList();
 
 
@@ -36,7 +37,8 @@ namespace Service
                 .Select(virusbacteria => new VirusBacteriaModel
                 {
                     IdVirusBacteria = virusbacteria.IdVirusBacteria,
-                    Nome = virusbacteria.Nome
+                    Nome = virusbacteria.Nome,
+                    DiasRecuperacao = virusbacteria.DiasRecuperacao
                 }).FirstOrDefault();
 
         public bool Insert(VirusBacteriaModel virusBacteriaModel)
@@ -50,7 +52,8 @@ namespace Service
             return new Virusbacteria
             {
                 IdVirusBacteria = virusModel.IdVirusBacteria,
-                Nome = virusModel.Nome
+                Nome = virusModel.Nome,
+                DiasRecuperacao = virusModel.DiasRecuperacao
             };
         }
 
