@@ -4,8 +4,6 @@ using Microsoft.Extensions.Configuration;
 using Model;
 using MonitoraSUS.Utils;
 using Service.Interface;
-using System.Collections.Generic;
-using System.Security.Claims;
 
 namespace MonitoraSUS.Controllers
 {
@@ -136,7 +134,7 @@ namespace MonitoraSUS.Controllers
         {
             var exames = _exameContext.GetByIdEmpresa(id);
             var pessoaEstado = _trabalhaEstadoContext.GetByIdEmpresa(id);
-            
+
             try
             {
                 foreach (var item in exames)

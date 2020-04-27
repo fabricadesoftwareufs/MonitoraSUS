@@ -12,6 +12,7 @@ namespace Persistence
 
         public int IdVirusBacteria { get; set; }
         public string Nome { get; set; }
+        public int DiasRecuperacao { get; set; }
 
         public ICollection<Exame> Exame { get; set; }
         public ICollection<Situacaopessoavirusbacteria> Situacaopessoavirusbacteria { get; set; }

@@ -53,7 +53,14 @@ namespace Service
                 Longitude = empresa.Longitude,
                 FoneCelular = empresa.FoneCelular,
                 FoneFixo = empresa.FoneFixo,
-                Email = empresa.Email
+                Email = empresa.Email,
+                // A partir daqui
+                EmiteLaudoExame = empresa.EmiteLaudoExame,
+                NumeroLeitos = empresa.NumeroLeitos,
+                NumeroLeitosDisponivel = empresa.NumeroLeitosDisponivel,
+                NumeroLeitosUti = empresa.NumeroLeitosUti,
+                NumeroLeitosUtidisponivel = empresa.NumeroLeitosUtidisponivel,
+                PossuiLeitosInternacao = empresa.PossuiLeitosInternacao
             };
         }
 
@@ -76,7 +83,13 @@ namespace Service
                 Longitude = empresa.Longitude,
                 FoneCelular = empresa.FoneCelular,
                 FoneFixo = empresa.FoneFixo,
-                Email = empresa.Email
+                Email = empresa.Email,
+                EmiteLaudoExame = empresa.EmiteLaudoExame,
+                NumeroLeitos = empresa.NumeroLeitos,
+                NumeroLeitosDisponivel = empresa.NumeroLeitosDisponivel,
+                NumeroLeitosUti = empresa.NumeroLeitosUti,
+                NumeroLeitosUtidisponivel = empresa.NumeroLeitosUtidisponivel,
+                PossuiLeitosInternacao = empresa.PossuiLeitosInternacao
             }).ToList();
 
         public EmpresaExameModel GetById(int id)
@@ -98,7 +111,13 @@ namespace Service
                 Longitude = empresa.Longitude,
                 FoneCelular = empresa.FoneCelular,
                 FoneFixo = empresa.FoneFixo,
-                Email = empresa.Email
+                Email = empresa.Email,
+                EmiteLaudoExame = empresa.EmiteLaudoExame,
+                NumeroLeitos = empresa.NumeroLeitos,
+                NumeroLeitosDisponivel = empresa.NumeroLeitosDisponivel,
+                NumeroLeitosUti = empresa.NumeroLeitosUti,
+                NumeroLeitosUtidisponivel = empresa.NumeroLeitosUtidisponivel,
+                PossuiLeitosInternacao = empresa.PossuiLeitosInternacao
             }).FirstOrDefault();
 
         public EmpresaExameModel GetByCnpj(string cnpj)
@@ -120,7 +139,13 @@ namespace Service
                 Longitude = empresa.Longitude,
                 FoneCelular = empresa.FoneCelular,
                 FoneFixo = empresa.FoneFixo,
-                Email = empresa.Email
+                Email = empresa.Email,
+                EmiteLaudoExame = empresa.EmiteLaudoExame,
+                NumeroLeitos = empresa.NumeroLeitos,
+                NumeroLeitosDisponivel = empresa.NumeroLeitosDisponivel,
+                NumeroLeitosUti = empresa.NumeroLeitosUti,
+                NumeroLeitosUtidisponivel = empresa.NumeroLeitosUtidisponivel,
+                PossuiLeitosInternacao = empresa.PossuiLeitosInternacao
             }).FirstOrDefault();
 
     }

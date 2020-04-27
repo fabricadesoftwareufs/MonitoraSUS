@@ -12,7 +12,7 @@ namespace Service.Interface
         EstadoModel GetById(int id);
         EstadoModel GetByName(string name);
         EstadoModel GetByUf(string uf);
-		EstadoModel GetByCodUf(int codigoUf);
+        EstadoModel GetByCodUf(int codigoUf);
 
-	}
+    }
 }
