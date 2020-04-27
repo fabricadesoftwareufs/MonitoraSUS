@@ -26,7 +26,8 @@ namespace Persistence
         public virtual DbSet<Virusbacteria> Virusbacteria { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        { }
+        {
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -70,6 +71,10 @@ namespace Persistence
                     .HasMaxLength(60)
                     .IsUnicode(false);
 
+                entity.Property(e => e.EmiteLaudoExame)
+                    .HasColumnName("emiteLaudoExame")
+                    .HasDefaultValueSql("0");
+
                 entity.Property(e => e.Estado)
                     .IsRequired()
                     .HasColumnName("estado")
@@ -111,6 +116,26 @@ namespace Persistence
                     .HasColumnName("numero")
                     .HasMaxLength(20)
                     .IsUnicode(false);
+
+                entity.Property(e => e.NumeroLeitos)
+                    .HasColumnName("numeroLeitos")
+                    .HasDefaultValueSql("0");
+
+                entity.Property(e => e.NumeroLeitosDisponivel)
+                    .HasColumnName("numeroLeitosDisponivel")
+                    .HasDefaultValueSql("0");
+
+                entity.Property(e => e.NumeroLeitosUti)
+                    .HasColumnName("numeroLeitosUTI")
+                    .HasDefaultValueSql("0");
+
+                entity.Property(e => e.NumeroLeitosUtidisponivel)
+                    .HasColumnName("numeroLeitosUTIDisponivel")
+                    .HasDefaultValueSql("0");
+
+                entity.Property(e => e.PossuiLeitosInternacao)
+                    .HasColumnName("possuiLeitosInternacao")
+                    .HasDefaultValueSql("0");
 
                 entity.Property(e => e.Rua)
                     .IsRequired()
@@ -156,6 +181,10 @@ namespace Persistence
 
                 entity.HasIndex(e => e.IdVirusBacteria)
                     .HasName("fk_exame_virusBacteria1_idx");
+
+                entity.HasIndex(e => new { e.IdVirusBacteria, e.IdPaciente, e.DataExame })
+                    .HasName("fk_exame_diaPessoa")
+                    .IsUnique();
 
                 entity.Property(e => e.IdExame).HasColumnName("idExame");
 
@@ -248,6 +277,10 @@ namespace Persistence
 
                 entity.ToTable("pessoa", "monitorasus");
 
+                entity.HasIndex(e => e.Cpf)
+                    .HasName("cpf_UNIQUE")
+                    .IsUnique();
+
                 entity.Property(e => e.Idpessoa).HasColumnName("idpessoa");
 
                 entity.Property(e => e.Bairro)
@@ -300,7 +333,6 @@ namespace Persistence
                     .HasDefaultValueSql("0");
 
                 entity.Property(e => e.Email)
-                    .IsRequired()
                     .HasColumnName("email")
                     .HasMaxLength(60)
                     .IsUnicode(false);
@@ -379,7 +411,7 @@ namespace Persistence
 
             modelBuilder.Entity<Pessoatrabalhaestado>(entity =>
             {
-                entity.HasKey(e => new { e.Idpessoa, e.IdEstado });
+                entity.HasKey(e => new { e.Idpessoa, e.IdEstado, e.IdEmpresaExame });
 
                 entity.ToTable("pessoatrabalhaestado", "monitorasus");
 
@@ -396,6 +428,10 @@ namespace Persistence
 
                 entity.Property(e => e.IdEstado).HasColumnName("idEstado");
 
+                entity.Property(e => e.IdEmpresaExame)
+                    .HasColumnName("idEmpresaExame")
+                    .HasDefaultValueSql("1");
+
                 entity.Property(e => e.EhResponsavel)
                     .HasColumnName("ehResponsavel")
                     .HasDefaultValueSql("0");
@@ -403,8 +439,6 @@ namespace Persistence
                 entity.Property(e => e.EhSecretario)
                     .HasColumnName("ehSecretario")
                     .HasDefaultValueSql("0");
-
-                entity.Property(e => e.IdEmpresaExame).HasColumnName("idEmpresaExame");
 
                 entity.Property(e => e.SituacaoCadastro)
                     .IsRequired()
@@ -415,6 +449,7 @@ namespace Persistence
                 entity.HasOne(d => d.IdEmpresaExameNavigation)
                     .WithMany(p => p.Pessoatrabalhaestado)
                     .HasForeignKey(d => d.IdEmpresaExame)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk_pessoatrabalhaestado_empresaexame1");
 
                 entity.HasOne(d => d.IdEstadoNavigation)
@@ -589,6 +624,10 @@ namespace Persistence
                 entity.ToTable("virusbacteria", "monitorasus");
 
                 entity.Property(e => e.IdVirusBacteria).HasColumnName("idVirusBacteria");
+
+                entity.Property(e => e.DiasRecuperacao)
+                    .HasColumnName("diasRecuperacao")
+                    .HasDefaultValueSql("0");
 
                 entity.Property(e => e.Nome)
                     .IsRequired()

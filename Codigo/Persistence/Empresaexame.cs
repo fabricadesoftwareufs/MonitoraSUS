@@ -25,6 +25,12 @@ namespace Persistence
         public string FoneCelular { get; set; }
         public string FoneFixo { get; set; }
         public string Email { get; set; }
+        public byte EmiteLaudoExame { get; set; }
+        public byte PossuiLeitosInternacao { get; set; }
+        public int NumeroLeitos { get; set; }
+        public int NumeroLeitosUti { get; set; }
+        public int NumeroLeitosDisponivel { get; set; }
+        public int NumeroLeitosUtidisponivel { get; set; }
 
         public ICollection<Exame> Exame { get; set; }
         public ICollection<Pessoatrabalhaestado> Pessoatrabalhaestado { get; set; }

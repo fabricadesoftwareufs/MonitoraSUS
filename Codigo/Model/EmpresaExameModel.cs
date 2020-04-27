@@ -42,5 +42,11 @@ namespace Model
         public string FoneFixo { get; set; }
         [Display(Name = "Email")]
         public string Email { get; set; }
+        public byte EmiteLaudoExame { get; set; }
+        public byte PossuiLeitosInternacao { get; set; }
+        public int NumeroLeitos { get; set; }
+        public int NumeroLeitosUti { get; set; }
+        public int NumeroLeitosDisponivel { get; set; }
+        public int NumeroLeitosUtidisponivel { get; set; }
     }
 }
