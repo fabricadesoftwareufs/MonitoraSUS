@@ -27,10 +27,12 @@ namespace MonitoraSUS.Controllers
         private readonly IConfiguration _configuration;
         private readonly IRecuperarSenhaService _recuperarSenhaService;
         private readonly IEmailService _emailService;
+        private readonly IExameService _exameService;
+
         public AgenteSecretarioController(IMunicipioService municipioService, IEstadoService estadoService,
             IPessoaService pessoaService, IPessoaTrabalhaMunicipioService pessoaTrabalhaMunicipioService,
             IPessoaTrabalhaEstadoService pessoaTrabalhaEstadoService, IUsuarioService usuarioService, IConfiguration configuration,
-            IRecuperarSenhaService recuperarSenhaService, IEmailService emailService)
+            IRecuperarSenhaService recuperarSenhaService, IEmailService emailService, IExameService exameService)
         {
             _municipioService = municipioService;
             _estadoService = estadoService;
@@ -41,6 +43,7 @@ namespace MonitoraSUS.Controllers
             _configuration = configuration;
             _recuperarSenhaService = recuperarSenhaService;
             _emailService = emailService;
+            _exameService = exameService;
         }
 
         // GET: AgenteSecretario
@@ -217,51 +220,6 @@ namespace MonitoraSUS.Controllers
         [AllowAnonymous]
         public ActionResult ReturnStates() => Ok(_estadoService.GetAll());
 
-        // GET: AgenteSecretario/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        // POST: AgenteSecretario/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                // TODO: Add update logic here
-
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: AgenteSecretario/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: AgenteSecretario/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                // TODO: Add delete logic here
-
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
 
         //========================= AGENTE, GESTOR CONTROL ACESS ====================
         /// <summary>
@@ -335,6 +293,10 @@ namespace MonitoraSUS.Controllers
             if (TempData["responseUp"] != null)
                 ViewBag.responseUp = TempData["responseUp"];
 
+            if (TempData["responseOp"] != null)
+                ViewBag.responseOp = TempData["responseOp"];
+
+            //TODO view do op 
             return View(solicitantes);
         }
 
@@ -347,15 +309,39 @@ namespace MonitoraSUS.Controllers
             {
                 _pessoaTrabalhaEstadoService.Delete(agenteEstado.IdPessoa, agenteEstado.IdEstado);
 
-                _pessoaService.Delete(agenteEstado.IdPessoa);
-
+                var exames = _exameService.GetByIdPaciente(agenteEstado.IdPessoa);
+                if (exames == null)
+                {
+                    _pessoaService.Delete(agenteEstado.IdPessoa);
+                    int idUsuario = _usuarioService.GetByIdPessoa(agenteEstado.IdPessoa).IdUsuario;
+                    _usuarioService.Delete(idUsuario);
+                }
+                else
+                {
+                    var usuario = _usuarioService.GetByIdPessoa(agenteEstado.IdPessoa);
+                    usuario.TipoUsuario = 0;
+                    _usuarioService.Update(usuario);
+                }
             }
             else
             {
                 var agenteMunicipio = _pessoaTrabalhaMunicipioService.GetByIdPessoa(idPessoa);
                 _pessoaTrabalhaMunicipioService.Delete(agenteMunicipio.IdPessoa, agenteMunicipio.IdMunicipio);
 
-                _pessoaService.Delete(agenteMunicipio.IdPessoa);
+                var exames = _exameService.GetByIdPaciente(agenteMunicipio.IdPessoa);
+                if (exames == null)
+                {
+                    _pessoaService.Delete(agenteMunicipio.IdPessoa);
+                    int idUsuario = _usuarioService.GetByIdPessoa(agenteMunicipio.IdPessoa).IdUsuario;
+                    _usuarioService.Delete(idUsuario);
+                }
+                else
+                {
+                    var usuario = _usuarioService.GetByIdPessoa(agenteMunicipio.IdPessoa);
+                    usuario.TipoUsuario = 0;
+                    _usuarioService.Update(usuario);
+                }
+
             }
 
             int responsavel;
@@ -364,6 +350,8 @@ namespace MonitoraSUS.Controllers
             else
                 responsavel = 1;
 
+            TempData["responseOp"] = entidade + " excluído com sucesso!";
+
             return RedirectToAction(nameof(IndexApproveAgent), new { ehResponsavel = responsavel });
         }
 
@@ -371,8 +359,11 @@ namespace MonitoraSUS.Controllers
         [HttpGet("[controller]/[action]/{entidade}/{idPessoa}")]
         public async Task<ActionResult> ActivateAgent(string entidade, int idPessoa)
         {
-            bool sucess = true;
+            bool sucess = false;
+            string responseOp = "";
+            UsuarioModel usuarioModel = null;
 
+            //caso o sujeito trabalhe no estado
             var agenteEstado = _pessoaTrabalhaEstadoService.GetByIdPessoa(idPessoa);
             if (agenteEstado != null)
             {
@@ -392,27 +383,44 @@ namespace MonitoraSUS.Controllers
                     if (_usuarioService.GetByCpf(pessoa.Cpf) == null)
                         _usuarioService.Insert(usuario);
 
+                    usuarioModel = usuario;
+
                     (bool nCpf, bool nUsuario, bool nToken) =
                                             await new LoginController(_usuarioService, _pessoaService, _emailService, _recuperarSenhaService).GenerateToken(usuario.Cpf, 1);
 
-                    if (!(nCpf && nUsuario && nToken))
-                    {
-                        _usuarioService.Delete(usuario.IdUsuario);
-                        sucess = false;
-                    }
+                    responseOp = ReturnMsgOper(nCpf, nUsuario, nToken);
+
+                    if (responseOp.Equals(""))
+                        sucess = true;
 
                 }
+                else
+                {
+                    (bool nCpf, bool nUsuario, bool nToken) =
+                        await new LoginController(_usuarioService, _pessoaService, _emailService, _recuperarSenhaService).GenerateToken(usuarioModel.Cpf, 2);
+
+                    responseOp = ReturnMsgOper(nCpf, nUsuario, nToken);
+
+                    if (responseOp.Equals(""))
+                        sucess = true;
+
+                }
+
                 if (sucess)
                 {
                     agenteEstado.SituacaoCadastro = "A";
                     _pessoaTrabalhaEstadoService.Update(agenteEstado);
                 }
+                else
+                    _usuarioService.Delete(usuarioModel.IdUsuario);
             }
+
+            // caso o sujeito trabalhe no municipio
             else
             {
                 var agenteMunicipio = _pessoaTrabalhaMunicipioService.GetByIdPessoa(idPessoa);
 
-                //se o ator tiver o cadstro solicitado, será gerado um novo usuario pra ele 
+                //se o ator tiver o cadastro solicitado, será gerado um novo usuario pra ele 
                 if (agenteMunicipio.SituacaoCadastro.Equals("S"))
                 {
                     var pessoa = _pessoaService.GetById(agenteMunicipio.IdPessoa);
@@ -428,28 +436,46 @@ namespace MonitoraSUS.Controllers
                     if (_usuarioService.GetByCpf(pessoa.Cpf) == null)
                         _usuarioService.Insert(usuario);
 
+                    usuarioModel = usuario;
+
                     (bool nCpf, bool nUsuario, bool nToken) =
                         await new LoginController(_usuarioService, _pessoaService, _emailService, _recuperarSenhaService).GenerateToken(usuario.Cpf, 1);
 
-                    if (!(nCpf && nUsuario && nToken))
-                    {
-                        _usuarioService.Delete(usuario.IdUsuario);
-                        sucess = false;
-                    }
+                    responseOp = ReturnMsgOper(nCpf, nUsuario, nToken);
 
+                    if (responseOp.Equals(""))
+                        sucess = true;
                 }
+                else
+                {
+                    (bool nCpf, bool nUsuario, bool nToken) =
+                       await new LoginController(_usuarioService, _pessoaService, _emailService, _recuperarSenhaService).GenerateToken(usuarioModel.Cpf, 2);
+
+                    responseOp = ReturnMsgOper(nCpf, nUsuario, nToken);
+
+                    if (responseOp.Equals(""))
+                        sucess = true;
+                }
+
                 if (sucess)
                 {
                     agenteMunicipio.SituacaoCadastro = "A";
                     _pessoaTrabalhaMunicipioService.Update(agenteMunicipio);
+                    responseOp += entidade + " foi ativado com sucesso. Um email foi enviado para notificá-lo";
                 }
+                else
+                    _usuarioService.Delete(usuarioModel.IdUsuario);
+
             }
 
             int responsavel;
             if (entidade.Equals("Agente"))
                 responsavel = 0;
+
             else
                 responsavel = 1;
+
+            TempData["responseOp"] = responseOp;
 
             return RedirectToAction(nameof(IndexApproveAgent), new { ehResponsavel = responsavel });
         }
@@ -478,6 +504,8 @@ namespace MonitoraSUS.Controllers
             else
                 responsavel = 1;
 
+            TempData["responseOp"] = entidade + " bloqueado com sucesso!";
+
             return RedirectToAction(nameof(IndexApproveAgent), new { ehResponsavel = responsavel });
         }
 
@@ -502,6 +530,8 @@ namespace MonitoraSUS.Controllers
 
             int responsavel = 1;
 
+            TempData["responseOp"] = "Gestor foi rebaixado à notificador e bloqueado com sucesso!";
+
             return RedirectToAction(nameof(IndexApproveAgent), new { ehResponsavel = responsavel });
         }
 
@@ -512,39 +542,73 @@ namespace MonitoraSUS.Controllers
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult UpToGestor(string cpf, string entidade)
+        public ActionResult UpToGestor(string cpf)
         {
             // usuario logado
             var usuario = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
-            var pessoaTrabalhaEstado = _pessoaTrabalhaEstadoService.GetByIdPessoa(usuario.UsuarioModel.IdPessoa);
 
             var pessoa = _pessoaService.GetByCpf(Methods.RemoveSpecialsCaracts(cpf));
 
             if (pessoa != null)
             {
+                var pessoaTrabalhaEstado = _pessoaTrabalhaEstadoService.GetByIdPessoa(usuario.UsuarioModel.IdPessoa);
+                var pessoaTrabalhaMunicipio = _pessoaTrabalhaMunicipioService.GetByIdPessoa(usuario.UsuarioModel.IdPessoa);
+
                 var agenteEstado = _pessoaTrabalhaEstadoService.GetAgentEstadoByIdPessoa(pessoa.Idpessoa, pessoaTrabalhaEstado.IdEstado);
 
-                if (agenteEstado != null)
+                if (pessoaTrabalhaEstado != null)
                 {
-                    agenteEstado.EhResponsavel = true;
-                    agenteEstado.SituacaoCadastro = "A";
-                    _pessoaTrabalhaEstadoService.Update(agenteEstado);
-                }
+                    if (agenteEstado != null)
+                    {
+                        agenteEstado.EhResponsavel = true;
+                        agenteEstado.SituacaoCadastro = "A";
+                        _pessoaTrabalhaEstadoService.Update(agenteEstado);
+                        TempData["responseOp"] = "Notificador foi promovido à Gestor!";
+                    }
+                    else
+                    {
+                        var pessoaTrabalhaEstadoModel = new PessoaTrabalhaEstadoModel
+                        {
+                            IdPessoa = pessoa.Idpessoa,
+                            IdEstado = pessoaTrabalhaEstado.IdEstado,
+                            EhResponsavel = true,
+                            EhSecretario = false,
+                            SituacaoCadastro = "I",
+                        };
 
+                        _pessoaTrabalhaEstadoService.Insert(pessoaTrabalhaEstadoModel);
+
+                        return RedirectToAction(nameof(ActivateAgent), new { entidade = "Gestor", idPessoa = pessoaTrabalhaEstadoModel.IdPessoa });
+                    }
+                }
                 else
                 {
-                    var pessoaTrabalhaMunicipio = _pessoaTrabalhaMunicipioService.GetByIdPessoa(usuario.UsuarioModel.IdPessoa);
-
                     var agenteMunicipio = _pessoaTrabalhaMunicipioService.GetAgentMunicipioByIdPessoa(pessoa.Idpessoa, pessoaTrabalhaMunicipio.IdMunicipio);
 
                     if (agenteMunicipio != null)
                     {
                         agenteEstado.EhResponsavel = true;
                         agenteMunicipio.SituacaoCadastro = "A";
+
                         _pessoaTrabalhaMunicipioService.Update(agenteMunicipio);
+
+                        TempData["responseOp"] = "Notificador foi promovido à Gestor!";
                     }
                     else
-                        TempData["responseUp"] = "Notificador não encontrado!";
+                    {
+                        var pessoaTrabalhaMunicipioModel = new PessoaTrabalhaMunicipioModel
+                        {
+                            IdPessoa = pessoa.Idpessoa,
+                            IdMunicipio = pessoaTrabalhaMunicipio.IdMunicipio,
+                            EhResponsavel = true,
+                            EhSecretario = false,
+                            SituacaoCadastro = "I"
+                        };
+
+                        _pessoaTrabalhaMunicipioService.Insert(pessoaTrabalhaMunicipioModel);
+
+                        return RedirectToAction(nameof(ActivateAgent), new { entidade = "Gestor", idPessoa = pessoaTrabalhaMunicipioModel.IdPessoa });
+                    }
 
                 }
             }
@@ -635,6 +699,23 @@ namespace MonitoraSUS.Controllers
                 case "S": return "Pedente";
                 default: return "Undefined";
             }
+
+        }
+
+        private string ReturnMsgOper(bool nCpf, bool nUsuario, bool nToken)
+        {
+            string responseOp = "";
+
+            if (!nCpf)
+                responseOp += "CPF inválido. ";
+
+            else if (!nUsuario)
+                responseOp += "Não login associado ao profissional. ";
+
+            else if (!nToken)
+                responseOp += "Ocorreu um erro com o envio do email, falha na operação. ";
+
+            return responseOp;
 
         }
     }

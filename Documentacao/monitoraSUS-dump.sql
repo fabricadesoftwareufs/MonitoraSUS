@@ -219,14 +219,13 @@ DROP TABLE IF EXISTS `pessoatrabalhaestado`;
 CREATE TABLE `pessoatrabalhaestado` (
   `idpessoa` int(11) NOT NULL,
   `idEstado` int(11) NOT NULL,
-  `idEmpresaExame` int(11) NOT NULL DEFAULT '1',
+  `idEmpresaExame` int(11) DEFAULT NULL,
   `ehResponsavel` tinyint(4) NOT NULL DEFAULT '0',
   `ehSecretario` tinyint(4) NOT NULL DEFAULT '0',
   `situacaoCadastro` enum('S','A','I') NOT NULL DEFAULT 'S',
-  PRIMARY KEY (`idpessoa`,`idEstado`,`idEmpresaExame`),
+  PRIMARY KEY (`idpessoa`,`idEstado`),
   KEY `fk_pessoa_has_estado_estado1_idx` (`idEstado`),
   KEY `fk_pessoa_has_estado_pessoa1_idx` (`idpessoa`),
-  KEY `fk_pessoatrabalhaestado_empresaexame1_idx` (`idEmpresaExame`),
   CONSTRAINT `fk_pessoatrabalhaestado_empresaexame1` FOREIGN KEY (`idEmpresaExame`) REFERENCES `empresaexame` (`id`),
   CONSTRAINT `fk_pessoa_has_estado_estado1` FOREIGN KEY (`idEstado`) REFERENCES `estado` (`Id`),
   CONSTRAINT `fk_pessoa_has_estado_pessoa1` FOREIGN KEY (`idpessoa`) REFERENCES `pessoa` (`idpessoa`)

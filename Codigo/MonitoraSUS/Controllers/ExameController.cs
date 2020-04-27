@@ -340,7 +340,7 @@ namespace MonitoraSUS.Controllers
             else
             {
                 exame.IdEstado = secretarioEstado.IdEstado;
-                if (secretarioEstado.IdEmpresaExame.HasValue)
+                if (secretarioEstado.IdEmpresaExame != -1)
                     exame.IdEmpresaSaude = secretarioEstado.IdEmpresaExame;
             }
 
@@ -399,8 +399,8 @@ namespace MonitoraSUS.Controllers
                 {
                     var secretarioEstado = _pessoaTrabalhaEstadoContext.GetByIdPessoa(usuario.UsuarioModel.IdPessoa);
 
-                    if (secretarioEstado.IdEmpresaExame.HasValue)
-                        exames = _exameContext.GetByIdEmpresa(secretarioEstado.IdEmpresaExame.Value);
+                    if (secretarioEstado.IdEmpresaExame != -1)
+                        exames = _exameContext.GetByIdEmpresa(secretarioEstado.IdEmpresaExame);
                     else
                         exames = _exameContext.GetByIdEstado(secretarioEstado.IdEstado);
                 }

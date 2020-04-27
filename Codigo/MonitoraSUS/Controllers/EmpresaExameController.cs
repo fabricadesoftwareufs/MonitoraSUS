@@ -145,7 +145,7 @@ namespace MonitoraSUS.Controllers
 
                 foreach (var item in pessoaEstado)
                 {
-                    item.IdEmpresaExame = null;
+                  //item.IdEmpresaExame = null;
                     _trabalhaEstadoContext.Update(item);
                 }
 
