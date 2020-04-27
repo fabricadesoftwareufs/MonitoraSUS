@@ -25,8 +25,8 @@
                         </div>
                     </div>
 
-                     @if (ViewBag.entidade.Equals("Gestor"))
-                     {
+                    @if (ViewBag.entidade.Equals("Gestor"))
+                    {
                         <hr />
                         <div class="row align-items-center" style="float: left">
                             <div class="col text-left">
@@ -44,7 +44,27 @@
                                 }
                             </div>
                         </div>
-                      }
+                    }
+
+                    @if (ViewBag.responseOp != null)
+                    {
+                        if (ViewBag.responseOp.Contains("!"))
+                        {
+                        <span class="alert-inner--icon"><i class="ni ni-like-2"></i></span>
+                        <span class="alert-inner--text"><strong>Success!</strong>@ViewBag.responseOp</span>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                        }
+                        else
+                        {
+                            <span class="alert-inner--icon"><i class="ni ni-support-16"></i></span>
+                            <span class="alert-inner--text"><strong>Danger!</strong>@ViewBag.responseOp</span>
+                            <button type = "button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                         }
+                     }
 
                 </div>
                 <div class="card-body ">
@@ -152,7 +172,7 @@
     </div>
 </div>
 
-<!-- Modal -->
+<!-- Modal confirmação descartar -->
 <div class="modal fade  bs-example-modal-sm" id="agentModal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">

@@ -46,8 +46,14 @@ namespace MonitoraSUS.Utils
 
                 case 1:
                     return "<html><body>" +
-                    "Seu cadastro foi aprovado para acesso ao MonitoraSUS. Para acessar o sistema clique no link abaixo para criar uma nova senha.<br>" +
-                    link + senhaModel.Token + "'>Clique aqui para criar uma senha</a>";
+                        "Seu cadastro foi aprovado para acesso ao MonitoraSUS. Para acessar o sistema clique no link abaixo para criar uma nova senha.<br>" +
+                        link + senhaModel.Token + "'>Clique aqui para criar uma senha</a>";
+
+                case 2:
+                    return "<html><body>" +
+                        "Seu cadastro foi ativado para acesso ao MonitoraSUS. Acesse o sistema " + link + "'>aqui</a>" +
+                        ". Caso seja a primeira vez que acessa ou não lembre da sua senha, clique no link abaixo para iniciar o processo de recuperação.<br>" +
+                        link + senhaModel.Token + "'>Clique aqui para criar uma senha</a>";
 
                 default: return null;
             }

@@ -13,5 +13,6 @@ namespace Service.Interface
         List<ExameModel> GetByIdAgente(int id);
         List<ExameModel> GetByIdEstado(int idEstado);
         List<ExameModel> GetByIdEmpresa(int idEempresa);
+        List<ExameModel> GetByIdPaciente(int idPaciente);
     }
 }
