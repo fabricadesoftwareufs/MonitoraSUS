@@ -137,21 +137,18 @@ namespace MonitoraSUS.Controllers
 
             try
             {
-                foreach (var item in exames)
+                if (exames == null && pessoaEstado == null)
                 {
-                    item.IdEmpresaSaude = null;
-                    _exameContext.Update(item);
+                    _empresaContext.Delete(id);
+                    TempData["mensagemSucesso"] = "Laboratório removido com sucesso!";
+                }
+                else
+                {
+                    TempData["mensagemErro"] = "Esse laboratório não pode ser removido pois existem " +
+                                                  "profissionais e exames cadastrados que dependem dele!";
                 }
 
-                foreach (var item in pessoaEstado)
-                {
-                    item.IdEmpresaExame = null;
-                    _trabalhaEstadoContext.Update(item);
-                }
-
-                _empresaContext.Delete(id);
-
-                TempData["mensagemSucesso"] = "Laboratório removido com sucesso!";
+                
             }
             catch
             {

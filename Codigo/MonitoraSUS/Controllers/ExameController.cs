@@ -134,6 +134,29 @@ namespace MonitoraSUS.Controllers
 
             try
             {
+                /* 
+                 * Verificando duplicidade de exames na 
+                 * hora de atulizar um registro
+                 */
+                var check = _exameContext.CheckDuplicateExamToday(exame.IdPaciente.Idpessoa, exame.IdVirusBacteria.IdVirusBacteria, exame.DataExame);
+                if (check.Count > 0)
+                {
+                    var status = false;
+                    foreach (var item in check)
+                    {
+                        if (item.IdExame == exame.IdExame)
+                            status = true;
+                        
+                    }
+
+                    if (!status)
+                    {
+                        TempData["mensagemErro"] = "Notificação DUPLICADA! Já existe um exame registrado desse paciente para esse Vírus/Bactéria na " +
+                                                    "data informada. Por favor, verifique se os dados da notificação estão corretos.";
+                        return View(exame);
+                    }
+                }
+
                 /*
                  * Atualizando Exame
                  */
@@ -215,10 +238,19 @@ namespace MonitoraSUS.Controllers
                 }
                 else
                 {
+                    var pessoa = CreatePessoaModelByExame(exame);
+                    if (_exameContext.CheckDuplicateExamToday(pessoa.Idpessoa, exame.IdVirusBacteria.IdVirusBacteria, exame.DataExame).Count > 0)
+                    {
+                        TempData["mensagemErro"] = "Notificação DUPLICADA! Já existe um exame registrado desse paciente para esse Vírus/Bactéria na " +
+                                                    "data informada. Por favor, verifique se os dados da notificação estão corretos.";
+                        return View(exame);
+                    }
+                    
+
 
                     try
                     {
-                        var pessoa = CreatePessoaModelByExame(exame);
+                        
                         // inserindo ou atualizando o paciente
                         if (_pessoaContext.GetByCpf(pessoa.Cpf) == null)
                             _pessoaContext.Insert(pessoa);
@@ -236,8 +268,7 @@ namespace MonitoraSUS.Controllers
                     try
                     {
                         // inserindo o resultado do exame (situacao da pessoa)                  
-                        var cpf = Methods.RemoveSpecialsCaracts(exame.IdPaciente.Cpf);
-                        var idPessoa = _pessoaContext.GetByCpf(cpf).Idpessoa;
+                        var idPessoa = _pessoaContext.GetByCpf(exame.IdPaciente.Cpf).Idpessoa;
                         var situacaoPessoa = _situacaoPessoaContext.GetById(idPessoa, exame.IdVirusBacteria.IdVirusBacteria);
 
                         if (situacaoPessoa == null)
@@ -255,7 +286,7 @@ namespace MonitoraSUS.Controllers
                     try
                     {
                         // inserindo o exame
-                        _exameContext.Insert(CreateExameModel(exame));
+                        var value = _exameContext.Insert(CreateExameModel(exame));
                     }
                     catch
                     {
@@ -333,15 +364,12 @@ namespace MonitoraSUS.Controllers
             {
                 exame.IdMunicipio = secretarioMunicipio.IdMunicipio;
                 exame.IdEstado = Convert.ToInt32(_municicpioContext.GetById(secretarioMunicipio.IdMunicipio).Uf);
-
-                if (secretarioEstado != null)
-                    exame.IdEmpresaSaude = secretarioEstado.IdEmpresaExame;
+                exame.IdEmpresaSaude = 1; // empresa padrão do banco 
             }
             else
             {
                 exame.IdEstado = secretarioEstado.IdEstado;
-                if (secretarioEstado.IdEmpresaExame.HasValue)
-                    exame.IdEmpresaSaude = secretarioEstado.IdEmpresaExame;
+                exame.IdEmpresaSaude = secretarioEstado.IdEmpresaExame;
             }
 
             exame.IdAgenteSaude = agente.UsuarioModel.IdPessoa;
@@ -399,8 +427,8 @@ namespace MonitoraSUS.Controllers
                 {
                     var secretarioEstado = _pessoaTrabalhaEstadoContext.GetByIdPessoa(usuario.UsuarioModel.IdPessoa);
 
-                    if (secretarioEstado.IdEmpresaExame.HasValue)
-                        exames = _exameContext.GetByIdEmpresa(secretarioEstado.IdEmpresaExame.Value);
+                    if (secretarioEstado.IdEmpresaExame != 1)
+                        exames = _exameContext.GetByIdEmpresa(secretarioEstado.IdEmpresaExame);
                     else
                         exames = _exameContext.GetByIdEstado(secretarioEstado.IdEstado);
                 }
@@ -455,10 +483,6 @@ namespace MonitoraSUS.Controllers
 
             if (exame.IdPaciente.FoneFixo != null)
                 exame.IdPaciente.FoneFixo = Methods.RemoveSpecialsCaracts(exame.IdPaciente.FoneFixo);
-
-            var paciente = _pessoaContext.GetByCpf(exame.IdPaciente.Cpf);
-            if (paciente != null)
-                exame.IdPaciente.Idpessoa = paciente.Idpessoa;
 
             return exame.IdPaciente;
         }
