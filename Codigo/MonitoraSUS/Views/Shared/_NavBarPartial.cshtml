@@ -23,7 +23,7 @@
 <!-- Topnav -->
 <nav class="navbar bg-gradient-primary">
     <div class="container-fluid">
-        <img src="~/assets/img/logo-sus.png" class="logo-header">
+        <img src="~/assets/img/logo-sus-white.png" class="logo-header">
         <div class="top-user">
             <span>
                 <i class="fa fa-user" aria-hidden="true"></i>@nome
@@ -31,8 +31,8 @@
             <span>
                 <i class="fas fa-map-marker-alt"></i> @cidade / @estado
             </span>
-            <span style="margin-top: 15px;">
-                <a href="@Url.Action("Logout", "Login")"><i class="fas fa-sign-out-alt"></i> Sair</a>
+            <span style="margin-top: 15px; " >
+                <a class="btn-logout" href="@Url.Action("Logout", "Login")"><i class="fas fa-sign-out-alt"></i> Sair</a>
             </span>
         </div>
     </div>

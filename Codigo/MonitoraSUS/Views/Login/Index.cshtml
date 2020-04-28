@@ -11,13 +11,37 @@
                 <div class="card-body p-0">
                     <!-- Nested Row within Card Body -->
                     <div class="row">
-                        <div class="col-lg-6 d-none d-lg-block bg-login-image">
+                        <div class="col-lg-6 d-none d-lg-block banner-left">
+                            <div class="row row-info"></div>
+                            <div class="row row-info-white">
+                                <div class="col-4 text-center"> 
+                                    <img src="assets/img/logo-ufs.png" height="60" widht="100"></img>
+                                </div>
+                                <div class="col-6 text-center"> 
+                                    <img src="assets/img/logo-knuth.png" style="width: 270px !important;" height="52" widht="330"></img>
+                                </div>
+                            </div>
+                            <div class="row row-info">
+                                <div class="row-info-title">
+                                    <h5 style="margin-top: -20px;">&nbsp;</h5>
+                                </div>
+                                <div class="col-6"> 
+                                    <a href="index.html" class="btn btn-block card-button-map">
+                                        <i class="fas fa-globe-americas fa-2x"></i><br> Mapa de <br> Casos
+                                    </a>
+                                </div>
+                                <div class="col-6"> 
+                                    <a href="index.html" class="btn btn-block card-button-docs">
+                                        <i class="fas fa-book fa-2x"></i> <br>Manual do <br> Sistema
+                                    </a>
+                                </div>
+                            </div>
                         </div>
                         <div class="col-lg-6">
                             <div class="p-5">
                                 <div class="text-center">
-                                    <img src="assets/img/logo-sus.png" class="login-logo">
-                                    <h1 class="h4 text-gray-900 mb-4">MonitoraSUS</h1>
+                                    <img src="assets/img/logo-sus.png" style="margin-bottom: 10px;" height="80" widht="80"></img>
+                                    <h1 class="h4 text-gray-900 mb-2 title-app">MonitoraSUS</h1>
                                 </div>
                                 <hr>
                                 <form class="user" asp-action="SignIn" asp-controller="Login" autocomplete="off">
@@ -36,34 +60,29 @@
                                     <button type="submit" class="btn btn-primary btn-user btn-block">
                                         Entrar
                                     </button>
-                                    <div class="text-center" style="margin-top: 2px;">
+                                    <div class="form-group" style="margin-top: 10px; text-align: right">
                                         <a href="#exampleModalCenter" data-toggle="modal" data-target="#modalRecSenha">Esqueceu sua senha?</a>
                                     </div>
-                                    <div class="info text-center">
-                                        <span>Aguardando Resultado de Exame? </span><br><a href="#">Clique aqui</a>
-                                    </div>
+                                    <hr>
                                 </form>
-                                <div class="card-register">
-                                    <div class="row">
-                                        <div class="col-6 card-button text-center">
-                                            <a href="@Url.Action("Create", "AgenteSecretario", new { userType = 1 })">
-                                                <div class="card-button-body">
-                                                    <span>Gestor de Saúde?</span>
-                                                    <i class="fas fa-user-plus fa-3x"></i>
-                                                    <span>Cadastre-se</span>
-                                                </div>
-                                            </a>
-                                        </div>
-                                        <div class="col-6 card-button text-center">
-                                            <a href="@Url.Action("Create", "AgenteSecretario")">
-                                                <div class="card-button-body">
-                                                    <span>Notificar Exames?</span>
-                                                    <i class="fas fa-user-md fa-3x"></i>
-                                                    <span>Cadastre-se</span>
-                                                </div>
-                                            </a>
-                                        </div>
+                                <div class="text-center" style="margin-bottom: 10px; color:#000;">
+                                   Ainda não possui cadastro?
+                                </div>
+                                <div class="row">
+                                    <div class="col-6"> 
+                                        <a href="@Url.Action("Create", "AgenteSecretario", new { userType = 1 })" class="btn btn-block card-button-primary" >
+                                            <i class="fa fa-user fa-2x"></i><br> Gestor de <br> Saúde
+                                        </a>
                                     </div>
+                                    <div class="col-6"> 
+                                        <a href="@Url.Action("Create", "AgenteSecretario")" class="btn btn-block card-button-primary">
+                                            <i class="fa fa-user-md fa-2x"></i> <br>Notificador <br>de Exames
+                                        </a>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="text-center span-resultados">
+                                    <a class="" href="register.html">Resultados de Exames</a>
                                 </div>
                             </div>
                         </div>

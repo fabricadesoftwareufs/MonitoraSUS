@@ -41,6 +41,9 @@
   --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 
+
+
+
 *,
 *::before,
 *::after {
@@ -7693,7 +7696,7 @@ button.bg-dark:focus {
 }
 
 .p-5 {
-  padding: 1.2rem !important;
+  padding: 3rem !important;
 }
 
 .pt-5,
@@ -10587,59 +10590,105 @@ a:focus {
     background-color: #007bff0f;
 }
 
-.bg-login-image {
-    background: url('../img/background-login.jpg');
-    background-position: center;
-    background-size: cover;
+
+/* CUSTOM PAGE */
+.card-button-primary{
+    background-color: #007bff; 
+    color: #FFF;
+    font-size: .8rem;
+    border-radius: 5px; 
+    padding: .75rem 1rem;
 }
 
-.info{
-    color: #625454;
-}
-
-.card-register{
-    margin-left:1rem;
-    margin-right:1rem;
-    margin-top: 2vh;
-    margin-bottom: 2vh;
-}
-
-.card-register .card-button{
-    padding: 0.25rem;
+.card-button-primary:hover{
+    background-color: rgba(0, 123, 255,0.65); 
+    -webkit-transform: scale(1.15);
+    -ms-transform: scale(1.15);
+    transform: scale(1.15);
+    color: #FFF;
 }
 
 
-.card-button span{
-    /* font-weight: lighter; */
-    display: block;
-}
-
-.card-button a:link {
-    text-decoration: none;
-}
-
-.card-button .card-button-body{
-    border-radius: 8px;
-    color: #ffffff;
-    cursor: pointer;
-    background-color: rgb(0, 123, 255);
-}
-
-.card-button .card-button-body:hover{
-    background-color: rgb(0, 123, 255);
+.card-button-map:hover, .card-button-docs:hover{
+    color: #007bff; 
+    -webkit-transform: scale(1.15);
+    -ms-transform: scale(1.15);
+    transform: scale(1.15);
 }
 
 
-.info{
-    margin-top: 20px;
-    margin-bottom: 20px;
-}
+.card-button-map{
+    background: #ffffff;
+    border-color: #ffffff;
+    color: #007bff;
+    font-size: .8rem;
+    border-radius: 5px; 
+    font-weight: bold;
+    padding: .75rem 1rem;
+  }
 
-.login-logo{
-    height: 120px;
-    width: 120px;
-    margin-bottom: 10px;
-}
+  .card-button-docs{
+    background: #FFFFFF;
+    border-color: #ffffff;
+    color: #007bff;
+    font-size: .8rem;
+    font-weight: bold;
+    border-radius: 5px; 
+    padding: .75rem 1rem;
+  }
+
+  .span-resultados{
+    margin-top: 1.5rem;
+  }
+
+  .banner-left{
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+    background: #007bff;
+  }
+
+  .bg-transparent-login{
+    background: #007bff0f;
+
+  }
+
+  .row-info{
+    height: 40%;
+    background: #007bff;
+    padding-left: 3rem;
+    padding-right: 3rem;
+  }
+
+  .row-info-white{
+    height: 20%;
+    padding-left: 1.2rem;
+    padding-right: 1.2rem;
+    background: #FFFFFF;
+  }
+
+  .row-info-white img{
+    margin-top: 30px;
+  }
+
+  .title-app{
+    font-family: 'Poppins', sans-serif;
+  }
+
+  .row-info-title{
+    font-family: 'Poppins', sans-serif;
+    color: #172b4d;
+    width: 100%;
+    font-weight: bold;
+    text-align: center;
+  }
+
+  .row-info hr{
+    color: #007bff;
+    border-top: 1px solid rgba(0, 123, 255,.1);
+  }
+
+  /*  END CUSTOM PAGE */
+
 
 @media only screen and (max-width: 400px){
     .login-logo {
