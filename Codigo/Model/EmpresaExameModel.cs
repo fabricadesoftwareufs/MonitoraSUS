@@ -42,11 +42,23 @@ namespace Model
         public string FoneFixo { get; set; }
         [Display(Name = "Email")]
         public string Email { get; set; }
-        public byte EmiteLaudoExame { get; set; }
-        public byte PossuiLeitosInternacao { get; set; }
+        [Required]
+        [Display(Name = "Emite Laudo de Exames ? ")]
+        public bool EmiteLaudoExame { get; set; }
+        [Required]
+        [Display(Name = "Possui Leitos de Internação ? ")]
+        public bool PossuiLeitosInternacao { get; set; }
+        [Required]
+        [Display(Name = "Número de Leitos")]
         public int NumeroLeitos { get; set; }
+        [Required]
+        [Display(Name = "Número de Leitos de UTI")]
         public int NumeroLeitosUti { get; set; }
+        [Required]
+        [Display(Name = "Possui Leitos Disponível")]
         public int NumeroLeitosDisponivel { get; set; }
+        [Required]
+        [Display(Name = "Número de Leitos de UTI Disponível")]
         public int NumeroLeitosUtidisponivel { get; set; }
     }
 }

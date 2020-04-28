@@ -1,6 +1,7 @@
 ﻿using Model;
 using Persistence;
 using Service.Interface;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -55,12 +56,12 @@ namespace Service
                 FoneFixo = empresa.FoneFixo,
                 Email = empresa.Email,
                 // A partir daqui
-                EmiteLaudoExame = empresa.EmiteLaudoExame,
-                NumeroLeitos = empresa.NumeroLeitos,
-                NumeroLeitosDisponivel = empresa.NumeroLeitosDisponivel,
-                NumeroLeitosUti = empresa.NumeroLeitosUti,
-                NumeroLeitosUtidisponivel = empresa.NumeroLeitosUtidisponivel,
-                PossuiLeitosInternacao = empresa.PossuiLeitosInternacao
+                EmiteLaudoExame = Convert.ToByte(empresa.EmiteLaudoExame),
+                NumeroLeitos = empresa.PossuiLeitosInternacao ? empresa.NumeroLeitos :0,
+                NumeroLeitosDisponivel = empresa.PossuiLeitosInternacao ? empresa.NumeroLeitosDisponivel:0,
+                NumeroLeitosUti = empresa.PossuiLeitosInternacao ? empresa.NumeroLeitosUti:0,
+                NumeroLeitosUtidisponivel = empresa.PossuiLeitosInternacao ? empresa.NumeroLeitosUtidisponivel: 0,
+                PossuiLeitosInternacao = Convert.ToByte(empresa.PossuiLeitosInternacao)
             };
         }
 
@@ -84,12 +85,12 @@ namespace Service
                 FoneCelular = empresa.FoneCelular,
                 FoneFixo = empresa.FoneFixo,
                 Email = empresa.Email,
-                EmiteLaudoExame = empresa.EmiteLaudoExame,
+                EmiteLaudoExame = Convert.ToBoolean(empresa.EmiteLaudoExame),
                 NumeroLeitos = empresa.NumeroLeitos,
                 NumeroLeitosDisponivel = empresa.NumeroLeitosDisponivel,
                 NumeroLeitosUti = empresa.NumeroLeitosUti,
                 NumeroLeitosUtidisponivel = empresa.NumeroLeitosUtidisponivel,
-                PossuiLeitosInternacao = empresa.PossuiLeitosInternacao
+                PossuiLeitosInternacao = Convert.ToBoolean(empresa.PossuiLeitosInternacao)
             }).ToList();
 
         public EmpresaExameModel GetById(int id)
@@ -112,12 +113,12 @@ namespace Service
                 FoneCelular = empresa.FoneCelular,
                 FoneFixo = empresa.FoneFixo,
                 Email = empresa.Email,
-                EmiteLaudoExame = empresa.EmiteLaudoExame,
+                EmiteLaudoExame = Convert.ToBoolean(empresa.EmiteLaudoExame),
                 NumeroLeitos = empresa.NumeroLeitos,
                 NumeroLeitosDisponivel = empresa.NumeroLeitosDisponivel,
                 NumeroLeitosUti = empresa.NumeroLeitosUti,
                 NumeroLeitosUtidisponivel = empresa.NumeroLeitosUtidisponivel,
-                PossuiLeitosInternacao = empresa.PossuiLeitosInternacao
+                PossuiLeitosInternacao = Convert.ToBoolean(empresa.PossuiLeitosInternacao)
             }).FirstOrDefault();
 
         public EmpresaExameModel GetByCnpj(string cnpj)
@@ -140,12 +141,12 @@ namespace Service
                 FoneCelular = empresa.FoneCelular,
                 FoneFixo = empresa.FoneFixo,
                 Email = empresa.Email,
-                EmiteLaudoExame = empresa.EmiteLaudoExame,
+                EmiteLaudoExame = Convert.ToBoolean(empresa.EmiteLaudoExame),
                 NumeroLeitos = empresa.NumeroLeitos,
                 NumeroLeitosDisponivel = empresa.NumeroLeitosDisponivel,
                 NumeroLeitosUti = empresa.NumeroLeitosUti,
                 NumeroLeitosUtidisponivel = empresa.NumeroLeitosUtidisponivel,
-                PossuiLeitosInternacao = empresa.PossuiLeitosInternacao
+                PossuiLeitosInternacao = Convert.ToBoolean(empresa.PossuiLeitosInternacao)
             }).FirstOrDefault();
 
     }
