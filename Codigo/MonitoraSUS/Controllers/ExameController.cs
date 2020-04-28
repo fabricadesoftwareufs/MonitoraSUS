@@ -340,7 +340,7 @@ namespace MonitoraSUS.Controllers
             else
             {
                 exame.IdEstado = secretarioEstado.IdEstado;
-                if (secretarioEstado.IdEmpresaExame != -1)
+             //   if (secretarioEstado.IdEmpresaExame.HasValue)
                     exame.IdEmpresaSaude = secretarioEstado.IdEmpresaExame;
             }
 

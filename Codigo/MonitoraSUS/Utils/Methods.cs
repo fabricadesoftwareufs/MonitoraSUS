@@ -34,8 +34,8 @@ namespace MonitoraSUS.Utils
         public static string MessageEmail(RecuperarSenhaModel senhaModel, int finalidadeEmail)
         {
             var uri = new Uri("http://www.monitorasus.ufs.br/");
-
-            var link = "<a href='" + uri.Scheme + "://" + uri.Host + ":" + uri.Port + "/Login/RecuperarSenha/";
+            var site = "<a href='" + uri.Scheme + "://" + uri.Host + ":" + uri.Port;
+            var link = site + "/Login/RecuperarSenha/";
 
             switch (finalidadeEmail)
             {
@@ -51,7 +51,7 @@ namespace MonitoraSUS.Utils
 
                 case 2:
                     return "<html><body>" +
-                        "Seu cadastro foi ativado para acesso ao MonitoraSUS. Acesse o sistema " + link + "'>aqui</a>" +
+                        "Seu cadastro foi ativado para acesso ao MonitoraSUS. Acesse o sistema " + site + "'>aqui</a>" +
                         ". Caso seja a primeira vez que acessa ou não lembre da sua senha, clique no link abaixo para iniciar o processo de recuperação.<br>" +
                         link + senhaModel.Token + "'>Clique aqui para criar uma senha</a>";
 
