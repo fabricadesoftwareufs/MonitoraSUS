@@ -1,4 +1,5 @@
 ﻿using Model;
+using System;
 using System.Collections.Generic;
 
 namespace Service.Interface
@@ -11,7 +12,10 @@ namespace Service.Interface
         List<ExameModel> GetAll();
         ExameModel GetById(int id);
         List<ExameModel> GetByIdAgente(int id);
+        List<ExameModel> GetByIdPaciente(int idPaciente);
         List<ExameModel> GetByIdEstado(int idEstado);
         List<ExameModel> GetByIdEmpresa(int idEempresa);
+        List<ExameModel> CheckDuplicateExamToday(int idPaciente,int idVirusBacteria, DateTime dateExame);
+
     }
 }
