@@ -187,7 +187,11 @@ namespace MonitoraSUS.Controllers
                 else
                 {
                     TempData["mensagemErro"] = "Esse laboratório não pode ser removido pois existem " +
+<<<<<<< HEAD
                                                   "profissionais e exames cadastrados que dependem dele!";
+=======
+                                                "profissionais e exames cadastrados que dependem dele!";
+>>>>>>> 9c8df4baf41ba7459f1a3cd8fed596a17c95511f
                 }
 
                 

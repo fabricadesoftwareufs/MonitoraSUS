@@ -149,6 +149,7 @@ namespace Service
                    IdEmpresaSaude = exame.IdEmpresaSaude,
                }).ToList();
 
+<<<<<<< HEAD
         public List<ExameModel> GetByIdPaciente(int idPaciente)
          => _context.Exame
                 .Where(exameModel => exameModel.IdPaciente == idPaciente)
@@ -168,6 +169,9 @@ namespace Service
                     IdEmpresaSaude = exame.IdEmpresaSaude,
                 }).ToList();
 
+=======
+                
+>>>>>>> 9c8df4baf41ba7459f1a3cd8fed596a17c95511f
         public List<ExameModel> CheckDuplicateExamToday(int idPaciente, int idVirusBacteria, DateTime dateExame)
         {
             var exames = _context.Exame.Where(exameModel => exameModel.IdVirusBacteria == idVirusBacteria &&
