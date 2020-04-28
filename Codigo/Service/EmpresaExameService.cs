@@ -68,6 +68,7 @@ namespace Service
 
         public List<EmpresaExameModel> GetAll()
         => _context.Empresaexame
+            .Where(empresaExame => empresaExame.Id != 1)
             .Select(empresa => new EmpresaExameModel
             {
                 Id = empresa.Id,
