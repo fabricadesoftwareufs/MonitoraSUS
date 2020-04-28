@@ -6,7 +6,7 @@
     var idPessoa = Model.IdPaciente.Idpessoa;
     var cpf = Model.IdPaciente.Cpf;
     var nome = Model.IdPaciente.Nome;
-    string dataNascimento = Model.IdPaciente.DataNascimento == null ? Model.IdPaciente.DataNascimento.ToString("yyyy-MM-dd") : DateTime.Now.ToString("yyyy-MM-dd");
+    string dataNascimento = Model.IdPaciente.DataNascimento != null ? Model.IdPaciente.DataNascimento.ToString("yyyy-MM-dd"):"0000-00-00";
     var rua = Model.IdPaciente.Rua;
     var cep = Model.IdPaciente.Cep;
     var bairro = Model.IdPaciente.Bairro;
@@ -26,8 +26,8 @@
     bool doenRespiatoria = Model.IdPaciente.DoencaRespiratoria == true ? true:false;
     bool obeso = Model.IdPaciente.Obeso == true ? true:false;
     bool imunodeprimido = Model.IdPaciente.Imunodeprimido == true ? true:false;
-    string dataExame = Model.DataExame == null ? Model.DataExame.ToString("yyyy-MM-dd") : DateTime.Now.ToString("yyyy-MM-dd");
-    string DataInicioSintomas = Model.DataInicioSintomas == null ? Model.DataInicioSintomas.ToString("yyyy-MM-dd") : DateTime.Now.ToString("yyyy-MM-dd");
+    string dataExame = Model.DataExame != null ? Model.DataExame.ToString("yyyy-MM-dd") : DateTime.Now.ToString("yyyy-MM-dd");
+    string DataInicioSintomas = Model.DataInicioSintomas != null ? Model.DataInicioSintomas.ToString("yyyy-MM-dd") : DateTime.Now.ToString("yyyy-MM-dd");
     var googleKey = ViewBag.googleKey;
     var outrasComorbidades = Model.IdPaciente.OutrasComorbidades;
 

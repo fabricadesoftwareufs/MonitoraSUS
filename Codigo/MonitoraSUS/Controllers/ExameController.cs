@@ -299,7 +299,7 @@ namespace MonitoraSUS.Controllers
 
                     TempData["mensagemSucesso"] = "Notificação realizada com SUCESSO!";
 
-                    return View(new ExameViewModel());
+                    return RedirectToAction(nameof(Create));
                 }
             }
             else
