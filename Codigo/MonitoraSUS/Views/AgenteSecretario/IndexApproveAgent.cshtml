@@ -7,6 +7,21 @@
     var ativar = "Ativar";
     var descartar = "Descartar";
 }
+
+@if (ViewBag.responseOp != null)
+{
+    if (ViewBag.responseOp.Contains("!"))
+    {
+        <div id="msg" onclick="swtAlert('sucess','Sucesso!', '@ViewBag.responseOp')"></div>
+
+    }
+    else
+    {
+        <div id="msg" onclick="swtAlert('error','Falha!', '@ViewBag.responseOp')"></div>
+
+    }
+}
+
 <!-- Page Content -->
 <div class="container-fluid mt--6">
     <div class="row">
@@ -25,8 +40,8 @@
                         </div>
                     </div>
 
-                     @if (ViewBag.entidade.Equals("Gestor"))
-                     {
+                    @if (ViewBag.entidade.Equals("Gestor"))
+                    {
                         <hr />
                         <div class="row align-items-center" style="float: left">
                             <div class="col text-left">
@@ -44,7 +59,7 @@
                                 }
                             </div>
                         </div>
-                      }
+                    }
 
                 </div>
                 <div class="card-body ">
@@ -152,7 +167,7 @@
     </div>
 </div>
 
-<!-- Modal -->
+<!-- Modal confirmação descartar -->
 <div class="modal fade  bs-example-modal-sm" id="agentModal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
@@ -176,8 +191,22 @@
 
 @section Scripts {
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
 
     <script type="text/javascript">
+
+    $(document).ready(function () {
+        var msg = document.getElementById("msg");
+        msg.click();
+    })
+
+        function swtAlert(type,title,message){
+    	Swal.fire({
+	        icon: type,
+	        title: title,
+	        text: message,
+    	});
+         }
 
         $('#agentModal').on('show.bs.modal', function(e) {
             var id = e.relatedTarget.dataset.id;

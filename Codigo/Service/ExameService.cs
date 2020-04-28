@@ -130,25 +130,6 @@ namespace Service
                     IdEmpresaSaude = exame.IdEmpresaSaude,
                 }).ToList();
 
-        public List<ExameModel> GetByIdPaciente(int idPaciente)
-        => _context.Exame
-               .Where(exameModel => exameModel.IdPaciente == idPaciente)
-               .Select(exame => new ExameModel
-               {
-                   IdVirusBacteria = exame.IdVirusBacteria,
-                   IdExame = exame.IdExame,
-                   IdPaciente = exame.IdPaciente,
-                   IdAgenteSaude = exame.IdAgenteSaude,
-                   DataExame = exame.DataExame,
-                   DataInicioSintomas = exame.DataInicioSintomas,
-                   IgG = exame.IgG,
-                   IgM = exame.IgM,
-                   Pcr = exame.Pcr,
-                   IdEstado = exame.IdEstado,
-                   IdMunicipio = exame.IdMunicipio,
-                   IdEmpresaSaude = exame.IdEmpresaSaude,
-               }).ToList();
-
         public List<ExameModel> GetByIdEmpresa(int idEempresa)
         => _context.Exame
                .Where(exameModel => exameModel.IdEmpresaSaude == idEempresa)
@@ -167,6 +148,25 @@ namespace Service
                    IdMunicipio = exame.IdMunicipio,
                    IdEmpresaSaude = exame.IdEmpresaSaude,
                }).ToList();
+
+        public List<ExameModel> GetByIdPaciente(int idPaciente)
+         => _context.Exame
+                .Where(exameModel => exameModel.IdPaciente == idPaciente)
+                .Select(exame => new ExameModel
+                {
+                    IdVirusBacteria = exame.IdVirusBacteria,
+                    IdExame = exame.IdExame,
+                    IdPaciente = exame.IdPaciente,
+                    IdAgenteSaude = exame.IdAgenteSaude,
+                    DataExame = exame.DataExame,
+                    DataInicioSintomas = exame.DataInicioSintomas,
+                    IgG = exame.IgG,
+                    IgM = exame.IgM,
+                    Pcr = exame.Pcr,
+                    IdEstado = exame.IdEstado,
+                    IdMunicipio = exame.IdMunicipio,
+                    IdEmpresaSaude = exame.IdEmpresaSaude,
+                }).ToList();
 
         public List<ExameModel> CheckDuplicateExamToday(int idPaciente, int idVirusBacteria, DateTime dateExame)
         {

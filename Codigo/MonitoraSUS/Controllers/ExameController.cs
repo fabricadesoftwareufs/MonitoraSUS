@@ -146,7 +146,7 @@ namespace MonitoraSUS.Controllers
                     {
                         if (item.IdExame == exame.IdExame)
                             status = true;
-                        
+
                     }
 
                     if (!status)
@@ -245,12 +245,12 @@ namespace MonitoraSUS.Controllers
                                                     "data informada. Por favor, verifique se os dados da notificação estão corretos.";
                         return View(exame);
                     }
-                    
+
 
 
                     try
                     {
-                        
+
                         // inserindo ou atualizando o paciente
                         if (_pessoaContext.GetByCpf(pessoa.Cpf) == null)
                             _pessoaContext.Insert(pessoa);

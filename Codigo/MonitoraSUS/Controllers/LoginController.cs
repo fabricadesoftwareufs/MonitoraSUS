@@ -159,9 +159,9 @@ namespace MonitoraSUS.Controllers
                                 await _emailService.SendEmailAsync(user.Email, "MonitoraSUS - Alteração de senha", Methods.MessageEmail(recSenha, finalidade));
                                 return (true, true, true);
                             }
-                            catch (Exception e)
+                            catch (Exception ex)
                             {
-                                throw e.InnerException;
+                                throw ex.InnerException;
                             }
                         }
                         return (true, true, false); // Falha na inserção do recuperarSenha

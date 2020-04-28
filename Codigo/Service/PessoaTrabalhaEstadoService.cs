@@ -13,9 +13,9 @@ namespace Service
         {
             _context = context;
         }
-        public bool Delete(int idPessoa, int idEstado)
+        public bool Delete(int idPessoa, int idEstado, int idEmpresaExame)
         {
-            var agente = _context.Pessoatrabalhaestado.Find(idPessoa, idEstado);
+            var agente = _context.Pessoatrabalhaestado.Find(idPessoa, idEstado, idEmpresaExame);
             _context.Pessoatrabalhaestado.Remove(agente);
             return _context.SaveChanges() == 1 ? true : false;
         }
