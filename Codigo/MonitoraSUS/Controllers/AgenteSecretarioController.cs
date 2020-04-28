@@ -28,7 +28,7 @@ namespace MonitoraSUS.Controllers
         private readonly IRecuperarSenhaService _recuperarSenhaService;
         private readonly IEmailService _emailService;
         private readonly IExameService _exameService;
-        private LoginController _loginController;
+
         public AgenteSecretarioController(IMunicipioService municipioService, IEstadoService estadoService,
             IPessoaService pessoaService, IPessoaTrabalhaMunicipioService pessoaTrabalhaMunicipioService,
             IPessoaTrabalhaEstadoService pessoaTrabalhaEstadoService, IUsuarioService usuarioService, IConfiguration configuration,
@@ -44,7 +44,6 @@ namespace MonitoraSUS.Controllers
             _recuperarSenhaService = recuperarSenhaService;
             _emailService = emailService;
             _exameService = exameService;
-            _loginController = new LoginController(_usuarioService, _pessoaService, _emailService, _recuperarSenhaService);
         }
 
         // GET: AgenteSecretario
@@ -387,7 +386,9 @@ namespace MonitoraSUS.Controllers
 
                     usuarioModel = usuario;
 
-                    (bool nCpf, bool nUsuario, bool nToken) = await _loginController.GenerateToken(usuario.Cpf, 1);
+                    (bool nCpf, bool nUsuario, bool nToken) = await new 
+                        LoginController(_usuarioService, _pessoaService, _emailService, _recuperarSenhaService)
+                        .GenerateToken(usuario.Cpf, 1);
 
                     responseOp = ReturnMsgOper(nCpf, nUsuario, nToken);
 
@@ -399,8 +400,9 @@ namespace MonitoraSUS.Controllers
                 {
                     usuarioModel = _usuarioService.GetByIdPessoa(agenteEstado.IdPessoa);
 
-                    (bool nCpf, bool nUsuario, bool nToken) = await _loginController.GenerateToken(usuarioModel.Cpf, 2);
-
+                    (bool nCpf, bool nUsuario, bool nToken) = await new
+                                          LoginController(_usuarioService, _pessoaService, _emailService, _recuperarSenhaService)
+                                          .GenerateToken(usuarioModel.Cpf, 2);
                     responseOp = ReturnMsgOper(nCpf, nUsuario, nToken);
 
                     if (responseOp.Equals(""))
@@ -441,7 +443,9 @@ namespace MonitoraSUS.Controllers
 
                     usuarioModel = usuario;
 
-                    (bool nCpf, bool nUsuario, bool nToken) = await _loginController.GenerateToken(usuario.Cpf, 1);
+                    (bool nCpf, bool nUsuario, bool nToken) = await new
+                                          LoginController(_usuarioService, _pessoaService, _emailService, _recuperarSenhaService)
+                                          .GenerateToken(usuarioModel.Cpf, 1);
 
                     responseOp = ReturnMsgOper(nCpf, nUsuario, nToken);
 
@@ -452,7 +456,9 @@ namespace MonitoraSUS.Controllers
                 {
                     usuarioModel = _usuarioService.GetByIdPessoa(agenteMunicipio.IdPessoa);
 
-                    (bool nCpf, bool nUsuario, bool nToken) = await _loginController.GenerateToken(usuarioModel.Cpf, 2);
+                    (bool nCpf, bool nUsuario, bool nToken) = await new
+                        LoginController(_usuarioService, _pessoaService, _emailService, _recuperarSenhaService).
+                        GenerateToken(usuarioModel.Cpf, 2);
 
                     responseOp = ReturnMsgOper(nCpf, nUsuario, nToken);
 
