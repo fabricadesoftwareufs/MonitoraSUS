@@ -96,5 +96,16 @@ namespace Service
             });
             _context.SaveChanges();
         }
+
+        public void DeleteByUser(int idUser)
+        {
+            var tokens = _context.Recuperarsenha.Where(t => t.IdUsuario == idUser).ToList();
+            tokens.ForEach(token =>
+            {
+
+                _context.Recuperarsenha.Remove(token);
+            });
+            _context.SaveChanges();
+        }
     }
 }

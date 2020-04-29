@@ -7,6 +7,7 @@ namespace Service.Interface
         bool Insert(RecuperarSenhaModel recuperarSenha);
         RecuperarSenhaModel GetByToken(string token);
         void SetTokenInvalid(int idUser);
+        void DeleteByUser(int idUser);
         RecuperarSenhaModel GetByUser(int idUser);
         /// <summary>
         /// Checa se o token é valido

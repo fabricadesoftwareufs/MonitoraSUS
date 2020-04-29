@@ -416,8 +416,12 @@ namespace MonitoraSUS.Controllers
                     _pessoaTrabalhaEstadoService.Update(agenteEstado);
                     responseOp += entidade + " foi ativado com sucesso. Um email foi enviado para notificá-lo!";
                 }
-                else
+
+                if (agenteEstado.SituacaoCadastro.Equals("S"))
+                {
+                    //  _recuperarSenhaService.DeleteByUser(usuarioModel.IdUsuario);
                     _usuarioService.Delete(usuarioModel.IdUsuario);
+                }
             }
 
             // caso o sujeito trabalhe no municipio
@@ -472,8 +476,12 @@ namespace MonitoraSUS.Controllers
                     _pessoaTrabalhaMunicipioService.Update(agenteMunicipio);
                     responseOp += entidade + " foi ativado com sucesso. Um email foi enviado para notificá-lo!";
                 }
-                else
+
+                if (agenteEstado.SituacaoCadastro.Equals("S"))
+                {
+                    //  _recuperarSenhaService.DeleteByUser(usuarioModel.IdUsuario);
                     _usuarioService.Delete(usuarioModel.IdUsuario);
+                }
 
             }
 
@@ -493,8 +501,12 @@ namespace MonitoraSUS.Controllers
         [HttpGet("[controller]/[action]/{entidade}/{idPessoa}")]
         public ActionResult BlockAgent(string entidade, int idPessoa)
         {
-
             var agenteEstado = _pessoaTrabalhaEstadoService.GetByIdPessoa(idPessoa);
+
+            var idUsuario = _usuarioService.GetByIdPessoa(idPessoa).IdUsuario;
+            if (idUsuario != -1)
+                _recuperarSenhaService.SetTokenInvalid(idUsuario);
+
             if (agenteEstado != null)
             {
                 agenteEstado.SituacaoCadastro = "I";
