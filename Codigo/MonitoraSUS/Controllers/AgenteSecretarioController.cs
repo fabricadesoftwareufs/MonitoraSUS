@@ -28,11 +28,12 @@ namespace MonitoraSUS.Controllers
         private readonly IRecuperarSenhaService _recuperarSenhaService;
         private readonly IEmailService _emailService;
         private readonly IExameService _exameService;
+        private readonly IEmpresaExameService _empresaExameService;
 
         public AgenteSecretarioController(IMunicipioService municipioService, IEstadoService estadoService,
             IPessoaService pessoaService, IPessoaTrabalhaMunicipioService pessoaTrabalhaMunicipioService,
             IPessoaTrabalhaEstadoService pessoaTrabalhaEstadoService, IUsuarioService usuarioService, IConfiguration configuration,
-            IRecuperarSenhaService recuperarSenhaService, IEmailService emailService, IExameService exameService)
+            IRecuperarSenhaService recuperarSenhaService, IEmailService emailService, IExameService exameService, IEmpresaExameService empresaExameService)
         {
             _municipioService = municipioService;
             _estadoService = estadoService;
@@ -44,6 +45,7 @@ namespace MonitoraSUS.Controllers
             _recuperarSenhaService = recuperarSenhaService;
             _emailService = emailService;
             _exameService = exameService;
+            _empresaExameService = empresaExameService;
         }
 
         // GET: AgenteSecretario
@@ -237,10 +239,16 @@ namespace MonitoraSUS.Controllers
             var usuario = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
 
             var agentes = new List<AgenteMunicipioEstadoViewModel>();
-            var solicitantes = new List<SolicitanteAprovacaoModelView>();
+            var solicitantes = new List<SolicitanteAprovacaoViewModel>();
             var pessoaTrabalhaEstado = _pessoaTrabalhaEstadoService.GetByIdPessoa(usuario.UsuarioModel.IdPessoa);
+
+            string estadoTrabalha = "";
+            string cidadeTrabalha = "";
+
             if (pessoaTrabalhaEstado != null)
             {
+                estadoTrabalha = _estadoService.GetById(pessoaTrabalhaEstado.IdEstado).Nome;
+
                 var agentesEstado = new List<PessoaTrabalhaEstadoModel>();
                 if (ehResponsavel == 0)
                     agentesEstado = _pessoaTrabalhaEstadoService.GetAllAgentsEstado(pessoaTrabalhaEstado.IdEstado);
@@ -249,12 +257,12 @@ namespace MonitoraSUS.Controllers
 
                 agentesEstado.ForEach(item => agentes.Add(new AgenteMunicipioEstadoViewModel { Pessoa = _pessoaService.GetById(item.IdPessoa), PessoaEstado = item, Situacao = item.SituacaoCadastro }));
 
-                agentes.ForEach(item => solicitantes.Add(new SolicitanteAprovacaoModelView
+                agentes.ForEach(item => solicitantes.Add(new SolicitanteAprovacaoViewModel
                 {
                     IdPessoa = item.Pessoa.Idpessoa,
                     Nome = item.Pessoa.Nome,
                     Cpf = Methods.PatternCpf(item.Pessoa.Cpf),
-                    Estado = _estadoService.GetByCodUf(item.PessoaEstado.IdEstado).Nome,
+                    Estado = estadoTrabalha,
                     Cidade = null,
                     Status = item.Situacao,
                     Situacao = ReturnStatus(item.Situacao)
@@ -264,6 +272,10 @@ namespace MonitoraSUS.Controllers
             else
             {
                 var pessoaTrabalhaMunicipio = _pessoaTrabalhaMunicipioService.GetByIdPessoa(usuario.UsuarioModel.IdPessoa);
+
+                estadoTrabalha = _estadoService.GetByCodUf(Int32.Parse(_municipioService.GetById(pessoaTrabalhaMunicipio.IdMunicipio).Uf)).Nome;
+                cidadeTrabalha = _municipioService.GetById(pessoaTrabalhaMunicipio.IdMunicipio).Nome;
+
                 var agentesMunicipio = new List<PessoaTrabalhaMunicipioModel>();
                 if (ehResponsavel == 0)
                     agentesMunicipio = _pessoaTrabalhaMunicipioService.GetAllAgentsMunicipio(pessoaTrabalhaMunicipio.IdMunicipio);
@@ -272,23 +284,18 @@ namespace MonitoraSUS.Controllers
 
                 agentesMunicipio.ForEach(item => agentes.Add(new AgenteMunicipioEstadoViewModel { Pessoa = _pessoaService.GetById(item.IdPessoa), PessoaMunicipio = item, Situacao = item.SituacaoCadastro }));
 
-                agentes.ForEach(item => solicitantes.Add(new SolicitanteAprovacaoModelView
+                agentes.ForEach(item => solicitantes.Add(new SolicitanteAprovacaoViewModel
                 {
                     IdPessoa = item.Pessoa.Idpessoa,
                     Nome = item.Pessoa.Nome,
                     Cpf = item.Pessoa.Cpf,
-                    Estado = _estadoService.GetByUf(_municipioService.GetById(item.PessoaMunicipio.IdMunicipio).Uf).Nome,
-                    Cidade = _municipioService.GetById(item.PessoaMunicipio.IdMunicipio).Nome,
+                    Estado = estadoTrabalha,
+                    Cidade = cidadeTrabalha,
                     Status = item.Situacao,
                     Situacao = ReturnStatus(item.Situacao)
 
                 }));
             }
-
-            if (ehResponsavel == 0)
-                ViewBag.entidade = "Agente";
-            else
-                ViewBag.entidade = "Gestor";
 
             if (TempData["responseUp"] != null)
                 ViewBag.responseUp = TempData["responseUp"];
@@ -296,8 +303,23 @@ namespace MonitoraSUS.Controllers
             if (TempData["responseOp"] != null)
                 ViewBag.responseOp = TempData["responseOp"];
 
-            //TODO view do op 
-            return View(solicitantes);
+            Tuple <List<SolicitanteAprovacaoViewModel>, List<EmpresaExameModel>> tupleModel = null;
+
+            if (ehResponsavel == 0)
+            {
+                ViewBag.entidade = "Agente";
+                var empresas = _empresaExameService.GetAllOfState(estadoTrabalha);
+                tupleModel = new Tuple<List<SolicitanteAprovacaoViewModel>, List<EmpresaExameModel>>(solicitantes, empresas);
+
+            }
+
+            else
+            {
+                ViewBag.entidade = "Gestor";
+                tupleModel = new Tuple<List<SolicitanteAprovacaoViewModel>, List<EmpresaExameModel>>(solicitantes, null);
+            }
+
+            return View(tupleModel);
         }
 
         // GET: AgenteSecretario/ExcludeAgent/{agente|gestor}/id
@@ -315,6 +337,7 @@ namespace MonitoraSUS.Controllers
                 {
                     _pessoaService.Delete(agenteEstado.IdPessoa);
                     int idUsuario = _usuarioService.GetByIdPessoa(agenteEstado.IdPessoa).IdUsuario;
+                    _recuperarSenhaService.DeleteByUser(idUsuario);
                     _usuarioService.Delete(idUsuario);
                 }
                 else
@@ -334,6 +357,7 @@ namespace MonitoraSUS.Controllers
                 {
                     _pessoaService.Delete(agenteMunicipio.IdPessoa);
                     int idUsuario = _usuarioService.GetByIdPessoa(agenteMunicipio.IdPessoa).IdUsuario;
+                    _recuperarSenhaService.DeleteByUser(idUsuario);
                     _usuarioService.Delete(idUsuario);
                 }
                 else
@@ -416,8 +440,12 @@ namespace MonitoraSUS.Controllers
                     _pessoaTrabalhaEstadoService.Update(agenteEstado);
                     responseOp += entidade + " foi ativado com sucesso. Um email foi enviado para notificá-lo!";
                 }
-                else
+
+                if (agenteEstado.SituacaoCadastro.Equals("S"))
+                {
+                    //  _recuperarSenhaService.DeleteByUser(usuarioModel.IdUsuario);
                     _usuarioService.Delete(usuarioModel.IdUsuario);
+                }
             }
 
             // caso o sujeito trabalhe no municipio
@@ -472,8 +500,11 @@ namespace MonitoraSUS.Controllers
                     _pessoaTrabalhaMunicipioService.Update(agenteMunicipio);
                     responseOp += entidade + " foi ativado com sucesso. Um email foi enviado para notificá-lo!";
                 }
-                else
+                if (agenteMunicipio.SituacaoCadastro.Equals("S"))
+                {
+                  //  _recuperarSenhaService.DeleteByUser(usuarioModel.IdUsuario);
                     _usuarioService.Delete(usuarioModel.IdUsuario);
+                }
 
             }
 
@@ -495,6 +526,11 @@ namespace MonitoraSUS.Controllers
         {
 
             var agenteEstado = _pessoaTrabalhaEstadoService.GetByIdPessoa(idPessoa);
+
+            var idUsuario = _usuarioService.GetByIdPessoa(idPessoa).IdUsuario;
+            if (idUsuario != -1)
+                _recuperarSenhaService.SetTokenInvalid(idUsuario);
+
             if (agenteEstado != null)
             {
                 agenteEstado.SituacaoCadastro = "I";

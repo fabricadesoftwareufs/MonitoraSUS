@@ -46,7 +46,7 @@ namespace MonitoraSUS.Utils
 
                 case 1:
                     return "<html><body>" +
-                        "Seu cadastro foi aprovado para acesso ao MonitoraSUS. Para acessar o sistema clique no link abaixo para criar uma nova senha.<br>" +
+                        "Seu cadastro foi aprovado para acesso ao MonitoraSUS. Para acessar o sistema clique no link abaixo para criar uma nova senha.<br><a href='" +
                         link + senhaModel.Token + "'>Clique aqui para criar uma senha</a>";
 
                 case 2:
@@ -65,7 +65,7 @@ namespace MonitoraSUS.Utils
             {
                 case 0: return "USUARIO";
                 case 1: return "AGENTE";
-                case 2: return "COORDENADOR";
+                case 2: return "GESTOR";
                 case 3: return "SECRETARIO";
                 case 4: return "ADM";
                 default: return "UNDEFINED";
