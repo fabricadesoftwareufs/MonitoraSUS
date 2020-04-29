@@ -28,9 +28,8 @@ $('#btn-submit').on('click', function () {
     var nome = $('#input-nome').val();
     var dataNasc = $('#input-data-nascimento').val();
     var cep = $('#postal_code').val();
-    var numero = $('#street_number').val();
     var rua = $('#route').val();
-    var bairro = $('#input-bairro').val();
+    var bairro = $('#sublocality_level_1').val();
     var cidade = $('#administrative_area_level_2').val();
     var estado = $('#administrative_area_level_1').val();
     var foneCelular = $('#input-celular').val();
@@ -41,7 +40,7 @@ $('#btn-submit').on('click', function () {
 
     if (!(cpf === "" || nome === "" || dataNasc === "" || cep === "" || rua === "" || bairro === "" ||
           cidade === "" || estado === "" || foneCelular === "" || outrasComorbidades === "" ||
-          numero === "" || email === "" || dataExame === "" || dataSintomas === "" )) {
+          email === "" || dataExame === "" || dataSintomas === "" )) {
 
         $('#modal-espera').modal('show');
     }

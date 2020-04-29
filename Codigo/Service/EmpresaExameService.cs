@@ -150,5 +150,32 @@ namespace Service
                 PossuiLeitosInternacao = Convert.ToBoolean(empresa.PossuiLeitosInternacao)
             }).FirstOrDefault();
 
+        public List<EmpresaExameModel> GetByUF(string uf)
+         => _context.Empresaexame
+            .Where(empresaExame => empresaExame.Numero.ToUpper().Equals(uf.ToUpper()))
+            .Select(empresa => new EmpresaExameModel
+            {
+                Id = empresa.Id,
+                Cnpj = empresa.Cnpj,
+                Nome = empresa.Nome,
+                Cep = empresa.Cep,
+                Rua = empresa.Rua,
+                Bairro = empresa.Bairro,
+                Cidade = empresa.Cidade,
+                Estado = empresa.Estado,
+                Numero = empresa.Numero,
+                Complemento = empresa.Complemento,
+                Latitude = empresa.Latitude,
+                Longitude = empresa.Longitude,
+                FoneCelular = empresa.FoneCelular,
+                FoneFixo = empresa.FoneFixo,
+                Email = empresa.Email,
+                EmiteLaudoExame = Convert.ToBoolean(empresa.EmiteLaudoExame),
+                NumeroLeitos = empresa.NumeroLeitos,
+                NumeroLeitosDisponivel = empresa.NumeroLeitosDisponivel,
+                NumeroLeitosUti = empresa.NumeroLeitosUti,
+                NumeroLeitosUtidisponivel = empresa.NumeroLeitosUtidisponivel,
+                PossuiLeitosInternacao = Convert.ToBoolean(empresa.PossuiLeitosInternacao)
+            }).ToList();
     }
 }

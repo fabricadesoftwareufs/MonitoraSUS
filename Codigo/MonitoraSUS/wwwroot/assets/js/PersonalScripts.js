@@ -1,5 +1,6 @@
 ﻿var placeSearch, autocomplete, inputHtml, geocoder;
-inputHtml = document.getElementById('input-pesquisa');
+inputHtml = document.getElementById('route');
+input = document.getElementById('postal_code');
 
 var span = document.getElementById('spanInvalidCep');
 
@@ -9,12 +10,13 @@ var componentForm = {
     street_number: 'short_name',
     administrative_area_level_1: 'short_name',
     administrative_area_level_2: 'long_name',
-    postal_code: 'short_name'
+    postal_code: 'short_name',
+    sublocality_level_1: 'long_name'
 };
 
 var formCep = {
     cep: document.getElementById('postal_code'),
-    bairro: document.getElementById('input-bairro'),
+    bairro: document.getElementById('sublocality_level_1'),
     localidade: document.getElementById('administrative_area_level_2'),
     uf: document.getElementById('administrative_area_level_1'),
     logradouro: document.getElementById('route')
@@ -43,11 +45,18 @@ function fillInAddress() {
             document.getElementById(addressType).value = val;
 
             // DISABLE ONLY INPUTS THAT RECEIVED A VALID VALUE
-            if (val != '')
+            if (val != '' && addressType != "route" && addressType != "postal_code")
                 document.getElementById(addressType).setAttribute('readonly', 'true');
         }
     }
 
+    for (var item in componentForm) {
+        if (document.getElementById(item).value == '') {
+            document.getElementById(item).readOnly = false;
+        }
+
+    }
+        
     if ($('#postal_code').val() == "")
         $('#postal_code').focus();
     else
@@ -162,6 +171,15 @@ function PreencheForm() {
     }
 }
 
+function PreencheFormCEP() {
+    if ((!isNaN(input.value) || input.value.toString().match(/\d{5}-\d{3}/))
+        && input.value !== ''
+        && (input.value.length == 8 || input.value.length == 9)
+    ) {
+        BuscaViaCep(input.value);
+    }
+}
+
 function BuscaViaCep(cep) {
     let url = `https://viacep.com.br/ws/${cep}/json/`;
 
@@ -176,7 +194,8 @@ function BuscaViaCep(cep) {
                         formCep[input].name == nameInputEmpresaExame(value)) {
 
                         formCep[input].value = data[value];
-                        formCep[input].setAttribute('readonly', 'true');
+                        if (value != "cep")
+                            formCep[input].setAttribute('readonly', 'true');
                     }
                 }
             }
@@ -239,9 +258,8 @@ $('#btn-solicitar').on('click', function () {
     var nome = $('#input-nome').val();
     var dataNasc = $('#input-data-nascimento').val();
     var cep = $('#postal_code').val();
-    var numero = $('#street_number').val();
     var rua = $('#route').val();
-    var bairro = $('#input-bairro').val();
+    var bairro = $('#sublocality_level_1').val();
     var cidade = $('#administrative_area_level_2').val();
     var estado = $('#administrative_area_level_1').val();
     var foneCelular = $('#input-celular').val();
@@ -251,7 +269,7 @@ $('#btn-solicitar').on('click', function () {
 
     if (!(cpf === "" || nome === "" || dataNasc === "" || cep === "" ||
         rua === "" || bairro === "" || cidade === "" || estado === "" ||
-        foneCelular === "" || numero === "" || email === "" || outrasComorbidades === "")) {
+        foneCelular === ""  || email === "" || outrasComorbidades === "")) {
         $('#modal-espera').modal('show');
 
     }

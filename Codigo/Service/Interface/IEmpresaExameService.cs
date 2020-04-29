@@ -11,5 +11,6 @@ namespace Service.Interface
         List<EmpresaExameModel> GetAll();
         EmpresaExameModel GetById(int id);
         EmpresaExameModel GetByCnpj(string cnpj);
+        List<EmpresaExameModel> GetByUF(string uf);
     }
 }

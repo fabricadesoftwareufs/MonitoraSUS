@@ -14,17 +14,21 @@ namespace MonitoraSUS.Controllers
         private readonly IConfiguration _configuration;
         private readonly IEmpresaExameService _empresaContext;
         private readonly IExameService _exameContext;
+        private readonly IPessoaService _pessoaContext;
         private readonly IPessoaTrabalhaEstadoService _trabalhaEstadoContext;
+
 
 
         public EmpresaExameController(IConfiguration configuration,
                                       IEmpresaExameService empresaContext,
                                       IExameService exameContext,
+                                      IPessoaService pessoaContext,
                                       IPessoaTrabalhaEstadoService trabalhaEstadoContext)
         {
             _configuration = configuration;
             _empresaContext = empresaContext;
             _exameContext = exameContext;
+            _pessoaContext = pessoaContext;
             _trabalhaEstadoContext = trabalhaEstadoContext;
         }
 
@@ -40,7 +44,7 @@ namespace MonitoraSUS.Controllers
             var empresas = new List<EmpresaExameModel>();
             if (usuario.RoleUsuario.Equals("SECRETARIO") || usuario.RoleUsuario.Equals("COORDENADOR"))
             {
-                empresas = _empresaContext.GetAll();
+                empresas = _empresaContext.GetByUF(_pessoaContext.GetById(usuario.UsuarioModel.IdPessoa).Estado);
             }
 
             return empresas;
