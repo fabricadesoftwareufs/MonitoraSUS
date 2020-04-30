@@ -10,7 +10,7 @@ using System.Security.Claims;
 
 namespace MonitoraSUS.Controllers
 {
-    [Authorize(Roles = "AGENTE, SECRETARIO, ADM")]
+    [Authorize(Roles = "AGENTE, SECRETARIO")]
     public class EmpresaExameController : Controller
     {
         private readonly IConfiguration _configuration;
