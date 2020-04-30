@@ -110,13 +110,14 @@ namespace MonitoraSUS.Controllers
                              + "gestor de saúde estadual sua inclusão como notificador.";
                         return RedirectToAction("Create", "AgenteSecretario");
                     }
-                    if (_pessoaTrabalhaEstadoService
-                            .Insert(new PessoaTrabalhaEstadoModel
-                            {
-                                IdPessoa = idPessoaInserida,
-                                IdEstado = Convert.ToInt32(collection["select-Estado"]),
-                                EhSecretario = false,
-                                EhResponsavel = false
+					if (_pessoaTrabalhaEstadoService
+							.Insert(new PessoaTrabalhaEstadoModel
+							{
+								IdPessoa = idPessoaInserida,
+								IdEstado = Convert.ToInt32(collection["select-Estado"]),
+								EhSecretario = false,
+								EhResponsavel = false,
+								IdEmpresaExame = EmpresaExameModel.EMPRESA_ESTADO_MUNICIPIO
                             }))
                     {
                         TempData["mensagemSucesso"] = "Solicitação de cadastro realizado com sucesso! Por favor, aguarde e-mail " +
@@ -188,8 +189,9 @@ namespace MonitoraSUS.Controllers
                                 IdPessoa = idPessoaInserida,
                                 IdEstado = Convert.ToInt32(collection["select-Estado"]),
                                 EhSecretario = false,
-                                EhResponsavel = true
-                            }))
+                                EhResponsavel = true,
+								IdEmpresaExame = EmpresaExameModel.EMPRESA_ESTADO_MUNICIPIO    //valor padrão
+				}))
                     {
                         TempData["mensagemSucesso"] = "Solicitação de cadastro realizado com sucesso! Por favor, aguarde e-mail " +
                             "que será enviado pelo MonitoraSUS assim que seu acesso ao sistema for autorizado por um gestor de saúde estadual.";
