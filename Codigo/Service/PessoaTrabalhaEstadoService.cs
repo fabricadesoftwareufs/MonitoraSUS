@@ -75,7 +75,21 @@ namespace Service
                     IdEmpresaExame = p.IdEmpresaExame
                 }).ToList();
 
-        public PessoaTrabalhaEstadoModel GetById(int idPessoa, int idEstado)
+		public List<PessoaTrabalhaEstadoModel> GetAllGestoresEstado()
+		   => _context
+			   .Pessoatrabalhaestado
+			   .Where(p => p.EhResponsavel.Equals(1))
+			   .Select(p => new PessoaTrabalhaEstadoModel
+			   {
+				   IdPessoa = p.Idpessoa,
+				   IdEstado = p.IdEstado,
+				   EhResponsavel = Convert.ToBoolean(p.EhResponsavel),
+				   EhSecretario = Convert.ToBoolean(p.EhSecretario),
+				   SituacaoCadastro = p.SituacaoCadastro,
+				   IdEmpresaExame = p.IdEmpresaExame
+			   }).ToList();
+
+		public PessoaTrabalhaEstadoModel GetById(int idPessoa, int idEstado)
             => _context
                 .Pessoatrabalhaestado
                 .Where(p => p.Idpessoa == idPessoa && p.IdEstado == idEstado)

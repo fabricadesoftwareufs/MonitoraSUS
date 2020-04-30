@@ -56,7 +56,7 @@
                                     <div class="form-group">
                                         <label class="form-control-label" for="sexo">Sexo</label><br>
                                         <div class="custom-control custom-radio custom-control-inline">
-                                            <input type="radio" id="input-sexo-masc" required name="sexo" value="Masculino" class="custom-control-input">
+                                            <input type="radio" id="input-sexo-masc" required name="sexo" value="Masculino" checked class="custom-control-input">
                                             <label class="custom-control-label" for="input-sexo-masc">Masculino</label>
                                         </div>
                                         <div class="custom-control custom-radio custom-control-inline">
@@ -79,7 +79,7 @@
                                 </div>
                                 <div class="col-lg-2">
                                     <div class="form-group">
-                                        <label class="form-control-label" for="postal_code">CEP (Não sabe o CEP? </label> <a href="http://www.buscacep.correios.com.br/sistemas/buscacep/" target="_blank">Clique aqui</a>)
+                                        <label class="form-control-label" for="postal_code">CEP (Não sabe? </label> <a href="http://www.buscacep.correios.com.br/sistemas/buscacep/" target="_blank">Busque aqui</a>)
                                         <input asp-for="Cep" name="Cep" oninput="PreencheFormCEP()" id="postal_code" class="form-control" required placeholder="CEP">
                                         <span id="spanInvalidCep" hidden class="text-danger text-center" style="padding: 10px">Cep Invalido!!</span>
                                     </div>
