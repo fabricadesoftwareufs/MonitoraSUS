@@ -199,7 +199,7 @@ function BuscaViaCep(cep) {
                     }
                 }
             }
-            if (document.getElementById('route').value != "")
+            if (formCep.logradouro.value != "")
                 ProcuraEndereco(formCep.logradouro.value);
         } else
             span.hidden = false;
