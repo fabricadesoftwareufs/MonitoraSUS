@@ -194,12 +194,13 @@ function BuscaViaCep(cep) {
                         formCep[input].name == nameInputEmpresaExame(value)) {
 
                         formCep[input].value = data[value];
-                        if (value != "cep")
+                        if (value != "cep" && data[value] != '')
                             formCep[input].setAttribute('readonly', 'true');
                     }
                 }
             }
-            ProcuraEndereco(formCep.logradouro.value);
+            if (document.getElementById('route').value != "")
+                ProcuraEndereco(formCep.logradouro.value);
         } else
             span.hidden = false;
     })
