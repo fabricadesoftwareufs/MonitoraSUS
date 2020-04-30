@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Model;
@@ -9,6 +10,7 @@ using System.Security.Claims;
 
 namespace MonitoraSUS.Controllers
 {
+    [Authorize(Roles = "AGENTE, SECRETARIO, ADM")]
     public class EmpresaExameController : Controller
     {
         private readonly IConfiguration _configuration;
