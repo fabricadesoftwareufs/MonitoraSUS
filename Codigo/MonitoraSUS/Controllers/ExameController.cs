@@ -13,7 +13,8 @@ using System.Security.Claims;
 
 namespace MonitoraSUS.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "AGENTE, SECRETARIO, ADM")]
+
     public class ExameController : Controller
     {
         private readonly IVirusBacteriaService _virusBacteriaContext;
