@@ -51,23 +51,17 @@
                         <h6 class="heading-small text-muted mb-4">Informações de Contato</h6>
                         <div class="pl-lg-4">
                             <div class="row">
-                                <div class="col-lg-12">
-                                    <div class="form-group">
-                                        <label class="form-control-label" for="input-pesquisa">Pesquisa Endereço (Não sabe o CEP? </label> <a href="http://www.buscacep.correios.com.br/sistemas/buscacep/" target="_blank">Clique aqui</a>)
-                                        <input type="search" id="input-pesquisa" class="form-control" oninput="PreencheForm()" placeholder="Pesquise pelo CEP, Rua, Bairro, Número" autocomplete="off">
-                                        <span id="spanInvalidCep" hidden class="text-danger text-center" style="padding: 10px">Cep Invalido!!</span>
-                                    </div>
-                                </div>
                                 <div class="col-lg-2">
                                     <div class="form-group">
-                                        <label class="form-control-label" for="postal_code">CEP</label>
-                                        <input asp-for="Cep" id="postal_code" class="form-control" required placeholder="CEP">
+                                        <label class="form-control-label" for="postal_code">CEP (Não sabe o CEP? </label> <a href="http://www.buscacep.correios.com.br/sistemas/buscacep/" target="_blank">Clique aqui</a>)
+                                        <input asp-for="Cep" oninput="PreencheFormCEP()" id="postal_code" class="form-control" required placeholder="CEP">
+                                        <span id="spanInvalidCep" hidden class="text-danger text-center" style="padding: 10px">Cep Invalido!!</span>
                                     </div>
                                 </div>
                                 <div class="col-lg-5">
                                     <div class="form-group">
                                         <label class="form-control-label" for="route">Logradouro</label>
-                                        <input asp-for="Rua" id="route" required class="form-control" placeholder="Rua, Av, Travessa">
+                                        <input asp-for="Rua" type="search" oninput="PreencheForm()" placeholder="Pesquise pelo CEP, Rua, Bairro, Número" autocomplete="off" id="route" required class="form-control">
                                     </div>
                                 </div>
                                 <div class="col-lg-1">
@@ -78,8 +72,8 @@
                                 </div>
                                 <div class="col-lg-4">
                                     <div class="form-group">
-                                        <label class="form-control-label" for="input-bairro">Bairro</label>
-                                        <input asp-for="Bairro" id="input-bairro" required class="form-control" placeholder="Bairro">
+                                        <label class="form-control-label" for="sublocality_level_1">Bairro</label>
+                                        <input asp-for="Bairro" id="sublocality_level_1" required class="form-control" placeholder="Bairro">
                                     </div>
                                 </div>
                                 <div class="col-lg-4">
@@ -232,42 +226,26 @@
 </div>
 
 
-@if (TempData["mensagemSucesso"] != null || TempData["mensagemErro"] != null)
+@if (TempData["mensagemSucesso"] != null)
 {
-    <div class="modal fade bs-example-modal-sm" id="modal-mensagem-retorno" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-sm">
-            <div class="modal-content">
-                <div style="padding: 20pt;text-align: center">
-                    @if (TempData["mensagemSucesso"] != null)
-                    {
-                        <p> @TempData["mensagemSucesso"] </p>
-                        <a asp-action="Index" asp-controller="EmpresaExame" class="btn btn-success">Ok</a>
+    <div id="mensagem-retorno" onclick="swtAlertRedirectIndex('success','Parabéns!', '@TempData["mensagemSucesso"]','/EmpresaExame/Index/')" class="text-center"></div>
 
-                    }
-                    else
-                    {
-                        <p> @TempData["mensagemErro"] </p>
-                        <button type="button" data-dismiss="modal" class="btn btn-success">Ok</button>
-                    }
-                </div>
-            </div>
-        </div>
-    </div>
 }
-
-
+else if (TempData["mensagemErro"] != null)
+{
+    <div id="mensagem-retorno" onclick="swtAlert('error','Falha!', '@TempData["mensagemErro"]')"></div>
+}
 
 
 @section Scripts {
 
     <script>
-
         $(document).ready(function () {
             if (!$("#customCheck2").is(':checked')) {
                 $('#inputs-leitos').toggle();
             }
 
-            $('#modal-mensagem-retorno').modal('show');
+            $('#mensagem-retorno').click();
         });
 
         function mostraForm() {
@@ -281,7 +259,7 @@
             var nome = $('#input-nome').val();
             var cep = $('#postal_code').val();
             var rua = $('#route').val();
-            var bairro = $('#input-bairro').val();
+            var bairro = $('#sublocality_level_1').val();
             var cidade = $('#administrative_area_level_2').val();
             var estado = $('#administrative_area_level_1').val();
             var foneCelular = $('#input-celular').val();
@@ -294,8 +272,29 @@
 
         });
 
+
+        function swtAlert(type, title, message) {
+            Swal.fire({
+                icon: type,
+                title: title,
+                text: message,
+            });
+        }
+
+        function swtAlertRedirectIndex(type, title, message, url) {
+            Swal.fire({
+                icon: type,
+                title: title,
+                text: message,
+                footer:
+                    '<a href="' + url + '" class="btn btn-success">OK</a>',
+                showConfirmButton: false,
+            });
+        }
+
     </script>
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
     <script src="~/assets/js/PersonalScripts.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=@googleKey&libraries=places&callback=initAutocomplete&language=pt-BR"
             async defer></script>

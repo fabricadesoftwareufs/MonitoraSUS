@@ -41,23 +41,39 @@ namespace MonitoraSUS.Utils
             {
                 case 0:
                     return "<html><body>" +
-                        "Foi solicitado a recuperação de sua senha para acesso ao MonitoraSUS, clique no link abaixo para iniciar o processo de recuperação.<br>" +
-                        link + senhaModel.Token + "'>Clique aqui mudar a senha</a>";
+                        "Foi solicitado a recuperação de sua senha para acesso ao MonitoraSUS.<br>" +
+						"Clique no link abaixo para iniciar o processo de recuperação.<br>" +
+                        link + senhaModel.Token + "'>Clique aqui mudar a senha</a>" +
+						RodapeEmail();
 
-                case 1:
-                    return "<html><body>" +
-                        "Seu cadastro foi aprovado para acesso ao MonitoraSUS. Para acessar o sistema clique no link abaixo para criar uma nova senha.<br>" +
-                        link + senhaModel.Token + "'>Clique aqui para criar uma senha</a>";
 
-                case 2:
+				case 1:
                     return "<html><body>" +
-                        "Seu cadastro foi ativado para acesso ao MonitoraSUS. Acesse o sistema <a href='" + site + "'>aqui</a>" +
-                        ". Caso seja a primeira vez que acessa ou não lembre da sua senha, clique no link abaixo para iniciar o processo de recuperação.<br><a href='" +
-                        link + senhaModel.Token + "'>Clique aqui para criar uma senha</a>";
+                        "Parabéns! Seu cadastro foi aprovado para acesso ao MonitoraSUS.<br>"+
+						"Clique no link abaixo para criar sua senha de acesso ao sistema.<br>" +
+                        link + senhaModel.Token + "'>Clique aqui para criar sua senha.</a>" +
+						RodapeEmail();
+
+				case 2:
+                    return "<html><body>" +
+                        "Parabéns! Seu cadastro foi ativado para acesso ao MonitoraSUS. <br>"+
+						"Acesse o sistema <a href='" + site + "'>aqui</a>" +
+                        ". Caso não lembre da sua senha de acesso, clique no link abaixo para iniciar o processo de recuperação.<br><a href='" +
+                        link + senhaModel.Token + "'>Clique aqui para criar uma nova senha.</a>"+
+						RodapeEmail();
 
                 default: return null;
             }
         }
+
+		private static string RodapeEmail()
+		{
+			return "<br>Qualquer dúvida ou sugestão entre em contato com o nosso time." +
+						"<br><br>" +
+						"<br>Equipe MonitoraSUS" +
+						"<br>KNUTH-Fábrica de Software da Universidade Federal de Sergipe" +
+						"<br>fabricadesoftware@ufs.br";
+		}
 
         public static string ReturnRole(int userType)
         {

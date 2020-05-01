@@ -156,7 +156,7 @@ namespace MonitoraSUS.Controllers
                         {
                             try
                             {
-                                await _emailService.SendEmailAsync(user.Email, "MonitoraSUS - Alteração de senha", Methods.MessageEmail(recSenha, finalidade));
+                                await _emailService.SendEmailAsync(user.Email, "MonitoraSUS - Acesso ao Sistema", Methods.MessageEmail(recSenha, finalidade));
                                 return (true, true, true);
                             }
                             catch (Exception ex)

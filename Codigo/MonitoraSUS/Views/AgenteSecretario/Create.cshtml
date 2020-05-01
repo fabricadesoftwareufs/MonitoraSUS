@@ -56,7 +56,7 @@
                                     <div class="form-group">
                                         <label class="form-control-label" for="sexo">Sexo</label><br>
                                         <div class="custom-control custom-radio custom-control-inline">
-                                            <input type="radio" id="input-sexo-masc" required name="sexo" value="Masculino" class="custom-control-input">
+                                            <input type="radio" id="input-sexo-masc" required name="sexo" value="Masculino" checked class="custom-control-input">
                                             <label class="custom-control-label" for="input-sexo-masc">Masculino</label>
                                         </div>
                                         <div class="custom-control custom-radio custom-control-inline">
@@ -71,37 +71,35 @@
                         <h6 class="heading-small text-muted mb-4">Informações de Contato</h6>
                         <div class="pl-lg-4">
                             <div class="row">
-                                <div class="col-lg-12">
-									<div class="form-group">
-										<label class="form-control-label" for="input-pesquisa">Pesquisa Endereço (Não sabe o CEP? </label> <a href="http://www.buscacep.correios.com.br/sistemas/buscacep/" target="_blank">Clique aqui</a>)
-										<input type="search" id="input-pesquisa" required class="form-control" oninput="PreencheForm()" placeholder="Pesquise pelo CEP, Rua, Bairro, Número" autocomplete="off">
-										<span id="spanInvalidCep" hidden class="text-danger text-center" style="padding: 10px">Cep Invalido!!</span>
-										<input type="hidden" id="longitude" asp-for="Longitude" />
-										<input type="hidden" id="latitude" asp-for="Latitude" />
-									</div>
+                                <div class="col-lg-12" hidden>
+                                    <div class="form-group">
+                                        <input type="hidden" id="longitude" asp-for="Longitude" />
+                                        <input type="hidden" id="latitude" asp-for="Latitude" />
+                                    </div>
                                 </div>
                                 <div class="col-lg-2">
                                     <div class="form-group">
-                                        <label class="form-control-label" for="input-cep">CEP</label>
-                                        <input id="postal_code" class="form-control" asp-for="Cep" name="Cep" required placeholder="CEP" type="text">
+                                        <label class="form-control-label" for="postal_code">CEP (Não sabe? </label> <a href="http://www.buscacep.correios.com.br/sistemas/buscacep/" target="_blank">Busque aqui</a>)
+                                        <input asp-for="Cep" name="Cep" oninput="PreencheFormCEP()" id="postal_code" class="form-control" required placeholder="CEP">
+                                        <span id="spanInvalidCep" hidden class="text-danger text-center" style="padding: 10px">Cep Invalido!!</span>
                                     </div>
                                 </div>
                                 <div class="col-lg-5">
                                     <div class="form-group">
-                                        <label class="form-control-label" for="input-logradouro">Logradouro</label>
-                                        <input type="text" id="route" required class="form-control" asp-for="Rua" name="Logradouro" placeholder="Rua, Av, Travessa">
+                                        <label class="form-control-label" for="route">Logradouro</label>
+                                        <input asp-for="Rua" name="Logradouro" type="search" oninput="PreencheForm()" placeholder="Pesquise pelo CEP, Rua, Bairro, Número" autocomplete="off" id="route" required class="form-control">
                                     </div>
                                 </div>
                                 <div class="col-lg-1">
                                     <div class="form-group">
-                                        <label class="form-control-label" for="input-numero">Número</label>
-                                        <input type="text" id="street_number" class="form-control" asp-for="Numero" name="Numero" placeholder="">
+                                        <label class="form-control-label" for="street_number">Número</label>
+                                        <input asp-for="Numero" name="Numero" id="street_number" class="form-control" placeholder="">
                                     </div>
                                 </div>
                                 <div class="col-lg-4">
                                     <div class="form-group">
-                                        <label class="form-control-label" for="input-bairro">Bairro</label>
-                                        <input type="text" id="input-bairro" required class="form-control" asp-for="Bairro" name="Bairro" placeholder="Bairro">
+                                        <label class="form-control-label" for="sublocality_level_1">Bairro</label>
+                                        <input asp-for="Bairro" name="Bairro" id="sublocality_level_1" required class="form-control" placeholder="Bairro">
                                     </div>
                                 </div>
                                 <div class="col-lg-4">

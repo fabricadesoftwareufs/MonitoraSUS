@@ -6,7 +6,7 @@ $(document).ready(function () {
         window.location.href = "#input-virus-bacteria";
     }
 
-    $('#modal-mensagem-retorno').modal('show');
+    document.getElementById("mensagem-retorno").click();
 });
 
 // Pegando o cpf enquanto o usuario digita e submetendo quando terminar
@@ -28,21 +28,17 @@ $('#btn-submit').on('click', function () {
     var nome = $('#input-nome').val();
     var dataNasc = $('#input-data-nascimento').val();
     var cep = $('#postal_code').val();
-    var numero = $('#street_number').val();
     var rua = $('#route').val();
-    var bairro = $('#input-bairro').val();
+    var bairro = $('#sublocality_level_1').val();
     var cidade = $('#administrative_area_level_2').val();
     var estado = $('#administrative_area_level_1').val();
     var foneCelular = $('#input-celular').val();
-    var email = $('#input-email').val();
     var dataExame = $('#input-data-exame').val();
     var dataSintomas = $('#input-data-sintomas').val();
     var outrasComorbidades = $('#input-outrasComorbidades').val();
 
     if (!(cpf === "" || nome === "" || dataNasc === "" || cep === "" || rua === "" || bairro === "" ||
-          cidade === "" || estado === "" || foneCelular === "" || outrasComorbidades === "" ||
-          numero === "" || email === "" || dataExame === "" || dataSintomas === "" )) {
-
+        cidade === "" || estado === "" || foneCelular === "" || outrasComorbidades === "" || dataExame === "" || dataSintomas === "")) {
         $('#modal-espera').modal('show');
     }
 
@@ -98,3 +94,23 @@ function resultadoExame() {
 
     return resultado;
 }
+
+function swtAlert(type, title, message) {
+    Swal.fire({
+        icon: type,
+        title: title,
+        text: message,
+    });
+}
+
+function swtAlertRedirectIndex(type, title, message, url) {
+    Swal.fire({
+        icon: type,
+        title: title,
+        text: message,
+        footer: 
+            '<a href="'+url+'" class="btn btn-success">OK</a>',
+        showConfirmButton: false,
+    });
+}
+

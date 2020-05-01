@@ -14,7 +14,6 @@ using System.Threading.Tasks;
 
 namespace MonitoraSUS.Controllers
 {
-
     [Authorize(Roles = "AGENTE, SECRETARIO, ADM")]
     public class AgenteSecretarioController : Controller
     {
@@ -93,6 +92,7 @@ namespace MonitoraSUS.Controllers
                                 IdPessoa = idPessoaInserida,
                                 IdMunicipio = Convert.ToInt32(collection["select-Cidade"]),
                                 EhSecretario = false,
+                                SituacaoCadastro = EmpresaExameModel.SITUACAO_CADASTRO_SOLICITADA,
                                 EhResponsavel = false
                             }))
                     {
@@ -118,7 +118,9 @@ namespace MonitoraSUS.Controllers
                                 IdPessoa = idPessoaInserida,
                                 IdEstado = Convert.ToInt32(collection["select-Estado"]),
                                 EhSecretario = false,
-                                EhResponsavel = false
+                                EhResponsavel = false,
+                                SituacaoCadastro = EmpresaExameModel.SITUACAO_CADASTRO_SOLICITADA,
+                                IdEmpresaExame = EmpresaExameModel.EMPRESA_ESTADO_MUNICIPIO
                             }))
                     {
                         TempData["mensagemSucesso"] = "Solicitação de cadastro realizado com sucesso! Por favor, aguarde e-mail " +
@@ -165,11 +167,14 @@ namespace MonitoraSUS.Controllers
                                 IdPessoa = idPessoaInserida,
                                 IdMunicipio = Convert.ToInt32(collection["select-Cidade"]),
                                 EhSecretario = false,
+                                SituacaoCadastro = EmpresaExameModel.SITUACAO_CADASTRO_SOLICITADA,
                                 EhResponsavel = true
                             }))
                     {
                         TempData["mensagemSucesso"] = "Solicitação de cadastro realizado com sucesso! Por favor, aguarde e-mail " +
-                            "que será enviado pelo MonitoraSUS assim que seu acesso ao sistema for autorizado por um gestor de saúde municipal.";
+                            "que será enviado pelo MonitoraSUS assim que seu acesso ao sistema for autorizado por um gestor de saúde municipal. " +
+                            "Se você for secretário de saúde ou ainda não há gestores cadastrados no município, por favor, envie documentação comprobatória " +
+                            " para fabricadesoftware@ufs.br para liberarmos o primeiro acesso para seu município."; ;
                     }
                     else
                         TempData["mensagemErro"] = "Não foi possível concluir seu cadastro. Por favor, tente novamente";
@@ -191,10 +196,14 @@ namespace MonitoraSUS.Controllers
                                 IdEstado = Convert.ToInt32(collection["select-Estado"]),
                                 EhSecretario = false,
                                 EhResponsavel = true,
+                                SituacaoCadastro = EmpresaExameModel.SITUACAO_CADASTRO_SOLICITADA,
+                                IdEmpresaExame = EmpresaExameModel.EMPRESA_ESTADO_MUNICIPIO    //valor padrão
                             }))
                     {
                         TempData["mensagemSucesso"] = "Solicitação de cadastro realizado com sucesso! Por favor, aguarde e-mail " +
-                            "que será enviado pelo MonitoraSUS assim que seu acesso ao sistema for autorizado por um gestor de saúde estadual.";
+                            "que será enviado pelo MonitoraSUS assim que seu acesso ao sistema for autorizado por um gestor de saúde estadual." +
+                            " Se você for secretário de saúde ou ainda não há gestores cadastrados no estado, por favor, envie documentação comprobatória " +
+                            " para fabricadesoftware@ufs.br para liberarmos o primeiro acesso para seu estado.";
                     }
                     else
                         TempData["mensagemErro"] = "Não foi possível concluir seu cadastro. Por favor, tente novamente.";
@@ -387,6 +396,7 @@ namespace MonitoraSUS.Controllers
             bool sucess = false;
             string responseOp = "";
             UsuarioModel usuarioModel = null;
+            bool ehPerfilAdministrador = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity).RoleUsuario == "ADM";
 
             //caso o sujeito trabalhe no estado
             var agenteEstado = _pessoaTrabalhaEstadoService.GetByIdPessoa(idPessoa);
@@ -397,13 +407,18 @@ namespace MonitoraSUS.Controllers
                 {
                     var pessoa = _pessoaService.GetById(agenteEstado.IdPessoa);
 
+                    int tipoUsuario = entidade.Equals("Agente") ? UsuarioModel.PERFIL_AGENTE : UsuarioModel.PERFIL_COORDENADOR;
+
+                    if (entidade.Equals("gestor") && ehPerfilAdministrador)
+                        tipoUsuario = UsuarioModel.PERFIL_SECRETARIO;
+
                     var usuario = new UsuarioModel
                     {
                         IdPessoa = pessoa.Idpessoa,
                         Cpf = pessoa.Cpf,
                         Email = pessoa.Email,
                         Senha = Methods.GenerateToken(),
-                        TipoUsuario = Methods.ReturnRoleId(entidade)
+                        TipoUsuario = tipoUsuario
                     };
                     if (_usuarioService.GetByCpf(pessoa.Cpf) == null)
                         _usuarioService.Insert(usuario);
@@ -436,6 +451,8 @@ namespace MonitoraSUS.Controllers
 
                 if (sucess)
                 {
+                    // o administrador libera gestores sempre com perfil de secretario
+                    agenteEstado.EhSecretario = (ehPerfilAdministrador) ? true : false;
                     agenteEstado.SituacaoCadastro = "A";
                     _pessoaTrabalhaEstadoService.Update(agenteEstado);
                     responseOp += entidade + " foi ativado com sucesso. Um email foi enviado para notificá-lo!";
@@ -458,13 +475,18 @@ namespace MonitoraSUS.Controllers
                 {
                     var pessoa = _pessoaService.GetById(agenteMunicipio.IdPessoa);
 
+                    int tipoUsuario = entidade.Equals("Agente") ? UsuarioModel.PERFIL_AGENTE : UsuarioModel.PERFIL_COORDENADOR;
+
+                    if (entidade.Equals("gestor") && ehPerfilAdministrador)
+                        tipoUsuario = UsuarioModel.PERFIL_SECRETARIO;
+
                     var usuario = new UsuarioModel
                     {
                         IdPessoa = pessoa.Idpessoa,
                         Cpf = pessoa.Cpf,
                         Email = pessoa.Email,
                         Senha = Methods.GenerateToken(),
-                        TipoUsuario = Methods.ReturnRoleId(entidade)
+                        TipoUsuario = tipoUsuario
                     };
                     if (_usuarioService.GetByCpf(pessoa.Cpf) == null)
                         _usuarioService.Insert(usuario);
@@ -496,6 +518,8 @@ namespace MonitoraSUS.Controllers
 
                 if (sucess)
                 {
+                    // o administrador libera gestores sempre com perfil de secretario
+                    agenteMunicipio.EhSecretario = (ehPerfilAdministrador) ? true : false;
                     agenteMunicipio.SituacaoCadastro = "A";
                     _pessoaTrabalhaMunicipioService.Update(agenteMunicipio);
                     responseOp += entidade + " foi ativado com sucesso. Um email foi enviado para notificá-lo!";
@@ -862,5 +886,6 @@ namespace MonitoraSUS.Controllers
             return responseOp;
 
         }
-    }
+
+	}
 }

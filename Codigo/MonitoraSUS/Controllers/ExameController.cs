@@ -13,7 +13,8 @@ using System.Security.Claims;
 
 namespace MonitoraSUS.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "AGENTE, COORDENADOR, SECRETARIO")]
+
     public class ExameController : Controller
     {
         private readonly IVirusBacteriaService _virusBacteriaContext;
@@ -288,7 +289,7 @@ namespace MonitoraSUS.Controllers
                         // inserindo o exame
                         var value = _exameContext.Insert(CreateExameModel(exame));
                     }
-                    catch
+                    catch (Exception e)
                     {
                         TempData["mensagemErro"] = "Cadastro não pode ser concluido pois houve um problema ao inserir os dados do exame, tente novamente." +
                                                    " Se o erro persistir, entre em contato com a Fábrica de Software da UFS pelo email fabricadesoftware@ufs.br";
@@ -370,6 +371,7 @@ namespace MonitoraSUS.Controllers
             {
                 exame.IdEstado = secretarioEstado.IdEstado;
                 exame.IdEmpresaSaude = secretarioEstado.IdEmpresaExame;
+				exame.IdMunicipio = null;
             }
 
             exame.IdAgenteSaude = agente.UsuarioModel.IdPessoa;

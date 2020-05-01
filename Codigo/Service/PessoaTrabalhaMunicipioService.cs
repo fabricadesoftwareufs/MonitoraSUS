@@ -73,7 +73,20 @@ namespace Service
                     SituacaoCadastro = p.SituacaoCadastro
                 }).ToList();
 
-        public PessoaTrabalhaMunicipioModel GetById(int idPessoa, int idMunicipio)
+		public List<PessoaTrabalhaMunicipioModel> GetAllGestoresMunicipio()
+			=> _context
+				.Pessoatrabalhamunicipio
+				.Where(p => p.EhResponsavel.Equals(1))
+				.Select(p => new PessoaTrabalhaMunicipioModel
+				{
+					IdPessoa = p.IdPessoa,
+					IdMunicipio = p.IdMunicipio,
+					EhResponsavel = Convert.ToBoolean(p.EhResponsavel),
+					EhSecretario = Convert.ToBoolean(p.EhSecretario),
+					SituacaoCadastro = p.SituacaoCadastro
+				}).ToList();
+
+		public PessoaTrabalhaMunicipioModel GetById(int idPessoa, int idMunicipio)
             => _context
                 .Pessoatrabalhamunicipio
                 .Where(p => p.IdPessoa == idPessoa && p.IdMunicipio == idMunicipio)

@@ -4,7 +4,10 @@ namespace Model
 {
     public class EmpresaExameModel
     {
-        [Display(Name = "Código")]
+		public const int EMPRESA_ESTADO_MUNICIPIO = 1;
+		public const string SITUACAO_CADASTRO_SOLICITADA = "S";
+
+		[Display(Name = "Código")]
         public int Id { get; set; }
         [Required]
         [Display(Name = "Cnpj")]

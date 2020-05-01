@@ -6,7 +6,7 @@
     var idPessoa = Model.IdPaciente.Idpessoa;
     var cpf = Model.IdPaciente.Cpf;
     var nome = Model.IdPaciente.Nome;
-    string dataNascimento = Model.IdPaciente.DataNascimento != null ? Model.IdPaciente.DataNascimento.ToString("yyyy-MM-dd"):"0000-00-00";
+    string dataNascimento = Model.IdPaciente.DataNascimento != null ? Model.IdPaciente.DataNascimento.ToString("yyyy-MM-dd") : "0000-00-00";
     var rua = Model.IdPaciente.Rua;
     var cep = Model.IdPaciente.Cep;
     var bairro = Model.IdPaciente.Bairro;
@@ -19,13 +19,13 @@
     string email = Model.IdPaciente.Email;
     string foneCelular = Model.IdPaciente.FoneCelular;
     string foneFixo = Model.IdPaciente.FoneFixo;
-    bool hipertenso = Model.IdPaciente.Hipertenso == true ? true:false;
-    bool cardiopata = Model.IdPaciente.Cardiopatia== true ? true:false;
-    bool cancer = Model.IdPaciente.Cancer == true ? true:false;
-    bool diabetico = Model.IdPaciente.Diabetes == true ? true:false;
-    bool doenRespiatoria = Model.IdPaciente.DoencaRespiratoria == true ? true:false;
-    bool obeso = Model.IdPaciente.Obeso == true ? true:false;
-    bool imunodeprimido = Model.IdPaciente.Imunodeprimido == true ? true:false;
+    bool hipertenso = Model.IdPaciente.Hipertenso == true ? true : false;
+    bool cardiopata = Model.IdPaciente.Cardiopatia == true ? true : false;
+    bool cancer = Model.IdPaciente.Cancer == true ? true : false;
+    bool diabetico = Model.IdPaciente.Diabetes == true ? true : false;
+    bool doenRespiatoria = Model.IdPaciente.DoencaRespiratoria == true ? true : false;
+    bool obeso = Model.IdPaciente.Obeso == true ? true : false;
+    bool imunodeprimido = Model.IdPaciente.Imunodeprimido == true ? true : false;
     string dataExame = Model.DataExame != null ? Model.DataExame.ToString("yyyy-MM-dd") : DateTime.Now.ToString("yyyy-MM-dd");
     string DataInicioSintomas = Model.DataInicioSintomas != null ? Model.DataInicioSintomas.ToString("yyyy-MM-dd") : DateTime.Now.ToString("yyyy-MM-dd");
     var googleKey = ViewBag.googleKey;
@@ -103,35 +103,29 @@
                         <h6 class="heading-small text-muted mb-4">Informações de Contato</h6>
                         <div class="pl-lg-4">
                             <div class="row">
-                                <div class="col-lg-12">
-                                    <div class="form-group">
-                                        <label class="form-control-label" for="input-pesquisa">Pesquisa Endereço (Não sabe o CEP? </label> <a href="http://www.buscacep.correios.com.br/sistemas/buscacep/" target="_blank">Clique aqui</a>)
-                                        <input type="search" id="input-pesquisa" class="form-control" oninput="PreencheForm()" placeholder="Pesquise pelo CEP, Rua, Bairro, Número" autocomplete="off">
-                                        <span id="spanInvalidCep" hidden class="text-danger text-center" style="padding: 10px">Cep Invalido!!</span>
-                                    </div>
-                                </div>
                                 <div class="col-lg-2">
                                     <div class="form-group">
-                                        <label class="form-control-label" for="postal_code">CEP</label>
-                                        <input asp-for="IdPaciente.Cep" id="postal_code" class="form-control" required placeholder="CEP" value="@cep">
+                                        <label class="form-control-label" for="postal_code">CEP (Não sabe? </label> <a href="http://www.buscacep.correios.com.br/sistemas/buscacep/" target="_blank">Busque aqui</a>)
+                                        <input asp-for="IdPaciente.Cep" oninput="PreencheFormCEP()" id="postal_code" class="form-control" required placeholder="CEP" value="@cep">
+                                        <span id="spanInvalidCep" hidden class="text-danger text-center" style="padding: 10px">Cep Invalido!!</span>
                                     </div>
                                 </div>
                                 <div class="col-lg-5">
                                     <div class="form-group">
                                         <label class="form-control-label" for="route">Logradouro</label>
-                                        <input asp-for="IdPaciente.Rua" id="route" required class="form-control" placeholder="Rua, Av, Travessa" value="@rua">
+                                        <input asp-for="IdPaciente.Rua" type="search" oninput="PreencheForm()" required placeholder="Pesquise pelo CEP, Rua, Bairro, Número" autocomplete="off" id="route" class="form-control" value="@rua">
                                     </div>
                                 </div>
                                 <div class="col-lg-1">
                                     <div class="form-group">
                                         <label class="form-control-label" for="street_number">Número</label>
-                                        <input asp-for="IdPaciente.Numero" id="street_number" required class="form-control" placeholder="" value="@numero">
+                                        <input asp-for="IdPaciente.Numero" id="street_number" class="form-control" placeholder="" value="@numero">
                                     </div>
                                 </div>
                                 <div class="col-lg-4">
                                     <div class="form-group">
-                                        <label class="form-control-label" for="input-bairro">Bairro</label>
-                                        <input asp-for="IdPaciente.Bairro" id="input-bairro" required class="form-control" placeholder="Bairro" value="@bairro">
+                                        <label class="form-control-label" for="sublocality_level_1">Bairro</label>
+                                        <input asp-for="IdPaciente.Bairro" id="sublocality_level_1" required class="form-control" placeholder="Bairro" value="@bairro">
                                     </div>
                                 </div>
                                 <div class="col-lg-4">
@@ -179,7 +173,7 @@
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label class="form-control-label" for="input-email">E-mail</label>
-                                        <input asp-for="IdPaciente.Email" id="input-email" required class="form-control" placeholder="email@example.com" value="@email">
+                                        <input asp-for="IdPaciente.Email" id="input-email" class="form-control" placeholder="email@example.com" value="@email">
                                     </div>
                                 </div>
                             </div>
@@ -352,17 +346,17 @@
                             <div class="modal-dialog modal-sm">
                                 <div class="modal-content">
                                     <div style="padding: 10pt;text-align: center">
-                                        <p id="titulo-confirmacao"> Confirmar Notificação do Resultado do Exame ? </p>
+                                        <h3 id="titulo-confirmacao"> Confirmar Notificação do Resultado do Exame ? </h3>
                                         <p id="texto-confirmacao">  </p>
 
-                                        <div class="col text-center form-group" id="acoes-model-form">
-                                            <a data-dismiss="modal" class="btn btn-danger">Não</a>
+                                        <div class="col text-center form-group text-white" id="acoes-model-form">
+                                            <a data-dismiss="modal" class="btn btn-danger text-white">Não</a>
 
-                                            <button id="btn-submit" value="Notificar" class="btn btn-success"> Sim</button>
+                                            <button id="btn-submit" value="Notificar" class="btn btn-success text-white"> Sim</button>
                                         </div>
 
                                         <div class="col text-center" id="ok-model-form">
-                                            <a data-dismiss="modal" class="btn btn-success">Ok</a>
+                                            <a data-dismiss="modal" class="btn btn-success text-white">Ok</a>
                                         </div>
                                     </div>
                                 </div>
@@ -412,33 +406,19 @@
     </div>
 </div>
 
-
-@if (TempData["mensagemSucesso"] != null || TempData["mensagemErro"] != null)
+@if (TempData["mensagemSucesso"] != null)
 {
-    <div class="modal fade bs-example-modal-sm" id="modal-mensagem-retorno" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-sm">
-            <div class="modal-content">
-                <div style="padding: 20pt;text-align: center">
-                    @if (TempData["mensagemSucesso"] != null)
-                    {
-                        <p> @TempData["mensagemSucesso"] </p>
-                    }
-                    else
-                    {
-                        <p> @TempData["mensagemErro"] </p>
-                    }
-                    <button type="button" data-dismiss="modal" class="btn btn-success">Ok</button>
-                </div>
-            </div>
-        </div>
-    </div>
+    <div id="mensagem-retorno" onclick="swtAlert('success','Parabéns!', '@TempData["mensagemSucesso"]')"></div>
+}
+else if (TempData["mensagemErro"] != null)
+{
+    <div id="mensagem-retorno" onclick="swtAlert('error','Falha!', '@TempData["mensagemErro"]')"></div>
 }
 
 @section Scripts {
 
-
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
     <script src="~/assets/js/resultado-exame.js"></script>
-
     <script src="~/assets/js/PersonalScripts.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=@googleKey&libraries=places&callback=initAutocomplete&language=pt-BR"
             async defer></script>
