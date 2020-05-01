@@ -15,9 +15,6 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
-CREATE DATABASE monitorasus;
-USE monitorasus;
-
 --
 -- Table structure for table `empresaexame`
 --
@@ -84,7 +81,7 @@ CREATE TABLE `estado` (
 
 LOCK TABLES `estado` WRITE;
 /*!40000 ALTER TABLE `estado` DISABLE KEYS */;
-INSERT INTO `estado` VALUES (28,11,'Rondônia','RO',1),(29,12,'Acre','AC',1),(30,13,'Amazonas','AM',1),(31,14,'Roraima','RR',1),(32,15,'Pará','PA',1),(33,16,'Amapá','AP',1),(34,17,'Tocantins','TO',1),(35,21,'Maranhão','MA',2),(36,22,'Piauí','PI',2),(37,23,'Ceará','CE',2),(38,24,'Rio Grande do Norte','RN',2),(39,25,'Paraíba','PB',2),(40,26,'Pernambuco','PE',2),(41,27,'Alagoas','AL',2),(42,28,'Sergipe','SE',2),(43,29,'Bahia','BA',2),(44,31,'Minas Gerais','MG',3),(45,32,'Espírito Santo','ES',3),(46,33,'Rio de Janeiro','RJ',3),(47,35,'São Paulo','SP',3),(48,41,'Paraná','PR',4),(49,42,'Santa Catarina','SC',4),(50,43,'Rio Grande do Sul','RS',4),(51,50,'Mato Grosso do Sul','MS',5),(52,51,'Mato Grosso','MT',5),(53,52,'Goiás','GO',5),(54,53,'Distrito Federal','DF',5);
+INSERT INTO `estado` VALUES (11,11,'Rondônia','RO',1),(12,12,'Acre','AC',1),(13,13,'Amazonas','AM',1),(14,14,'Roraima','RR',1),(15,15,'Pará','PA',1),(16,16,'Amapá','AP',1),(17,17,'Tocantins','TO',1),(21,21,'Maranhão','MA',2),(22,22,'Piauí','PI',2),(23,23,'Ceará','CE',2),(24,24,'Rio Grande do Norte','RN',2),(25,25,'Paraíba','PB',2),(26,26,'Pernambuco','PE',2),(27,27,'Alagoas','AL',2),(28,28,'Sergipe','SE',2),(29,29,'Bahia','BA',2),(31,31,'Minas Gerais','MG',3),(32,32,'Espírito Santo','ES',3),(33,33,'Rio de Janeiro','RJ',3),(35,35,'São Paulo','SP',3),(41,41,'Paraná','PR',4),(42,42,'Santa Catarina','SC',4),(43,43,'Rio Grande do Sul','RS',4),(50,50,'Mato Grosso do Sul','MS',5),(51,51,'Mato Grosso','MT',5),(52,52,'Goiás','GO',5),(53,53,'Distrito Federal','DF',5);
 /*!40000 ALTER TABLE `estado` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -108,6 +105,7 @@ CREATE TABLE `exame` (
   `idEstado` int(11) NOT NULL,
   `idMunicipio` int(11) DEFAULT NULL,
   `idEmpresaSaude` int(11) DEFAULT NULL,
+  `dataNotificacao` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`idExame`),
   UNIQUE KEY `fk_exame_diaPessoa` (`idVirusBacteria`,`idPaciente`,`dataExame`),
   KEY `fk_exame_virusBacteria1_idx` (`idVirusBacteria`),
@@ -122,7 +120,7 @@ CREATE TABLE `exame` (
   CONSTRAINT `fk_exame_pessoa1` FOREIGN KEY (`idPaciente`) REFERENCES `pessoa` (`idpessoa`),
   CONSTRAINT `fk_exame_pessoa2` FOREIGN KEY (`idAgenteSaude`) REFERENCES `pessoa` (`idpessoa`),
   CONSTRAINT `fk_exame_virusBacteria1` FOREIGN KEY (`idVirusBacteria`) REFERENCES `virusbacteria` (`idVirusBacteria`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -131,7 +129,7 @@ CREATE TABLE `exame` (
 
 LOCK TABLES `exame` WRITE;
 /*!40000 ALTER TABLE `exame` DISABLE KEYS */;
-INSERT INTO `exame` VALUES (1,1,8,3,'2020-04-26 00:00:00','2020-04-21 00:00:00','S','S','N',31,2214,NULL),(2,1,9,3,'2020-04-26 00:00:00','2020-04-26 00:00:00','N','N','N',31,2214,NULL),(3,1,5,3,'2020-04-01 00:00:00','2020-04-01 00:00:00','N','S','N',31,2214,NULL),(4,1,6,3,'2020-04-01 00:00:00','2020-04-01 00:00:00','S','S','N',31,2214,NULL),(5,1,7,3,'2020-04-01 00:00:00','2020-04-01 00:00:00','N','N','N',31,2214,NULL),(6,1,11,3,'2020-04-05 00:00:00','2020-04-05 00:00:00','S','S','N',31,2214,NULL);
+INSERT INTO `exame` VALUES (1,1,8,3,'2020-04-26 00:00:00','2020-04-21 00:00:00','S','S','N',12,2214,1,'0000-00-00 00:00:00'),(2,1,9,3,'2020-04-26 00:00:00','2020-04-26 00:00:00','N','N','N',12,2214,1,'0000-00-00 00:00:00'),(3,1,5,3,'2020-04-01 00:00:00','2020-04-01 00:00:00','N','S','N',12,2214,1,'0000-00-00 00:00:00'),(4,1,6,3,'2020-04-01 00:00:00','2020-04-01 00:00:00','S','S','N',12,2214,1,'0000-00-00 00:00:00'),(5,1,7,3,'2020-04-01 00:00:00','2020-04-01 00:00:00','N','N','N',12,2214,1,'0000-00-00 00:00:00'),(6,1,11,3,'2020-04-05 00:00:00','2020-04-05 00:00:00','S','S','N',12,2214,1,'0000-00-00 00:00:00'),(7,1,11,3,'2020-04-27 00:00:00','2020-04-27 00:00:00','S','S','N',12,2214,1,'0000-00-00 00:00:00'),(8,1,7,3,'2020-04-27 00:00:00','2020-04-27 00:00:00','S','S','N',12,2214,1,'0000-00-00 00:00:00'),(15,1,17,18,'2020-04-05 00:00:00','2020-04-01 00:00:00','S','S','N',26,NULL,1,'0000-00-00 00:00:00'),(16,1,19,18,'2020-04-03 00:00:00','2020-04-01 00:00:00','N','N','S',26,NULL,1,'0000-00-00 00:00:00'),(17,1,19,18,'2020-04-28 00:00:00','2020-04-27 00:00:00','S','S','N',26,NULL,1,'2020-05-01 01:12:26');
 /*!40000 ALTER TABLE `exame` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -196,7 +194,7 @@ CREATE TABLE `pessoa` (
   `outrasComorbidades` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`idpessoa`),
   UNIQUE KEY `cpf_UNIQUE` (`cpf`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -205,7 +203,7 @@ CREATE TABLE `pessoa` (
 
 LOCK TABLES `pessoa` WRITE;
 /*!40000 ALTER TABLE `pessoa` DISABLE KEYS */;
-INSERT INTO `pessoa` VALUES (2,'00000000000','Gabriel Santan','M','49200000','Rua João Francisco da Silva','Centro','Estância','Sergipe','234','','-99.99999999','-99.99999999','79999914349','','gabriel@hmtil.com','1996-10-15',1,0,1,0,0,1,0,NULL),(3,'06579861517','Gabriel Santana Cruz','M','49200000','Rua João Francisco da Silva','Centro','Estância','Sergipe','234','Casa','-99.99999999','-99.99999999','79999914349','','gabriel.sistemasjr@gmail.com','1996-10-15',1,0,1,1,0,0,0,NULL),(4,'00000000001','bruninho o furão','M','49200000','Rua João Francisco da Silva','Centro','Estância','Sergipe','234','','-11.2720296','-37.4356362','79999999999','','gabriel@hmtil.com','0123-12-15',0,0,0,0,0,0,0,NULL),(5,'60121870502','SEC SAUDE SERGIPE','M','49085972','Rua Alagoas','José Conrado de Araújo','Aracaju','SE','100',NULL,'-19.9338841','-43.9357743','79111111111','7911111111','marcosdosea@yahoo.com.br','2020-04-26',1,0,1,0,1,0,1,'tem quatro'),(6,'11525837516','GESTOR SAUDE SERGIPE 01','M','49075030','Rua Alagoas','Siqueira Campos','Aracaju','SE','764',NULL,'-19.9338841','-43.9357743','79222222222','7922222222','marcosdosea@yahoo.com.br','2020-04-26',0,1,0,1,0,1,0,'3'),(7,'70517827549','GESTOR SAUDE SERGIPE 02','M','49055540','Rua Porto da Folha','Getúlio Vargas','Aracaju','SE','117',NULL,'-10.9196948','-37.0630349','79933333333','7933333333','MARCOSDOSEA@YAHOO.COM.BR','2020-04-26',1,1,0,1,0,1,0,'HIP CANCER'),(8,'99687844515','Marcos Barbosa Dósea','M','49010490','Avenida Pedro Calazans','Centro','Aracaju','SE','225',NULL,'-10.908477','-37.0573287','79999002378','7932137456','marcosdosea@yahoo.com.br','2020-04-26',0,0,0,0,0,0,0,'teste'),(9,'00119821524','Elielma Alves de Sá','M','49050485','Rua Leonel Curvelo','Suíssa','Aracaju','SE','117','APTO 303B','-10.9242893','-37.06532929999999','79999002398','7932137456','ELIELMASA@YAHOO.COM.BR','2020-04-26',0,0,0,0,0,0,0,NULL),(11,'17054946502','NOTIFICADOR SERGIPE 01','M','49055210','Avenida Desembargador Maynard','Cirurgia','Aracaju','SE','300',NULL,'-10.9186629','-37.063504','79555555555','7935555555','marcosdosea@yahoo.com.br','2020-04-26',1,1,0,1,0,1,1,NULL);
+INSERT INTO `pessoa` VALUES (2,'00000000000','Gabriel Santan','M','49200000','Rua João Francisco da Silva','Centro','Estância','Sergipe','234','','-99.99999999','-99.99999999','79999914349','','gabriel@hmtil.com','1996-10-15',1,0,1,0,0,1,0,NULL),(3,'06579861517','Gabriel Santana Cruz','M','49200000','Rua João Francisco da Silva','Centro','Estância','Sergipe','234','Casa','-99.99999999','-99.99999999','79999914349','','gabriel.sistemasjr@gmail.com','1996-10-15',1,0,1,1,0,0,0,NULL),(4,'00000000001','bruninho o furão','M','49200000','Rua João Francisco da Silva','Centro','Estância','Sergipe','234','','-11.2720296','-37.4356362','79999999999','','gabriel@hmtil.com','0123-12-15',0,0,0,0,0,0,0,NULL),(5,'60121870502','SEC SAUDE SERGIPE','M','49085972','Rua Alagoas','José Conrado de Araújo','Aracaju','SE','100',NULL,'-19.9338841','-43.9357743','79111111111','7911111111','marcosdosea@yahoo.com.br','2010-04-26',1,0,1,0,1,0,1,'tem quatro'),(6,'11525837516','GESTOR SAUDE SERGIPE 01','F','49075030','Rua Alagoas','Siqueira Campos','Aracaju','SE','764',NULL,'-19.9338841','-43.9357743','79222222222','7922222222','marcosdosea@yahoo.com.br','2000-04-26',0,1,0,1,0,1,0,'3'),(7,'70517827549','GESTOR SAUDE SERGIPE 02','F','49055540','Rua Porto da Folha','Getúlio Vargas','Aracaju','SE','117',NULL,'-10.9196948','-37.0630349','79933333333','7933333333','MARCOSDOSEA@YAHOO.COM.BR','2001-04-27',1,1,0,1,0,1,1,'HIP CANCER'),(8,'99687844515','Marcos Barbosa Dósea','M','49010490','Avenida Pedro Calazans','Centro','Aracaju','SE','225',NULL,'-10.908477','-37.0573287','79999002378','7932137456','marcosdosea@yahoo.com.br','2002-04-26',0,0,0,0,0,0,0,'teste'),(9,'00119821524','Elielma Alves de Sá','F','49050485','Rua Leonel Curvelo','Suíssa','Aracaju','SE','117','APTO 303B','-10.9242893','-37.06532929999999','79999002398','7932137456','ELIELMASA@YAHOO.COM.BR','1950-04-26',0,0,0,0,0,0,0,NULL),(11,'17054946502','NOTIFICADOR SERGIPE 01','M','49055210','Avenida Desembargador Maynard','Cirurgia','Aracaju','SE','300',NULL,'-10.9186629','-37.063504','79555555555','7935555555','marcosdosea@yahoo.com.br','1960-04-27',1,1,0,1,0,1,1,NULL),(17,'07488013409','secretario saude PE','M','51340737','Rua Alto das Laranjeiras','COHAB','Recife','PE',NULL,NULL,'-8.1394199','-34.9392561','79999999999','7933333333','marcosdosea@yahoo.com.br','1970-01-01',1,1,1,0,0,0,0,NULL),(18,'51809530490','GESTOR PERNAMBUCO 1','M','52091290','Rua Cleto Praia','Nova Descoberta','Recife','PE','998',NULL,'-3.350265','-64.7057148','79999999999','7933333333','marcosdosea@yahoo.com.br','1990-12-30',0,1,0,0,0,1,0,NULL),(19,'98560231498','GESTOR PERNAMBUCO 2','M','52280401','Rua Sergipe','Alto José Bonifácio','Recife','PE','100',NULL,'-19.9330183','-43.936921','79955555555','7931111111','marcosdosea@yahoo.com.br','1983-05-01',0,0,1,0,0,0,1,NULL),(20,'37378233404','NOTIFICADOR PERNAMBUCO 1','M','52071132','Rua Cedro','Alto do Mandu','Recife','PE','100','','-22.9840952','-43.2418053','79911111111','7931111111','marcosdosea@yahoo.com.br','1995-04-30',1,0,0,1,0,0,0,''),(21,'57521961404','NOTIFICADOR MUNICIPAL PE','M','53585255','Avenida Salgueiro','Matinha','Abreu e Lima','PE','12',NULL,'38.7653689','-9.2790135','79666666666','7933333333','marcosdosea@yahoo.com.br','1930-01-01',0,0,0,0,0,1,0,NULL);
 /*!40000 ALTER TABLE `pessoa` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -219,7 +217,7 @@ DROP TABLE IF EXISTS `pessoatrabalhaestado`;
 CREATE TABLE `pessoatrabalhaestado` (
   `idpessoa` int(11) NOT NULL,
   `idEstado` int(11) NOT NULL,
-  `idEmpresaExame` int(11) NOT NULL DEFAULT '1',
+  `idEmpresaExame` int(11) NOT NULL,
   `ehResponsavel` tinyint(4) NOT NULL DEFAULT '0',
   `ehSecretario` tinyint(4) NOT NULL DEFAULT '0',
   `situacaoCadastro` enum('S','A','I') NOT NULL DEFAULT 'S',
@@ -239,7 +237,7 @@ CREATE TABLE `pessoatrabalhaestado` (
 
 LOCK TABLES `pessoatrabalhaestado` WRITE;
 /*!40000 ALTER TABLE `pessoatrabalhaestado` DISABLE KEYS */;
-INSERT INTO `pessoatrabalhaestado` VALUES (3,28,1,1,1,'S'),(4,28,1,0,0,'S'),(5,28,1,1,0,'A'),(6,28,1,1,0,'S'),(7,28,1,1,0,'S'),(8,28,1,1,0,'S'),(11,28,1,0,0,'S');
+INSERT INTO `pessoatrabalhaestado` VALUES (3,12,1,1,1,'S'),(4,12,1,0,0,'S'),(5,12,1,1,0,'A'),(6,12,1,1,0,'A'),(7,12,1,1,0,'I'),(8,12,1,1,0,'S'),(11,12,1,0,0,'S'),(17,26,1,1,1,'A'),(18,26,1,1,0,'A'),(19,26,1,1,0,'A'),(20,26,1,0,0,'A');
 /*!40000 ALTER TABLE `pessoatrabalhaestado` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -270,7 +268,7 @@ CREATE TABLE `pessoatrabalhamunicipio` (
 
 LOCK TABLES `pessoatrabalhamunicipio` WRITE;
 /*!40000 ALTER TABLE `pessoatrabalhamunicipio` DISABLE KEYS */;
-INSERT INTO `pessoatrabalhamunicipio` VALUES (3,2214,1,1,'S'),(9,295,1,0,'S');
+INSERT INTO `pessoatrabalhamunicipio` VALUES (3,2214,1,1,'S'),(9,295,1,0,'S'),(21,14,0,0,'S');
 /*!40000 ALTER TABLE `pessoatrabalhamunicipio` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -291,7 +289,7 @@ CREATE TABLE `recuperarsenha` (
   PRIMARY KEY (`id`),
   KEY `fk_recuperarsenha_usuario1_idx` (`idUsuario`),
   CONSTRAINT `fk_recuperarsenha_usuario1` FOREIGN KEY (`idUsuario`) REFERENCES `usuario` (`idUsuario`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -300,7 +298,7 @@ CREATE TABLE `recuperarsenha` (
 
 LOCK TABLES `recuperarsenha` WRITE;
 /*!40000 ALTER TABLE `recuperarsenha` DISABLE KEYS */;
-INSERT INTO `recuperarsenha` VALUES (1,'788687754917F8C456774407D34B0125ED2D31636DC1AE478A8036A424481EF8','2020-04-26 15:44:33','2020-04-27 15:44:33',1,3);
+INSERT INTO `recuperarsenha` VALUES (1,'788687754917F8C456774407D34B0125ED2D31636DC1AE478A8036A424481EF8','2020-04-26 15:44:33','2020-04-27 15:44:33',1,3),(2,'5EEBD6CD8502F100010AF6EF2A21B7B3CD464CE125F7E99911E72F143570C377','2020-04-27 15:50:52','2020-04-28 15:50:52',1,4),(3,'AA72B45DDBF0CE39DB12951B574B9DD6AD936548C010C8D5B92B0B867E790ECA','2020-04-29 08:15:55','2020-04-30 08:15:55',1,5),(4,'07ABB6409E1E66F96A07D06A9A158BF0599723D01E14F3B7EF496E6E347FBB29','2020-04-30 07:14:59','2020-05-01 07:14:59',0,6),(5,'B354353B92B067F2D0691403748F7B4EB9269868195C3DFC5E31325CCC8FD928','2020-04-30 08:46:54','2020-05-01 08:46:54',0,7),(6,'7EE191DBC5CF808C16DD7762D75B5E9AE08168D122B812F88387BF52C4864120','2020-04-30 09:47:14','2020-05-01 09:47:14',0,8),(7,'21D23C6E297FEC3596A24258FE54CCC0D83E2ACCE3AA77FBEFA22CF7293DE0AC','2020-04-30 10:03:46','2020-05-01 10:03:46',0,9);
 /*!40000 ALTER TABLE `recuperarsenha` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -329,7 +327,7 @@ CREATE TABLE `situacaopessoavirusbacteria` (
 
 LOCK TABLES `situacaopessoavirusbacteria` WRITE;
 /*!40000 ALTER TABLE `situacaopessoavirusbacteria` DISABLE KEYS */;
-INSERT INTO `situacaopessoavirusbacteria` VALUES (1,5,'P'),(1,6,'P'),(1,7,'N'),(1,8,'P'),(1,9,'N'),(1,11,'P');
+INSERT INTO `situacaopessoavirusbacteria` VALUES (1,5,'P'),(1,6,'P'),(1,7,'P'),(1,8,'P'),(1,9,'N'),(1,11,'P'),(1,17,'P'),(1,18,'P'),(1,19,'P'),(1,21,'P');
 /*!40000 ALTER TABLE `situacaopessoavirusbacteria` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -350,7 +348,7 @@ CREATE TABLE `usuario` (
   PRIMARY KEY (`idUsuario`),
   KEY `fk_usuario_pessoa1_idx` (`idPessoa`),
   CONSTRAINT `fk_usuario_pessoa1` FOREIGN KEY (`idPessoa`) REFERENCES `pessoa` (`idpessoa`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -359,7 +357,7 @@ CREATE TABLE `usuario` (
 
 LOCK TABLES `usuario` WRITE;
 /*!40000 ALTER TABLE `usuario` DISABLE KEYS */;
-INSERT INTO `usuario` VALUES (2,'06579861517','60BFAA61E12B4FD3DAD35586B11387689E35645279C6103495F019AAA0C1FCF3','gabriel.sistemasjr@gmail.com',3,3),(3,'60121870502','ABF2AA34A49E1149BBFD2FDA72362A046CA289FF2209F063AD753B8EAF2DBC3C','marcosdosea@yahoo.com.br',2,5);
+INSERT INTO `usuario` VALUES (2,'06579861517','60BFAA61E12B4FD3DAD35586B11387689E35645279C6103495F019AAA0C1FCF3','gabriel.sistemasjr@gmail.com',4,3),(3,'60121870502','60BFAA61E12B4FD3DAD35586B11387689E35645279C6103495F019AAA0C1FCF3','marcosdosea@yahoo.com.br',4,5),(4,'11525837516','0A10183CA1BFD506A4EDE25AB6F7D7105ADC546F99D8E362384AAE824D46034E','marcosdosea@yahoo.com.br',2,6),(5,'70517827549','AC9D8F1630014E7C883B92A5CDB6DFCB33673380B40087ACE67E19A8C54A524F','MARCOSDOSEA@YAHOO.COM.BR',2,7),(6,'07488013409','60BFAA61E12B4FD3DAD35586B11387689E35645279C6103495F019AAA0C1FCF3','marcosdosea@yahoo.com.br',3,17),(7,'51809530490','5EDA7A21C971E6D4B6A89A49C6129AEBCD3760D11803F8CB0238C549C430258D','marcosdosea@yahoo.com.br',2,18),(8,'98560231498','0926DBB3E76786A2630509752D6C35D31FF16556F060E985C62B5C14553A9CB1','marcosdosea@yahoo.com.br',2,19),(9,'37378233404','9286895F5657C478CCA4F1A5BDA1E9660D8A6A2147D6FF0AAA9A354014CE77D6','marcosdosea@yahoo.com.br',1,20);
 /*!40000 ALTER TABLE `usuario` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -375,7 +373,7 @@ CREATE TABLE `virusbacteria` (
   `nome` varchar(60) NOT NULL,
   `diasRecuperacao` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`idVirusBacteria`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -384,7 +382,7 @@ CREATE TABLE `virusbacteria` (
 
 LOCK TABLES `virusbacteria` WRITE;
 /*!40000 ALTER TABLE `virusbacteria` DISABLE KEYS */;
-INSERT INTO `virusbacteria` VALUES (1,'Sars-Cov-2 (COVID-19)',0),(2,'H1N1',0);
+INSERT INTO `virusbacteria` VALUES (1,'Sars-Cov-2 (COVID-19)',20),(2,'H1N1',15),(3,'Influenza A',15),(4,'Influenza B',15);
 /*!40000 ALTER TABLE `virusbacteria` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -397,4 +395,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-04-27 13:42:27
+-- Dump completed on 2020-04-30 22:34:37
