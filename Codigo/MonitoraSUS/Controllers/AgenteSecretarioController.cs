@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace MonitoraSUS.Controllers
 {
-    [Authorize(Roles = "AGENTE, SECRETARIO, ADM")]
+    [Authorize(Roles = "AGENTE, SECRETARIO, GESTOR, ADM")]
     public class AgenteSecretarioController : Controller
     {
         private readonly IMunicipioService _municipioService;
@@ -239,7 +239,7 @@ namespace MonitoraSUS.Controllers
         /// </summary>
         /// <param name="ehResponsavel">Se for 0 é agente e se for 1 é gestor</param>
         /// <returns></returns>
-        [Authorize(Roles = "SECRETARIO, ADM")]
+        [Authorize(Roles = "SECRETARIO, GESTOR, ADM")]
         // GET: AgenteSecretario/IndexApproveAgent/ehResponsavel
         [HttpGet("[controller]/[action]/{ehResponsavel}")]
         public ActionResult IndexApproveAgent(int ehResponsavel)
@@ -452,7 +452,8 @@ namespace MonitoraSUS.Controllers
                 if (sucess)
                 {
                     // o administrador libera gestores sempre com perfil de secretario
-                    agenteEstado.EhSecretario = (ehPerfilAdministrador) ? true : false;
+					if (agenteEstado.EhSecretario == false)
+						agenteEstado.EhSecretario = (ehPerfilAdministrador) ? true : false;
                     agenteEstado.SituacaoCadastro = "A";
                     _pessoaTrabalhaEstadoService.Update(agenteEstado);
                     responseOp += entidade + " foi ativado com sucesso. Um email foi enviado para notificá-lo!";
@@ -522,7 +523,7 @@ namespace MonitoraSUS.Controllers
                     agenteMunicipio.EhSecretario = (ehPerfilAdministrador) ? true : false;
                     agenteMunicipio.SituacaoCadastro = "A";
                     _pessoaTrabalhaMunicipioService.Update(agenteMunicipio);
-                    responseOp += entidade + " foi ativado com sucesso. Um email foi enviado para notificá-lo!";
+                    responseOp += entidade + " foi ativado com sucesso! Um e-mail foi enviado para notificá-lo.";
                 }
                 if (agenteMunicipio.SituacaoCadastro.Equals("S"))
                 {
@@ -599,7 +600,7 @@ namespace MonitoraSUS.Controllers
 
             int responsavel = 1;
 
-            TempData["responseOp"] = "Gestor foi rebaixado à notificador e bloqueado com sucesso!";
+            TempData["responseOp"] = "Gestor agora possui permissões de notificador e ficou com acesso bloqueado. Autorize o acesso, caso necessário.";
 
             return RedirectToAction(nameof(IndexApproveAgent), new { ehResponsavel = responsavel });
         }
@@ -632,7 +633,7 @@ namespace MonitoraSUS.Controllers
                         agenteEstado.EhResponsavel = true;
                         agenteEstado.SituacaoCadastro = "A";
                         _pessoaTrabalhaEstadoService.Update(agenteEstado);
-                        TempData["responseOp"] = "Notificador foi promovido à Gestor!";
+                        TempData["responseOp"] = "Gestor ativado com sucesso!";
                     }
                     else
                     {
@@ -662,7 +663,7 @@ namespace MonitoraSUS.Controllers
 
                         _pessoaTrabalhaMunicipioService.Update(agenteMunicipio);
 
-                        TempData["responseOp"] = "Notificador foi promovido à Gestor!";
+                        TempData["responseOp"] = "Gestor ativado com sucesso!";
                     }
                     else
                     {
@@ -764,7 +765,7 @@ namespace MonitoraSUS.Controllers
                             var responseOp = ReturnMsgOper(nCpf, nUsuario, nToken);
 
                             if (responseOp.Equals(""))
-                                TempData["responseOp"] = "O notificador criado foi associado a empresa e ativado com sucesso!";
+                                TempData["responseOp"] = "O notificador foi associado a empresa e ativado com sucesso!";
 
                             else
                             {
@@ -878,7 +879,7 @@ namespace MonitoraSUS.Controllers
                 responseOp += "CPF inválido. ";
 
             else if (!nUsuario)
-                responseOp += "Usuário já contem um token válido. ";
+                responseOp += "Um e-mail já foi enviado para esse usuário para alteração de senha. ";
 
             else if (!nToken)
                 responseOp += "Ocorreu um erro com o envio do email, falha na operação. ";

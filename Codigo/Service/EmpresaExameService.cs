@@ -180,7 +180,7 @@ namespace Service
 
         public List<EmpresaExameModel> GetByUF(string uf)
              => _context.Empresaexame
-                .Where(empresaExame => empresaExame.Numero.ToUpper().Equals(uf.ToUpper()))
+                .Where(empresaExame => empresaExame.Estado.ToUpper().Equals(uf.ToUpper()))
                 .Select(empresa => new EmpresaExameModel
                 {
                     Id = empresa.Id,

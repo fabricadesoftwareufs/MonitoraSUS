@@ -53,7 +53,7 @@
                             <div class="row">
                                 <div class="col-lg-2">
                                     <div class="form-group">
-                                        <label class="form-control-label" for="postal_code">CEP (Não sabe o CEP? </label> <a href="http://www.buscacep.correios.com.br/sistemas/buscacep/" target="_blank">Clique aqui</a>)
+                                        <label class="form-control-label" for="postal_code">CEP (Não sabe? </label> <a href="http://www.buscacep.correios.com.br/sistemas/buscacep/" target="_blank">Busque aqui</a>)
                                         <input asp-for="Cep" oninput="PreencheFormCEP()" id="postal_code" class="form-control" required placeholder="CEP">
                                         <span id="spanInvalidCep" hidden class="text-danger text-center" style="padding: 10px">Cep Invalido!!</span>
                                     </div>
@@ -158,12 +158,12 @@
                                         <input asp-for="NumeroLeitos" type="number" id="input-leitos" class="form-control" placeholder="">
                                     </div>
                                 </div>
-                                <div class="col-lg-3">
+                                <!--div class="col-lg-3">
                                     <div class="form-group">
                                         <label class="form-control-label" for="input-leitos-disponiveis">Número de Leitos Disponível</label>
                                         <input asp-for="NumeroLeitosDisponivel" type="number" id="input-leitos-disponiveis" class="form-control" placeholder="">
                                     </div>
-                                </div>
+                                </!--div-->
 
                                 <div class="col-lg-3">
                                     <div class="form-group">
@@ -171,12 +171,12 @@
                                         <input asp-for="NumeroLeitosUti" type="number" id="input-leitos-uti" class="form-control" placeholder="">
                                     </div>
                                 </div>
-                                <div class="col-lg-3">
+                                <!--div class="col-lg-3">
                                     <div class="form-group">
                                         <label class="form-control-label" for="input-leitos-uti-disponivel">Número de Leitos de UTI Disponível</label>
                                         <input asp-for="NumeroLeitosUtidisponivel" type="number" id="input-leitos-uti-disponivel" class="form-control" placeholder="">
                                     </div>
-                                </div>
+                                </!--div-->
                             </div>
                         </div>
                         <hr class="my-4" />
