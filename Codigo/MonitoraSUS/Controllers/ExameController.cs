@@ -13,7 +13,7 @@ using System.Security.Claims;
 
 namespace MonitoraSUS.Controllers
 {
-    [Authorize(Roles = "AGENTE, COORDENADOR, SECRETARIO")]
+    [Authorize(Roles = "AGENTE, GESTOR, SECRETARIO")]
 
     public class ExameController : Controller
     {
