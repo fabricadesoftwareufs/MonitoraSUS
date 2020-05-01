@@ -33,15 +33,12 @@ $('#btn-submit').on('click', function () {
     var cidade = $('#administrative_area_level_2').val();
     var estado = $('#administrative_area_level_1').val();
     var foneCelular = $('#input-celular').val();
-    var email = $('#input-email').val();
     var dataExame = $('#input-data-exame').val();
     var dataSintomas = $('#input-data-sintomas').val();
     var outrasComorbidades = $('#input-outrasComorbidades').val();
 
     if (!(cpf === "" || nome === "" || dataNasc === "" || cep === "" || rua === "" || bairro === "" ||
-        cidade === "" || estado === "" || foneCelular === "" || outrasComorbidades === "" ||
-        email === "" || dataExame === "" || dataSintomas === "")) {
-
+        cidade === "" || estado === "" || foneCelular === "" || outrasComorbidades === "" || dataExame === "" || dataSintomas === "")) {
         $('#modal-espera').modal('show');
     }
 
