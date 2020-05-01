@@ -190,7 +190,7 @@ namespace MonitoraSUS.Controllers
                                 IdPessoa = idPessoaInserida,
                                 IdEstado = Convert.ToInt32(collection["select-Estado"]),
                                 EhSecretario = false,
-                                EhResponsavel = true
+                                EhResponsavel = true,
                             }))
                     {
                         TempData["mensagemSucesso"] = "Solicitação de cadastro realizado com sucesso! Por favor, aguarde e-mail " +
@@ -303,7 +303,7 @@ namespace MonitoraSUS.Controllers
             if (TempData["responseOp"] != null)
                 ViewBag.responseOp = TempData["responseOp"];
 
-            Tuple <List<SolicitanteAprovacaoViewModel>, List<EmpresaExameModel>> tupleModel = null;
+            Tuple<List<SolicitanteAprovacaoViewModel>, List<EmpresaExameModel>> tupleModel = null;
 
             if (ehResponsavel == 0)
             {
@@ -410,7 +410,7 @@ namespace MonitoraSUS.Controllers
 
                     usuarioModel = usuario;
 
-                    (bool nCpf, bool nUsuario, bool nToken) = await new 
+                    (bool nCpf, bool nUsuario, bool nToken) = await new
                         LoginController(_usuarioService, _pessoaService, _emailService, _recuperarSenhaService)
                         .GenerateToken(usuario.Cpf, 1);
 
@@ -502,7 +502,7 @@ namespace MonitoraSUS.Controllers
                 }
                 if (agenteMunicipio.SituacaoCadastro.Equals("S"))
                 {
-                  //  _recuperarSenhaService.DeleteByUser(usuarioModel.IdUsuario);
+                    //  _recuperarSenhaService.DeleteByUser(usuarioModel.IdUsuario);
                     _usuarioService.Delete(usuarioModel.IdUsuario);
                 }
 
@@ -659,12 +659,110 @@ namespace MonitoraSUS.Controllers
                 }
             }
             else
-                TempData["responseUp"] = "Notificador não encontrado!";
+                TempData["responseUp"] = "Notificador não encontrado.";
 
             int responsavel = 1;
 
             return RedirectToAction(nameof(IndexApproveAgent), new { ehResponsavel = responsavel });
         }
+
+        // GET: AgenteSecretario/DownToAgent/{agente|gestor}/id
+        [HttpGet("[controller]/[action]/{idEmpresa}/{cpf}")]
+        public async Task<ActionResult> AssignAgentToCorp(int idEmpresa, string cpf)
+        {
+            var pessoa = _pessoaService.GetByCpf(Methods.RemoveSpecialsCaracts(cpf));
+            var empresa = _empresaExameService.GetById(idEmpresa);
+            var idEstado = _estadoService.GetByName(empresa.Estado).Id;
+
+            if (empresa != null)
+            {
+                var trabalhaEstado = _pessoaTrabalhaEstadoService.GetByIdPessoa(pessoa.Idpessoa);
+                if (trabalhaEstado != null)
+                {
+                    trabalhaEstado.IdEmpresaExame = empresa.Id;
+                    _pessoaTrabalhaEstadoService.Update(trabalhaEstado);
+                    TempData["responseOp"] = "O notificador foi associado a empresa com sucesso!";
+                }
+                else
+                {
+                    var trabalhaMunicipio = _pessoaTrabalhaMunicipioService.GetByIdPessoa(pessoa.Idpessoa);
+                    if (trabalhaMunicipio != null)
+                    {
+                        var novoTrabalhaEstado = new PessoaTrabalhaEstadoModel
+                        {
+                            IdPessoa = trabalhaMunicipio.IdPessoa,
+                            IdEstado = idEstado,
+                            EhResponsavel = false,
+                            EhSecretario = false,
+                            SituacaoCadastro = trabalhaMunicipio.SituacaoCadastro,
+                            IdEmpresaExame = empresa.Id
+                        };
+
+                        if (_pessoaTrabalhaEstadoService.Insert(novoTrabalhaEstado))
+                        {
+                            if (_pessoaTrabalhaMunicipioService.Delete(trabalhaMunicipio.IdPessoa, trabalhaMunicipio.IdMunicipio))
+                                TempData["responseOp"] = "O notificador foi associado a empresa e remanejado para o Estado com sucesso!";
+                        }
+                        else
+                            TempData["responseOp"] = "Falha ao associar o Notificador à empresa.";
+
+                    }
+                    else // se for uma pessoa normal
+                    {
+                        var novoTrabalhaEstado = new PessoaTrabalhaEstadoModel
+                        {
+                            IdPessoa = pessoa.Idpessoa,
+                            IdEstado = idEstado,
+                            EhResponsavel = false,
+                            EhSecretario = false,
+                            SituacaoCadastro = "A",
+                            IdEmpresaExame = empresa.Id
+                        };
+
+                        if (_pessoaTrabalhaEstadoService.Insert(novoTrabalhaEstado))
+                        {
+                            var usuario = new UsuarioModel
+                            {
+                                IdPessoa = pessoa.Idpessoa,
+                                Cpf = pessoa.Cpf,
+                                Email = pessoa.Email,
+                                Senha = Methods.GenerateToken(),
+                                TipoUsuario = Methods.ReturnRoleId("Agente")
+                            };
+
+                            if (_usuarioService.GetByCpf(pessoa.Cpf) == null)
+                                _usuarioService.Insert(usuario);
+
+                            (bool nCpf, bool nUsuario, bool nToken) = await new
+                            LoginController(_usuarioService, _pessoaService, _emailService, _recuperarSenhaService).
+                                GenerateToken(usuario.Cpf, 2);
+
+                            var responseOp = ReturnMsgOper(nCpf, nUsuario, nToken);
+
+                            if (responseOp.Equals(""))
+                                TempData["responseOp"] = "O notificador criado foi associado a empresa e ativado com sucesso!";
+
+                            else
+                            {
+                                TempData["responseOp"] = "Falha ao associar o Notificador à empresa.";
+                                _recuperarSenhaService.DeleteByUser(usuario.IdUsuario);
+                                _usuarioService.Delete(usuario.IdUsuario);
+                            }
+                        }
+                        else
+                            TempData["responseOp"] = "Falha ao associar o Notificador à empresa.";
+                    }
+                }
+            }
+            else
+                TempData["responseOp"] = "Problemas para encontrar os dados da empresa.";
+
+            int responsavel = 0;
+
+            return RedirectToAction(nameof(IndexApproveAgent), new { ehResponsavel = responsavel });
+        }
+
+        public bool ExistsAgent(string cpf) => (_pessoaService.GetByCpf(Methods.RemoveSpecialsCaracts(cpf))) != null ? true : false;
 
         // ======================== PRIVATE METHODS ========================
         private int PeopleInserted(IFormCollection collection)
