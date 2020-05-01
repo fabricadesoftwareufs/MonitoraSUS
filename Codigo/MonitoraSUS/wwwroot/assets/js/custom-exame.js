@@ -36,8 +36,10 @@ input.addEventListener("keyup", function () {
             if (verificaRGCompleto(uf.toLowerCase())) {
                 submitAutomaticoForm();
             }
-
-            mascaraGenericaRG(identificador);
+            else
+            {
+               mascaraGenericaRG(identificador + '0');
+            }
         }
     }
 });
