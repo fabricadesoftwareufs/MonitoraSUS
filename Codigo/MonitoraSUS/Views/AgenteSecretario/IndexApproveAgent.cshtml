@@ -1,5 +1,4 @@
-﻿@model IEnumerable<Model.ViewModel.SolicitanteAprovacaoModelView>
-
+﻿@model Tuple<List<Model.ViewModel.SolicitanteAprovacaoViewModel>, List<Model.EmpresaExameModel>>
 @{
     ViewData["Title"] = "IndexApproveAgent";
 
@@ -55,12 +54,28 @@
                                 </div>
                                 @if (ViewBag.responseUp != null)
                                 {
-                                    <span class="mb-4 text-danger text-center">@ViewBag.responseUp</span>
+                                    <span class="text-danger text-center">@ViewBag.responseUp</span>
                                 }
                             </div>
                         </div>
                     }
-
+                    else if (ViewBag.entidade.Equals("Agente"))
+                    {
+                        <hr />
+                        <div class="row align-items-center" style="float: left">
+                            <div class="col text-left">
+                                <h6 class="heading-small text-muted pl-lg-4">Associar Notificador à Empresa</h6>
+                                <div class="form-inline">
+                                    <input type="text" required class="form-control form-control-user cpf" name="cpf" id="input-cpf" value="" placeholder="CPF">
+                                    <button id="btnAssociaAgente" class="margin-left-10 btn btn-success">Adicionar</button>
+                                </div>
+                                @if (ViewBag.responseUp != null)
+                                {
+                                    <span class="text-danger text-center">@ViewBag.responseUp</span>
+                                }
+                            </div>
+                        </div>
+                    }
                 </div>
                 <div class="card-body ">
                     <div class="table-responsive">
@@ -68,19 +83,19 @@
                             <thead class="thead-light">
                                 <tr>
                                     <th scope="col" class="sort" data-sort="nome">
-                                        @Html.DisplayNameFor(model => model.Nome)
+                                        @Html.DisplayNameFor(model => model.Item1.FirstOrDefault().Nome)
                                     </th>
                                     <th scope="col" class="sort" data-sort="cpf">
-                                        @Html.DisplayNameFor(model => model.Cpf)
+                                        @Html.DisplayNameFor(model => model.Item1.FirstOrDefault().Cpf)
                                     </th>
                                     <th scope="col" class="sort" data-sort="estado">
-                                        @Html.DisplayNameFor(model => model.Estado)
+                                        @Html.DisplayNameFor(model => model.Item1.FirstOrDefault().Estado)
                                     </th>
                                     <th scope="col" class="sort" data-sort="cidade">
-                                        @Html.DisplayNameFor(model => model.Cidade)
+                                        @Html.DisplayNameFor(model => model.Item1.FirstOrDefault().Cidade)
                                     </th>
                                     <th scope="col" class="sort" data-sort="status">
-                                        @Html.DisplayNameFor(model => model.Status)
+                                        @Html.DisplayNameFor(model => model.Item1.FirstOrDefault().Status)
                                     </th>
                                     <th scope="col" class="sort" data-sort="acoes">
                                         Ações
@@ -88,7 +103,7 @@
                                 </tr>
                             </thead>
                             <tbody class="list">
-                                @foreach (var item in Model)
+                                @foreach (var item in Model.Item1)
                                 {
                                     <tr>
                                         <td>
@@ -189,50 +204,85 @@
     </div>
 </div>
 
+@if (ViewBag.entidade.Equals("Agente"))
+{
+    <!-- Modal empresas -->
+    <div class="modal fade  bs-example-modal-xl" id="empresaModal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel">Escolha a empresa</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    <div hidden id="cpfAssign" value=""></div>
+                    <div class="card-body ">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th scope="col" class="sort" data-sort="cnpj">
+                                            @Html.DisplayNameFor(model => model.Item2.FirstOrDefault().Cnpj)
+                                        </th>
+                                        <th scope="col" class="sort" data-sort="nome">
+                                            @Html.DisplayNameFor(model => model.Item2.FirstOrDefault().Nome)
+                                        </th>
+                                        <th scope="col" class="sort" data-sort="celular">
+                                            @Html.DisplayNameFor(model => model.Item2.FirstOrDefault().FoneCelular)
+                                        </th>
+                                        <th scope="col" class="sort" data-sort="email">
+                                            @Html.DisplayNameFor(model => model.Item2.FirstOrDefault().Email)
+                                        </th>
+                                        <th>
+                                            Ações
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.Item2)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Cnpj)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Nome)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.FoneCelular)
+                                            </td>
+                                            <td>
+                                                @if (item.Email.Equals(""))
+                                                {
+                                                    <div> - </div>
+                                                }
+                                                else
+                                                {
+                                                    @Html.DisplayFor(modelItem => item.Email)
+                                                }
+                                            </td>
+                                            <td>
+                                                <a href="#" onclick="associaAgente('@item.Id')" class="btn btn-success btn-sm"><i class="fa fa-check"></i>Associar</a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+}
+
 @section Scripts {
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
 
-    <script type="text/javascript">
-
-        $(document).ready(function () {
-            var msg = document.getElementById("msg");
-            msg.click();
-        })
-
-        function swtAlert(type,title,message){
-    	Swal.fire({
-	        icon: type,
-	        title: title,
-	        text: message,
-    	});
-         }
-
-        $('#agentModal').on('show.bs.modal', function(e) {
-            var id = e.relatedTarget.dataset.id;
-            var nome = e.relatedTarget.dataset.nome;
-            var funcao = e.relatedTarget.dataset.funcao;
-            $(".modal-body #modal-id").text(id);
-            $(".modal-body #modal-nome").text(nome);
-            $(".modal-body #modal-funcao").text(funcao);
-        });
-
-        function actionDel() {
-            var action = $("#modal-funcao").text();
-            var idPessoa = $("#modal-id").text();
-
-            var url = '@Url.Action("excludeAgent", "AgenteSecretario")';
-
-            if (action == 'Agente')
-                window.location.href = url + '/Agente/' + idPessoa;
-            else if(action == 'Gestor')
-                window.location.href = url + '/Gestor/' + idPessoa;
-
-        }
-
-    </script>
-
     <script src="~/assets/js/PersonalScripts.js"></script>
+    <script src="~/assets/js/agente-secretario.js"></script>
 
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 

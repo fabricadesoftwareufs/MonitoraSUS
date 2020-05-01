@@ -81,7 +81,7 @@ namespace MonitoraSUS.Utils
             {
                 case 0: return "USUARIO";
                 case 1: return "AGENTE";
-                case 2: return "COORDENADOR";
+                case 2: return "GESTOR";
                 case 3: return "SECRETARIO";
                 case 4: return "ADM";
                 default: return "UNDEFINED";
