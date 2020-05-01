@@ -29,6 +29,14 @@
 @if (!User.Identity.IsAuthenticated && @Context.Request.Path.ToString().CompareTo("/Login") == 0)
 {
 <body class="bg-login">
+    <!-- Scripts -->
+    <div class="main-content card-content" id="panel">
+        @RenderBody()
+    </div>
+    @RenderSection("Scripts", required: false)
+    <script src="~/assets/js/plugins/jquery-3.4.1/jquery-3.4.1.min.js"></script>
+    <script src="~/assets/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/assets/js/plugins/jquery-mask/dist/jquery.mask.min.js"></script>
 	<!-- Scripts -->
 	<div class="main-content card-content" id="panel">
 		@RenderBody()
@@ -37,7 +45,7 @@
 	<script src="~/assets/js/plugins/jquery-3.4.1/jquery-3.4.1.min.js"></script>
 	<script src="~/assets/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 	<script src="~/assets/js/plugins/jquery-mask/dist/jquery.mask.min.js"></script>
-	<script src="~/assets/js/custom.js"></script>
+
 	<!-- Global site tag (gtag.js) - Google Analytics -->
 	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-165261999-1"></script>
 	<script>
@@ -77,8 +85,7 @@ else
         <script src="~/assets/vendor/jquery-scroll-lock/dist/jquery-scrollLock.min.js"></script>
         <script src="~/assets/js/plugins/jquery-mask/dist/jquery.mask.min.js"></script>
         <script src="~/assets/js/argon.js?v=1.2.0"></script>
-        <script src="~/assets/js/custom.js"></script>
-
+    
         @RenderSection("Scripts", required: false)
     </body>
 }

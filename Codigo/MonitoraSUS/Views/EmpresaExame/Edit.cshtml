@@ -271,30 +271,11 @@ else if (TempData["mensagemErro"] != null)
             }
 
         });
-
-
-        function swtAlert(type, title, message) {
-            Swal.fire({
-                icon: type,
-                title: title,
-                text: message,
-            });
-        }
-
-        function swtAlertRedirectIndex(type, title, message, url) {
-            Swal.fire({
-                icon: type,
-                title: title,
-                text: message,
-                footer:
-                    '<a href="' + url + '" class="btn btn-success">OK</a>',
-                showConfirmButton: false,
-            });
-        }
-
     </script>
 
+    <script src="~/assets/js/custom.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+    <script src="~/assets/js/sweet-alert.js"></script>
     <script src="~/assets/js/PersonalScripts.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=@googleKey&libraries=places&callback=initAutocomplete&language=pt-BR"
             async defer></script>
