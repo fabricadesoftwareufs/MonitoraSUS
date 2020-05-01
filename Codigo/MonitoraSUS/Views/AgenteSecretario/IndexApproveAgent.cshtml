@@ -12,7 +12,7 @@
 {
     if (ViewBag.responseOp.Contains("!"))
     {
-        <div id="msg" onclick="swtAlert('sucess','Sucesso!', '@ViewBag.responseOp')"></div>
+        <div id="msg" onclick="swtAlert('success','Sucesso!', '@ViewBag.responseOp')"></div>
 
     }
     else
@@ -195,10 +195,10 @@
 
     <script type="text/javascript">
 
-    $(document).ready(function () {
-        var msg = document.getElementById("msg");
-        msg.click();
-    })
+        $(document).ready(function () {
+            var msg = document.getElementById("msg");
+            msg.click();
+        })
 
         function swtAlert(type,title,message){
     	Swal.fire({

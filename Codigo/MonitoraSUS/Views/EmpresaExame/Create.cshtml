@@ -226,30 +226,14 @@
 </div>
 
 
-@if (TempData["mensagemSucesso"] != null || TempData["mensagemErro"] != null)
+@if (TempData["mensagemSucesso"] != null)
 {
-    <div class="modal fade bs-example-modal-sm" id="modal-mensagem-retorno" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-sm">
-            <div class="modal-content">
-                <div style="padding: 20pt;text-align: center">
-                    @if (TempData["mensagemSucesso"] != null)
-                    {
-                        <p> @TempData["mensagemSucesso"] </p>
-                        <a asp-action="Index" asp-controller="Home" class="btn btn-success">Ok</a>
-
-                    }
-                    else
-                    {
-                        <p> @TempData["mensagemErro"] </p>
-                        <button type="button" data-dismiss="modal" class="btn btn-success">Ok</button>
-                    }
-                </div>
-            </div>
-        </div>
-    </div>
+    <div id="mensagem-retorno" onclick="swtAlertRedirectIndex('success','Parabéns!', '@TempData["mensagemSucesso"]','/EmpresaExame/Index/')"></div>
 }
-
-
+else if (TempData["mensagemErro"] != null)
+{
+    <div id="mensagem-retorno" onclick="swtAlert('error','Falha!', '@TempData["mensagemErro"]')"></div>
+}
 
 
 @section Scripts {
@@ -260,7 +244,7 @@
             if (!$("#customCheck2").is(':checked')) {
                 $('#inputs-leitos').toggle();
             }
-            $('#modal-mensagem-retorno').modal('show');
+            $('#mensagem-retorno').click();
         });
 
         function mostraForm() {
@@ -287,8 +271,29 @@
 
         });
 
+
+        function swtAlert(type, title, message) {
+            Swal.fire({
+                icon: type,
+                title: title,
+                text: message,
+            });
+        }
+
+         function swtAlertRedirectIndex(type, title, message, url) {
+            Swal.fire({
+                icon: type,
+                title: title,
+                text: message,
+                footer:
+                    '<a href="' + url + '" class="btn btn-success">OK</a>',
+                showConfirmButton: false,
+            });
+        }
+
     </script>
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
     <script src="~/assets/js/PersonalScripts.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=@googleKey&libraries=places&callback=initAutocomplete&language=pt-BR"
             async defer></script>

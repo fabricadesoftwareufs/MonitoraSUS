@@ -346,17 +346,17 @@
                             <div class="modal-dialog modal-sm">
                                 <div class="modal-content">
                                     <div style="padding: 10pt;text-align: center">
-                                        <p id="titulo-confirmacao"> Confirmar Notificação do Resultado do Exame ? </p>
+                                        <h3 id="titulo-confirmacao"> Confirmar Notificação do Resultado do Exame ? </h3>
                                         <p id="texto-confirmacao">  </p>
 
                                         <div class="col text-center form-group text-white" id="acoes-model-form">
-                                            <a data-dismiss="modal" class="btn btn-danger">Não</a>
+                                            <a data-dismiss="modal" class="btn btn-danger text-white">Não</a>
 
-                                            <button id="btn-submit" value="Notificar" class="btn btn-success"> Sim</button>
+                                            <button id="btn-submit" value="Notificar" class="btn btn-success text-white"> Sim</button>
                                         </div>
 
                                         <div class="col text-center" id="ok-model-form">
-                                            <a data-dismiss="modal" class="btn btn-success">Ok</a>
+                                            <a data-dismiss="modal" class="btn btn-success text-white">Ok</a>
                                         </div>
                                     </div>
                                 </div>
@@ -406,33 +406,19 @@
     </div>
 </div>
 
-
-@if (TempData["mensagemSucesso"] != null || TempData["mensagemErro"] != null)
+@if (TempData["mensagemSucesso"] != null)
 {
-    <div class="modal fade bs-example-modal-sm" id="modal-mensagem-retorno" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-sm">
-            <div class="modal-content">
-                <div style="padding: 20pt;text-align: center">
-                    @if (TempData["mensagemSucesso"] != null)
-                    {
-                        <p> @TempData["mensagemSucesso"] </p>
-                    }
-                    else
-                    {
-                        <p> @TempData["mensagemErro"] </p>
-                    }
-                    <button type="button" data-dismiss="modal" class="btn btn-success">Ok</button>
-                </div>
-            </div>
-        </div>
-    </div>
+    <div id="mensagem-retorno" onclick="swtAlert('success','Parabéns!', '@TempData["mensagemSucesso"]')"></div>
+}
+else if (TempData["mensagemErro"] != null)
+{
+    <div id="mensagem-retorno" onclick="swtAlert('error','Falha!', '@TempData["mensagemErro"]')"></div>
 }
 
 @section Scripts {
 
-
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
     <script src="~/assets/js/resultado-exame.js"></script>
-
     <script src="~/assets/js/PersonalScripts.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=@googleKey&libraries=places&callback=initAutocomplete&language=pt-BR"
             async defer></script>

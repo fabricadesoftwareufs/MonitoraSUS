@@ -6,7 +6,7 @@ $(document).ready(function () {
         window.location.href = "#input-virus-bacteria";
     }
 
-    $('#modal-mensagem-retorno').modal('show');
+    document.getElementById("mensagem-retorno").click();
 });
 
 // Pegando o cpf enquanto o usuario digita e submetendo quando terminar
@@ -39,8 +39,8 @@ $('#btn-submit').on('click', function () {
     var outrasComorbidades = $('#input-outrasComorbidades').val();
 
     if (!(cpf === "" || nome === "" || dataNasc === "" || cep === "" || rua === "" || bairro === "" ||
-          cidade === "" || estado === "" || foneCelular === "" || outrasComorbidades === "" ||
-          email === "" || dataExame === "" || dataSintomas === "" )) {
+        cidade === "" || estado === "" || foneCelular === "" || outrasComorbidades === "" ||
+        email === "" || dataExame === "" || dataSintomas === "")) {
 
         $('#modal-espera').modal('show');
     }
@@ -97,3 +97,23 @@ function resultadoExame() {
 
     return resultado;
 }
+
+function swtAlert(type, title, message) {
+    Swal.fire({
+        icon: type,
+        title: title,
+        text: message,
+    });
+}
+
+function swtAlertRedirectIndex(type, title, message, url) {
+    Swal.fire({
+        icon: type,
+        title: title,
+        text: message,
+        footer: 
+            '<a href="'+url+'" class="btn btn-success">OK</a>',
+        showConfirmButton: false,
+    });
+}
+
