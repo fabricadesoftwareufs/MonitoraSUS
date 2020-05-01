@@ -1,5 +1,6 @@
 // Mostra modal com mensagem de erro
 $(document).ready(function () {
+
     if ($('#input-cpf').val() == "") {
         $('#input-cpf').focus();
     } else if ($('#input-cpf').val() != "" && $('#input-nome').val() != "") {
@@ -7,16 +8,7 @@ $(document).ready(function () {
     }
 
     document.getElementById("mensagem-retorno").click();
-});
 
-// Pegando o cpf enquanto o usuario digita e submetendo quando terminar
-var input = document.getElementById('input-cpf');
-input.addEventListener("keyup", function () {
-    if (document.getElementById('input-cpf').value.length == 14) {
-        $('#modal-espera').modal('show');
-        document.getElementById('PesquisarCpf').value = 1;
-        document.forms["form-exame"].submit();
-    }
 });
 
 //quando o usuario der submit no exame
@@ -51,14 +43,10 @@ function submitForm() {
 }
 // mostra modal de confirmaocao
 function mensagemResultado() {
-    var mensagem = verificaCampoRequired();
-    $('#texto-confirmacao').text(mensagem);
-    $('#modal-confirmar').modal('show');
-}
-// verifica se todos os campos estão preenchidos (diretiva required parou de funcionar)
-function verificaCampoRequired() {
     var cpf = document.getElementById('input-cpf').value;
     var nome = document.getElementById('input-nome').value;
+    var idVirus = document.getElementById('input-virus-bacteria').value;
+    var virus = document.getElementById('input-virus-bacteria')[idVirus-1].text;
 
     var mensagem = "";
 
@@ -67,15 +55,20 @@ function verificaCampoRequired() {
 
     if (cpf === "" || nome === "") {
         mensagem = "Nenhum paciente foi informado.";
+        $('#texto-erro').text(mensagem);
         $('#ok-model-form').show();
     } else {
-        var mensagem = "Cpf: " + cpf + "\n" +
-            "Paciente: " + nome + "\n" +
-            "Resultado: " + resultadoExame();
+
+        $('#cpf-paciente').text(cpf);
+        $('#nome-paciente').text(nome);
+        $('#resultado-paciente').text(resultadoExame());
+        $('#virus-paciente').text(virus);
+
         $('#acoes-model-form').show();
     }
-    return mensagem;
+    $('#modal-confirmar').modal('show');
 }
+
 // Calcula o resultado do exame
 function resultadoExame() {
     var igg = $("input[name='IgG']:checked").val();
@@ -94,23 +87,3 @@ function resultadoExame() {
 
     return resultado;
 }
-
-function swtAlert(type, title, message) {
-    Swal.fire({
-        icon: type,
-        title: title,
-        text: message,
-    });
-}
-
-function swtAlertRedirectIndex(type, title, message, url) {
-    Swal.fire({
-        icon: type,
-        title: title,
-        text: message,
-        footer: 
-            '<a href="'+url+'" class="btn btn-success">OK</a>',
-        showConfirmButton: false,
-    });
-}
-

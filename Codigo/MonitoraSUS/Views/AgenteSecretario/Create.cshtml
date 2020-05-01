@@ -282,19 +282,19 @@
     <div class="modal fade bs-example-modal-sm" id="modal-mensagem-retorno" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-sm">
             <div class="modal-content">
-				<div style="padding: 20pt;text-align: center">
-					@if (TempData["mensagemSucesso"] != null)
-					{
-						<p> @TempData["mensagemSucesso"] </p>
-						<a asp-action="Index" asp-controller="Login" class="btn btn-success">Ok</a>
-					}
-					else
-					{
-						<p> @TempData["mensagemErro"] </p>
-						<!-- data-dismiss="modal" class="btn btn-success">Ok</!--a-->
-						<a asp-action="Index" asp-controller="Login" class="btn btn-success">Ok</a>
-					}
-				</div>
+                <div style="padding: 20pt;text-align: center">
+                    @if (TempData["mensagemSucesso"] != null)
+                    {
+                        <p> @TempData["mensagemSucesso"] </p>
+                        <a asp-action="Index" asp-controller="Login" class="btn btn-success">Ok</a>
+                    }
+                    else
+                    {
+                        <p> @TempData["mensagemErro"] </p>
+                        <!-- data-dismiss="modal" class="btn btn-success">Ok</!--a-->
+                        <a asp-action="Index" asp-controller="Login" class="btn btn-success">Ok</a>
+                    }
+                </div>
             </div>
         </div>
     </div>
@@ -304,7 +304,7 @@
 <!-- Scripts -->
 
 @section Scripts {
-
+    <script src="~/assets/js/custom.js"></script>
     <script src="~/assets/js/PersonalScripts.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=@googleKey&libraries=places&callback=initAutocomplete&language=pt-BR"
             async defer></script>
