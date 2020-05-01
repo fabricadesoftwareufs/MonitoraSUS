@@ -1,6 +1,6 @@
 ﻿namespace Model.ViewModel
 {
-    public class SolicitanteAprovacaoModelView
+    public class SolicitanteAprovacaoViewModel
     {
         public int IdPessoa { get; set; }
         public string Nome { get; set; }
