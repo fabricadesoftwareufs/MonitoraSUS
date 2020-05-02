@@ -53,7 +53,7 @@
                             <div class="row">
                                 <div class="col-lg-2">
                                     <div class="form-group">
-                                        <label class="form-control-label" for="postal_code">CEP (Não sabe o CEP? </label> <a href="http://www.buscacep.correios.com.br/sistemas/buscacep/" target="_blank">Clique aqui</a>)
+                                        <label class="form-control-label" for="postal_code">CEP (Não sabe? </label> <a href="http://www.buscacep.correios.com.br/sistemas/buscacep/" target="_blank">Busque aqui</a>)
                                         <input asp-for="Cep" oninput="PreencheFormCEP()" id="postal_code" class="form-control" required placeholder="CEP">
                                     </div>
                                 </div>
@@ -158,12 +158,12 @@
                                         <input asp-for="NumeroLeitos" type="number" id="input-leitos" class="form-control" placeholder="">
                                     </div>
                                 </div>
-                                <div class="col-lg-3">
+                                <!--div class="col-lg-3">
                                     <div class="form-group">
                                         <label class="form-control-label" for="input-leitos-disponiveis">Número de Leitos Disponível</label>
                                         <input asp-for="NumeroLeitosDisponivel" type="number" id="input-leitos-disponiveis" class="form-control" placeholder="">
                                     </div>
-                                </div>
+                                </div-->
 
                                 <div class="col-lg-3">
                                     <div class="form-group">
@@ -171,12 +171,12 @@
                                         <input asp-for="NumeroLeitosUti" type="number" id="input-leitos-uti" class="form-control" placeholder="">
                                     </div>
                                 </div>
-                                <div class="col-lg-3">
+                                <!--div class="col-lg-3">
                                     <div class="form-group">
                                         <label class="form-control-label" for="input-leitos-uti-disponivel">Número de Leitos de UTI Disponível</label>
                                         <input asp-for="NumeroLeitosUtidisponivel" type="number" id="input-leitos-uti-disponivel" class="form-control" placeholder="">
                                     </div>
-                                </div>
+                                </!--div-->
                             </div>
                         </div>
                         <div class="row align-items-center">
@@ -270,30 +270,11 @@ else if (TempData["mensagemErro"] != null)
             }
 
         });
-
-
-        function swtAlert(type, title, message) {
-            Swal.fire({
-                icon: type,
-                title: title,
-                text: message,
-            });
-        }
-
-         function swtAlertRedirectIndex(type, title, message, url) {
-            Swal.fire({
-                icon: type,
-                title: title,
-                text: message,
-                footer:
-                    '<a href="' + url + '" class="btn btn-success">OK</a>',
-                showConfirmButton: false,
-            });
-        }
-
     </script>
 
+    <script src="~/assets/js/custom.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+    <script src="~/assets/js/sweet-alert.js"></script>
     <script src="~/assets/js/PersonalScripts.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=@googleKey&libraries=places&callback=initAutocomplete&language=pt-BR"
             async defer></script>

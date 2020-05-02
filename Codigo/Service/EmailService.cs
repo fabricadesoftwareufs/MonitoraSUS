@@ -50,6 +50,10 @@ namespace Service
             }
             catch (Exception ex)
             {
+                Console.WriteLine("An exception ({0}) occurred.",
+                     ex.GetType().Name);
+                Console.WriteLine("   Message:\n{0}", ex.Message);
+                Console.WriteLine("   Stack Trace:\n   {0}", ex.StackTrace);
                 throw ex.InnerException;
             }
         }

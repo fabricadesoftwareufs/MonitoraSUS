@@ -57,10 +57,10 @@ namespace Service
                 Email = empresa.Email,
                 // A partir daqui
                 EmiteLaudoExame = Convert.ToByte(empresa.EmiteLaudoExame),
-                NumeroLeitos = empresa.PossuiLeitosInternacao ? empresa.NumeroLeitos :0,
-                NumeroLeitosDisponivel = empresa.PossuiLeitosInternacao ? empresa.NumeroLeitosDisponivel:0,
-                NumeroLeitosUti = empresa.PossuiLeitosInternacao ? empresa.NumeroLeitosUti:0,
-                NumeroLeitosUtidisponivel = empresa.PossuiLeitosInternacao ? empresa.NumeroLeitosUtidisponivel: 0,
+                NumeroLeitos = empresa.PossuiLeitosInternacao ? empresa.NumeroLeitos : 0,
+                NumeroLeitosDisponivel = empresa.PossuiLeitosInternacao ? empresa.NumeroLeitosDisponivel : 0,
+                NumeroLeitosUti = empresa.PossuiLeitosInternacao ? empresa.NumeroLeitosUti : 0,
+                NumeroLeitosUtidisponivel = empresa.PossuiLeitosInternacao ? empresa.NumeroLeitosUtidisponivel : 0,
                 PossuiLeitosInternacao = Convert.ToByte(empresa.PossuiLeitosInternacao)
             };
         }
@@ -150,9 +150,9 @@ namespace Service
                 PossuiLeitosInternacao = Convert.ToBoolean(empresa.PossuiLeitosInternacao)
             }).FirstOrDefault();
 
-        public List<EmpresaExameModel> GetByUF(string uf)
+        public List<EmpresaExameModel> GetAllOfState(string nomeEstado)
          => _context.Empresaexame
-            .Where(empresaExame => empresaExame.Numero.ToUpper().Equals(uf.ToUpper()))
+            .Where(empresaExame => empresaExame.Estado.ToUpper().Equals(nomeEstado.ToUpper()))
             .Select(empresa => new EmpresaExameModel
             {
                 Id = empresa.Id,
@@ -177,5 +177,33 @@ namespace Service
                 NumeroLeitosUtidisponivel = empresa.NumeroLeitosUtidisponivel,
                 PossuiLeitosInternacao = Convert.ToBoolean(empresa.PossuiLeitosInternacao)
             }).ToList();
+
+        public List<EmpresaExameModel> GetByUF(string uf)
+             => _context.Empresaexame
+                .Where(empresaExame => empresaExame.Estado.ToUpper().Equals(uf.ToUpper()))
+                .Select(empresa => new EmpresaExameModel
+                {
+                    Id = empresa.Id,
+                    Cnpj = empresa.Cnpj,
+                    Nome = empresa.Nome,
+                    Cep = empresa.Cep,
+                    Rua = empresa.Rua,
+                    Bairro = empresa.Bairro,
+                    Cidade = empresa.Cidade,
+                    Estado = empresa.Estado,
+                    Numero = empresa.Numero,
+                    Complemento = empresa.Complemento,
+                    Latitude = empresa.Latitude,
+                    Longitude = empresa.Longitude,
+                    FoneCelular = empresa.FoneCelular,
+                    FoneFixo = empresa.FoneFixo,
+                    Email = empresa.Email,
+                    EmiteLaudoExame = Convert.ToBoolean(empresa.EmiteLaudoExame),
+                    NumeroLeitos = empresa.NumeroLeitos,
+                    NumeroLeitosDisponivel = empresa.NumeroLeitosDisponivel,
+                    NumeroLeitosUti = empresa.NumeroLeitosUti,
+                    NumeroLeitosUtidisponivel = empresa.NumeroLeitosUtidisponivel,
+                    PossuiLeitosInternacao = Convert.ToBoolean(empresa.PossuiLeitosInternacao)
+                }).ToList();
     }
 }

@@ -57,8 +57,8 @@ namespace MonitoraSUS.Utils
 				case 2:
                     return "<html><body>" +
                         "Parabéns! Seu cadastro foi ativado para acesso ao MonitoraSUS. <br>"+
-						"Acesse o sistema <a href='" + site + "'>aqui</a>" +
-                        ". Caso não lembre da sua senha de acesso, clique no link abaixo para iniciar o processo de recuperação.<br><a href='" +
+						"Acesse o sistema "+ site + "'>aqui</a>." +
+						"<br>Caso não lembre da sua senha de acesso, clique no link abaixo para iniciar o processo de recuperação.<br><a href='" +
                         link + senhaModel.Token + "'>Clique aqui para criar uma nova senha.</a>"+
 						RodapeEmail();
 
@@ -68,7 +68,8 @@ namespace MonitoraSUS.Utils
 
 		private static string RodapeEmail()
 		{
-			return "<br>Qualquer dúvida ou sugestão entre em contato com o nosso time." +
+			return "<br>" +
+					"Qualquer dúvida ou sugestão entre em contato com o nosso time." +
 						"<br><br>" +
 						"<br>Equipe MonitoraSUS" +
 						"<br>KNUTH-Fábrica de Software da Universidade Federal de Sergipe" +
@@ -81,7 +82,7 @@ namespace MonitoraSUS.Utils
             {
                 case 0: return "USUARIO";
                 case 1: return "AGENTE";
-                case 2: return "COORDENADOR";
+                case 2: return "GESTOR";
                 case 3: return "SECRETARIO";
                 case 4: return "ADM";
                 default: return "UNDEFINED";
