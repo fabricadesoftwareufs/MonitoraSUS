@@ -232,103 +232,121 @@ namespace MonitoraSUS.Controllers
         public ActionResult ReturnStates() => Ok(_estadoService.GetAll());
 
 
-        //========================= AGENTE, GESTOR CONTROL ACESS ====================
-        /// <summary>
-        /// Se for secretario poderá administrar o status do agente/gestor no sistema, A, I, S. 
-        /// Gerenciar autorização do agente/gestor de saúde
-        /// </summary>
-        /// <param name="ehResponsavel">Se for 0 é agente e se for 1 é gestor</param>
-        /// <returns></returns>
-        [Authorize(Roles = "SECRETARIO, GESTOR, ADM")]
-        // GET: AgenteSecretario/IndexApproveAgent/ehResponsavel
-        [HttpGet("[controller]/[action]/{ehResponsavel}")]
-        public ActionResult IndexApproveAgent(int ehResponsavel)
-        {
-            // usuario logado
-            var usuario = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
+		//========================= AGENTE, GESTOR CONTROL ACESS ====================
+		/// <summary>
+		/// Se for secretario poderá administrar o status do agente/gestor no sistema, A, I, S. 
+		/// Gerenciar autorização do agente/gestor de saúde
+		/// </summary>
+		/// <param name="ehResponsavel">Se for 0 é agente e se for 1 é gestor</param>
+		/// <returns></returns>
+		[Authorize(Roles = "SECRETARIO, GESTOR, ADM")]
+		// GET: AgenteSecretario/IndexApproveAgent/ehResponsavel
+		[HttpGet("[controller]/[action]/{ehResponsavel}")]
+		public ActionResult IndexApproveAgent(int ehResponsavel)
+		{
+			// usuario logado
+			var usuario = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
 
-            var agentes = new List<AgenteMunicipioEstadoViewModel>();
-            var solicitantes = new List<SolicitanteAprovacaoViewModel>();
-            var pessoaTrabalhaEstado = _pessoaTrabalhaEstadoService.GetByIdPessoa(usuario.UsuarioModel.IdPessoa);
+			var solicitantes = new List<SolicitanteAprovacaoViewModel>();
+			var pessoaTrabalhaEstado = _pessoaTrabalhaEstadoService.GetByIdPessoa(usuario.UsuarioModel.IdPessoa);
+			var pessoaTrabalhaMunicipio = _pessoaTrabalhaMunicipioService.GetByIdPessoa(usuario.UsuarioModel.IdPessoa);
+			string estadoTrabalha = "";
 
-            string estadoTrabalha = "";
-            string cidadeTrabalha = "";
+			if (pessoaTrabalhaEstado != null || usuario.RoleUsuario.Equals("ADM"))
+			{
+				var agentesEstado = new List<PessoaTrabalhaEstadoModel>();
+				var agentesE = new List<AgenteMunicipioEstadoViewModel>();
+				if (usuario.RoleUsuario.Equals("ADM"))
+					agentesEstado = _pessoaTrabalhaEstadoService.GetAllGestoresEstado();
+				else
+				{
 
-            if (pessoaTrabalhaEstado != null)
-            {
-                estadoTrabalha = _estadoService.GetById(pessoaTrabalhaEstado.IdEstado).Nome;
+					estadoTrabalha = _estadoService.GetById(pessoaTrabalhaEstado.IdEstado).Nome;
 
-                var agentesEstado = new List<PessoaTrabalhaEstadoModel>();
-                if (ehResponsavel == 0)
-                    agentesEstado = _pessoaTrabalhaEstadoService.GetAllAgentsEstado(pessoaTrabalhaEstado.IdEstado);
-                else
-                    agentesEstado = _pessoaTrabalhaEstadoService.GetAllGestoresEstado(pessoaTrabalhaEstado.IdEstado);
+					if (ehResponsavel == 0)
+						agentesEstado = _pessoaTrabalhaEstadoService.GetAllAgentsEstado(pessoaTrabalhaEstado.IdEstado);
+					else
+						agentesEstado = _pessoaTrabalhaEstadoService.GetAllGestoresEstado(pessoaTrabalhaEstado.IdEstado);
+				}
+				agentesEstado.ForEach(item => agentesE.Add(new AgenteMunicipioEstadoViewModel { Pessoa = _pessoaService.GetById(item.IdPessoa), PessoaEstado = item, Situacao = item.SituacaoCadastro }));
 
-                agentesEstado.ForEach(item => agentes.Add(new AgenteMunicipioEstadoViewModel { Pessoa = _pessoaService.GetById(item.IdPessoa), PessoaEstado = item, Situacao = item.SituacaoCadastro }));
+				agentesE.ForEach(item => solicitantes.Add(new SolicitanteAprovacaoViewModel
+				{
+					IdPessoa = item.Pessoa.Idpessoa,
+					Nome = item.Pessoa.Nome,
+					Cpf = Methods.PatternCpf(item.Pessoa.Cpf),
+					Estado = string.IsNullOrEmpty(estadoTrabalha) ? estadoTrabalha : _estadoService.GetById(item.PessoaEstado.IdEstado).Nome,
+					Cidade = null,
+					Status = item.Situacao,
+					Situacao = ReturnStatus(item.Situacao)
+				}));
 
-                agentes.ForEach(item => solicitantes.Add(new SolicitanteAprovacaoViewModel
-                {
-                    IdPessoa = item.Pessoa.Idpessoa,
-                    Nome = item.Pessoa.Nome,
-                    Cpf = Methods.PatternCpf(item.Pessoa.Cpf),
-                    Estado = estadoTrabalha,
-                    Cidade = null,
-                    Status = item.Situacao,
-                    Situacao = ReturnStatus(item.Situacao)
-                }));
+			}
+			if (pessoaTrabalhaMunicipio != null || usuario.RoleUsuario.Equals("ADM"))
+			{
+				string cidadeTrabalha = "";
+				var agentesMunicipio = new List<PessoaTrabalhaMunicipioModel>();
 
-            }
-            else
-            {
-                var pessoaTrabalhaMunicipio = _pessoaTrabalhaMunicipioService.GetByIdPessoa(usuario.UsuarioModel.IdPessoa);
+				//var pessoaTrabalhaMunicipio = _pessoaTrabalhaMunicipioService.GetByIdPessoa(usuario.UsuarioModel.IdPessoa);
+				if (usuario.RoleUsuario.Equals("ADM"))
+					agentesMunicipio = _pessoaTrabalhaMunicipioService.GetAllGestoresMunicipio();
+				else
+				{
+					estadoTrabalha = _estadoService.GetByCodUf(Int32.Parse(_municipioService.GetById(pessoaTrabalhaMunicipio.IdMunicipio).Uf)).Nome;
+					cidadeTrabalha = _municipioService.GetById(pessoaTrabalhaMunicipio.IdMunicipio).Nome;
+					if (ehResponsavel == 0)
+						agentesMunicipio = _pessoaTrabalhaMunicipioService.GetAllAgentsMunicipio(pessoaTrabalhaMunicipio.IdMunicipio);
+					else
+						agentesMunicipio = _pessoaTrabalhaMunicipioService.GetAllGestoresMunicipio(pessoaTrabalhaMunicipio.IdMunicipio);
+				}
+				var agentesM = new List<AgenteMunicipioEstadoViewModel>();
+				agentesMunicipio.ForEach(item => agentesM.Add(new AgenteMunicipioEstadoViewModel { Pessoa = _pessoaService.GetById(item.IdPessoa), PessoaMunicipio = item, Situacao = item.SituacaoCadastro }));
 
-                estadoTrabalha = _estadoService.GetByCodUf(Int32.Parse(_municipioService.GetById(pessoaTrabalhaMunicipio.IdMunicipio).Uf)).Nome;
-                cidadeTrabalha = _municipioService.GetById(pessoaTrabalhaMunicipio.IdMunicipio).Nome;
+				foreach (AgenteMunicipioEstadoViewModel agente in agentesM)
+				{
+					if (string.IsNullOrEmpty(estadoTrabalha))
+					{
+						var municipio = _municipioService.GetById(agente.PessoaMunicipio.IdMunicipio);
+						estadoTrabalha = _estadoService.GetByCodUf(int.Parse(municipio.Uf)).Nome;
+					}
+					var solicitante = new SolicitanteAprovacaoViewModel
+					{
+						IdPessoa = agente.Pessoa.Idpessoa,
+						Nome = agente.Pessoa.Nome,
+						Cpf = agente.Pessoa.Cpf,
+						Estado = estadoTrabalha,
+						Cidade = cidadeTrabalha,
+						Status = agente.Situacao,
+						Situacao = ReturnStatus(agente.Situacao)
 
-                var agentesMunicipio = new List<PessoaTrabalhaMunicipioModel>();
-                if (ehResponsavel == 0)
-                    agentesMunicipio = _pessoaTrabalhaMunicipioService.GetAllAgentsMunicipio(pessoaTrabalhaMunicipio.IdMunicipio);
-                else
-                    agentesMunicipio = _pessoaTrabalhaMunicipioService.GetAllGestoresMunicipio(pessoaTrabalhaMunicipio.IdMunicipio);
+					};
+					solicitantes.Add(solicitante);
+				}
+			}
 
-                agentesMunicipio.ForEach(item => agentes.Add(new AgenteMunicipioEstadoViewModel { Pessoa = _pessoaService.GetById(item.IdPessoa), PessoaMunicipio = item, Situacao = item.SituacaoCadastro }));
+			if (TempData["responseUp"] != null)
+				ViewBag.responseUp = TempData["responseUp"];
 
-                agentes.ForEach(item => solicitantes.Add(new SolicitanteAprovacaoViewModel
-                {
-                    IdPessoa = item.Pessoa.Idpessoa,
-                    Nome = item.Pessoa.Nome,
-                    Cpf = item.Pessoa.Cpf,
-                    Estado = estadoTrabalha,
-                    Cidade = cidadeTrabalha,
-                    Status = item.Situacao,
-                    Situacao = ReturnStatus(item.Situacao)
+			if (TempData["responseOp"] != null)
+				ViewBag.responseOp = TempData["responseOp"];
 
-                }));
-            }
+			Tuple<List<SolicitanteAprovacaoViewModel>, List<EmpresaExameModel>> tupleModel = null;
 
-            if (TempData["responseUp"] != null)
-                ViewBag.responseUp = TempData["responseUp"];
-
-            if (TempData["responseOp"] != null)
-                ViewBag.responseOp = TempData["responseOp"];
-
-            Tuple<List<SolicitanteAprovacaoViewModel>, List<EmpresaExameModel>> tupleModel = null;
-
-            if (ehResponsavel == 0)
-            {
-                ViewBag.entidade = "Agente";
-                var empresas = _empresaExameService.GetAllOfState(estadoTrabalha);
-                tupleModel = new Tuple<List<SolicitanteAprovacaoViewModel>, List<EmpresaExameModel>>(solicitantes, empresas);
-
-            }
-
-            else
-            {
-                ViewBag.entidade = "Gestor";
-                tupleModel = new Tuple<List<SolicitanteAprovacaoViewModel>, List<EmpresaExameModel>>(solicitantes, null);
-            }
-
-            return View(tupleModel);
+			ViewBag.entidade = (ehResponsavel == 0) ? "Agente" : "Gestor";
+			var estado = _estadoService.GetByName(estadoTrabalha);
+			List<EmpresaExameModel> empresas = null;
+			if (usuario.RoleUsuario.Equals("ADM")) {
+				empresas = _empresaExameService.GetAll();
+			}
+			else {
+				if (estado != null)
+					empresas = _empresaExameService.GetByUF(estado.Uf);
+			}
+			if (empresas != null)
+				tupleModel = new Tuple<List<SolicitanteAprovacaoViewModel>, List<EmpresaExameModel>>(solicitantes, empresas);
+			else
+				tupleModel = new Tuple<List<SolicitanteAprovacaoViewModel>, List<EmpresaExameModel>>(solicitantes, null);
+			return View(tupleModel);
         }
 
         // GET: AgenteSecretario/ExcludeAgent/{agente|gestor}/id
@@ -865,7 +883,7 @@ namespace MonitoraSUS.Controllers
             {
                 case "I": return "Bloqueado";
                 case "A": return "Ativo";
-                case "S": return "Pedente";
+                case "S": return "Pendente";
                 default: return "Undefined";
             }
 
@@ -887,6 +905,7 @@ namespace MonitoraSUS.Controllers
             return responseOp;
 
         }
+
 
 	}
 }

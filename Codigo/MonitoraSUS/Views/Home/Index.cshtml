@@ -17,7 +17,7 @@
      * ====== NIVEIS NO BANCO ======
      * USUARIO = 0
      * AGENTE = 1
-     * COORDENADOR = 2
+     * GESTOR = 2
      * SECRETARIO = 3
      * ADM = 4
      */
@@ -36,359 +36,130 @@
                     </div>
                 </div>
                 <div class="card-body ">
-                    <div class="row">
+                    
                         @if (User.IsInRole("USUARIO"))
                         {
 
                         }
                         else if (User.IsInRole("AGENTE"))
                         {
+                        <h6 class="heading-small text-muted mb-4">Paciente</h6>
+                        <div class="row">
                             <div class="col-xl-2 col-md-4">
-                                <a asp-controller="Exame" asp-action="Create">
-                                    <div class="card card-stats ">
-                                        <div class="card-body card-round card-button  bg-gradient-primary">
-                                            <div class="row">
-
-                                                <div class="col-auto">
-                                                    <div class="icon icon-shape bg-translucent-white text-white rounded-circle shadow">
-                                                        <i class="fas fa-file-medical"></i>
-
-                                                    </div>
-                                                </div>
-                                                <div class="col">
-                                                    <h5 class="card-title text-uppercase text-muted-white mb-0">Notificar Resultado Exame</h5>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                <a asp-controller="Exame" asp-action="Create" class="btn btn-block card-button-home">
+                                    <i class="fas fa-file-medical fa-2x"></i>
+                                    <br>Notificar <br> Exame
                                 </a>
                             </div>
                             <div class="col-xl-2 col-md-4">
-                                <a asp-controller="Exame" asp-action="Index">
-                                    <div class="card card-stats ">
-                                        <div class="card-body card-round card-button bg-gradient-primary">
-                                            <div class="row">
-                                                <div class="col-auto">
-                                                    <div class="icon icon-shape bg-translucent-white text-white rounded-circle shadow">
-                                                        <i class="fas fa-clipboard-list "></i>
-
-                                                    </div>
-                                                </div>
-                                                <div class="col">
-                                                    <h5 class="card-title text-uppercase text-muted-white mb-0">Histórico de Resultados</h5>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                <a asp-controller="Exame" asp-action="Index" class="btn btn-block card-button-home">
+                                    <i class="fas fa-clipboard-list fa-2x"></i>
+                                    <br>Exames <br> Notificados
                                 </a>
                             </div>
+                        </div>
                         }
                         else if (User.IsInRole("GESTOR"))
-                        {
-                            <div class="col-xl-2 col-md-4">
-                                <a asp-controller="Exame" asp-action="Create">
-                                    <div class="card card-stats ">
-                                        <div class="card-body card-round card-button  bg-gradient-primary">
-                                            <div class="row">
-
-                                                <div class="col-auto">
-                                                    <div class="icon icon-shape bg-translucent-white text-white rounded-circle shadow">
-                                                        <i class="fas fa-file-medical"></i>
-
-                                                    </div>
-                                                </div>
-                                                <div class="col">
-                                                    <h5 class="card-title text-uppercase text-muted-white mb-0">Notificar Resultado Exame</h5>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                        {   
+                        <h6 class="heading-small text-muted mb-4">Paciente</h6>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <a asp-controller="Exame" asp-action="Create" class="btn btn-block card-button-home">
+                                    <i class="fas fa-file-medical fa-2x"></i>
+                                    <br>Notificar <br> Exame
                                 </a>
                             </div>
-                            <div class="col-xl-2 col-md-4">
-                                <a asp-controller="Exame" asp-action="Index">
-                                    <div class="card card-stats ">
-                                        <div class="card-body card-round card-button bg-gradient-primary">
-                                            <div class="row">
-                                                <div class="col-auto">
-                                                    <div class="icon icon-shape bg-translucent-white text-white rounded-circle shadow">
-                                                        <i class="fas fa-clipboard-list "></i>
-
-                                                    </div>
-                                                </div>
-                                                <div class="col">
-                                                    <h5 class="card-title text-uppercase text-muted-white mb-0">Histórico de Resultados</h5>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                            <div class="col-md-3">
+                                <a asp-controller="Exame" asp-action="Index" class="btn btn-block card-button-home">
+                                    <i class="fas fa-clipboard-list fa-2x"></i>
+                                    <br>Exames <br> Notificados
                                 </a>
                             </div>
-                            <div class="col-xl-2 col-md-4">
-                                <a onclick="swtAlert()">
-                                    <div class="card card-stats ">
-                                        <div class="card-body card-round card-button bg-gradient-primary">
-                                            <div class="row">
-                                                <div class="col-auto">
-                                                    <div class="icon icon-shape bg-translucent-white text-white rounded-circle shadow">
-                                                        <i class="fas fa-users-cog" ></i>
-                                                    </div>
-                                                </div>
-                                                <div class="col">
-                                                    <h5 class="card-title text-uppercase text-muted-white mb-0">Monitorar Pacientes</h5>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                            <div class="col-md-3">
+                                <a href="" class="btn btn-block card-button-home" onclick="swtAlert(); return false;">
+                                    <i class="fas fa-users-cog fa-2x" ></i>
+                                    <br>Monitorar <br>Pacientes
+                                </a>
+                            </div> 
+                        </div>
+                        <h6 class="heading-small text-muted mb-4" style="margin-top:10px;">Administração </h6>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <a asp-controller="EmpresaExame" asp-action="Index" class="btn btn-block card-button-home"> 
+                                    <i class="fas fa-users-cog fa-2x"></i>
+                                    <br>Cadastro de <br>Laboratórios
                                 </a>
                             </div>
-                            <div class="col-xl-2 col-md-4">
-                                <a asp-controller="AgenteSecretario" asp-action="IndexApproveAgent" asp-route-ehResponsavel="0">
-                                    <div class="card card-stats ">
-                                        <div class="card-body card-round card-button bg-gradient-primary">
-                                            <div class="row">
-                                                <div class="col-auto">
-                                                    <div class="icon icon-shape bg-translucent-white text-white rounded-circle shadow">
-                                                        <i class="fas fa-clipboard-list "></i>
-
-                                                    </div>
-                                                </div>
-                                                <div class="col">
-                                                    <h5 class="card-title text-uppercase text-muted-white mb-0">
-                                                        Autorizar Realizadores de Exames
-                                                    </h5>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                            <div class="col-md-3">
+                                <a asp-controller="AgenteSecretario" asp-action="IndexApproveAgent" asp-route-ehResponsavel="0" class="btn btn-block card-button-home">
+                                    <i class="fas fa-clipboard-list fa-2x"></i>
+                                    <br>Autorizar Notificadores<br> de Exames
                                 </a>
                             </div>
-                            <!--div class="col-xl-2 col-md-4">
-                                <a asp-controller="" asp-action="">
-                                    <div class="card card-stats ">
-                                        <div class="card-body card-round card-button bg-gradient-primary">
-                                            <div class="row">
-                                                <div class="col-auto">
-                                                    <div class="icon icon-shape bg-translucent-white text-white rounded-circle shadow">
-                                                        <i class="fas fa-users-cog"></i>
-                                                    </div>
-                                                </div>
-                                                <div class="col">
-                                                    <h5 class="card-title text-uppercase text-muted-white mb-0">
-                                                        Autorizar Agentes em Laboratórios
-                                                    </h5>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </a>
-                            </!--div-->
-                            <div class="col-xl-2 col-md-4">
-                                <a asp-controller="EmpresaExame" asp-action="Index">
-                                    <div class="card card-stats ">
-                                        <div class="card-body card-round card-button bg-gradient-primary">
-                                            <div class="row">
-                                                <div class="col-auto">
-                                                    <div class="icon icon-shape bg-translucent-white text-white rounded-circle shadow">
-                                                        <i class="fas fa-users-cog"></i>
-                                                    </div>
-                                                </div>
-                                                <div class="col">
-                                                    <h5 class="card-title text-uppercase text-muted-white mb-0">
-                                                        Cadastro de Laboratórios
-                                                    </h5>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
+                        </div>
                         }
                         else if (User.IsInRole("SECRETARIO"))
                         {
-                            <div class="col-xl-2 col-md-4">
-                                <a asp-controller="Exame" asp-action="Create">
-                                    <div class="card card-stats ">
-                                        <div class="card-body card-round card-button  bg-gradient-primary">
-                                            <div class="row">
-
-                                                <div class="col-auto">
-                                                    <div class="icon icon-shape bg-translucent-white text-white rounded-circle shadow">
-                                                        <i class="fas fa-file-medical"></i>
-
-                                                    </div>
-                                                </div>
-                                                <div class="col">
-                                                    <h5 class="card-title text-uppercase text-muted-white mb-0">Notificar Resultado Exame</h5>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                        <h6 class="heading-small text-muted mb-4">Paciente</h6>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <a asp-controller="Exame" asp-action="Create" class="btn btn-block card-button-home"> 
+                                    <i class="fas fa-file-medical fa-2x"></i>
+                                    <br>Notificar <br> Exames
                                 </a>
                             </div>
-                            <div class="col-xl-2 col-md-4">
-                                <a asp-controller="Exame" asp-action="Index">
-                                    <div class="card card-stats ">
-                                        <div class="card-body card-round card-button bg-gradient-primary">
-                                            <div class="row">
-                                                <div class="col-auto">
-                                                    <div class="icon icon-shape bg-translucent-white text-white rounded-circle shadow">
-                                                        <i class="fas fa-clipboard-list "></i>
-
-                                                    </div>
-                                                </div>
-                                                <div class="col">
-                                                    <h5 class="card-title text-uppercase text-muted-white mb-0">Histórico de Resultados</h5>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                            <div class="col-md-3">
+                                <a asp-controller="Exame" asp-action="Index" class="btn btn-block card-button-home">
+                                    <i class="fas fa-clipboard-list fa-2x"></i>
+                                    <br>Exames <br> Notificados
                                 </a>
                             </div>
-                            <div class="col-xl-2 col-md-4">
-                                <a onclick="swtAlert()">
-                                    <div class="card card-stats ">
-                                        <div class="card-body card-round card-button bg-gradient-primary">
-                                            <div class="row">
-                                                <div class="col-auto">
-                                                    <div class="icon icon-shape bg-translucent-white text-white rounded-circle shadow">
-                                                        <i class="fas fa-users-cog" ></i>
-                                                    </div>
-                                                </div>
-                                                <div class="col">
-                                                    <h5 class="card-title text-uppercase text-muted-white mb-0">Monitorar Pacientes</h5>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                            <div class="col-md-3">
+                                <a href="" class="btn btn-block card-button-home" onclick="swtAlert(); return false;">
+                                    <i class="fas fa-users-cog fa-2x" ></i>
+                                    <br>Monitorar <br>Pacientes
+                                </a>
+                            </div> 
+                        </div>
+                        <h6 class="heading-small text-muted mb-4" style="margin-top:10px;">Administração </h6>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <a asp-controller="EmpresaExame" asp-action="Index" class="btn btn-block card-button-home"> 
+                                    <i class="fas fa-users-cog fa-2x"></i>
+                                    <br>Cadastro de <br>Laboratórios
                                 </a>
                             </div>
-                            <div class="col-xl-2 col-md-4">
-                                <a asp-controller="AgenteSecretario" asp-action="IndexApproveAgent" asp-route-ehResponsavel="1">
-                                    <div class="card card-stats ">
-                                        <div class="card-body card-round card-button  bg-gradient-primary">
-                                            <div class="row">
-
-                                                <div class="col-auto">
-                                                    <div class="icon icon-shape bg-translucent-white text-white rounded-circle shadow">
-                                                        <i class="fas fa-file-medical"></i>
-
-                                                    </div>
-                                                </div>
-                                                <div class="col">
-                                                    <h5 class="card-title text-uppercase text-muted-white mb-0">
-                                                        Autorizar Gestores de Saúde
-                                                    </h5>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                            <div class="col-md-3">
+                                <a asp-controller="AgenteSecretario" asp-action="IndexApproveAgent" asp-route-ehResponsavel="0" class="btn btn-block card-button-home">
+                                    <i class="fas fa-clipboard-list fa-2x"></i>
+                                    <br>Autorizar Notificadores<br> de Exames
                                 </a>
                             </div>
-                            <div class="col-xl-2 col-md-4">
-                                <a asp-controller="AgenteSecretario" asp-action="IndexApproveAgent" asp-route-ehResponsavel="0">
-                                    <div class="card card-stats ">
-                                        <div class="card-body card-round card-button bg-gradient-primary">
-                                            <div class="row">
-                                                <div class="col-auto">
-                                                    <div class="icon icon-shape bg-translucent-white text-white rounded-circle shadow">
-                                                        <i class="fas fa-clipboard-list "></i>
-
-                                                    </div>
-                                                </div>
-                                                <div class="col">
-                                                    <h5 class="card-title text-uppercase text-muted-white mb-0">
-                                                        Autorizar Realizadores Exames
-                                                    </h5>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                            <div class="col-md-3">
+                                <a asp-controller="AgenteSecretario" asp-action="IndexApproveAgent" asp-route-ehResponsavel="1" class="btn btn-block card-button-home">
+                                    <i class="fas fa-file-medical fa-2x"></i>
+                                    <br>Autorizar Gestores<br> de Saúde
                                 </a>
                             </div>
-                            <!--div class="col-xl-2 col-md-4">
-                                <a asp-controller="" asp-action="">
-                                    <div class="card card-stats ">
-                                        <div class="card-body card-round card-button bg-gradient-primary">
-                                            <div class="row">
-                                                <div class="col-auto">
-                                                    <div class="icon icon-shape bg-translucent-white text-white rounded-circle shadow">
-                                                        <i class="fas fa-users-cog"></i>
-                                                    </div>
-                                                </div>
-                                                <div class="col">
-                                                    <h5 class="card-title text-uppercase text-muted-white mb-0">
-                                                        Autorizar Agentes em Laboratórios
-                                                    </h5>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </a>
-                            </!--div-->
-                            <div class="col-xl-2 col-md-4">
-                                <a asp-controller="EmpresaExame" asp-action="Index">
-                                    <div class="card card-stats ">
-                                        <div class="card-body card-round card-button bg-gradient-primary">
-                                            <div class="row">
-                                                <div class="col-auto">
-                                                    <div class="icon icon-shape bg-translucent-white text-white rounded-circle shadow">
-                                                        <i class="fas fa-users-cog"></i>
-                                                    </div>
-                                                </div>
-                                                <div class="col">
-                                                    <h5 class="card-title text-uppercase text-muted-white mb-0">
-                                                        Cadastro de Laboratórios
-                                                    </h5>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
+                        </div>
                         }
                         else if (User.IsInRole("ADM"))
-                        {
-                            <div class="col-xl-2 col-md-4">
-                                <a asp-controller="AgenteSecretario" asp-action="IndexApproveAgent" asp-route-ehResponsavel="1">
-                                    <div class="card card-stats ">
-                                        <div class="card-body card-round card-button  bg-gradient-primary">
-                                            <div class="row">
-
-                                                <div class="col-auto">
-                                                    <div class="icon icon-shape bg-translucent-white text-white rounded-circle shadow">
-                                                        <i class="fas fa-users-cog"></i>
-
-                                                    </div>
-                                                </div>
-                                                <div class="col">
-                                                    <h5 class="card-title text-uppercase text-muted-white mb-0">Autorizar Gestores de Saúde</h5>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-							<div class="col-xl-2 col-md-4">
-								<a asp-controller="EmpresaExame" asp-action="Index">
-									<div class="card card-stats ">
-										<div class="card-body card-round card-button bg-gradient-primary">
-											<div class="row">
-												<div class="col-auto">
-													<div class="icon icon-shape bg-translucent-white text-white rounded-circle shadow">
-														<i class="fas fa-users-cog"></i>
-													</div>
-												</div>
-												<div class="col">
-													<h5 class="card-title text-uppercase text-muted-white mb-0">
-														Cadastro de Laboratórios
-													</h5>
-												</div>
-											</div>
-										</div>
-									</div>
+                        {   
+                        <h6 class="heading-small text-muted mb-4" style="margin-top:10px;">Administração </h6>
+						<div class="row">
+							<div class="col-md-3 col-6">
+								<a class="btn btn-block card-button-home" asp-controller="AgenteSecretario" asp-action="IndexApproveAgent" asp-route-ehResponsavel="1">
+									<i class="fas fa-users-cog fa-2x"></i>
+									<br> Autorizar Gestores<br> de Saúde
 								</a>
 							</div>
+							<div class="col-md-3">
+								<a asp-controller="EmpresaExame" asp-action="Index" class="btn btn-block card-button-home">
+									<i class="fas fa-users-cog fa-2x"></i>
+									<br>Cadastro de <br>Laboratórios
+								</a>
+							</div>
+						</div>
                         }
                     </div>
                 </div>
@@ -403,8 +174,8 @@
     function swtAlert() {
         Swal.fire({
             icon: "error",
-            title: "funcionalidade Indisponível",
-            text: "Essa funcionalidade está em processo de desenvolvimento.Quer conversar conosco e enviar suas necessidades e sugestões ? Entre em contato pelo email fabricadesoftware@ufs.br",
+            title: "Funcionalidade Indisponível",
+            text: "Essa funcionalidade está em processo de desenvolvimento. Quer conversar conosco e enviar suas necessidades e sugestões ? Entre em contato pelo email fabricadesoftware@ufs.br",
         });
     }
 

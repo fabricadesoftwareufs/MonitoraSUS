@@ -50,13 +50,14 @@ namespace MonitoraSUS.Controllers
             _configuration = configuration;
         }
 
-        public IActionResult Index(DateTime filtro)
+        public IActionResult Index(string cpf, DateTime DataInicial, DateTime DataFinal)
         {
             /*
              * O tratamento da variavel filtro é feito dentro 
              * do método GetAllExamesViewModel()
              */
-            return View(GetAllExamesViewModel(filtro));
+
+            return View(GetAllExamesViewModel(cpf, DataInicial, DataFinal));
         }
 
         public IActionResult Details(int id)
@@ -160,9 +161,9 @@ namespace MonitoraSUS.Controllers
                 var usuarioDuplicado = _pessoaContext.GetByCpf(exame.IdPaciente.Cpf);
                 if (usuarioDuplicado != null)
                 {
-                    if(!(usuarioDuplicado.Idpessoa == exame.IdPaciente.Idpessoa))
+                    if (!(usuarioDuplicado.Idpessoa == exame.IdPaciente.Idpessoa))
                     {
-                        TempData["mensagemErro"] = "Já existe um paciente com esse CPF/RG, tente novamente!"; 
+                        TempData["mensagemErro"] = "Já existe um paciente com esse CPF/RG, tente novamente!";
                         return View(exame);
                     }
                 }
@@ -430,7 +431,7 @@ namespace MonitoraSUS.Controllers
             return ex;
         }
 
-        public List<ExameViewModel> GetAllExamesViewModel(DateTime filtro)
+        public List<ExameViewModel> GetAllExamesViewModel(string cpf, DateTime DataInicial, DateTime DataFinal)
         {
             /*
              * Pegando usuario logado e carregando 
@@ -444,7 +445,7 @@ namespace MonitoraSUS.Controllers
             {
                 exames = _exameContext.GetByIdAgente(usuario.UsuarioModel.IdPessoa);
             }
-            else if (usuario.RoleUsuario.Equals("COORDENADOR") || usuario.RoleUsuario.Equals("SECRETARIO"))
+            else if (usuario.RoleUsuario.Equals("GESTOR") || usuario.RoleUsuario.Equals("SECRETARIO"))
             {
                 var secretarioMunicipio = _pessoaTrabalhaMunicipioContext.GetByIdPessoa(usuario.UsuarioModel.IdPessoa);
 
@@ -469,15 +470,55 @@ namespace MonitoraSUS.Controllers
              * Se o filtro for uma data válida, 
              * ele faz a seleção
              */
-            if (filtro != DateTime.MinValue && filtro != null)
+            cpf = cpf ?? "";
+
+            if ((DataInicial == DateTime.MinValue) && (DataFinal == DateTime.MinValue) && cpf.Equals(""))
             {
-                exames = exames.Where(exameModel => DateTime.Compare(exameModel.DataExame, filtro) == 0).ToList();
+                exames = exames.Where(exameModel => DateTime.Compare(exameModel.DataExame, DateTime.Today) == 0).ToList();
+            }
+            else if (!cpf.Equals(""))
+            {
+                cpf = Methods.RemoveSpecialsCaracts(cpf);
+                var paciente = _pessoaContext.GetByCpf(cpf);
+
+                if (paciente == null)
+                {
+                    exames = new List<ExameModel>();
+                }
+                else if (DataInicial > DateTime.MinValue && DataFinal > DateTime.MinValue)
+                {
+                    exames = exames.Where(exameModel => exameModel.DataExame >= DataInicial &&
+                                        exameModel.DataExame <= DataFinal && exameModel.IdPaciente == paciente.Idpessoa).ToList();
+                }
+                else if (DataInicial == DateTime.MinValue && DataFinal > DateTime.MinValue)
+                {
+                    exames = exames.Where(exameModel => exameModel.DataExame <= DataFinal && exameModel.IdPaciente == paciente.Idpessoa).ToList();
+                }
+                else if (DataFinal == DateTime.MinValue && DataInicial > DateTime.MinValue)
+                {
+                    exames = exames.Where(exameModel => exameModel.DataExame >= DataInicial && exameModel.IdPaciente == paciente.Idpessoa).ToList();
+                }
+                else
+                {
+                    exames = exames.Where(exameModel => exameModel.IdPaciente == paciente.Idpessoa).ToList();
+                }
+            }
+            else if (DataInicial > DateTime.MinValue && DataFinal > DateTime.MinValue)
+            {
+                exames = exames.Where(exameModel => exameModel.DataExame >= DataInicial && exameModel.DataExame <= DataFinal).ToList();
+            }
+            else if (DataInicial == DateTime.MinValue && DataFinal > DateTime.MinValue)
+            {
+                exames = exames.Where(exameModel => exameModel.DataExame <= DataFinal).ToList();
+            }
+            else if (DataFinal == DateTime.MinValue && DataInicial > DateTime.MinValue)
+            {
+                exames = exames.Where(exameModel => exameModel.DataExame >= DataInicial).ToList();
             }
             else
             {
                 exames = exames.Where(exameModel => DateTime.Compare(exameModel.DataExame, DateTime.Today) == 0).ToList();
             }
-
 
             var examesViewModel = new List<ExameViewModel>();
 
@@ -521,7 +562,7 @@ namespace MonitoraSUS.Controllers
         public static bool SoContemNumeros(String texto)
         {
             texto = texto.Replace(".", "").Replace("-", "");
-            var value = Regex.IsMatch(texto,"^[0-9]*$");
+            var value = Regex.IsMatch(texto, "^[0-9]*$");
             return value;
         }
 
