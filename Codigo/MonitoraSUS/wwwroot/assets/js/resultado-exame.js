@@ -27,12 +27,16 @@ $('#btn-submit').on('click', function () {
     var foneCelular = $('#input-celular').val();
     var dataExame = $('#input-data-exame').val();
     var dataSintomas = $('#input-data-sintomas').val();
-    var outrasComorbidades = $('#input-outrasComorbidades').val();
+    document.getElementById('PesquisarCpf').value = 0;
 
     if (!(cpf === "" || nome === "" || dataNasc === "" || cep === "" || rua === "" || bairro === "" ||
-        cidade === "" || estado === "" || foneCelular === "" || outrasComorbidades === "" || dataExame === "" || dataSintomas === "")) {
-        $('#modal-espera').modal('show');
+        cidade === "" || estado === "" || foneCelular === "" || dataExame === "" || dataSintomas === "")) {
+        submitForm();
     }
+
+    var campo1 = document.getElementById('administrative_area_level_2');
+    //Seleciona o campo com a ID "nome"
+    campo1.setCustomValidity('Preencha este campo corretamente.'); 
 
 });
 
