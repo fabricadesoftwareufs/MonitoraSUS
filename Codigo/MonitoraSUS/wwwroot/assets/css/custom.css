@@ -42,3 +42,37 @@
 .card-round{
     border-radius: 10px !important;
 }
+
+
+.card-button-home:hover{
+    color: #fff;
+    border-color: #eeeeee;
+    -webkit-transform: scale(1.05);
+    -ms-transform: scale(1.05);
+    transform: scale(1.05);
+}
+
+
+.card-button-home{
+    background: linear-gradient(87deg, #007bff 0, #224abe 100%) !important;
+    border-color: #eeeeee;
+    color: #fff;
+    font-size: .8rem;
+    border-radius: 5px; 
+    padding: 1.15rem 1rem !important;
+    margin-bottom: 0.75rem;
+}
+
+.card-button-home i{
+    margin-bottom: 10px;
+}
+
+.btn-logout{
+    text-decoration: none;
+    color: #fff;
+}
+
+.btn-logout:hover{
+    text-decoration: none;
+    color: #eee;
+}

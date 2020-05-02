@@ -865,7 +865,7 @@ namespace MonitoraSUS.Controllers
             {
                 case "I": return "Bloqueado";
                 case "A": return "Ativo";
-                case "S": return "Pedente";
+                case "S": return "Pendente";
                 default: return "Undefined";
             }
 
@@ -887,6 +887,7 @@ namespace MonitoraSUS.Controllers
             return responseOp;
 
         }
+
 
 	}
 }
