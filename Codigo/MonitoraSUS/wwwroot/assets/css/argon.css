@@ -11168,6 +11168,12 @@ button.bg-darker:focus
     padding-bottom: 3rem !important;
 }
 
+.pb-1r,
+.py-1r
+{
+    padding-bottom: 1rem !important;
+}
+
 .pl-5,
 .px-5
 {
