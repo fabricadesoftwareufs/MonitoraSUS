@@ -1,6 +1,8 @@
 // Mostra modal com mensagem de erro
 $(document).ready(function () {
 
+    document.getElementById('PesquisarCpf').value = 0;
+
     let identificador = document.getElementById('input-cpf').value;
     identificador = identificador.replace("-", "").replace(".", "").replace(".", "");
     if ($.isNumeric(identificador)) {
