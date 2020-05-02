@@ -48,7 +48,7 @@ input.addEventListener("keyup", function () {
 
 function submitAutomaticoForm() {
     var url_atual = window.location.href.toLowerCase();
-    if (url_atual.includes('exame/create')) {
+    if (url_atual.includes('exame/create') && !verificaCampoPreenchido()) {
         $('#modal-espera').modal('show');
         document.getElementById('PesquisarCpf').value = 1;
         document.forms["form-exame"].submit();
@@ -98,4 +98,29 @@ function verificaRGCompleto(uf) {
         case 'to': return true; break;
         default: return false;
     }
+}
+
+function verificaCampoPreenchido() {
+
+    var cpf = $('#input-cpf').val();
+    var nome = $('#input-nome').val();
+    var dataNasc = $('#input-data-nascimento').val();
+    var cep = $('#postal_code').val();
+    var rua = $('#route').val();
+    var bairro = $('#sublocality_level_1').val();
+    var cidade = $('#administrative_area_level_2').val();
+    var estado = $('#administrative_area_level_1').val();
+    var foneCelular = $('#input-celular').val();
+    var dataExame = $('#input-data-exame').val();
+    var dataSintomas = $('#input-data-sintomas').val();
+
+    if (!(cpf === "" || nome === "" || dataNasc === "" || cep === "" || rua === "" || bairro === "" ||
+        cidade === "" || estado === "" || foneCelular === "" || outrasComorbidades === "" || dataExame === "" || dataSintomas === "")) {
+
+        return true;
+    }
+    else {
+        return false;
+    }
+
 }

@@ -59,7 +59,7 @@
                                                 @Html.DisplayFor(modelItem => item.FoneCelular)
                                             </td>
                                             <td>
-                                                @if (item.Email.Equals(""))
+                                                @if (item.Email == null)
                                                 {
                                                     <div> - </div>
                                                 }
