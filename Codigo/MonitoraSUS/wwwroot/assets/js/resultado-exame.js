@@ -8,7 +8,6 @@ $(document).ready(function () {
     }
 
     document.getElementById("mensagem-retorno").click();
-
 });
 
 //quando o usuario der submit no exame
@@ -31,12 +30,9 @@ $('#btn-submit').on('click', function () {
 
     if (!(cpf === "" || nome === "" || dataNasc === "" || cep === "" || rua === "" || bairro === "" ||
         cidade === "" || estado === "" || foneCelular === "" || dataExame === "" || dataSintomas === "")) {
-        submitForm();
+        $('#modal-espera').modal('show');
     }
 
-    var campo1 = document.getElementById('administrative_area_level_2');
-    //Seleciona o campo com a ID "nome"
-    campo1.setCustomValidity('Preencha este campo corretamente.'); 
 
 });
 

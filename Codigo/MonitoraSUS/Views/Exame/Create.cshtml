@@ -33,7 +33,6 @@
 
 }
 
-
 <!-- Page Content -->
 <div class="container-fluid mt--6">
     <div class="row">
@@ -65,10 +64,10 @@
                                 <div class="col-md-2">
                                     <div class="form-group">
                                         <label class="form-control-label" for="input-cpf">CPF ou RG</label>
-                                        <input asp-for="IdPaciente.Cpf" required id="input-cpf" placeholder="000.000.000-00 ou 000000XX" value="@cpf" class="form-control" />
+                                        <input asp-for="IdPaciente.Cpf" required id="input-cpf" placeholder="000.000.000-00" type="text" value="@cpf" class="form-control" />
                                         @if (TempData["resultadoPesquisa"] != null)
                                         {
-                                            <h6 class="heading-small text-danger">@TempData["resultadoPesquisa"]</h6>
+                                        <h6 class="heading-small text-danger">@TempData["resultadoPesquisa"]</h6>
                                         }
                                     </div>
                                 </div>
@@ -342,38 +341,42 @@
                             <input asp-for="PesquisarCpf" id="PesquisarCpf" value="0" />
                         </div>
                         <hr class="my-4" />
-                        <div class="modal fade bs-example-modal-sm" id="modal-confirmar" tabindex="-1" role="dialog" aria-hidden="true">
-                            <div class="modal-dialog modal-sm">
-                                <div class="modal-content">
-                                    <div style="padding: 10pt;text-align: center">
-                                        <div class="col text-center form-group" id="acoes-model-form">
-                                            <h3 id="titulo-confirmacao"> Confirmar Notificação do Resultado do Exame ? </h3>
+                        <div class="form-group">
 
-                                            <h4> CPF/RG</h4>
-                                            <p id="cpf-paciente"> </p>
+                            <div class="modal fade bs-example-modal-sm" id="modal-confirmar" tabindex="-1" role="dialog" aria-hidden="true">
+                                <div class="modal-dialog modal-sm">
+                                    <div class="modal-content">
+                                        <div style="padding: 10pt;text-align: center">
+                                            <div class="col text-center form-group" id="acoes-model-form">
+                                                <h3 id="titulo-confirmacao"> Confirmar Notificação do Resultado do Exame ? </h3>
 
-                                            <h4> Paciente </h4>
-                                            <p id="nome-paciente"> </p>
+                                                <h4> CPF/RG</h4>
+                                                <p id="cpf-paciente"> </p>
 
-                                            <h4> VirusBacteria</h4>
-                                            <p id="virus-paciente"> </p>
+                                                <h4> Paciente </h4>
+                                                <p id="nome-paciente"> </p>
 
-                                            <h4> Resultado</h4>
-                                            <p id="resultado-paciente"> </p>
+                                                <h4> VirusBacteria</h4>
+                                                <p id="virus-paciente"> </p>
+
+                                                <h4> Resultado</h4>
+                                                <p id="resultado-paciente"> </p>
 
 
-                                            <a data-dismiss="modal" class="btn btn-danger text-white">Não</a>
-                                            <input id="btn-submit" type="submit" value="Sim" class="btn btn-success text-white"/>
-                                        </div>
+                                                <a data-dismiss="modal" class="btn btn-danger text-white">Não</a>
+                                                <input id="btn-submit" type="submit" value="Sim" class="btn btn-success text-white" />
+                                            </div>
 
-                                        <div class="col text-center" id="ok-model-form">
-                                            <h3 id="texto-erro"> </h3>
-                                            <a data-dismiss="modal" class="btn btn-success text-white">Ok</a>
+                                            <div class="col text-center" id="ok-model-form">
+                                                <h3 id="texto-erro"> </h3>
+                                                <a data-dismiss="modal" class="btn btn-success text-white">Ok</a>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+
                     </form>
                     <div class="row align-items-center">
                         <div class="col text-right">
@@ -420,11 +423,11 @@
 
 @if (TempData["mensagemSucesso"] != null)
 {
-    <div id="mensagem-retorno" onclick="swtAlert('success','Parabéns!', '@TempData["mensagemSucesso"]')"></div>
+<div id="mensagem-retorno" onclick="swtAlert('success','Parabéns!', '@TempData["mensagemSucesso"]')"></div>
 }
 else if (TempData["mensagemErro"] != null)
 {
-    <div id="mensagem-retorno" onclick="swtAlert('error','Falha!', '@TempData["mensagemErro"]')"></div>
+<div id="mensagem-retorno" onclick="swtAlert('error','Falha!', '@TempData["mensagemErro"]')"></div>
 }
 
 @section Scripts {

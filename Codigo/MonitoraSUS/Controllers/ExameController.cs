@@ -331,7 +331,7 @@ namespace MonitoraSUS.Controllers
                     // inserindo o exame
                     _exameContext.Insert(CreateExameModel(exame));
                 }
-                catch (Exception e)
+                catch
                 {
                     TempData["mensagemErro"] = "Cadastro não pode ser concluido pois houve um problema ao inserir os dados do exame, tente novamente." +
                                                " Se o erro persistir, entre em contato com a Fábrica de Software da UFS pelo email fabricadesoftware@ufs.br";

@@ -1,13 +1,15 @@
 // Mostra modal com mensagem de erro
 $(document).ready(function () {
 
-    document.getElementById('PesquisarCpf').value = 0;
-
     let identificador = document.getElementById('input-cpf').value;
-    identificador = identificador.replace("-", "").replace(".", "").replace(".", "");
-    if ($.isNumeric(identificador)) {
-        $('#input-cpf').mask('AAA.AAA.AAA-AA');
-    } else {
+    identificador = identificador.normalize('NFD').replace(/([\u0300-\u036f]|[^0-9a-zA-Z])/g, '');
+
+    if ($.isNumeric(identificador) || identificador == "")
+    {
+        $('#input-cpf').mask('ZZZ.ZZZ.ZZZ-ZZ', { translation: { 'Z': { pattern: /[a-zA-Z0-9\s]/, recursive: true } } });        
+    }
+    else
+    {
         mascaraGenericaRG(identificador);
     }
 
@@ -19,36 +21,35 @@ $(document).ready(function () {
 
 // Pegando o cpf enquanto o usuario digita e submetendo quando terminar
 var input = document.getElementById('input-cpf');
+
 input.addEventListener("keyup", function () {
 
+    //try {$("#input-cpf").unmask();} catch (e) { }
+
     let identificador = document.getElementById('input-cpf').value;
-    identificador = identificador.replace('.', '').replace('.', '').replace('-', '');
+    identificador = identificador.normalize('NFD').replace(/([\u0300-\u036f]|[^0-9a-zA-Z])/g, '');
+
     if ($.isNumeric(identificador)) {
-
-        if (identificador.length == 11) {
+        if (identificador.length == 11)
             submitAutomaticoForm();
-        }
 
-        $('#input-cpf').mask('AAA.AAA.AAA-AA');
+        $('#input-cpf').mask('ZZZ.ZZZ.ZZZ-ZZ', { translation: { 'Z': { pattern: /[a-zA-Z0-9\s]/, recursive: true } } });                
     }
-    else
-    {
+    else {
         if (identificador.length >= 3) {
             var uf = identificador.substring(identificador.length - 2, identificador.length);
-            if (verificaRGCompleto(uf.toLowerCase())) {
+            if (verificaRGCompleto(uf.toLowerCase()))
                 submitAutomaticoForm();
-            }
             else
-            {
-               mascaraGenericaRG(identificador + '0');
-            }
+                mascaraGenericaRG(identificador + '0');
         }
     }
 });
 
+
 function submitAutomaticoForm() {
     var url_atual = window.location.href.toLowerCase();
-    if (url_atual.includes('exame/create') && !verificaCampoPreenchido()) {
+    if (url_atual.includes('exame/create')) {
         $('#modal-espera').modal('show');
         document.getElementById('PesquisarCpf').value = 1;
         document.forms["form-exame"].submit();
@@ -59,12 +60,13 @@ function mascaraGenericaRG(identificador) {
 
     var mask = '';
     for (let i = 0; i < identificador.length - 2; i++) {
-        mask += 'A';
+        mask += 'Z';
     }
 
-    mask += '-AA';
+    mask += '-ZZ';
 
-    $('#input-cpf').mask(mask);
+    $('#input-cpf').mask(mask, { translation: { 'Z': { pattern: /[a-zA-Z0-9\s]/, recursive: true } } });
+
 }
 
 function verificaRGCompleto(uf) {
@@ -98,29 +100,4 @@ function verificaRGCompleto(uf) {
         case 'to': return true; break;
         default: return false;
     }
-}
-
-function verificaCampoPreenchido() {
-
-    var cpf = $('#input-cpf').val();
-    var nome = $('#input-nome').val();
-    var dataNasc = $('#input-data-nascimento').val();
-    var cep = $('#postal_code').val();
-    var rua = $('#route').val();
-    var bairro = $('#sublocality_level_1').val();
-    var cidade = $('#administrative_area_level_2').val();
-    var estado = $('#administrative_area_level_1').val();
-    var foneCelular = $('#input-celular').val();
-    var dataExame = $('#input-data-exame').val();
-    var dataSintomas = $('#input-data-sintomas').val();
-
-    if (!(cpf === "" || nome === "" || dataNasc === "" || cep === "" || rua === "" || bairro === "" ||
-        cidade === "" || estado === "" || foneCelular === "" || outrasComorbidades === "" || dataExame === "" || dataSintomas === "")) {
-
-        return true;
-    }
-    else {
-        return false;
-    }
-
 }
