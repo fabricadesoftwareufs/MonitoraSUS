@@ -10,17 +10,19 @@
 	<link href="~/assets/fonts/fontawesome-free-5.13.0-web/css/all.min.css" rel="stylesheet" type="text/css">
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700">
 	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+	<link rel="shortcut icon" href="~/assets/favicon.ico">
+
 
 	@if (!User.Identity.IsAuthenticated && @Context.Request.Path.ToString().CompareTo("/Login") == 0)
 	{
 		<!-- Login Styles -->
-		<link href="~/assets/css/app.css" rel="stylesheet">
-		<link href="~/assets/css/login.css" rel="stylesheet">
+	<link href="~/assets/css/app.css" rel="stylesheet">
+	<link href="~/assets/css/login.css" rel="stylesheet">
 	}
 	else
 	{
-		<link rel="stylesheet" href="~/assets/css/argon.css?v=1.2.0" type="text/css">
-		<link rel="stylesheet" href="~/assets/css/custom.css" type="text/css">
+	<link rel="stylesheet" href="~/assets/css/argon.css?v=1.2.0" type="text/css">
+	<link rel="stylesheet" href="~/assets/css/custom.css" type="text/css">
 	}
 </head>
 @if (!User.Identity.IsAuthenticated && @Context.Request.Path.ToString().CompareTo("/Login") == 0)

@@ -13,6 +13,8 @@ $(document).ready(function () {
 //quando o usuario der submit no exame
 $('#btn-submit').on('click', function () {
 
+    try { $("#input-cpf").unmask(); } catch (e) { submitForm(); }
+
     $('#modal-confirmar').modal('hide');
 
     var cpf = $('#input-cpf').val();
