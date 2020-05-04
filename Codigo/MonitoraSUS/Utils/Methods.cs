@@ -42,7 +42,7 @@ namespace MonitoraSUS.Utils
                 case 0:
                     return "<html><body>" +
                         "Foi solicitado a recuperação de sua senha para acesso ao MonitoraSUS.<br>" +
-						"Clique no link abaixo para iniciar o processo de recuperação.<br>" +
+						"Você possui 24 horas para fazer a alteração da sua senha de acesso.<br>" +
                         link + senhaModel.Token + "'>Clique aqui mudar a senha</a>" +
 						RodapeEmail();
 
@@ -50,7 +50,7 @@ namespace MonitoraSUS.Utils
 				case 1:
                     return "<html><body>" +
                         "Parabéns! Seu cadastro foi aprovado para acesso ao MonitoraSUS.<br>"+
-						"Clique no link abaixo para criar sua senha de acesso ao sistema.<br>" +
+						"Você possui 24 horas para criar sua senha de acesso ao sistema.<br>" +
                         link + senhaModel.Token + "'>Clique aqui para criar sua senha.</a>" +
 						RodapeEmail();
 
@@ -58,7 +58,7 @@ namespace MonitoraSUS.Utils
                     return "<html><body>" +
                         "Parabéns! Seu cadastro foi ativado para acesso ao MonitoraSUS. <br>"+
 						"Acesse o sistema "+ site + "'>aqui</a>." +
-						"<br>Caso não lembre da sua senha de acesso, clique no link abaixo para iniciar o processo de recuperação.<br><a href='" +
+						"<br>Caso não lembre da sua senha de acesso, você possui 24 horas para criar uma nova senha.<br><a href='" +
                         link + senhaModel.Token + "'>Clique aqui para criar uma nova senha.</a>"+
 						RodapeEmail();
 

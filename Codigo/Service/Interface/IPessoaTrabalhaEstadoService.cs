@@ -7,7 +7,7 @@ namespace Service.Interface
     {
         bool Insert(PessoaTrabalhaEstadoModel pessoaTrabalhaEstadoModel);
         bool Update(PessoaTrabalhaEstadoModel pessoaTrabalhaEstadoModel);
-        bool Delete(int idPessoa, int idEstado, int idEmpresaExame);
+        bool Delete(int idPessoa);
         List<PessoaTrabalhaEstadoModel> GetAll();
         PessoaTrabalhaEstadoModel GetById(int idPessoa, int idEstado);
         List<PessoaTrabalhaEstadoModel> GetAllGestoresEstado(int idEstado);

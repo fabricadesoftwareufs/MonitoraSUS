@@ -3,15 +3,18 @@ $(document).ready(function () {
 
     if ($('#input-cpf').val() == "") {
         $('#input-cpf').focus();
-    } else if ($('#input-cpf').val() != "" && $('#input-nome').val() != "") {
+    } else if ($('#input-cpf').val() != "" && $('#input-nome').val() == "") {
+        $('#input-nome').focus();
+    } else if ($('#input-cpf').val() != "" && $('#input-nome').val() != "")
         window.location.href = "#input-virus-bacteria";
-    }
 
     document.getElementById("mensagem-retorno").click();
 });
 
 //quando o usuario der submit no exame
 $('#btn-submit').on('click', function () {
+
+    try { $("#input-cpf").unmask(); } catch (e) { submitForm(); }
 
     $('#modal-confirmar').modal('hide');
 
@@ -32,7 +35,6 @@ $('#btn-submit').on('click', function () {
         cidade === "" || estado === "" || foneCelular === "" || dataExame === "" || dataSintomas === "")) {
         $('#modal-espera').modal('show');
     }
-
 
 });
 

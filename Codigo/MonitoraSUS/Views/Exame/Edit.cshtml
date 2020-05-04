@@ -60,7 +60,7 @@
                 </div>
 
                 <div class="card-body">
-                    <form asp-action="Edit" name="form-exame" autocomplete="off">
+                    <form asp-action="Edit" name="form-exame" id="form-exame" autocomplete="off">
                         <h6 class="heading-small text-muted mb-4">Dados Pessoais</h6>
                         <div class="pl-lg-4">
                             <div class="row">
@@ -123,7 +123,7 @@
                                 <div class="col-lg-1">
                                     <div class="form-group">
                                         <label class="form-control-label" for="street_number">Número</label>
-                                        <input asp-for="IdPaciente.Numero" id="street_number" required class="form-control" placeholder="" value="@numero">
+                                        <input asp-for="IdPaciente.Numero" id="street_number" class="form-control" placeholder="" value="@numero">
                                     </div>
                                 </div>
                                 <div class="col-lg-4">
@@ -374,7 +374,7 @@
 
 
                                             <a data-dismiss="modal" class="btn btn-danger text-white">Não</a>
-                                            <button id="btn-submit" value="Notificar" class="btn btn-success text-white"> Sim</button>
+                                            <input id="btn-submit" type="submit" value="Sim" class="btn btn-success text-white" />
                                         </div>
 
                                         <div class="col text-center" id="ok-model-form">
@@ -432,21 +432,22 @@
 
 @if (TempData["mensagemSucesso"] != null)
 {
-    <div id="mensagem-retorno" onclick="swtAlertRedirectIndex('success','Parabéns!', '@TempData["mensagemSucesso"]','/Exame/Index/')" class="text-center"></div>
+<div id="mensagem-retorno" onclick="swtAlertRedirectIndex('success','Parabéns!', '@TempData["mensagemSucesso"]','/Exame/Index/')" class="text-center"></div>
 
 }
 else if (TempData["mensagemErro"] != null)
 {
-    <div id="mensagem-retorno" onclick="swtAlert('error','Falha!', '@TempData["mensagemErro"]')"></div>
+<div id="mensagem-retorno" onclick="swtAlert('error','Falha!', '@TempData["mensagemErro"]')"></div>
 }
 
 
 
 @section Scripts {
 
-    <script src="~/assets/js/custom-exame.js"></script>
+    
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
     <script src="~/assets/js/sweet-alert.js"></script>
+    <script src="~/assets/js/custom-exame.js"></script>
     <script src="~/assets/js/resultado-exame.js"></script>
     <script src="~/assets/js/PersonalScripts.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=@googleKey&libraries=places&callback=initAutocomplete&language=pt-BR"

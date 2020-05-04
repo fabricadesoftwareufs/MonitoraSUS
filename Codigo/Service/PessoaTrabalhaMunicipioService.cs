@@ -15,10 +15,11 @@ namespace Service
             _context = context;
         }
 
-        public bool Delete(int idPessoa, int idMunicipio)
+        public bool Delete(int idPessoa)
         {
-            var agente = _context.Pessoatrabalhamunicipio.Find(idPessoa, idMunicipio);
-            _context.Pessoatrabalhamunicipio.Remove(agente);
+            var pessoas = _context.Pessoatrabalhamunicipio.Where(p => p.IdPessoa == idPessoa);
+			foreach(Pessoatrabalhamunicipio pessoa in pessoas)
+				_context.Pessoatrabalhamunicipio.Remove(pessoa);
             return _context.SaveChanges() == 1 ? true : false;
         }
 

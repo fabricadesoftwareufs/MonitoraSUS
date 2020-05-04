@@ -1,17 +1,7 @@
 // Mostra modal com mensagem de erro
 $(document).ready(function () {
 
-    let identificador = document.getElementById('input-cpf').value;
-    identificador = identificador.normalize('NFD').replace(/([\u0300-\u036f]|[^0-9a-zA-Z])/g, '');
-
-    if ($.isNumeric(identificador) || identificador == "")
-    {
-        $('#input-cpf').mask('ZZZ.ZZZ.ZZZ-ZZ', { translation: { 'Z': { pattern: /[a-zA-Z0-9\s]/, recursive: true } } });        
-    }
-    else
-    {
-        mascaraGenericaRG(identificador);
-    }
+    colocaMascaraDinamica();
 
     $('#input-cep').mask('00000-000', { reverse: true });
     $('#input-telefone').mask('(00) 0000 - 0000');
@@ -19,9 +9,22 @@ $(document).ready(function () {
 
 });
 
+function colocaMascaraDinamica() {
+    let identificador = document.getElementById('input-cpf').value;
+    identificador = identificador.normalize('NFD').replace(/([\u0300-\u036f]|[^0-9a-zA-Z])/g, '');
+
+    if ($.isNumeric(identificador) || identificador == "") {
+        $('#input-cpf').mask('ZZZ.ZZZ.ZZZ-ZZ', { translation: { 'Z': { pattern: /[a-zA-Z0-9\s]/, recursive: true } } });
+    }
+    else {
+        mascaraGenericaRG(identificador);
+    }
+}
+
+
+
 // Pegando o cpf enquanto o usuario digita e submetendo quando terminar
 var input = document.getElementById('input-cpf');
-
 input.addEventListener("keyup", function () {
 
     //try {$("#input-cpf").unmask();} catch (e) { }
