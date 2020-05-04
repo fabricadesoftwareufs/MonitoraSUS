@@ -43,7 +43,8 @@ namespace Model
         public string FoneCelular { get; set; }
         [Display(Name = "Telefone Fixo")]
         public string FoneFixo { get; set; }
-        [Display(Name = "Email")]
+		[Required]
+		[Display(Name = "Email")]
         public string Email { get; set; }
         [Required]
         [Display(Name = "Emite Laudo de Exames ? ")]

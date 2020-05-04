@@ -255,27 +255,33 @@ namespace MonitoraSUS.Controllers
 			var autenticadoTrabalhaEstado = _pessoaTrabalhaEstadoService.GetByIdPessoa(usuarioAutenticado.UsuarioModel.IdPessoa);
 			var autenticadoTrabalhaMunicipio = _pessoaTrabalhaMunicipioService.GetByIdPessoa(usuarioAutenticado.UsuarioModel.IdPessoa);
 			var estadoAutenticado = _estadoService.GetById(autenticadoTrabalhaEstado.IdEstado);
-
 			if (autenticadoTrabalhaEstado != null || ehAdmin)
 			{
+				var ehEmpresa = autenticadoTrabalhaEstado.IdEmpresaExame != EmpresaExameModel.EMPRESA_ESTADO_MUNICIPIO;
+			
 				if (ehAdmin)
 					solicitantes = _pessoaTrabalhaEstadoService.GetAllGestores();
+				else if (ehEmpresa)
+				{
+					if (ehSecretario && ehListarGestores)
+					{
+						solicitantes = _pessoaTrabalhaEstadoService.GetAllGestoresEmpresa(autenticadoTrabalhaEstado.IdEmpresaExame);
+					}
+					else if (!ehListarGestores)
+					{
+						solicitantes = _pessoaTrabalhaEstadoService.GetAllNotificadoresEmpresa(autenticadoTrabalhaEstado.IdEmpresaExame);
+					}
+
+				}
 				else
 				{
 					if (ehSecretario && ehListarGestores)
 					{
 						solicitantes = _pessoaTrabalhaEstadoService.GetAllGestoresEstado(autenticadoTrabalhaEstado.IdEstado);
 					}
-					else if (ehGestor && ehListarGestores && (autenticadoTrabalhaEstado.IdEmpresaExame != EmpresaExameModel.EMPRESA_ESTADO_MUNICIPIO))
+					else if (!ehListarGestores)
 					{
-						solicitantes = _pessoaTrabalhaEstadoService.GetAllGestoresEmpresa(autenticadoTrabalhaEstado.IdEmpresaExame);
-					}
-					else if (ehGestor && !ehListarGestores)
-					{
-						if (autenticadoTrabalhaEstado.IdEmpresaExame == EmpresaExameModel.EMPRESA_ESTADO_MUNICIPIO)
-							solicitantes = _pessoaTrabalhaEstadoService.GetAllNotificadoresEstado(autenticadoTrabalhaEstado.IdEstado);
-						else
-							solicitantes = _pessoaTrabalhaEstadoService.GetAllNotificadoresEmpresa(autenticadoTrabalhaEstado.IdEmpresaExame);
+						solicitantes = _pessoaTrabalhaEstadoService.GetAllNotificadoresEstado(autenticadoTrabalhaEstado.IdEstado);
 					}
 				}
 			}
@@ -287,11 +293,10 @@ namespace MonitoraSUS.Controllers
 				{
 					if (ehSecretario && ehListarGestores)
 						solicitantes = _pessoaTrabalhaMunicipioService.GetAllGestoresMunicipio(autenticadoTrabalhaMunicipio.IdMunicipio);
-					if (ehGestor && !ehListarGestores)
+					else if (!ehListarGestores)
 						solicitantes = _pessoaTrabalhaMunicipioService.GetAllNotificadoresMunicipio(autenticadoTrabalhaMunicipio.IdMunicipio);
 				}
 			}
-
 			if (TempData["responseOp"] != null)
 				ViewBag.responseOp = TempData["responseOp"];
 

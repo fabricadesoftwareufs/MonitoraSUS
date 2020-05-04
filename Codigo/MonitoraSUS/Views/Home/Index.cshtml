@@ -83,20 +83,20 @@
                             </div> 
                         </div>
                         <h6 class="heading-small text-muted mb-4" style="margin-top:10px;">Administração </h6>
-                        <div class="row">
-                            <div class="col-md-3">
-                                <a asp-controller="EmpresaExame" asp-action="Index" class="btn btn-block card-button-home"> 
-                                    <i class="fas fa-users-cog fa-2x"></i>
-                                    <br>Cadastro de <br>Laboratórios
-                                </a>
-                            </div>
-                            <div class="col-md-3">
-                                <a asp-controller="AgenteSecretario" asp-action="IndexApproveAgent" asp-route-ehResponsavel="0" class="btn btn-block card-button-home">
-                                    <i class="fas fa-clipboard-list fa-2x"></i>
-                                    <br>Autorizar Notificadores<br> de Exames
-                                </a>
-                            </div>
-                        </div>
+						<div class="row">
+							<div class="col-md-3">
+								<a asp-controller="AgenteSecretario" asp-action="IndexApproveAgent" asp-route-ehResponsavel="0" class="btn btn-block card-button-home">
+									<i class="fas fa-clipboard-list fa-2x"></i>
+									<br>Autorizar Notificadores<br> de Exames
+								</a>
+							</div>
+							<div class="col-md-3">
+								<a asp-controller="EmpresaExame" asp-action="Index" class="btn btn-block card-button-home">
+									<i class="fas fa-users-cog fa-2x"></i>
+									<br>Cadastro de <br>Laboratórios
+								</a>
+							</div>
+						</div>
                         }
                         else if (User.IsInRole("SECRETARIO"))
                         {
@@ -122,26 +122,26 @@
                             </div> 
                         </div>
                         <h6 class="heading-small text-muted mb-4" style="margin-top:10px;">Administração </h6>
-                        <div class="row">
-                            <div class="col-md-3">
-                                <a asp-controller="EmpresaExame" asp-action="Index" class="btn btn-block card-button-home"> 
-                                    <i class="fas fa-users-cog fa-2x"></i>
-                                    <br>Cadastro de <br>Laboratórios
-                                </a>
-                            </div>
-                            <div class="col-md-3">
-                                <a asp-controller="AgenteSecretario" asp-action="IndexApproveAgent" asp-route-ehResponsavel="0" class="btn btn-block card-button-home">
-                                    <i class="fas fa-clipboard-list fa-2x"></i>
-                                    <br>Autorizar Notificadores<br> de Exames
-                                </a>
-                            </div>
-                            <div class="col-md-3">
-                                <a asp-controller="AgenteSecretario" asp-action="IndexApproveAgent" asp-route-ehResponsavel="1" class="btn btn-block card-button-home">
-                                    <i class="fas fa-file-medical fa-2x"></i>
-                                    <br>Autorizar Gestores<br> de Saúde
-                                </a>
-                            </div>
-                        </div>
+						<div class="row">
+							<div class="col-md-3">
+								<a asp-controller="AgenteSecretario" asp-action="IndexApproveAgent" asp-route-ehResponsavel="0" class="btn btn-block card-button-home">
+									<i class="fas fa-clipboard-list fa-2x"></i>
+									<br>Autorizar Notificadores<br> de Exames
+								</a>
+							</div>
+							<div class="col-md-3">
+								<a asp-controller="AgenteSecretario" asp-action="IndexApproveAgent" asp-route-ehResponsavel="1" class="btn btn-block card-button-home">
+									<i class="fas fa-file-medical fa-2x"></i>
+									<br>Autorizar Gestores<br> de Saúde
+								</a>
+							</div>
+							<div class="col-md-3">
+								<a asp-controller="EmpresaExame" asp-action="Index" class="btn btn-block card-button-home">
+									<i class="fas fa-users-cog fa-2x"></i>
+									<br>Cadastro de <br>Laboratórios
+								</a>
+							</div>
+						</div>
                         }
                         else if (User.IsInRole("ADM"))
                         {   
@@ -167,7 +167,6 @@
         </div>
     </div>
 </div>
-
 
 <script>
 
