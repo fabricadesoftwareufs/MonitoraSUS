@@ -55,13 +55,13 @@
                                     <div class="form-group">
                                         <label class="form-control-label" for="postal_code">CEP (Não sabe? </label> <a href="http://www.buscacep.correios.com.br/sistemas/buscacep/" target="_blank">Busque aqui</a>)
                                         <input asp-for="Cep" oninput="PreencheFormCEP()" id="postal_code" class="form-control" required placeholder="CEP">
+                                        <span id="spanInvalidCep" hidden class="text-danger text-center" style="padding: 10px">Cep Invalido!!</span>
                                     </div>
                                 </div>
                                 <div class="col-lg-5">
                                     <div class="form-group">
                                         <label class="form-control-label" for="route">Logradouro</label>
                                         <input asp-for="Rua" type="search" oninput="PreencheForm()" placeholder="Pesquise pelo CEP, Rua, Bairro, Número" autocomplete="off" id="route" required class="form-control">
-                                        <span id="spanInvalidCep" hidden class="text-danger text-center" style="padding: 10px">Cep Invalido!!</span>
                                     </div>
                                 </div>
                                 <div class="col-lg-1">
@@ -159,11 +159,11 @@
                                     </div>
                                 </div>
                                 <!--div class="col-lg-3">
-                                    <div class="form-group">
-                                        <label class="form-control-label" for="input-leitos-disponiveis">Número de Leitos Disponível</label>
-                                        <input asp-for="NumeroLeitosDisponivel" type="number" id="input-leitos-disponiveis" class="form-control" placeholder="">
-                                    </div>
-                                </div-->
+                <div class="form-group">
+                    <label class="form-control-label" for="input-leitos-disponiveis">Número de Leitos Disponível</label>
+                    <input asp-for="NumeroLeitosDisponivel" type="number" id="input-leitos-disponiveis" class="form-control" placeholder="">
+                </div>
+            </div-->
 
                                 <div class="col-lg-3">
                                     <div class="form-group">
@@ -172,13 +172,15 @@
                                     </div>
                                 </div>
                                 <!--div class="col-lg-3">
-                                    <div class="form-group">
-                                        <label class="form-control-label" for="input-leitos-uti-disponivel">Número de Leitos de UTI Disponível</label>
-                                        <input asp-for="NumeroLeitosUtidisponivel" type="number" id="input-leitos-uti-disponivel" class="form-control" placeholder="">
-                                    </div>
-                                </!--div-->
+                <div class="form-group">
+                    <label class="form-control-label" for="input-leitos-uti-disponivel">Número de Leitos de UTI Disponível</label>
+                    <input asp-for="NumeroLeitosUtidisponivel" type="number" id="input-leitos-uti-disponivel" class="form-control" placeholder="">
+                </div>
+            </!--div-->
                             </div>
                         </div>
+                        <hr class="my-4" />
+
                         <div class="row align-items-center">
                             <div class="col text-right">
                                 <button value="Cadastrar" id="btn-cadastrar-empresa" class="btn btn-success">Cadastrar</button>
@@ -244,7 +246,11 @@ else if (TempData["mensagemErro"] != null)
             if (!$("#customCheck2").is(':checked')) {
                 $('#inputs-leitos').toggle();
             }
-            $('#mensagem-retorno').click();
+
+            if ($("#mensagem-retorno").length) {
+                $('#mensagem-retorno').click();
+            }
+            
         });
 
         function mostraForm() {

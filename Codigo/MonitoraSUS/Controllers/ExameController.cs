@@ -239,7 +239,8 @@ namespace MonitoraSUS.Controllers
             ViewBag.googleKey = _configuration["GOOGLE_KEY"];
             ViewBag.VirusBacteria = new SelectList(_virusBacteriaContext.GetAll(), "IdVirusBacteria", "Nome");
 
-            if (SoContemNumeros(exame.IdPaciente.Cpf))
+            exame.IdPaciente.Cpf = exame.IdPaciente.Cpf ?? "";
+            if (SoContemNumeros(exame.IdPaciente.Cpf) && !exame.IdPaciente.Cpf.Equals(""))
             {
                 if (!Methods.ValidarCpf(exame.IdPaciente.Cpf))
                 {
@@ -270,8 +271,6 @@ namespace MonitoraSUS.Controllers
                 }
                 else
                 {
-                    TempData["resultadoPesquisa"] = "Paciente não cadastrado, preencha os campos para cadastra-lo!";
-
                     /*
                      * Limpando o objeto para enviar  
                      * somente o cpf pesquisado
@@ -296,9 +295,9 @@ namespace MonitoraSUS.Controllers
                 {
                     // inserindo ou atualizando o paciente
                     if (_pessoaContext.GetByCpf(pessoa.Cpf) == null)
-                        _pessoaContext.Insert(pessoa);
+                       pessoa = _pessoaContext.Insert(pessoa);
                     else
-                        _pessoaContext.Update(pessoa);
+                       pessoa = _pessoaContext.Update(pessoa);
                 }
                 catch
                 {
@@ -311,8 +310,7 @@ namespace MonitoraSUS.Controllers
                 try
                 {
                     // inserindo o resultado do exame (situacao da pessoa)                  
-                    var idPessoa = _pessoaContext.GetByCpf(exame.IdPaciente.Cpf).Idpessoa;
-                    var situacaoPessoa = _situacaoPessoaContext.GetById(idPessoa, exame.IdVirusBacteria.IdVirusBacteria);
+                    var situacaoPessoa = _situacaoPessoaContext.GetById(pessoa.Idpessoa, exame.IdVirusBacteria.IdVirusBacteria);
 
                     if (situacaoPessoa == null)
                         _situacaoPessoaContext.Insert(CreateSituacaoPessoaModelByExame(exame, situacaoPessoa));
@@ -555,6 +553,13 @@ namespace MonitoraSUS.Controllers
 
             if (exame.IdPaciente.FoneFixo != null)
                 exame.IdPaciente.FoneFixo = Methods.RemoveSpecialsCaracts(exame.IdPaciente.FoneFixo);
+
+            /* 
+             * Só para garantir que a aplicação não irá quebrar
+             * caso view retorne um id que ficou em cache... 
+             */
+            if (exame.IdPaciente.Cpf.Equals("")) 
+                exame.IdPaciente.Idpessoa = 0;
 
             return exame.IdPaciente;
         }

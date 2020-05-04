@@ -245,7 +245,10 @@ else if (TempData["mensagemErro"] != null)
                 $('#inputs-leitos').toggle();
             }
 
-            $('#mensagem-retorno').click();
+            if ($("#mensagem-retorno").length) {
+                $('#mensagem-retorno').click();
+            }
+
         });
 
         function mostraForm() {

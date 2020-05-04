@@ -1,13 +1,5 @@
 // Mostra modal com mensagem de erro
 $(document).ready(function () {
-
-    if ($('#input-cpf').val() == "") {
-        $('#input-cpf').focus();
-    } else if ($('#input-cpf').val() != "" && $('#input-nome').val() == "") {
-        $('#input-nome').focus();
-    } else if ($('#input-cpf').val() != "" && $('#input-nome').val() != "")
-        window.location.href = "#input-virus-bacteria";
-
     document.getElementById("mensagem-retorno").click();
 });
 
@@ -18,7 +10,6 @@ $('#btn-submit').on('click', function () {
 
     $('#modal-confirmar').modal('hide');
 
-    var cpf = $('#input-cpf').val();
     var nome = $('#input-nome').val();
     var dataNasc = $('#input-data-nascimento').val();
     var cep = $('#postal_code').val();
@@ -31,7 +22,7 @@ $('#btn-submit').on('click', function () {
     var dataSintomas = $('#input-data-sintomas').val();
     document.getElementById('PesquisarCpf').value = 0;
 
-    if (!(cpf === "" || nome === "" || dataNasc === "" || cep === "" || rua === "" || bairro === "" ||
+    if (!(nome === "" || dataNasc === "" || cep === "" || rua === "" || bairro === "" ||
         cidade === "" || estado === "" || foneCelular === "" || dataExame === "" || dataSintomas === "")) {
         $('#modal-espera').modal('show');
     }
@@ -55,8 +46,8 @@ function mensagemResultado() {
     $('#ok-model-form').hide();
     $('#acoes-model-form').hide();
 
-    if (cpf === "" || nome === "") {
-        mensagem = "Nenhum paciente foi informado.";
+    if (nome === "") {
+        mensagem = "Informe o Nome do Paciente!.";
         $('#texto-erro').text(mensagem);
         $('#ok-model-form').show();
     } else {

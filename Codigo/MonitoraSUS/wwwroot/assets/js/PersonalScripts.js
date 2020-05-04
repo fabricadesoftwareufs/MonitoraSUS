@@ -248,7 +248,10 @@ window.onload = function () {
 
     if ($('#input-cpf').val() == "") {
         $('#input-cpf').focus();
-    }
+    } else if ($('#input-cpf').val() != "" && $('#input-nome').val() == "") {
+        $('#input-nome').focus();
+    } else if ($('#input-cpf').val() != "" && $('#input-nome').val() != "")
+        window.location.href = "#input-virus-bacteria";
 
     $('#modal-mensagem-retorno').modal('show');
 };
@@ -264,13 +267,11 @@ $('#btn-solicitar').on('click', function () {
     var cidade = $('#administrative_area_level_2').val();
     var estado = $('#administrative_area_level_1').val();
     var foneCelular = $('#input-celular').val();
-    var email = $('#input-email').val();
-    var outrasComorbidades = $('#input-outrasComorbidades').val();
-    
+    var email = $('#input-email').val();    
 
     if (!(cpf === "" || nome === "" || dataNasc === "" || cep === "" ||
         rua === "" || bairro === "" || cidade === "" || estado === "" ||
-        foneCelular === ""  || email === "" || outrasComorbidades === "")) {
+        foneCelular === ""  || email === "")) {
         $('#modal-espera').modal('show');
 
     }
