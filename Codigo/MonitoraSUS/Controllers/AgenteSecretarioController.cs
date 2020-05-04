@@ -391,7 +391,7 @@ namespace MonitoraSUS.Controllers
 				{
 					_pessoaTrabalhaEstadoService.Delete(pessoaEstado.IdPessoa);
 					pessoaEstado.SituacaoCadastro = "A";
-					pessoaEstado.EhSecretario = true;
+					pessoaEstado.EhSecretario = (idEmpresa == EmpresaExameModel.EMPRESA_ESTADO_MUNICIPIO)?true:false;
 					pessoaEstado.EhResponsavel = true;
 					pessoaEstado.IdEmpresaExame = idEmpresa;
 					_pessoaTrabalhaEstadoService.Insert(pessoaEstado);
