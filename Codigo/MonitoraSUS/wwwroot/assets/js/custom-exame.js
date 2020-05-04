@@ -1,8 +1,12 @@
+// indica qual mascara está ativa
+var maskCpf = false;
+
 // Mostra modal com mensagem de erro
 $(document).ready(function () {
 
     colocaMascaraDinamica();
 
+    $('#input-data-nascimento').mask('00-00-0000', { reverse: true });
     $('#input-cep').mask('00000-000', { reverse: true });
     $('#input-telefone').mask('(00) 0000 - 0000');
     $('#input-celular').mask('(00) 00000 - 0000');
@@ -13,12 +17,10 @@ function colocaMascaraDinamica() {
     let identificador = document.getElementById('input-cpf').value;
     identificador = identificador.normalize('NFD').replace(/([\u0300-\u036f]|[^0-9a-zA-Z])/g, '');
 
-    if ($.isNumeric(identificador) || identificador == "") {
-        $('#input-cpf').mask('ZZZ.ZZZ.ZZZ-ZZ', { translation: { 'Z': { pattern: /[a-zA-Z0-9\s]/, recursive: true } } });
-    }
-    else {
+    if ($.isNumeric(identificador) || identificador == "")
+        mascaraGenericaCPF()
+    else
         mascaraGenericaRG(identificador);
-    }
 }
 
 
@@ -27,8 +29,6 @@ function colocaMascaraDinamica() {
 var input = document.getElementById('input-cpf');
 input.addEventListener("keyup", function () {
 
-    //try {$("#input-cpf").unmask();} catch (e) { }
-
     let identificador = document.getElementById('input-cpf').value;
     identificador = identificador.normalize('NFD').replace(/([\u0300-\u036f]|[^0-9a-zA-Z])/g, '');
 
@@ -36,7 +36,7 @@ input.addEventListener("keyup", function () {
         if (identificador.length == 11)
             submitAutomaticoForm();
 
-        $('#input-cpf').mask('ZZZ.ZZZ.ZZZ-ZZ', { translation: { 'Z': { pattern: /[a-zA-Z0-9\s]/, recursive: true } } });                
+        mascaraGenericaCPF();
     }
     else {
         if (identificador.length >= 3) {
@@ -58,6 +58,12 @@ function submitAutomaticoForm() {
         document.forms["form-exame"].submit();
     }
 }
+
+
+function mascaraGenericaCPF() {
+    $('#input-cpf').mask('ZZZ.ZZZ.ZZZ-ZZ', { translation: { 'Z': { pattern: /[a-zA-Z0-9\s]/, recursive: true } } });
+}
+
 
 function mascaraGenericaRG(identificador) {
 

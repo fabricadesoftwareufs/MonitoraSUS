@@ -1,38 +1,29 @@
 // Mostra modal com mensagem de erro
 $(document).ready(function () {
-
-    if ($('#input-cpf').val() == "") {
-        $('#input-cpf').focus();
-    } else if ($('#input-cpf').val() != "" && $('#input-nome').val() == "") {
-        $('#input-nome').focus();
-    } else if ($('#input-cpf').val() != "" && $('#input-nome').val() != "")
-        window.location.href = "#input-virus-bacteria";
-
     document.getElementById("mensagem-retorno").click();
 });
 
 //quando o usuario der submit no exame
 $('#btn-submit').on('click', function () {
 
-    try { $("#input-cpf").unmask(); } catch (e) { submitForm(); }
+    if ($("#input-cpf").val().length > 0)
+    {
+        $("#input-cpf").unmask();
+    }
+    else
+    {
+        $("#input-cpf").prop("disabled", true);
+        $("#input-cpf").val("");
+    }
 
     $('#modal-confirmar').modal('hide');
 
-    var cpf = $('#input-cpf').val();
-    var nome = $('#input-nome').val();
-    var dataNasc = $('#input-data-nascimento').val();
-    var cep = $('#postal_code').val();
-    var rua = $('#route').val();
-    var bairro = $('#sublocality_level_1').val();
-    var cidade = $('#administrative_area_level_2').val();
-    var estado = $('#administrative_area_level_1').val();
-    var foneCelular = $('#input-celular').val();
-    var dataExame = $('#input-data-exame').val();
-    var dataSintomas = $('#input-data-sintomas').val();
-    document.getElementById('PesquisarCpf').value = 0;
+    $('#PesquisarCpf').val('0');
 
-    if (!(cpf === "" || nome === "" || dataNasc === "" || cep === "" || rua === "" || bairro === "" ||
-        cidade === "" || estado === "" || foneCelular === "" || dataExame === "" || dataSintomas === "")) {
+    if ($('#input-nome').val() && $('#input-data-nascimento').val().length == 10 && $('#postal_code').val() && $('#route').val() &&
+        $('#sublocality_level_1').val() && $('#administrative_area_level_2').val() && $('#administrative_area_level_1').val() &&
+        $('#input-celular').val().length == 17 && $('#input-data-exame').val() && $('#input-data-sintomas').val())
+    {
         $('#modal-espera').modal('show');
     }
 
@@ -48,20 +39,20 @@ function mensagemResultado() {
     var cpf = document.getElementById('input-cpf').value;
     var nome = document.getElementById('input-nome').value;
     var idVirus = document.getElementById('input-virus-bacteria').value;
-    var virus = document.getElementById('input-virus-bacteria')[idVirus-1].text;
+    var virus = document.getElementById('input-virus-bacteria')[idVirus - 1].text;
 
     var mensagem = "";
 
     $('#ok-model-form').hide();
     $('#acoes-model-form').hide();
 
-    if (cpf === "" || nome === "") {
-        mensagem = "Nenhum paciente foi informado.";
+    if (nome === "") {
+        mensagem = "Informe o Nome do Paciente!.";
         $('#texto-erro').text(mensagem);
         $('#ok-model-form').show();
     } else {
 
-        $('#cpf-paciente').text(cpf);
+        $('#cpf-paciente').text(cpf.length == 0 ? 'Não consta':cpf);
         $('#nome-paciente').text(nome);
         $('#resultado-paciente').text(resultadoExame());
         $('#virus-paciente').text(virus);

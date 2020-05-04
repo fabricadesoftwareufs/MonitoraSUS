@@ -6,7 +6,7 @@
     var idPessoa = Model.IdPaciente.Idpessoa;
     var cpf = Model.IdPaciente.Cpf;
     var nome = Model.IdPaciente.Nome;
-    string dataNascimento = Model.IdPaciente.DataNascimento != null ? Model.IdPaciente.DataNascimento.ToString("yyyy-MM-dd") : "0000-00-00";
+    string dataNascimento = Model.IdPaciente.DataNascimento != DateTime.MinValue ? Model.IdPaciente.DataNascimento.ToString("dd-MM-yyyy") : DateTime.Now.ToString("dd-MM-yyyy");
     var rua = Model.IdPaciente.Rua;
     var cep = Model.IdPaciente.Cep;
     var bairro = Model.IdPaciente.Bairro;
@@ -19,18 +19,17 @@
     string email = Model.IdPaciente.Email;
     string foneCelular = Model.IdPaciente.FoneCelular;
     string foneFixo = Model.IdPaciente.FoneFixo;
-    bool hipertenso = Model.IdPaciente.Hipertenso == true ? true : false;
-    bool cardiopata = Model.IdPaciente.Cardiopatia == true ? true : false;
-    bool cancer = Model.IdPaciente.Cancer == true ? true : false;
-    bool diabetico = Model.IdPaciente.Diabetes == true ? true : false;
-    bool doenRespiatoria = Model.IdPaciente.DoencaRespiratoria == true ? true : false;
-    bool obeso = Model.IdPaciente.Obeso == true ? true : false;
-    bool imunodeprimido = Model.IdPaciente.Imunodeprimido == true ? true : false;
-    string dataExame = Model.DataExame != null ? Model.DataExame.ToString("yyyy-MM-dd") : DateTime.Now.ToString("yyyy-MM-dd");
-    string DataInicioSintomas = Model.DataInicioSintomas != null ? Model.DataInicioSintomas.ToString("yyyy-MM-dd") : DateTime.Now.ToString("yyyy-MM-dd");
+    bool hipertenso = Model.IdPaciente.Hipertenso;
+    bool cardiopata = Model.IdPaciente.Cardiopatia;
+    bool cancer = Model.IdPaciente.Cancer;
+    bool diabetico = Model.IdPaciente.Diabetes;
+    bool doenRespiatoria = Model.IdPaciente.DoencaRespiratoria;
+    bool obeso = Model.IdPaciente.Obeso;
+    bool imunodeprimido = Model.IdPaciente.Imunodeprimido;
+    string dataExame = Model.DataExame != DateTime.MinValue ? Model.DataExame.ToString("yyyy-MM-dd") : DateTime.Now.ToString("yyyy-MM-dd");
+    string DataInicioSintomas = Model.DataInicioSintomas != DateTime.MinValue ? Model.DataInicioSintomas.ToString("yyyy-MM-dd") : DateTime.Now.ToString("yyyy-MM-dd");
     var googleKey = ViewBag.googleKey;
     var outrasComorbidades = Model.IdPaciente.OutrasComorbidades;
-
 }
 
 <!-- Page Content -->
@@ -64,7 +63,11 @@
                                 <div class="col-md-2">
                                     <div class="form-group">
                                         <label class="form-control-label" for="input-cpf">CPF ou RG</label>
-                                        <input asp-for="IdPaciente.Cpf" required id="input-cpf" placeholder="000.000.000-00" type="text" value="@cpf" class="form-control" />
+                                        <input asp-for="IdPaciente.Cpf" id="input-cpf" placeholder="000.000.000-00" type="text" value="@cpf" class="form-control" />
+                                        @if (TempData["resultadoPesquisa"] != null)
+                                        {
+                                        <h6 class="heading-small text-danger">@TempData["resultadoPesquisa"]</h6>
+                                        }
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -76,7 +79,7 @@
                                 <div class="col-md-2">
                                     <div class="form-group">
                                         <label for="input-data-nascimento" class="form-control-label">Data de Nascimento</label>
-                                        <input asp-for="IdPaciente.DataNascimento" type="date" id="input-data-nascimento" class="form-control" value="@dataNascimento" required />
+                                        <input asp-for="IdPaciente.DataNascimento" type="text" id="input-data-nascimento" placeholder="DD-MM-AAAA" class="form-control" value="@dataNascimento" required />
                                     </div>
                                 </div>
                                 <div class="col-md-2">
@@ -337,42 +340,39 @@
                             <input asp-for="PesquisarCpf" id="PesquisarCpf" value="0" />
                         </div>
                         <hr class="my-4" />
-                        <div class="form-group">
+                        <div class="modal fade bs-example-modal-sm" id="modal-confirmar" tabindex="-1" role="dialog" aria-hidden="true">
+                            <div class="modal-dialog modal-sm">
+                                <div class="modal-content">
+                                    <div style="padding: 10pt;text-align: center">
+                                        <div class="col text-center form-group" id="acoes-model-form">
+                                            <h3 id="titulo-confirmacao"> Confirmar Notificação do Resultado do Exame ? </h3>
 
-                            <div class="modal fade bs-example-modal-sm" id="modal-confirmar" tabindex="-1" role="dialog" aria-hidden="true">
-                                <div class="modal-dialog modal-sm">
-                                    <div class="modal-content">
-                                        <div style="padding: 10pt;text-align: center">
-                                            <div class="col text-center form-group" id="acoes-model-form">
-                                                <h3 id="titulo-confirmacao"> Confirmar Notificação do Resultado do Exame ? </h3>
+                                            <h4> CPF/RG</h4>
+                                            <p id="cpf-paciente"> </p>
 
-                                                <h4> CPF/RG</h4>
-                                                <p id="cpf-paciente"> </p>
+                                            <h4> Paciente </h4>
+                                            <p id="nome-paciente"> </p>
 
-                                                <h4> Paciente </h4>
-                                                <p id="nome-paciente"> </p>
+                                            <h4> VirusBacteria</h4>
+                                            <p id="virus-paciente"> </p>
 
-                                                <h4> VirusBacteria</h4>
-                                                <p id="virus-paciente"> </p>
+                                            <h4> Resultado</h4>
+                                            <p id="resultado-paciente"> </p>
 
-                                                <h4> Resultado</h4>
-                                                <p id="resultado-paciente"> </p>
-
-
+                                            <div class="form-group">
                                                 <a data-dismiss="modal" class="btn btn-danger text-white">Não</a>
                                                 <input id="btn-submit" type="submit" value="Sim" class="btn btn-success text-white" />
                                             </div>
+                                        </div>
 
-                                            <div class="col text-center" id="ok-model-form">
-                                                <h3 id="texto-erro"> </h3>
-                                                <a data-dismiss="modal" class="btn btn-success text-white">Ok</a>
-                                            </div>
+                                        <div class="col text-center" id="ok-model-form">
+                                            <h3 id="texto-erro"> </h3>
+                                            <a data-dismiss="modal" class="btn btn-success text-white">Ok</a>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
                     </form>
                     <div class="row align-items-center">
                         <div class="col text-right">

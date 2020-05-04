@@ -22,10 +22,35 @@ namespace Service
             return _context.SaveChanges() == 1 ? true : false;
         }
 
-        public bool Update(PessoaModel pessoaModel)
+        public PessoaModel Update(PessoaModel pessoaModel)
         {
-            _context.Update(ModelToEntity(pessoaModel, new Pessoa()));
-            return _context.SaveChanges() == 1 ? true : false;
+            if (pessoaModel != null)
+            {
+                try
+                {
+                    var pessoaInserida = new Pessoa();
+                    _context.Update(ModelToEntity(pessoaModel, pessoaInserida));
+
+                    if (string.IsNullOrWhiteSpace(pessoaModel.Cpf))
+                    {
+                        pessoaModel.Cpf = "T" + DateTime.Now.Ticks.ToString().Substring(12);
+                        _context.SaveChanges();
+                        pessoaInserida.Cpf = "T" + Convert.ToString(pessoaInserida.Idpessoa).PadLeft(8, '0') + pessoaInserida.Estado;
+                    }
+                    _context.SaveChanges();
+
+                    // Returning the last inserted ID.
+                    pessoaModel.Cpf = pessoaInserida.Cpf;
+                    pessoaModel.Idpessoa = pessoaInserida.Idpessoa;
+                    return pessoaModel;
+                }
+                catch (Exception e)
+                {
+                    throw new Exception(e.Message);
+                }
+            }
+
+            return null;
         }
 
         public PessoaModel Insert(PessoaModel pessoaModel)
@@ -36,9 +61,17 @@ namespace Service
                 {
                     var pessoaInserida = new Pessoa();
                     _context.Pessoa.Add(ModelToEntity(pessoaModel, pessoaInserida));
+
+                    if (string.IsNullOrWhiteSpace(pessoaModel.Cpf))
+                    {
+                        pessoaModel.Cpf = "T" + DateTime.Now.Ticks.ToString().Substring(12);
+                        _context.SaveChanges();
+                        pessoaInserida.Cpf = "T" + Convert.ToString(pessoaInserida.Idpessoa).PadLeft(8, '0') + pessoaInserida.Estado;
+                    }
                     _context.SaveChanges();
 
                     // Returning the last inserted ID.
+                    pessoaModel.Cpf = pessoaInserida.Cpf;
                     pessoaModel.Idpessoa = pessoaInserida.Idpessoa;
                     return pessoaModel;
                 }

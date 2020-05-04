@@ -135,9 +135,8 @@ namespace MonitoraSUS.Controllers
             ViewBag.VirusBacteria = new SelectList(_virusBacteriaContext.GetAll(), "IdVirusBacteria", "Nome");
             ViewBag.googleKey = _configuration["GOOGLE_KEY"];
 
-            exame.IdPaciente.Cpf = Methods.RemoveSpecialsCaracts(exame.IdPaciente.Cpf);
-
-            if (SoContemNumeros(exame.IdPaciente.Cpf))
+            exame.IdPaciente.Cpf = exame.IdPaciente.Cpf ?? "";
+            if (SoContemNumeros(exame.IdPaciente.Cpf) && !exame.IdPaciente.Cpf.Equals(""))
             {
                 if (!Methods.ValidarCpf(exame.IdPaciente.Cpf))
                 {
@@ -193,7 +192,7 @@ namespace MonitoraSUS.Controllers
                 /*
                  * Atualizando Exame
                  */
-                _exameContext.Update(CreateExameModel(exame));
+                _exameContext.Update(CreateExameModel(exame,0,false));
 
                 /*
                  * Atualizando ou Inserindo situacao do usuario 
@@ -239,7 +238,8 @@ namespace MonitoraSUS.Controllers
             ViewBag.googleKey = _configuration["GOOGLE_KEY"];
             ViewBag.VirusBacteria = new SelectList(_virusBacteriaContext.GetAll(), "IdVirusBacteria", "Nome");
 
-            if (SoContemNumeros(exame.IdPaciente.Cpf))
+            exame.IdPaciente.Cpf = exame.IdPaciente.Cpf ?? "";
+            if (SoContemNumeros(exame.IdPaciente.Cpf) && !exame.IdPaciente.Cpf.Equals(""))
             {
                 if (!Methods.ValidarCpf(exame.IdPaciente.Cpf))
                 {
@@ -270,8 +270,6 @@ namespace MonitoraSUS.Controllers
                 }
                 else
                 {
-                    TempData["resultadoPesquisa"] = "Paciente não cadastrado, preencha os campos para cadastra-lo!";
-
                     /*
                      * Limpando o objeto para enviar  
                      * somente o cpf pesquisado
@@ -296,9 +294,9 @@ namespace MonitoraSUS.Controllers
                 {
                     // inserindo ou atualizando o paciente
                     if (_pessoaContext.GetByCpf(pessoa.Cpf) == null)
-                        _pessoaContext.Insert(pessoa);
+                       pessoa = _pessoaContext.Insert(pessoa);
                     else
-                        _pessoaContext.Update(pessoa);
+                       pessoa = _pessoaContext.Update(pessoa);
                 }
                 catch
                 {
@@ -311,8 +309,7 @@ namespace MonitoraSUS.Controllers
                 try
                 {
                     // inserindo o resultado do exame (situacao da pessoa)                  
-                    var idPessoa = _pessoaContext.GetByCpf(exame.IdPaciente.Cpf).Idpessoa;
-                    var situacaoPessoa = _situacaoPessoaContext.GetById(idPessoa, exame.IdVirusBacteria.IdVirusBacteria);
+                    var situacaoPessoa = _situacaoPessoaContext.GetById(pessoa.Idpessoa, exame.IdVirusBacteria.IdVirusBacteria);
 
                     if (situacaoPessoa == null)
                         _situacaoPessoaContext.Insert(CreateSituacaoPessoaModelByExame(exame, situacaoPessoa));
@@ -329,7 +326,7 @@ namespace MonitoraSUS.Controllers
                 try
                 {
                     // inserindo o exame
-                    _exameContext.Insert(CreateExameModel(exame));
+                    _exameContext.Insert(CreateExameModel(exame,pessoa.Idpessoa,true));
                 }
                 catch
                 {
@@ -365,12 +362,16 @@ namespace MonitoraSUS.Controllers
             return situacao;
         }
 
-        public ExameModel CreateExameModel(ExameViewModel viewModel)
+        public ExameModel CreateExameModel(ExameViewModel viewModel,int idPaciente ,bool create)
         {
             ExameModel exame = new ExameModel();
 
             exame.IdExame = viewModel.IdExame;
-            exame.IdPaciente = _pessoaContext.GetByCpf(Methods.RemoveSpecialsCaracts(viewModel.IdPaciente.Cpf)).Idpessoa;
+            if (create)
+                exame.IdPaciente = idPaciente;
+            else
+                exame.IdPaciente = viewModel.IdPaciente.Idpessoa;
+
             exame.IdVirusBacteria = viewModel.IdVirusBacteria.IdVirusBacteria;
             exame.IgG = viewModel.IgG;
             exame.IgM = viewModel.IgM;
@@ -427,6 +428,7 @@ namespace MonitoraSUS.Controllers
             ex.MunicipioId = exame.IdMunicipio;
             ex.DataInicioSintomas = exame.DataInicioSintomas;
             ex.DataExame = exame.DataExame;
+            ex.IdEmpresaSaude = exame.IdEmpresaSaude;
 
             return ex;
         }
@@ -555,6 +557,13 @@ namespace MonitoraSUS.Controllers
 
             if (exame.IdPaciente.FoneFixo != null)
                 exame.IdPaciente.FoneFixo = Methods.RemoveSpecialsCaracts(exame.IdPaciente.FoneFixo);
+
+            /* 
+             * Só para garantir que a aplicação não irá quebrar
+             * caso view retorne um id que ficou em cache... 
+             */
+            if (exame.IdPaciente.Cpf.Equals("")) 
+                exame.IdPaciente.Idpessoa = 0;
 
             return exame.IdPaciente;
         }

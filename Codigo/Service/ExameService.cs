@@ -94,7 +94,7 @@ namespace Service
 
         private Exame ModelToEntity(ExameModel exameModel)
         {
-            return new Exame
+                return new Exame
             {
                 IdExame = exameModel.IdExame,
                 IdAgenteSaude = exameModel.IdAgenteSaude,

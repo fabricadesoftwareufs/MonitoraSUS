@@ -6,7 +6,7 @@
     var idPessoa = Model.IdPaciente.Idpessoa;
     var cpf = Model.IdPaciente.Cpf;
     var nome = Model.IdPaciente.Nome;
-    string dataNascimento = Model.IdPaciente.DataNascimento == null ? Model.IdPaciente.DataNascimento.ToString("yyyy-MM-dd") : DateTime.Now.ToString("yyyy-MM-dd");
+    string dataNascimento = Model.IdPaciente.DataNascimento != DateTime.MinValue ? Model.IdPaciente.DataNascimento.ToString("dd-MM-yyyy") : DateTime.Now.ToString("dd-MM-yyyy");
     var rua = Model.IdPaciente.Rua;
     var cep = Model.IdPaciente.Cep;
     var latitude = Model.IdPaciente.Latitude;
@@ -19,15 +19,15 @@
     string email = Model.IdPaciente.Email;
     string foneCelular = Model.IdPaciente.FoneCelular;
     string foneFixo = Model.IdPaciente.FoneFixo;
-    bool hipertenso = Model.IdPaciente.Hipertenso == true ? true : false;
-    bool cardiopata = Model.IdPaciente.Cardiopatia == true ? true : false;
-    bool cancer = Model.IdPaciente.Cancer == true ? true : false;
-    bool diabetico = Model.IdPaciente.Diabetes == true ? true : false;
-    bool doenRespiatoria = Model.IdPaciente.DoencaRespiratoria == true ? true : false;
-    bool obeso = Model.IdPaciente.Obeso == true ? true : false;
-    bool imunodeprimido = Model.IdPaciente.Imunodeprimido == true ? true : false;
-    string dataExame = Model.DataExame == null ? Model.DataExame.ToString("yyyy-MM-dd") : DateTime.Now.ToString("yyyy-MM-dd");
-    string DataInicioSintomas = Model.DataInicioSintomas == null ? Model.DataInicioSintomas.ToString("yyyy-MM-dd") : DateTime.Now.ToString("yyyy-MM-dd");
+    bool hipertenso = Model.IdPaciente.Hipertenso;
+    bool cardiopata = Model.IdPaciente.Cardiopatia;
+    bool cancer = Model.IdPaciente.Cancer;
+    bool diabetico = Model.IdPaciente.Diabetes;
+    bool doenRespiatoria = Model.IdPaciente.DoencaRespiratoria;
+    bool obeso = Model.IdPaciente.Obeso;
+    bool imunodeprimido = Model.IdPaciente.Imunodeprimido;
+    string dataExame = Model.DataExame != DateTime.MinValue ? Model.DataExame.ToString("yyyy-MM-dd") : DateTime.Now.ToString("yyyy-MM-dd");
+    string DataInicioSintomas = Model.DataInicioSintomas != DateTime.MinValue ? Model.DataInicioSintomas.ToString("yyyy-MM-dd") : DateTime.Now.ToString("yyyy-MM-dd");
     var estadoid = Model.IdEstado;
     var municipioid = Model.MunicipioId;
     var idAgente = Model.IdAgenteSaude.Idpessoa;
@@ -84,7 +84,7 @@
                                 <div class="col-md-2">
                                     <div class="form-group">
                                         <label for="input-data-nascimento" class="form-control-label">Data de Nascimento</label>
-                                        <input asp-for="IdPaciente.DataNascimento" type="date" id="input-data-nascimento" class="form-control" value="@dataNascimento" required />
+                                        <input asp-for="IdPaciente.DataNascimento" type="text" id="input-data-nascimento" placeholder="DD-MM-AAAA" class="form-control" value="@dataNascimento" required />
                                     </div>
                                 </div>
                                 <div class="col-md-2">
@@ -373,8 +373,10 @@
                                             <p id="resultado-paciente"> </p>
 
 
-                                            <a data-dismiss="modal" class="btn btn-danger text-white">Não</a>
-                                            <input id="btn-submit" type="submit" value="Sim" class="btn btn-success text-white" />
+                                            <div class="form-group">
+                                                <a data-dismiss="modal" class="btn btn-danger text-white">Não</a>
+                                                <input id="btn-submit" type="submit" value="Sim" class="btn btn-success text-white" />
+                                            </div>
                                         </div>
 
                                         <div class="col text-center" id="ok-model-form">
