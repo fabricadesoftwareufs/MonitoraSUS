@@ -13,7 +13,10 @@ function swtAlert(type,title,message){
 }
 
 $('#empresaModal').on('show.bs.modal', function(e) {
-    var cpf = e.relatedTarget.dataset.cpf;
+	let cpf = document.getElementById('input-cpf').value;
+	if (cpf == "") {
+		cpf = e.relatedTarget.dataset.cpf;
+	}
     $(".modal-body #modal-cpf").text(cpf);
 });
 

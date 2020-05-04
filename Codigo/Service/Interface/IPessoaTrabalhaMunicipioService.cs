@@ -1,4 +1,5 @@
 ﻿using Model;
+using Model.ViewModel;
 using System.Collections.Generic;
 
 namespace Service.Interface
@@ -9,11 +10,10 @@ namespace Service.Interface
         bool Update(PessoaTrabalhaMunicipioModel pessoaTrabalhaMunicipioModel);
         bool Delete(int idPessoa);
         List<PessoaTrabalhaMunicipioModel> GetAll();
-        List<PessoaTrabalhaMunicipioModel> GetAllGestoresMunicipio(int idMunicipio);
-		List<PessoaTrabalhaMunicipioModel> GetAllGestoresMunicipio();
-		List<PessoaTrabalhaMunicipioModel> GetAllAgentsMunicipio(int idMunicipio);
-        PessoaTrabalhaMunicipioModel GetById(int idPessoa, int idMunicipio);
-        PessoaTrabalhaMunicipioModel GetAgentMunicipioByIdPessoa(int idPessoa, int idMunicipio);
-        PessoaTrabalhaMunicipioModel GetByIdPessoa(int idPessoa);
+		List<SolicitanteAprovacaoViewModel> GetAllGestores();
+		List<SolicitanteAprovacaoViewModel> GetAllGestoresMunicipio(int idMunicipio);
+		List<SolicitanteAprovacaoViewModel> GetAllNotificadores();
+		List<SolicitanteAprovacaoViewModel> GetAllNotificadoresMunicipio(int idMunicipio);
+		PessoaTrabalhaMunicipioModel GetByIdPessoa(int idPessoa);
     }
 }

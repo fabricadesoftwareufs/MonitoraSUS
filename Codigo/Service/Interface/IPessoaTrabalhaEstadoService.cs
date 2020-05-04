@@ -1,21 +1,22 @@
 ﻿using Model;
+using Model.ViewModel;
 using System.Collections.Generic;
 
 namespace Service.Interface
 {
-    public interface IPessoaTrabalhaEstadoService
-    {
-        bool Insert(PessoaTrabalhaEstadoModel pessoaTrabalhaEstadoModel);
-        bool Update(PessoaTrabalhaEstadoModel pessoaTrabalhaEstadoModel);
-        bool Delete(int idPessoa);
-        List<PessoaTrabalhaEstadoModel> GetAll();
-        PessoaTrabalhaEstadoModel GetById(int idPessoa, int idEstado);
-        List<PessoaTrabalhaEstadoModel> GetAllGestoresEstado(int idEstado);
-		List<PessoaTrabalhaEstadoModel> GetAllGestoresEstado();
-		List<PessoaTrabalhaEstadoModel> GetAllAgentsEstado(int idEstado);
-        PessoaTrabalhaEstadoModel GetSecretarioAtivoByIdPessoa(int idPessoa);
-        PessoaTrabalhaEstadoModel GetAgentEstadoByIdPessoa(int idPessoa, int idEstado);
-        PessoaTrabalhaEstadoModel GetByIdPessoa(int idPessoa);
-        List<PessoaTrabalhaEstadoModel> GetByIdEmpresa(int idEmpresa);
-    }
+	public interface IPessoaTrabalhaEstadoService
+	{
+		bool Insert(PessoaTrabalhaEstadoModel pessoaTrabalhaEstadoModel);
+		bool Update(PessoaTrabalhaEstadoModel pessoaTrabalhaEstadoModel);
+		bool Delete(int idPessoa);
+		List<PessoaTrabalhaEstadoModel> GetAll();
+		List<SolicitanteAprovacaoViewModel> GetAllGestores();
+		List<SolicitanteAprovacaoViewModel> GetAllGestoresEstado(int idEstado);
+		List<SolicitanteAprovacaoViewModel> GetAllGestoresEmpresa(int idEmpresa);
+		List<SolicitanteAprovacaoViewModel> GetAllNotificadores();
+		List<SolicitanteAprovacaoViewModel> GetAllNotificadoresEstado(int idEstado);
+		List<SolicitanteAprovacaoViewModel> GetAllNotificadoresEmpresa(int idEmpresa);
+		PessoaTrabalhaEstadoModel GetByIdPessoa(int idPessoa);
+		List<PessoaTrabalhaEstadoModel> GetByIdEmpresa(int idEmpresa);
+	}
 }

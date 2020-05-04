@@ -1,4 +1,5 @@
 ﻿using Model;
+using Model.ViewModel;
 using Persistence;
 using Service.Interface;
 using System;
@@ -15,25 +16,11 @@ namespace Service
         }
         public bool Delete(int idPessoa)
         {
-            var pessoas = _context.Pessoatrabalhaestado.Where(p => p.Idpessoa == idPessoa);
+            var pessoas = _context.Pessoatrabalhaestado.Where(p => p.Idpessoa.Equals(idPessoa));
 			foreach(Pessoatrabalhaestado pessoa in pessoas)
 				_context.Pessoatrabalhaestado.Remove(pessoa);
             return _context.SaveChanges() == 1 ? true : false;
         }
-
-        public PessoaTrabalhaEstadoModel GetAgentEstadoByIdPessoa(int idPessoa, int idEstado)
-        => _context
-                .Pessoatrabalhaestado
-                .Where(p => p.Idpessoa == idPessoa && p.IdEstado == idEstado && p.EhSecretario.Equals(0) && p.EhResponsavel.Equals(0))
-                .Select(p => new PessoaTrabalhaEstadoModel
-                {
-                    IdPessoa = p.Idpessoa,
-                    IdEstado = p.IdEstado,
-                    EhResponsavel = Convert.ToBoolean(p.EhResponsavel),
-                    EhSecretario = Convert.ToBoolean(p.EhSecretario),
-                    SituacaoCadastro = p.SituacaoCadastro,
-                    IdEmpresaExame = p.IdEmpresaExame
-                }).FirstOrDefault();
 
         public List<PessoaTrabalhaEstadoModel> GetAll()
             => _context
@@ -48,66 +35,95 @@ namespace Service
                     IdEmpresaExame = p.IdEmpresaExame
                 }).ToList();
 
-        public List<PessoaTrabalhaEstadoModel> GetAllAgentsEstado(int idEstado)
+		public List<SolicitanteAprovacaoViewModel> GetAllGestores()
+			=> _context
+				.Pessoatrabalhaestado
+				.Where(p => p.EhResponsavel.Equals(1))
+				.Select(p => new SolicitanteAprovacaoViewModel
+				{
+					IdPessoa = p.Idpessoa,
+					Cidade = (p.IdEmpresaExame == EmpresaExameModel.EMPRESA_ESTADO_MUNICIPIO)?"N/A":p.IdEmpresaExameNavigation.Nome,
+					Cpf = p.IdpessoaNavigation.Cpf,
+					Nome = p.IdpessoaNavigation.Nome,
+					Estado = p.IdEstadoNavigation.Uf,
+					Status = p.SituacaoCadastro,
+					EhSecretario = Convert.ToBoolean(p.EhSecretario)
+				}).ToList();
+		public List<SolicitanteAprovacaoViewModel> GetAllGestoresEstado(int idEstado)
+			=> _context
+				.Pessoatrabalhaestado
+				.Where(p => p.EhResponsavel.Equals(1) && p.IdEstado.Equals(idEstado))
+				.Select(p => new SolicitanteAprovacaoViewModel
+				{
+					IdPessoa = p.Idpessoa,
+					Cidade = (p.IdEmpresaExame == EmpresaExameModel.EMPRESA_ESTADO_MUNICIPIO) ? "N/A" : p.IdEmpresaExameNavigation.Nome,
+					Cpf = p.IdpessoaNavigation.Cpf,
+					Nome = p.IdpessoaNavigation.Nome,
+					Estado = p.IdEstadoNavigation.Uf,
+					Status = p.SituacaoCadastro,
+					EhSecretario = Convert.ToBoolean(p.EhSecretario)
+				}).ToList();
+		public List<SolicitanteAprovacaoViewModel> GetAllGestoresEmpresa(int idEmpresa)
+			=> _context
+				.Pessoatrabalhaestado
+				.Where(p => p.EhResponsavel.Equals(1) && p.IdEmpresaExame.Equals(idEmpresa))
+				.Select(p => new SolicitanteAprovacaoViewModel
+				{
+					IdPessoa = p.Idpessoa,
+					Cidade = (p.IdEmpresaExame == EmpresaExameModel.EMPRESA_ESTADO_MUNICIPIO) ? "N/A" : p.IdEmpresaExameNavigation.Nome,
+					Cpf = p.IdpessoaNavigation.Cpf,
+					Nome = p.IdpessoaNavigation.Nome,
+					Estado = p.IdEstadoNavigation.Uf,
+					Status = p.SituacaoCadastro,
+					EhSecretario = Convert.ToBoolean(p.EhSecretario)
+				}).ToList();
+		public List<SolicitanteAprovacaoViewModel> GetAllNotificadores()
+			=> _context
+				.Pessoatrabalhaestado
+				.Where(p => p.EhResponsavel.Equals(0) && p.EhSecretario.Equals(0))
+				.Select(p => new SolicitanteAprovacaoViewModel
+				{
+					IdPessoa = p.Idpessoa,
+					Cidade = (p.IdEmpresaExame == EmpresaExameModel.EMPRESA_ESTADO_MUNICIPIO) ? "N/A" : p.IdEmpresaExameNavigation.Nome,
+					Cpf = p.IdpessoaNavigation.Cpf,
+					Nome = p.IdpessoaNavigation.Nome,
+					Estado = p.IdEstadoNavigation.Uf,
+					Status = p.SituacaoCadastro,
+					EhSecretario = Convert.ToBoolean(p.EhSecretario)
+				}).ToList();
+		public List<SolicitanteAprovacaoViewModel> GetAllNotificadoresEstado(int idEstado)
+				=> _context
+				.Pessoatrabalhaestado
+				.Where(p => p.EhResponsavel.Equals(0) && p.EhSecretario.Equals(0) && p.IdEstado.Equals(idEstado))
+				.Select(p => new SolicitanteAprovacaoViewModel
+				{
+					IdPessoa = p.Idpessoa,
+					Cidade = (p.IdEmpresaExame == EmpresaExameModel.EMPRESA_ESTADO_MUNICIPIO) ? "N/A" : p.IdEmpresaExameNavigation.Nome,
+					Cpf = p.IdpessoaNavigation.Cpf,
+					Nome = p.IdpessoaNavigation.Nome,
+					Estado = p.IdEstadoNavigation.Uf,
+					Status = p.SituacaoCadastro,
+					EhSecretario = Convert.ToBoolean(p.EhSecretario)
+				}).ToList();
+		public List<SolicitanteAprovacaoViewModel> GetAllNotificadoresEmpresa(int idEmpresa)
+				=> _context
+				.Pessoatrabalhaestado
+				.Where(p => p.EhResponsavel.Equals(0) && p.EhSecretario.Equals(0) && p.IdEmpresaExame.Equals(idEmpresa))
+				.Select(p => new SolicitanteAprovacaoViewModel
+				{
+					IdPessoa = p.Idpessoa,
+					Cidade = (p.IdEmpresaExame == EmpresaExameModel.EMPRESA_ESTADO_MUNICIPIO) ? "N/A" : p.IdEmpresaExameNavigation.Nome,
+					Cpf = p.IdpessoaNavigation.Cpf,
+					Nome = p.IdpessoaNavigation.Nome,
+					Estado = p.IdEstadoNavigation.Uf,
+					Status = p.SituacaoCadastro,
+					EhSecretario = Convert.ToBoolean(p.EhSecretario)
+				}).ToList();
+
+		public PessoaTrabalhaEstadoModel GetByIdPessoa(int idPessoa)
             => _context
                 .Pessoatrabalhaestado
-                .Where(p => p.EhSecretario.Equals(0) && p.EhResponsavel.Equals(0) && p.IdEstado.Equals(idEstado))
-                .Select(p => new PessoaTrabalhaEstadoModel
-                {
-                    IdPessoa = p.Idpessoa,
-                    IdEstado = p.IdEstado,
-                    EhResponsavel = Convert.ToBoolean(p.EhResponsavel),
-                    EhSecretario = Convert.ToBoolean(p.EhSecretario),
-                    SituacaoCadastro = p.SituacaoCadastro,
-                    IdEmpresaExame = p.IdEmpresaExame
-                }).ToList();
-
-        public List<PessoaTrabalhaEstadoModel> GetAllGestoresEstado(int idEstado)
-            => _context
-                .Pessoatrabalhaestado
-                .Where(p => p.EhResponsavel.Equals(1) && p.IdEstado.Equals(idEstado))
-                .Select(p => new PessoaTrabalhaEstadoModel
-                {
-                    IdPessoa = p.Idpessoa,
-                    IdEstado = p.IdEstado,
-                    EhResponsavel = Convert.ToBoolean(p.EhResponsavel),
-                    EhSecretario = Convert.ToBoolean(p.EhSecretario),
-                    SituacaoCadastro = p.SituacaoCadastro,
-                    IdEmpresaExame = p.IdEmpresaExame
-                }).ToList();
-
-		public List<PessoaTrabalhaEstadoModel> GetAllGestoresEstado()
-		   => _context
-			   .Pessoatrabalhaestado
-			   .Where(p => p.EhResponsavel.Equals(1))
-			   .Select(p => new PessoaTrabalhaEstadoModel
-			   {
-				   IdPessoa = p.Idpessoa,
-				   IdEstado = p.IdEstado,
-				   EhResponsavel = Convert.ToBoolean(p.EhResponsavel),
-				   EhSecretario = Convert.ToBoolean(p.EhSecretario),
-				   SituacaoCadastro = p.SituacaoCadastro,
-				   IdEmpresaExame = p.IdEmpresaExame
-			   }).ToList();
-
-		public PessoaTrabalhaEstadoModel GetById(int idPessoa, int idEstado)
-            => _context
-                .Pessoatrabalhaestado
-                .Where(p => p.Idpessoa == idPessoa && p.IdEstado == idEstado)
-                .Select(p => new PessoaTrabalhaEstadoModel
-                {
-                    IdPessoa = p.Idpessoa,
-                    IdEstado = p.IdEstado,
-                    EhResponsavel = Convert.ToBoolean(p.EhResponsavel),
-                    EhSecretario = Convert.ToBoolean(p.EhSecretario),
-                    SituacaoCadastro = p.SituacaoCadastro,
-                    IdEmpresaExame = p.IdEmpresaExame
-                }).FirstOrDefault();
-
-        public PessoaTrabalhaEstadoModel GetByIdPessoa(int idPessoa)
-            => _context
-                .Pessoatrabalhaestado
-                .Where(p => p.Idpessoa == idPessoa)
+                .Where(p => p.Idpessoa.Equals(idPessoa))
                 .Select(p => new PessoaTrabalhaEstadoModel
                 {
                     IdPessoa = p.Idpessoa,
@@ -121,7 +137,7 @@ namespace Service
         public List<PessoaTrabalhaEstadoModel> GetByIdEmpresa(int idEmpresa)
            => _context
                .Pessoatrabalhaestado
-               .Where(p => p.IdEmpresaExame == idEmpresa)
+               .Where(p => p.IdEmpresaExame.Equals(idEmpresa))
                .Select(p => new PessoaTrabalhaEstadoModel
                {
                    IdPessoa = p.Idpessoa,
@@ -131,20 +147,6 @@ namespace Service
                    SituacaoCadastro = p.SituacaoCadastro,
                    IdEmpresaExame = p.IdEmpresaExame
                }).ToList();
-
-        public PessoaTrabalhaEstadoModel GetSecretarioAtivoByIdPessoa(int idPessoa)
-             => _context
-                .Pessoatrabalhaestado
-                .Where(p => p.EhSecretario.Equals(1) && p.SituacaoCadastro.Equals("A") && p.Idpessoa == idPessoa)
-                .Select(p => new PessoaTrabalhaEstadoModel
-                {
-                    IdPessoa = p.Idpessoa,
-                    IdEstado = p.IdEstado,
-                    EhResponsavel = Convert.ToBoolean(p.EhResponsavel),
-                    EhSecretario = Convert.ToBoolean(p.EhSecretario),
-                    SituacaoCadastro = p.SituacaoCadastro,
-                    IdEmpresaExame = p.IdEmpresaExame,
-                }).FirstOrDefault();
 
         public bool Insert(PessoaTrabalhaEstadoModel pessoaTrabalhaEstadoModel)
         {
