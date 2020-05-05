@@ -50,14 +50,14 @@ namespace MonitoraSUS.Controllers
             _configuration = configuration;
         }
 
-        public IActionResult Index(string cpf, DateTime DataInicial, DateTime DataFinal)
+        public IActionResult Index(string pesquisa, DateTime DataInicial, DateTime DataFinal)
         {
             /*
              * O tratamento da variavel filtro é feito dentro 
              * do método GetAllExamesViewModel()
              */
 
-            return View(GetAllExamesViewModel(cpf, DataInicial, DataFinal));
+            return View(GetAllExamesViewModel(pesquisa, DataInicial, DataFinal));
         }
 
         public IActionResult Details(int id)
@@ -136,7 +136,7 @@ namespace MonitoraSUS.Controllers
             ViewBag.googleKey = _configuration["GOOGLE_KEY"];
 
             exame.IdPaciente.Cpf = exame.IdPaciente.Cpf ?? "";
-            if (SoContemNumeros(exame.IdPaciente.Cpf) && !exame.IdPaciente.Cpf.Equals(""))
+            if (Methods.SoContemNumeros(exame.IdPaciente.Cpf) && !exame.IdPaciente.Cpf.Equals(""))
             {
                 if (!Methods.ValidarCpf(exame.IdPaciente.Cpf))
                 {
@@ -192,7 +192,7 @@ namespace MonitoraSUS.Controllers
                 /*
                  * Atualizando Exame
                  */
-                _exameContext.Update(CreateExameModel(exame,0,false));
+                _exameContext.Update(CreateExameModel(exame, 0, false));
 
                 /*
                  * Atualizando ou Inserindo situacao do usuario 
@@ -239,7 +239,7 @@ namespace MonitoraSUS.Controllers
             ViewBag.VirusBacteria = new SelectList(_virusBacteriaContext.GetAll(), "IdVirusBacteria", "Nome");
 
             exame.IdPaciente.Cpf = exame.IdPaciente.Cpf ?? "";
-            if (SoContemNumeros(exame.IdPaciente.Cpf) && !exame.IdPaciente.Cpf.Equals(""))
+            if (Methods.SoContemNumeros(exame.IdPaciente.Cpf) && !exame.IdPaciente.Cpf.Equals(""))
             {
                 if (!Methods.ValidarCpf(exame.IdPaciente.Cpf))
                 {
@@ -294,9 +294,9 @@ namespace MonitoraSUS.Controllers
                 {
                     // inserindo ou atualizando o paciente
                     if (_pessoaContext.GetByCpf(pessoa.Cpf) == null)
-                       pessoa = _pessoaContext.Insert(pessoa);
+                        pessoa = _pessoaContext.Insert(pessoa);
                     else
-                       pessoa = _pessoaContext.Update(pessoa);
+                        pessoa = _pessoaContext.Update(pessoa);
                 }
                 catch
                 {
@@ -326,7 +326,7 @@ namespace MonitoraSUS.Controllers
                 try
                 {
                     // inserindo o exame
-                    _exameContext.Insert(CreateExameModel(exame,pessoa.Idpessoa,true));
+                    _exameContext.Insert(CreateExameModel(exame, pessoa.Idpessoa, true));
                 }
                 catch
                 {
@@ -348,7 +348,7 @@ namespace MonitoraSUS.Controllers
 
             if (situacao != null)
             {
-                situacao.UltimaSituacaoSaude = GetResultadoExame(exame);
+                situacao.UltimaSituacaoSaude = Methods.GetResultadoExame(exame);
             }
             else
             {
@@ -356,13 +356,13 @@ namespace MonitoraSUS.Controllers
 
                 situacao.IdVirusBacteria = exame.IdVirusBacteria.IdVirusBacteria;
                 situacao.Idpessoa = _pessoaContext.GetByCpf(Methods.RemoveSpecialsCaracts(exame.IdPaciente.Cpf)).Idpessoa;
-                situacao.UltimaSituacaoSaude = GetResultadoExame(exame);
+                situacao.UltimaSituacaoSaude = Methods.GetResultadoExame(exame);
             }
 
             return situacao;
         }
 
-        public ExameModel CreateExameModel(ExameViewModel viewModel,int idPaciente ,bool create)
+        public ExameModel CreateExameModel(ExameViewModel viewModel, int idPaciente, bool create)
         {
             ExameModel exame = new ExameModel();
 
@@ -420,7 +420,7 @@ namespace MonitoraSUS.Controllers
             ex.IdPaciente = _pessoaContext.GetById(exame.IdPaciente);
             ex.IdAgenteSaude = _pessoaContext.GetById(exame.IdAgenteSaude);
             ex.IdVirusBacteria = _virusBacteriaContext.GetById(exame.IdVirusBacteria);
-            ex.Resultado = GetStatusExame(GetResultadoExame(new ExameViewModel { Pcr = exame.Pcr, IgG = exame.IgG, IgM = exame.IgM }));
+            ex.Resultado = Methods.GetStatusExame(Methods.GetResultadoExame(new ExameViewModel { Pcr = exame.Pcr, IgG = exame.IgG, IgM = exame.IgM }));
             ex.IgG = exame.IgG;
             ex.IgM = exame.IgM;
             ex.Pcr = exame.Pcr;
@@ -433,7 +433,7 @@ namespace MonitoraSUS.Controllers
             return ex;
         }
 
-        public List<ExameViewModel> GetAllExamesViewModel(string cpf, DateTime DataInicial, DateTime DataFinal)
+        public List<ExameViewModel> GetAllExamesViewModel(string pesquisa, DateTime DataInicial, DateTime DataFinal)
         {
             /*
              * Pegando usuario logado e carregando 
@@ -468,42 +468,14 @@ namespace MonitoraSUS.Controllers
                 }
             }
 
-            /* 
-             * Se o filtro for uma data válida, 
-             * ele faz a seleção
-             */
-            cpf = cpf ?? "";
 
-            if ((DataInicial == DateTime.MinValue) && (DataFinal == DateTime.MinValue) && cpf.Equals(""))
+            /* 
+             * 1º Filto - por datas 
+             */
+            pesquisa = pesquisa ?? "";
+            if ((DataInicial == DateTime.MinValue) && (DataFinal == DateTime.MinValue) && pesquisa.Equals(""))
             {
                 exames = exames.Where(exameModel => DateTime.Compare(exameModel.DataExame, DateTime.Today) == 0).ToList();
-            }
-            else if (!cpf.Equals(""))
-            {
-                cpf = Methods.RemoveSpecialsCaracts(cpf);
-                var paciente = _pessoaContext.GetByCpf(cpf);
-
-                if (paciente == null)
-                {
-                    exames = new List<ExameModel>();
-                }
-                else if (DataInicial > DateTime.MinValue && DataFinal > DateTime.MinValue)
-                {
-                    exames = exames.Where(exameModel => exameModel.DataExame >= DataInicial &&
-                                        exameModel.DataExame <= DataFinal && exameModel.IdPaciente == paciente.Idpessoa).ToList();
-                }
-                else if (DataInicial == DateTime.MinValue && DataFinal > DateTime.MinValue)
-                {
-                    exames = exames.Where(exameModel => exameModel.DataExame <= DataFinal && exameModel.IdPaciente == paciente.Idpessoa).ToList();
-                }
-                else if (DataFinal == DateTime.MinValue && DataInicial > DateTime.MinValue)
-                {
-                    exames = exames.Where(exameModel => exameModel.DataExame >= DataInicial && exameModel.IdPaciente == paciente.Idpessoa).ToList();
-                }
-                else
-                {
-                    exames = exames.Where(exameModel => exameModel.IdPaciente == paciente.Idpessoa).ToList();
-                }
             }
             else if (DataInicial > DateTime.MinValue && DataFinal > DateTime.MinValue)
             {
@@ -517,13 +489,11 @@ namespace MonitoraSUS.Controllers
             {
                 exames = exames.Where(exameModel => exameModel.DataExame >= DataInicial).ToList();
             }
-            else
-            {
-                exames = exames.Where(exameModel => DateTime.Compare(exameModel.DataExame, DateTime.Today) == 0).ToList();
-            }
 
+            /* 
+             * montando view model com o primeiro filtro
+             */
             var examesViewModel = new List<ExameViewModel>();
-
             foreach (var exame in exames)
             {
                 ExameViewModel ex = new ExameViewModel();
@@ -531,7 +501,7 @@ namespace MonitoraSUS.Controllers
                 ex.IdPaciente = _pessoaContext.GetById(exame.IdPaciente);
                 ex.IdAgenteSaude = _pessoaContext.GetById(exame.IdAgenteSaude);
                 ex.IdVirusBacteria = _virusBacteriaContext.GetById(exame.IdVirusBacteria);
-                ex.Resultado = GetStatusExame(GetResultadoExame(new ExameViewModel { Pcr = exame.Pcr, IgG = exame.IgG, IgM = exame.IgM }));
+                ex.Resultado = Methods.GetStatusExame(Methods.GetResultadoExame(new ExameViewModel { Pcr = exame.Pcr, IgG = exame.IgG, IgM = exame.IgM }));
                 ex.IgG = exame.IgG;
                 ex.IgM = exame.IgM;
                 ex.Pcr = exame.Pcr;
@@ -541,8 +511,24 @@ namespace MonitoraSUS.Controllers
                 ex.DataExame = exame.DataExame;
                 ex.IdEstado = exame.IdEstado;
                 ex.MunicipioId = exame.IdMunicipio;
+                ex.IdEmpresaSaude = exame.IdEmpresaSaude;
 
                 examesViewModel.Add(ex);
+            }
+
+            /*
+             * 2º Filtro - filtrando ViewModel por nome ou cpf
+             */
+            if (!pesquisa.Equals(""))
+            {
+                if (Methods.SoContemLetras(pesquisa))
+                {
+                    examesViewModel = examesViewModel.Where(exameViewModel => exameViewModel.IdPaciente.Nome.ToUpper().Contains(pesquisa.ToUpper())).ToList();
+                }
+                else
+                {
+                    examesViewModel = examesViewModel.Where(exameViewModel => exameViewModel.IdPaciente.Cpf.ToUpper().Contains(pesquisa.ToUpper())).ToList();
+                }
             }
 
             return examesViewModel;
@@ -562,61 +548,10 @@ namespace MonitoraSUS.Controllers
              * Só para garantir que a aplicação não irá quebrar
              * caso view retorne um id que ficou em cache... 
              */
-            if (exame.IdPaciente.Cpf.Equals("")) 
+            if (exame.IdPaciente.Cpf.Equals(""))
                 exame.IdPaciente.Idpessoa = 0;
 
             return exame.IdPaciente;
         }
-
-        public static bool SoContemNumeros(String texto)
-        {
-            texto = texto.Replace(".", "").Replace("-", "");
-            var value = Regex.IsMatch(texto, "^[0-9]*$");
-            return value;
-        }
-
-        public string GetResultadoExame(ExameViewModel exame)
-        {
-
-            string resultado = "I";
-
-            if (exame.Pcr.Equals("S") || exame.IgM.Equals("S"))
-            {
-                resultado = "P";
-            }
-            else if (exame.Pcr.Equals("I") || exame.IgM.Equals("I"))
-            {
-                resultado = "I";
-            }
-            else if (exame.IgG.Equals("S"))
-            {
-                resultado = "C";
-            }
-            else if (exame.Pcr.Equals("N") || exame.IgM.Equals("N"))
-            {
-                resultado = "N";
-            }
-
-            return resultado;
-        }
-
-
-        public string GetStatusExame(string status)
-        {
-
-
-            switch (status)
-            {
-                case "I": return "INDETERMINADO";
-                case "N": return "NEGATIVO";
-                case "C": return "CURADO";
-                case "P": return "POSITIVO";
-
-                default: return "IDETERMINADO";
-            }
-
-
-        }
-
     }
 }

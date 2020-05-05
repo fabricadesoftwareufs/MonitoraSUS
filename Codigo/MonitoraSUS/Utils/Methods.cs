@@ -218,5 +218,58 @@ namespace MonitoraSUS.Utils
             digito = digito + resto.ToString();
             return cnpj.EndsWith(digito);
         }
+
+        public static bool SoContemNumeros(String texto)
+        {
+            texto = texto.Replace(".", "").Replace("-", "");
+            var value = Regex.IsMatch(texto, "^[0-9]*$");
+            return value;
+        }
+
+        public static bool SoContemLetras(String texto)
+        {
+            texto = texto.Replace(".", "").Replace("-", "");
+            var value = Regex.IsMatch(texto, @"^([a-zA-Z ])*$");
+            return value;
+        }
+
+        public static string GetResultadoExame(ExameViewModel exame)
+        {
+
+            string resultado = "I";
+
+            if (exame.Pcr.Equals("S") || exame.IgM.Equals("S"))
+            {
+                resultado = "P";
+            }
+            else if (exame.Pcr.Equals("I") || exame.IgM.Equals("I"))
+            {
+                resultado = "I";
+            }
+            else if (exame.IgG.Equals("S"))
+            {
+                resultado = "C";
+            }
+            else if (exame.Pcr.Equals("N") || exame.IgM.Equals("N"))
+            {
+                resultado = "N";
+            }
+
+            return resultado;
+        }
+
+
+        public static string GetStatusExame(string status)
+        {
+            switch (status)
+            {
+                case "I": return "INDETERMINADO";
+                case "N": return "NEGATIVO";
+                case "C": return "CURADO";
+                case "P": return "POSITIVO";
+
+                default: return "IDETERMINADO";
+            }
+        }
     }
 }
