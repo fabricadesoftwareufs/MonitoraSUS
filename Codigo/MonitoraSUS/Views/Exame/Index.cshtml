@@ -16,15 +16,6 @@
 
     var agente = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
 
-    /*
-     * Usuario para testes, comente a linhda de cima e
-     * descomente as lihas de baixo e altere o id para o
-     * id do usuario que quiser
-     */
-
-    //var agente = new UsuarioViewModel();
-    //agente.UsuarioModel = new Model.UsuarioModel { IdPessoa = 3 };
-
 }
 
 
@@ -53,7 +44,7 @@
                             <div class="row">
                                 <div class="col-md-3">
                                     <div class="form-group">
-                                        <label class="form-control-label" for="input-cpf">CPF ou RG</label>
+                                        <label class="form-control-label" for="input-cpf">CPF/RG ou NOME</label>
                                         <input type="text" name="pesquisa" class="form-control" placeholder="000.000.000-00" />
                                     </div>
                                 </div>
