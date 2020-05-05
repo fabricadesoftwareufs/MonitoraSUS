@@ -132,8 +132,10 @@
 
 <script>
 
-    window.onload = function () {
-        $('#modal-mensagem-retorno').modal('show');
+    window.onload = function () {}
+        if (document.querySelector('#modal-mensagem-retorno')) {
+            $('#modal-mensagem-retorno').modal('show');
+        }
     };
 
 </script>

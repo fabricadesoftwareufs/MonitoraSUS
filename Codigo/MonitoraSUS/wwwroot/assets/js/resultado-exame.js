@@ -1,32 +1,44 @@
+var teclaPressionada = 0; // para evitar submit com tecla enter
+
 // Mostra modal com mensagem de erro
 $(document).ready(function () {
-    document.getElementById("mensagem-retorno").click();
+    if (document.querySelector('#mensagem-retorno'))
+        document.getElementById("mensagem-retorno").click();
+});
+
+// detectando submit via tecla enter
+$(window).keydown(function (event) {
+    if (event.keyCode == 13) {
+        teclaPressionada = event.keyCode;
+        event.preventDefault();
+        return false;
+    } 
 });
 
 //quando o usuario der submit no exame
 $('#btn-submit').on('click', function () {
 
-    if ($("#input-cpf").val().length > 0)
-    {
-        $("#input-cpf").unmask();
+    // evitando submit equivocado com a tecla enter
+    if (teclaPressionada != 13) {
+        if ($("#input-cpf").val().length > 0) {
+            $("#input-cpf").unmask();
+        }
+        else {
+            $("#input-cpf").prop("disabled", true);
+            $("#input-cpf").val("");
+        }
+
+
+       $('#modal-confirmar').modal('hide');
+
+        $('#PesquisarCpf').val('0');
+
+        if ($('#input-nome').val() && $('#input-data-nascimento').val().length == 10 && $('#postal_code').val() && $('#route').val() &&
+            $('#sublocality_level_1').val() && $('#administrative_area_level_2').val() && $('#administrative_area_level_1').val() &&
+            $('#input-celular').val().length == 17 && $('#input-data-exame').val() && $('#input-data-sintomas').val()) {
+            $('#modal-espera').modal('show');
+        }
     }
-    else
-    {
-        $("#input-cpf").prop("disabled", true);
-        $("#input-cpf").val("");
-    }
-
-    $('#modal-confirmar').modal('hide');
-
-    $('#PesquisarCpf').val('0');
-
-    if ($('#input-nome').val() && $('#input-data-nascimento').val().length == 10 && $('#postal_code').val() && $('#route').val() &&
-        $('#sublocality_level_1').val() && $('#administrative_area_level_2').val() && $('#administrative_area_level_1').val() &&
-        $('#input-celular').val().length == 17 && $('#input-data-exame').val() && $('#input-data-sintomas').val())
-    {
-        $('#modal-espera').modal('show');
-    }
-
 });
 
 // submete o formulário completo
@@ -36,6 +48,7 @@ function submitForm() {
 }
 // mostra modal de confirmaocao
 function mensagemResultado() {
+
     var cpf = document.getElementById('input-cpf').value;
     var nome = document.getElementById('input-nome').value;
     var idVirus = document.getElementById('input-virus-bacteria').value;

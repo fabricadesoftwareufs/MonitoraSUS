@@ -6,12 +6,12 @@ var span = document.getElementById('spanInvalidCep');
 
 // Objects forms
 var componentForm = {
+    postal_code: 'short_name',
     route: 'long_name',
     street_number: 'short_name',
-    administrative_area_level_1: 'short_name',
+    sublocality_level_1: 'long_name',
     administrative_area_level_2: 'long_name',
-    postal_code: 'short_name',
-    sublocality_level_1: 'long_name'
+    administrative_area_level_1: 'short_name'
 };
 
 var formCep = {
@@ -50,13 +50,8 @@ function fillInAddress() {
         }
     }
 
-    for (var item in componentForm) {
-        if (document.getElementById(item).value == '') {
-            document.getElementById(item).readOnly = false;
-        }
+    removeReadOnlyCampoVazio();
 
-    }
-        
     if ($('#postal_code').val() == "")
         $('#postal_code').focus();
     else
@@ -144,6 +139,7 @@ function loadEstados() {
 }
 
 function validaCpf() {
+
     let cpf = document.getElementById('input-cpf')
     let span = document.getElementById('spanInvalidCpf')
 
@@ -163,20 +159,33 @@ function validaCpf() {
 }
 
 function PreencheForm() {
-    if ((!isNaN(inputHtml.value) || inputHtml.value.toString().match(/\d{5}-\d{3}/))
-        && inputHtml.value !== ''
-        && (inputHtml.value.length == 8 || inputHtml.value.length == 9)
-    ) {
+    if ((!isNaN(inputHtml.value) || inputHtml.value.toString().match(/\d{5}-\d{3}/)) && inputHtml.value !== ''
+        && (inputHtml.value.length == 8 || inputHtml.value.length == 9)) {
         BuscaViaCep(inputHtml.value);
     }
 }
 
 function PreencheFormCEP() {
-    if ((!isNaN(input.value) || input.value.toString().match(/\d{5}-\d{3}/))
-        && input.value !== ''
-        && (input.value.length == 8 || input.value.length == 9)
-    ) {
+    if ((!isNaN(input.value) || input.value.toString().match(/\d{5}-\d{3}/)) && input.value !== ''
+        && (input.value.length == 8 || input.value.length == 9))
         BuscaViaCep(input.value);
+    else
+        removeReadOnly();
+}
+
+function removeReadOnly() {
+    for (let input in formCep) {
+        if (formCep[input].readOnly) {
+            formCep[input].readOnly = false;
+        }
+    }
+}
+
+function removeReadOnlyCampoVazio() {
+    for (let input in formCep) {
+        if (formCep[input].val() == '') {
+            formCep[input].readOnly = false;
+        }
     }
 }
 
@@ -199,6 +208,9 @@ function BuscaViaCep(cep) {
                     }
                 }
             }
+
+            removeReadOnlyCampoVazio();
+
             if (formCep.logradouro.value != "")
                 ProcuraEndereco(formCep.logradouro.value);
         } else
@@ -244,7 +256,7 @@ function nameInputEmpresaExame(s) {
     }
 }
 
-window.onload = function () {
+$(document).ready(function () {
 
     if ($('#input-cpf').val() == "") {
         $('#input-cpf').focus();
@@ -253,8 +265,9 @@ window.onload = function () {
     } else if ($('#input-cpf').val() != "" && $('#input-nome').val() != "")
         window.location.href = "#input-virus-bacteria";
 
-    $('#modal-mensagem-retorno').modal('show');
-};
+    if (document.querySelector('#modal-mensagem-retorno'))
+        $('#modal-mensagem-retorno').modal('show');
+});
 
 $('#btn-solicitar').on('click', function () {
 
@@ -267,12 +280,53 @@ $('#btn-solicitar').on('click', function () {
     var cidade = $('#administrative_area_level_2').val();
     var estado = $('#administrative_area_level_1').val();
     var foneCelular = $('#input-celular').val();
-    var email = $('#input-email').val();    
+    var email = $('#input-email').val();
 
     if (!(cpf === "" || nome === "" || dataNasc === "" || cep === "" ||
         rua === "" || bairro === "" || cidade === "" || estado === "" ||
-        foneCelular === ""  || email === "")) {
+        foneCelular === "" || email === "")) {
         $('#modal-espera').modal('show');
 
     }
 });
+
+// detectando submit via tecla enter
+$(window).keydown(function (event) {
+    if (event.keyCode == 9) {
+        var focused = document.activeElement;
+        var index = 0;
+        for (var component in componentForm) {
+            if (focused.id === component) {
+                colcoaFocoDinamico(index);
+                break;
+            }
+            index++;
+        }
+    }
+});
+
+
+function colcoaFocoDinamico(i) {
+    var elementoFocado = false;
+    var index = 0;
+    for (var component in componentForm) {
+        if (index > i) {
+            if (!document.getElementById(component).readOnly && document.getElementById(component).value.length == 0) {
+
+                var ind = 0;
+                for (var component in componentForm) {
+                    if (ind == index - 1) {
+                        document.getElementById(component).focus();
+                        elementoFocado = true;
+                    }
+                    ind++;
+                }
+                break;
+            }
+        }
+        index++;
+    }
+
+    if (!elementoFocado)
+        $('#administrative_area_level_1').focus();
+}

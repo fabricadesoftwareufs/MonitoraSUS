@@ -159,11 +159,11 @@
                                     </div>
                                 </div>
                                 <!--div class="col-lg-3">
-                <div class="form-group">
-                    <label class="form-control-label" for="input-leitos-disponiveis">Número de Leitos Disponível</label>
-                    <input asp-for="NumeroLeitosDisponivel" type="number" id="input-leitos-disponiveis" class="form-control" placeholder="">
-                </div>
-            </div-->
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="input-leitos-disponiveis">Número de Leitos Disponível</label>
+                                        <input asp-for="NumeroLeitosDisponivel" type="number" id="input-leitos-disponiveis" class="form-control" placeholder="">
+                                    </div>
+                                </div-->
 
                                 <div class="col-lg-3">
                                     <div class="form-group">
@@ -172,11 +172,11 @@
                                     </div>
                                 </div>
                                 <!--div class="col-lg-3">
-                <div class="form-group">
-                    <label class="form-control-label" for="input-leitos-uti-disponivel">Número de Leitos de UTI Disponível</label>
-                    <input asp-for="NumeroLeitosUtidisponivel" type="number" id="input-leitos-uti-disponivel" class="form-control" placeholder="">
-                </div>
-            </!--div-->
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="input-leitos-uti-disponivel">Número de Leitos de UTI Disponível</label>
+                                        <input asp-for="NumeroLeitosUtidisponivel" type="number" id="input-leitos-uti-disponivel" class="form-control" placeholder="">
+                                    </div>
+                                </!--div-->
                             </div>
                         </div>
                         <hr class="my-4" />
@@ -247,10 +247,9 @@ else if (TempData["mensagemErro"] != null)
                 $('#inputs-leitos').toggle();
             }
 
-            if ($("#mensagem-retorno").length) {
+            if (document.querySelector('#mensagem-retorno')) {
                 $('#mensagem-retorno').click();
             }
-            
         });
 
         function mostraForm() {
