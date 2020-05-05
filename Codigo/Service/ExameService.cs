@@ -149,7 +149,7 @@ namespace Service
                    IdEmpresaSaude = exame.IdEmpresaSaude,
                }).ToList();
 
-        public List<ExameModel> GetByIdPaciente(int idPaciente)
+		public List<ExameModel> GetByIdPaciente(int idPaciente)
          => _context.Exame
                 .Where(exameModel => exameModel.IdPaciente == idPaciente)
                 .Select(exame => new ExameModel
@@ -180,5 +180,15 @@ namespace Service
 
             return exames;
         }
-    }
+
+		public List<ExameModel> GetTotaisEstadoByEmpresa(int idEempresa)
+		=> _context.Exame
+			   .Where(exameModel => exameModel.IdEmpresaSaude == idEempresa)
+			   .GroupBy(e => new { Estado = e.IdEstadoNavigation.Uf,IdMunicipio = e.IdMunicipio, Bairro = e.IdEmpresaSaudeNavigation.Bairro})
+			   .Select(g => new ExameModel
+			   {
+				   IdMunicipio = (Int32) g.Key.IdMunicipio,
+				   IdAgenteSaude = g.Count(),
+			   }).ToList();
+	}
 }

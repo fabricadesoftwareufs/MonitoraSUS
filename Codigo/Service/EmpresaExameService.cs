@@ -205,5 +205,31 @@ namespace Service
 					NumeroLeitosUtidisponivel = empresa.NumeroLeitosUtidisponivel,
 					PossuiLeitosInternacao = Convert.ToBoolean(empresa.PossuiLeitosInternacao)
 				}).ToList();
+		public List<EmpresaExameModel> ListAll()
+			 => _context.Empresaexame
+				.Select(empresa => new EmpresaExameModel
+				{
+					Id = empresa.Id,
+					Cnpj = empresa.Cnpj,
+					Nome = empresa.Nome,
+					Cep = empresa.Cep,
+					Rua = empresa.Rua,
+					Bairro = empresa.Bairro,
+					Cidade = empresa.Cidade,
+					Estado = empresa.Estado,
+					Numero = empresa.Numero,
+					Complemento = empresa.Complemento,
+					Latitude = empresa.Latitude,
+					Longitude = empresa.Longitude,
+					FoneCelular = empresa.FoneCelular,
+					FoneFixo = empresa.FoneFixo,
+					Email = empresa.Email,
+					EmiteLaudoExame = Convert.ToBoolean(empresa.EmiteLaudoExame),
+					NumeroLeitos = empresa.NumeroLeitos,
+					NumeroLeitosDisponivel = empresa.NumeroLeitosDisponivel,
+					NumeroLeitosUti = empresa.NumeroLeitosUti,
+					NumeroLeitosUtidisponivel = empresa.NumeroLeitosUtidisponivel,
+					PossuiLeitosInternacao = Convert.ToBoolean(empresa.PossuiLeitosInternacao)
+				}).ToList();
 	}
 }

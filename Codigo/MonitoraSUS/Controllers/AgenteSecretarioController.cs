@@ -304,7 +304,9 @@ namespace MonitoraSUS.Controllers
 
 			ViewBag.entidade = (ehResponsavel == 0) ? "Agente" : "Gestor";
 			List<EmpresaExameModel> empresas = null;
-			if (autenticadoTrabalhaEstado != null && autenticadoTrabalhaEstado.IdEmpresaExame != EmpresaExameModel.EMPRESA_ESTADO_MUNICIPIO)
+			if (ehAdmin)
+				empresas = _empresaExameService.ListAll();
+			else if (autenticadoTrabalhaEstado != null && autenticadoTrabalhaEstado.IdEmpresaExame != EmpresaExameModel.EMPRESA_ESTADO_MUNICIPIO)
 				empresas = new List<EmpresaExameModel>() { _empresaExameService.GetById(autenticadoTrabalhaEstado.IdEmpresaExame) };
 			else
 				empresas = _empresaExameService.ListByUF(estadoAutenticado.Uf);
@@ -463,14 +465,14 @@ namespace MonitoraSUS.Controllers
 			UsuarioModel usuarioModel = _usuarioService.GetByIdPessoa(idPessoa);
 
 			int tipoUsuario = ativarPerfil.Equals("Agente") ? UsuarioModel.PERFIL_AGENTE : UsuarioModel.PERFIL_GESTOR;
-			if (ativarPerfil.Equals("gestor") && ehAdmin)
+			if (ehAdmin)
 				tipoUsuario = UsuarioModel.PERFIL_SECRETARIO;
 
 			string resposta = "";
 			if (usuarioModel == null)
 			{
 				var pessoa = _pessoaService.GetById(idPessoa);
-				var usuario = new UsuarioModel
+				usuarioModel = new UsuarioModel
 				{
 					IdPessoa = pessoa.Idpessoa,
 					Cpf = pessoa.Cpf,
@@ -478,7 +480,7 @@ namespace MonitoraSUS.Controllers
 					Senha = Methods.GenerateToken(),
 					TipoUsuario = tipoUsuario
 				};
-				_usuarioService.Insert(usuario);
+				_usuarioService.Insert(usuarioModel);
 				(bool nCpf, bool nUsuario, bool nToken) = await new
 									  LoginController(_usuarioService, _pessoaService, _emailService, _recuperarSenhaService)
 									  .GenerateToken(usuarioModel.Cpf, 1);

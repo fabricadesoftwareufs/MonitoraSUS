@@ -30,7 +30,14 @@
 					<div class="row align-items-center">
 						<div class="col">
 							<h5 class="card-title  text-muted mb-0">MonitoraSUS</h5>
-							<h5 class="h3 mb-0">Autorizar @ViewBag.entidade de Saúde</h5>
+							@if (ViewBag.entidade.Equals("Agente"))
+							{
+								<h5 class="h3 mb-0">Autorizar Notificadores</h5>
+							}
+							else
+							{
+								<h5 class="h3 mb-0">Autorizar Gestores</h5>
+							}
 						</div>
 						<div class="col text-right">
 							<a href="@Url.Action("Index", "Home")" class="btn btn-sm btn-default">
@@ -204,12 +211,6 @@
 									<th scope="col" class="sort" data-sort="nome">
 										@Html.DisplayNameFor(model => model.Item2.FirstOrDefault().Nome)
 									</th>
-									<th scope="col" class="sort" data-sort="celular">
-										@Html.DisplayNameFor(model => model.Item2.FirstOrDefault().FoneCelular)
-									</th>
-									<th scope="col" class="sort" data-sort="email">
-										@Html.DisplayNameFor(model => model.Item2.FirstOrDefault().Email)
-									</th>
 									<th>
 										Ações
 									</th>
@@ -220,23 +221,17 @@
 								{
 									<tr>
 										<td>
-											@Html.DisplayFor(modelItem => item.Cnpj)
-										</td>
-										<td>
-											@Html.DisplayFor(modelItem => item.Nome)
-										</td>
-										<td>
-											@Html.DisplayFor(modelItem => item.FoneCelular)
-										</td>
-										<td>
-											@if (item.Email.Equals(""))
+											@if (item.Cnpj.StartsWith("99999"))
 											{
 												<div> - </div>
 											}
 											else
 											{
-												@Html.DisplayFor(modelItem => item.Email)
+												@Html.DisplayFor(modelItem => item.Cnpj)
 											}
+										</td>
+										<td>
+											@Html.DisplayFor(modelItem => item.Nome)
 										</td>
 										<td>
 											<a href="#" onclick="associar('@item.Id', '@ViewBag.entidade')" class="btn btn-success btn-sm"><i class="fa fa-check"></i>Associar</a>
