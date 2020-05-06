@@ -22,5 +22,21 @@ namespace Model
         public int? IdMunicipio { get; set; }
         public int? IdEmpresaSaude { get; set; }
 
-    }
+		public string Resultado
+		{
+			get
+			{
+				if (IgM.Equals("S") || Pcr.Equals("S"))
+					return "Positivo";
+				else if (IgM.Equals("N") && Pcr.Equals("N") && IgG.Equals("N"))
+					return "Negativo";
+				else if ((IgM.Equals("N") && IgG.Equals("S")) || (Pcr.Equals("N") && IgG.Equals("S")))
+						return "Imunizado";
+				else
+					return "Indeterminado";
+			}
+		}
+
+
+	}
 }
