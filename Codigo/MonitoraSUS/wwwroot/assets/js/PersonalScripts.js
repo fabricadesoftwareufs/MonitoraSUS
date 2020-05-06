@@ -289,7 +289,7 @@ $('#btn-solicitar').on('click', function () {
     }
 });
 
-// detectando submit via tecla enter
+// detectando tecla tab
 $(window).keydown(function (event) {
     if (event.keyCode == 9) {
         var focused = document.activeElement;
