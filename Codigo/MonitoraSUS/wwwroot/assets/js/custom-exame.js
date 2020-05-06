@@ -1,13 +1,9 @@
-// indica qual mascara está ativa
-var maskCpf = false;
-
 // Mostra modal com mensagem de erro
 $(document).ready(function () {
 
     colocaMascaraDinamica();
 
     $('#input-data-nascimento').mask('00-00-0000', { reverse: true });
-    $('#input-cep').mask('00000-000', { reverse: true });
     $('#input-telefone').mask('(00) 0000 - 0000');
     $('#input-celular').mask('(00) 00000 - 0000');
 

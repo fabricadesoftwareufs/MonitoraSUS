@@ -102,7 +102,7 @@
                                 {
                                     <tr>
                                         <td>
-                                            @Html.DisplayFor(modelItem => item.IdPaciente.Cpf)
+                                            <a href="#">@Html.DisplayFor(modelItem => item.IdPaciente.Cpf)</a>
                                         </td>
                                         <td>
                                             @Html.DisplayFor(modelItem => item.IdPaciente.Nome)
@@ -127,7 +127,7 @@
                                                         <div class="modal-content text-center" style="padding: 10pt">
                                                             <h3> Confirmar Remoção do Exame ? </h3>
 
-                                                                
+
                                                             <h4>CPF/RG</h4><p>@item.IdPaciente.Cpf</p>
                                                             <h4>Paciente</h4> <p>@item.IdPaciente.Nome </p>
                                                             <h4>Virus/Bacteria</h4> <p>@item.IdVirusBacteria.Nome</p>
@@ -171,7 +171,8 @@ else if (TempData["mensagemErro"] != null)
 
     <script>
         $(document).ready(function () {
-            $('#mensagem-retorno').click();
+            if (document.querySelector('#mensagem-retorno'))
+                document.getElementById("mensagem-retorno").click();
         });
     </script>
 

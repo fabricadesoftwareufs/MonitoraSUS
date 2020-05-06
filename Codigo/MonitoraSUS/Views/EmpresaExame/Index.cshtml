@@ -50,7 +50,7 @@
                                     {
                                         <tr>
                                             <td>
-                                                @Html.DisplayFor(modelItem => item.Cnpj)
+                                                <a href="#">@Html.DisplayFor(modelItem => item.Cnpj)</a>
                                             </td>
                                             <td>
                                                 @Html.DisplayFor(modelItem => item.Nome)
@@ -132,8 +132,10 @@
 
 <script>
 
-    window.onload = function () {
-        $('#modal-mensagem-retorno').modal('show');
+    window.onload = function () {}
+        if (document.querySelector('#modal-mensagem-retorno')) {
+            $('#modal-mensagem-retorno').modal('show');
+        }
     };
 
 </script>
