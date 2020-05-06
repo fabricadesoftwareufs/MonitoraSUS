@@ -6,7 +6,7 @@
     var idPessoa = Model.IdPaciente.Idpessoa;
     var cpf = Model.IdPaciente.Cpf;
     var nome = Model.IdPaciente.Nome;
-    string dataNascimento = Model.IdPaciente.DataNascimento != DateTime.MinValue ? Model.IdPaciente.DataNascimento.ToString("dd-MM-yyyy") : DateTime.Now.ToString("dd-MM-yyyy");
+    string dataNascimento = Model.IdPaciente.DataNascimento != DateTime.MinValue ? Model.IdPaciente.DataNascimento.ToString("dd/MM/yyyy") : DateTime.Now.ToString("dd/MM/yyyy");
     var rua = Model.IdPaciente.Rua;
     var cep = Model.IdPaciente.Cep;
     var bairro = Model.IdPaciente.Bairro;
@@ -80,7 +80,7 @@
                                 <div class="col-md-2">
                                     <div class="form-group">
                                         <label for="input-data-nascimento" class="form-control-label">Data de Nascimento</label>
-                                        <input asp-for="IdPaciente.DataNascimento" id="input-data-nascimento" type="text" placeholder="DD-MM-AAAA" class="form-control" value="@dataNascimento" required />
+                                        <input asp-for="IdPaciente.DataNascimento" type="tel" id="input-data-nascimento" placeholder="dd/mm/aaaa" class="form-control" value="@dataNascimento" required />
                                     </div>
                                 </div>
                                 <div class="col-md-2">
