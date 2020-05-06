@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Model.ExameViewModel>
+﻿@model TotalizadoresExameViewModel
 @using System.Security.Claims;
 @using Model.ViewModel;
 @using MonitoraSUS.Utils;
@@ -15,6 +15,7 @@
      */
 
     var agente = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
+
 
 }
 
@@ -39,9 +40,9 @@
 
                 <div class="card-body">
                     <h4 class="card-title text-muted mb-0">Filtre Exames por Data e CPF/RG</h4>
-                    <form asp-controller="Exame" asp-action="Index">
-                        <div class="pl-lg-2">
-                            <div class="row">
+                    <div class="pl-lg-4">
+                        <div class="row">
+                            <form asp-controller="Exame" asp-action="Index" class="row">
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label class="form-control-label" for="input-cpf">CPF/RG ou NOME</label>
@@ -49,27 +50,85 @@
                                     </div>
                                 </div>
 
-                                <div class="col-md-2">
+                                <div class="col-lg-3">
                                     <div class="form-group">
                                         <label class="form-control-label" for="data-inicial"> Data Inicial</label>
                                         <input type="date" id="data-inicial" name="DataInicial" class="form-control" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
                                     </div>
                                 </div>
 
-                                <div class="col-md-2">
+                                <div class="col-lg-3">
                                     <div class="form-group">
                                         <label class="form-control-label" for="data-final"> Data Final</label>
                                         <input type="date" id="data-final" name="DataFinal" class="form-control" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
                                     </div>
                                 </div>
-                                <div class="col-md-0">
+                                <div class="col-md-2">
                                     <div class="form-group">
                                         <button type="submit" id="btn-filtar" class="form-control margin-left-10 btn btn-default" style="margin-top: 22pt">Filtrar</button>
                                     </div>
                                 </div>
-                            </div>
+                            </form>
+
+                            @if (Model.Imunizados != 0 || Model.Positivos != 0 || Model.Negativos != 0 || Model.Indeterminados != 0)
+                            {
+                                <div class="col text-center">
+                                    <div class="table-responsive">
+                                        <table class="table align-items-center table-flush">
+                                            <thead class="thead-light">
+                                                <tr>
+                                                    <th scope="col" class="sort" data-sort="resultado">
+                                                        Resultado
+                                                    </th>
+                                                    <th scope="col" class="sort" data-sort="nome-paciente">
+                                                        Total
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+
+                                                <tr class="text-danger">
+                                                    <td>
+                                                        Positivos
+                                                    </td>
+                                                    <td>
+                                                        @Model.Positivos
+                                                    </td>
+                                                </tr>
+
+                                                <tr class="text-success">
+                                                    <td>
+                                                        Negativos
+                                                    </td>
+                                                    <td>
+                                                        @Model.Negativos
+                                                    </td>
+                                                </tr>
+
+                                                <tr class="text-warning">
+                                                    <td>
+                                                        Indeterminados
+                                                    </td>
+                                                    <td>
+                                                        @Model.Indeterminados
+                                                    </td>
+                                                </tr>
+                                                <tr class="text-blue">
+                                                    <td>
+                                                        Imunizados
+                                                    </td>
+                                                    <td>
+                                                        @Model.Imunizados
+                                                    </td>
+                                                </tr>
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            }
                         </div>
-                    </form>
+                    </div>
                 </div>
 
                 <div class="card-body ">
@@ -78,19 +137,19 @@
                             <thead class="thead-light">
                                 <tr>
                                     <th scope="col" class="sort" data-sort="cpf">
-                                        Cpf
+                                        Cpf/Rg
                                     </th>
                                     <th scope="col" class="sort" data-sort="nome-paciente">
-                                        @Html.DisplayNameFor(model => model.IdPaciente)
+                                        Paciente
                                     </th>
                                     <th scope="col" class="sort" data-sort="data-exame">
-                                        @Html.DisplayNameFor(model => model.DataExame)
+                                        Data do Exame
                                     </th>
                                     <th scope="col" class="sort" data-sort="virus">
-                                        @Html.DisplayNameFor(model => model.IdVirusBacteria)
+                                        Vírus/Bacteria
                                     </th>
                                     <th scope="col" class="sort" data-sort="resultado">
-                                        @Html.DisplayNameFor(model => model.Resultado)
+                                        Resultado
                                     </th>
                                     <th scope="col" class="sort" data-sort="acoes">
                                         Ações
@@ -98,7 +157,7 @@
                                 </tr>
                             </thead>
                             <tbody class="list">
-                                @foreach (var item in Model)
+                                @foreach (var item in Model.Exames)
                                 {
                                     <tr>
                                         <td>

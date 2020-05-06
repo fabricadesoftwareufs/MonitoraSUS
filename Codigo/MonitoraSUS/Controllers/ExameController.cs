@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Configuration;
 using Model;
+using Model.ViewModel;
 using MonitoraSUS.Utils;
 using Service.Interface;
 using System;
@@ -433,8 +434,11 @@ namespace MonitoraSUS.Controllers
             return ex;
         }
 
-        public List<ExameViewModel> GetAllExamesViewModel(string pesquisa, DateTime DataInicial, DateTime DataFinal)
+        public TotalizadoresExameViewModel GetAllExamesViewModel(string pesquisa, DateTime DataInicial, DateTime DataFinal)
         {
+            // indica se o usuário fez um filtro nos exames
+            var foiFiltrado = false;
+
             /*
              * Pegando usuario logado e carregando 
              * os exames que ele pode ver
@@ -447,47 +451,41 @@ namespace MonitoraSUS.Controllers
             {
                 exames = _exameContext.GetByIdAgente(usuario.UsuarioModel.IdPessoa);
             }
-            else if (usuario.RoleUsuario.Equals("GESTOR") || usuario.RoleUsuario.Equals("SECRETARIO"))
+            else if (usuario.RoleUsuario.Equals("GESTOR"))
             {
                 var secretarioMunicipio = _pessoaTrabalhaMunicipioContext.GetByIdPessoa(usuario.UsuarioModel.IdPessoa);
 
-                // verificando se o funcionario trabalha no municipio ou no estado
                 if (secretarioMunicipio != null)
-                {
-                    var idEstado = Convert.ToInt32(_municicpioContext.GetById(secretarioMunicipio.IdMunicipio).Uf);
-                    exames = _exameContext.GetByIdEstado(idEstado);
-                }
-                else
-                {
-                    var secretarioEstado = _pessoaTrabalhaEstadoContext.GetByIdPessoa(usuario.UsuarioModel.IdPessoa);
+                    exames = _exameContext.GetByIdMunicipio(secretarioMunicipio.IdMunicipio);
+            }
+            else if (usuario.RoleUsuario.Equals("SECRETARIO"))
+            {
+                var secretarioEstado = _pessoaTrabalhaEstadoContext.GetByIdPessoa(usuario.UsuarioModel.IdPessoa);
 
-                    if (secretarioEstado.IdEmpresaExame != 1)
-                        exames = _exameContext.GetByIdEmpresa(secretarioEstado.IdEmpresaExame);
-                    else
-                        exames = _exameContext.GetByIdEstado(secretarioEstado.IdEstado);
-                }
+                if (secretarioEstado.IdEmpresaExame != 1)
+                    exames = _exameContext.GetByIdEmpresa(secretarioEstado.IdEmpresaExame);
+                else
+                    exames = _exameContext.GetByIdEstado(secretarioEstado.IdEstado);
             }
 
 
             /* 
              * 1º Filto - por datas 
              */
-            pesquisa = pesquisa ?? "";
-            if ((DataInicial == DateTime.MinValue) && (DataFinal == DateTime.MinValue) && pesquisa.Equals(""))
-            {
-                exames = exames.Where(exameModel => DateTime.Compare(exameModel.DataExame, DateTime.Today) == 0).ToList();
-            }
-            else if (DataInicial > DateTime.MinValue && DataFinal > DateTime.MinValue)
+            if (DataInicial > DateTime.MinValue && DataFinal > DateTime.MinValue)
             {
                 exames = exames.Where(exameModel => exameModel.DataExame >= DataInicial && exameModel.DataExame <= DataFinal).ToList();
+                foiFiltrado = true;
             }
             else if (DataInicial == DateTime.MinValue && DataFinal > DateTime.MinValue)
             {
                 exames = exames.Where(exameModel => exameModel.DataExame <= DataFinal).ToList();
+                foiFiltrado = true;
             }
             else if (DataFinal == DateTime.MinValue && DataInicial > DateTime.MinValue)
             {
                 exames = exames.Where(exameModel => exameModel.DataExame >= DataInicial).ToList();
+                foiFiltrado = true;
             }
 
             /* 
@@ -519,19 +517,22 @@ namespace MonitoraSUS.Controllers
             /*
              * 2º Filtro - filtrando ViewModel por nome ou cpf
              */
+            pesquisa = pesquisa ?? "";
             if (!pesquisa.Equals(""))
             {
                 if (Methods.SoContemLetras(pesquisa))
                 {
                     examesViewModel = examesViewModel.Where(exameViewModel => exameViewModel.IdPaciente.Nome.ToUpper().Contains(pesquisa.ToUpper())).ToList();
+                    foiFiltrado = true;
                 }
                 else
                 {
                     examesViewModel = examesViewModel.Where(exameViewModel => exameViewModel.IdPaciente.Cpf.ToUpper().Contains(pesquisa.ToUpper())).ToList();
+                    foiFiltrado = true;
                 }
             }
 
-            return examesViewModel;
+            return (foiFiltrado ? PreencheTotalizadores(examesViewModel) : new TotalizadoresExameViewModel { Exames = examesViewModel });
         }
 
         public PessoaModel CreatePessoaModelByExame(ExameViewModel exame)
@@ -553,5 +554,24 @@ namespace MonitoraSUS.Controllers
 
             return exame.IdPaciente;
         }
+
+        public TotalizadoresExameViewModel PreencheTotalizadores(List<ExameViewModel> listaExames)
+        {
+            var examesTotalizados = new TotalizadoresExameViewModel { Exames = listaExames };
+
+            foreach (var item in listaExames)
+            {
+                switch (item.Resultado.ToUpper())
+                {
+                    case "POSITIVO": examesTotalizados.Positivos++; break;
+                    case "NEGATIVO": examesTotalizados.Negativos++; break;
+                    case "INDETERMINADO": examesTotalizados.Indeterminados++; break;
+                    case "CURADO": examesTotalizados.Imunizados++; break;
+                }
+            }
+
+            return examesTotalizados;
+        }
+
     }
 }
