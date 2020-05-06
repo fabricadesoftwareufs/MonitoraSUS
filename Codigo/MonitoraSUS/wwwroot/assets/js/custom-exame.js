@@ -1,6 +1,3 @@
-// indica qual mascara está ativa
-var maskCpf = false;
-
 // Mostra modal com mensagem de erro
 $(document).ready(function () {
 
