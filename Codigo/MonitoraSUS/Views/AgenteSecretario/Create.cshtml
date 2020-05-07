@@ -9,6 +9,7 @@
     var caseController = ViewBag.userType == 1 ? "CreateSec" : "CreateAgent";
     var listaDeEstados = ViewBag.estados as List<Model.PessoaModel>;
     var googleKey = ViewBag.googleKey;
+    var recaptchaSiteKey = ViewBag.recaptchaSiteKey;
 }
 
 
@@ -75,6 +76,7 @@
                                     <div class="form-group">
                                         <input type="hidden" id="longitude" asp-for="Longitude" />
                                         <input type="hidden" id="latitude" asp-for="Latitude" />
+                                        <input type="hidden" id="g-recaptcha-response" name="g-recaptcha-response" />
                                     </div>
                                 </div>
                                 <div class="col-lg-2">
@@ -306,6 +308,15 @@
 @section Scripts {
     <script src="~/assets/js/custom.js"></script>
     <script src="~/assets/js/PersonalScripts.js"></script>
+    <script src="https://www.google.com/recaptcha/api.js?render=@recaptchaSiteKey"></script>
+    <script>
+        grecaptcha.ready(function () {
+            grecaptcha.execute('@recaptchaSiteKey', { action: 'homepage' }).then(function (token) {
+                console.log(token);
+                document.getElementById('g-recaptcha-response').value = token;
+            });
+        });
+    </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=@googleKey&libraries=places&callback=initAutocomplete&language=pt-BR"
             async defer></script>
 }
