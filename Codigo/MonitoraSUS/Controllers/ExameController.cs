@@ -28,7 +28,6 @@ namespace MonitoraSUS.Controllers
         private readonly IPessoaTrabalhaEstadoService _pessoaTrabalhaEstadoContext;
         private readonly IPessoaTrabalhaMunicipioService _pessoaTrabalhaMunicipioContext;
         private readonly IConfiguration _configuration;
-        public static List<ExameViewModel> ITENS_PESQUISADO;
 
         public ExameController(IVirusBacteriaService virusBacteriaContext,
                                IExameService exameContext,
@@ -557,8 +556,6 @@ namespace MonitoraSUS.Controllers
                     foiFiltrado = true;
                 }
             }
-
-            ITENS_PESQUISADO = examesViewModel;
 
             return (foiFiltrado ? PreencheTotalizadores(examesViewModel) : new TotalizadoresExameViewModel { Exames = examesViewModel });
         }
