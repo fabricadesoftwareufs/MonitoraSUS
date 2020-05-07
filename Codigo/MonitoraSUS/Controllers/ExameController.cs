@@ -65,20 +65,43 @@ namespace MonitoraSUS.Controllers
             return View(GetAllExamesViewModel(pesquisa, DataInicial, DataFinal));
         }
 
-        /* 
-        * Lançamento de notificação 
-        */
+        /*
+    * Lançamento de notificação 
+         */
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult NotificateByList(List<ExameViewModel> exames)
         {
             foreach (var item in exames)
-            { 
-                
+            {
+
                 // TODO lançar notificacao
             }
-
             return RedirectToAction(nameof(Notificate));
+        }
+
+        [Authorize(Roles = "GESTOR, SECRETARIO")]
+        public IActionResult TotaisExames()
+        {
+            var usuario = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
+
+            var autenticadoTrabalhaEstado = _pessoaTrabalhaEstadoContext.GetByIdPessoa(usuario.UsuarioModel.IdPessoa);
+            var autenticadoTrabalhaMunicipio = _pessoaTrabalhaMunicipioContext.GetByIdPessoa(usuario.UsuarioModel.IdPessoa);
+
+            List<TotalEstadoMunicipioBairro> totaisRealizado = new List<TotalEstadoMunicipioBairro>();
+
+            if (autenticadoTrabalhaMunicipio != null)
+            {
+                totaisRealizado = _exameContext.GetTotaisRealizadosByMunicipio(autenticadoTrabalhaMunicipio.IdMunicipio);
+            }
+            else if (autenticadoTrabalhaEstado != null)
+            {
+                if (autenticadoTrabalhaEstado.IdEmpresaExame == EmpresaExameModel.EMPRESA_ESTADO_MUNICIPIO)
+                    totaisRealizado = _exameContext.GetTotaisRealizadosByEstado(autenticadoTrabalhaEstado.IdEstado);
+                else
+                    totaisRealizado = _exameContext.GetTotaisRealizadosByEmpresa(autenticadoTrabalhaEstado.IdEmpresaExame);
+            }
+            return View(totaisRealizado);
         }
 
         /// <summary>
@@ -108,7 +131,7 @@ namespace MonitoraSUS.Controllers
                     ViewBag.successN = "error";
                     Console.WriteLine
                         (
-                            $" Registration Failure : {ex.Message} " + 
+                            $" Registration Failure : {ex.Message} " +
                             $" responseTrace : {ex.StackTrace}"
                         );
                 }

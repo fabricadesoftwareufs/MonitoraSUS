@@ -50,12 +50,13 @@ function fillInAddress() {
         }
     }
 
+    removeReadOnlyCampoVazio();
+
     if ($('#postal_code').val() == "")
         $('#postal_code').focus();
     else
         $('#street_number').focus();
 
-     removeReadOnlyCampoVazio();
 }
 
 function geolocate() {
@@ -208,10 +209,10 @@ function BuscaViaCep(cep) {
                 }
             }
 
+            removeReadOnlyCampoVazio();
+
             if (formCep.logradouro.value != "")
                 ProcuraEndereco(formCep.logradouro.value);
-            
-            removeReadOnlyCampoVazio();
         } else
             span.hidden = false;
     })
@@ -289,7 +290,7 @@ $('#btn-solicitar').on('click', function () {
     }
 });
 
-// detectando tecla tab
+// detectando submit via tecla enter
 $(window).keydown(function (event) {
     if (event.keyCode == 9) {
         var focused = document.activeElement;

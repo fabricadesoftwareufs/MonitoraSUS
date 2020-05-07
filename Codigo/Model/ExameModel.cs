@@ -5,7 +5,12 @@ namespace Model
 {
     public class ExameModel
     {
-        public int IdExame { get; set; }
+		public const string RESULTADO_POSITIVO = "Positivo";
+		public const string RESULTADO_NEGATIVO = "Negativo";
+		public const string RESULTADO_IMUNIZADO = "Imunizado";
+		public const string RESULTADO_INDETERMINADO = "Indeterminado";
+
+		public int IdExame { get; set; }
         public int IdVirusBacteria { get; set; }
         public int IdPaciente { get; set; }
         public int IdAgenteSaude { get; set; }
@@ -29,13 +34,13 @@ namespace Model
 			get
 			{
 				if (IgM.Equals("S") || Pcr.Equals("S"))
-					return "Positivo";
+					return RESULTADO_POSITIVO;
 				else if (IgM.Equals("N") && Pcr.Equals("N") && IgG.Equals("N"))
-					return "Negativo";
+					return RESULTADO_NEGATIVO;
 				else if ((IgM.Equals("N") && IgG.Equals("S")) || (Pcr.Equals("N") && IgG.Equals("S")))
-						return "Imunizado";
+						return RESULTADO_IMUNIZADO;
 				else
-					return "Indeterminado";
+					return RESULTADO_INDETERMINADO;
 			}
 		}
 
