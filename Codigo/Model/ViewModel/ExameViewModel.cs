@@ -20,6 +20,7 @@ namespace Model
             MunicipioId = 0;
             PesquisarCpf = 0;
             Resultado = "";
+            FoiNotificado = false;
         }
         public int IdExame { get; set; }
         [Display(Name = "Virus ou Bacteria")]
@@ -44,6 +45,7 @@ namespace Model
         public int PesquisarCpf { get; set; }
         [Display(Name = "Resultado")]
         public string Resultado { get; set; }
+        public bool FoiNotificado {get;set;}
 
     }
 }

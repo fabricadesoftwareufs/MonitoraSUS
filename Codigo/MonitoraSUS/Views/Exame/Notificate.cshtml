@@ -1,4 +1,4 @@
-﻿@model TotalizadoresExameViewModel
+﻿@model Model.ViewModel.TotalizadoresExameViewModel
 @using System.Security.Claims;
 @using Model.ViewModel;
 @using MonitoraSUS.Utils;
@@ -6,7 +6,7 @@
 
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Notificar";
 
 
     /*
@@ -15,6 +15,7 @@
      */
 
     var agente = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
+    var listaItens = Model.Exames;
 
 
 }
@@ -43,7 +44,7 @@
                     <div class="pl-lg-0">
                         <div class="row">
                             <div class="col">
-                                <form asp-controller="Exame" asp-action="Index">
+                                <form asp-controller="Exame" asp-action="Notificate">
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="form-group">
@@ -140,6 +141,37 @@
                         </div>
                     </div>
                 </div>
+                <div class="col-md-12 text-right">
+                    @using (Html.BeginForm("NotificateByList", "Exame", FormMethod.Post))
+                    {
+                        @for (int i = 0; i < Model.Exames.Count; i++)
+                        {
+                            <div class="form-group" hidden>
+                                @Html.LabelFor(model => model.Exames[i].IdExame, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.Exames[i].IdExame, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.Exames[i].IdExame, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group" hidden>
+                                @Html.LabelFor(model => model.Exames[i].IdPaciente.Idpessoa, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.Exames[i].IdPaciente.Idpessoa, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.Exames[i].IdPaciente.Idpessoa, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group" hidden>
+                                @Html.LabelFor(model => model.Exames[i].Resultado, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.Exames[i].Resultado, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.Exames[i].Resultado, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        }
+
+                        <button type="submit" class="btn btn-info btn-xs"><i class="fa fa-envelope"></i> Notificar Todos</button>
+                    }
+                </div>
 
                 <div class="card-body ">
                     <div class="table-responsive">
@@ -160,6 +192,9 @@
                                     </th>
                                     <th scope="col" class="sort" data-sort="resultado">
                                         Resultado
+                                    </th>
+                                    <th scope="col" class="sort" data-sort="foi-notificado">
+                                        Foi Notificado
                                     </th>
                                     <th scope="col" class="sort" data-sort="acoes">
                                         Ações
@@ -186,30 +221,19 @@
                                             @Html.DisplayFor(modelItem => item.Resultado)
                                         </td>
                                         <td>
-                                            <a href="@Url.Action("Details", "Exame", new { id = item.IdExame})" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> Detalhes </a>
-                                            <a href="@Url.Action("Edit", "Exame", new { id = item.IdExame })" class="btn btn-info btn-xs"><i class="fa fa-edit"></i> Editar </a>
-                                            @if (item.IdAgenteSaude.Idpessoa == agente.UsuarioModel.IdPessoa)
+                                            @if (item.FoiNotificado)
                                             {
-                                                <a data-toggle="modal" data-target="#modal-confirmar-@item.IdExame" class="btn btn-danger btn-xs text-white"><i class="fa fa-trash "></i> Remover </a>
-                                                <div class="modal fade bs-example-modal-sm" id="modal-confirmar-@item.IdExame" tabindex="-1" role="dialog" aria-hidden="true">
-                                                    <div class="modal-dialog modal-sm">
-                                                        <div class="modal-content text-center" style="padding: 10pt">
-                                                            <h3> Confirmar Remoção do Exame ? </h3>
-
-
-                                                            <h4>CPF/RG</h4><p>@item.IdPaciente.Cpf</p>
-                                                            <h4>Paciente</h4> <p>@item.IdPaciente.Nome </p>
-                                                            <h4>Virus/Bacteria</h4> <p>@item.IdVirusBacteria.Nome</p>
-                                                            <h4>Resultado</h4> <p>@item.Resultado </p>
-
-                                                            @using (Html.BeginForm("Delete", "Exame", new { id = item.IdExame }, FormMethod.Post))
-                                                            {
-                                                                <a class="btn btn-danger text-white" data-dismiss="modal">Cancelar</a>
-                                                                <button type="submit" value="Remover" class="btn btn-success btn-xs">Confimar</button>
-                                                            }
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                                <p>SIM</p>
+                                            }
+                                            else
+                                            {
+                                                <p>NAO</p>
+                                            }
+                                        </td>
+                                        <td>
+                                            @using (Html.BeginForm("NotificateById", "Exame", new { id = item.IdExame }, FormMethod.Post))
+                                            {
+                                                <button type="submit" class="btn btn-info btn-xs"><i class="fa fa-envelope"></i> Notificar</button>
                                             }
                                         </td>
                                     </tr>
