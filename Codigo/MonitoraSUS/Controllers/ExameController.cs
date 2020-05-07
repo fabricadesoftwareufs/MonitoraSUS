@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Configuration;
 using Model;
+using Model.ViewModel;
 using MonitoraSUS.Utils;
 using Service.Interface;
 using System;
@@ -59,8 +60,31 @@ namespace MonitoraSUS.Controllers
 
             return View(GetAllExamesViewModel(pesquisa, DataInicial, DataFinal));
         }
+		[Authorize(Roles = "GESTOR, SECRETARIO")]
+		public IActionResult TotaisExames()
+		{
+			var usuario = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
 
-        public IActionResult Details(int id)
+			var autenticadoTrabalhaEstado = _pessoaTrabalhaEstadoContext.GetByIdPessoa(usuario.UsuarioModel.IdPessoa);
+			var autenticadoTrabalhaMunicipio = _pessoaTrabalhaMunicipioContext.GetByIdPessoa(usuario.UsuarioModel.IdPessoa);
+
+			List<TotalEstadoMunicipioBairro> totaisRealizado = new List<TotalEstadoMunicipioBairro>();
+
+			if (autenticadoTrabalhaMunicipio != null)
+			{
+				totaisRealizado = _exameContext.GetTotaisRealizadosByMunicipio(autenticadoTrabalhaMunicipio.IdMunicipio);
+			}
+			else if (autenticadoTrabalhaEstado != null)
+			{
+				if (autenticadoTrabalhaEstado.IdEmpresaExame == EmpresaExameModel.EMPRESA_ESTADO_MUNICIPIO)
+					totaisRealizado = _exameContext.GetTotaisRealizadosByEstado(autenticadoTrabalhaEstado.IdEstado);
+				else
+					totaisRealizado = _exameContext.GetTotaisRealizadosByEmpresa(autenticadoTrabalhaEstado.IdEmpresaExame);
+			}
+			return View(totaisRealizado);
+		}
+
+		public IActionResult Details(int id)
         {
             return View(GetExameViewModelById(id));
         }
