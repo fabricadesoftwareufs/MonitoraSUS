@@ -28,7 +28,7 @@ namespace MonitoraSUS.Controllers
         private readonly IPessoaTrabalhaEstadoService _pessoaTrabalhaEstadoContext;
         private readonly IPessoaTrabalhaMunicipioService _pessoaTrabalhaMunicipioContext;
         private readonly IConfiguration _configuration;
-
+        public static List<ExameViewModel> ITENS_PESQUISADO;
 
         public ExameController(IVirusBacteriaService virusBacteriaContext,
                                IExameService exameContext,
@@ -53,12 +53,33 @@ namespace MonitoraSUS.Controllers
 
         public IActionResult Index(string pesquisa, DateTime DataInicial, DateTime DataFinal)
         {
-            /*
-             * O tratamento da variavel filtro é feito dentro 
-             * do método GetAllExamesViewModel()
-             */
-
             return View(GetAllExamesViewModel(pesquisa, DataInicial, DataFinal));
+        }
+
+        public IActionResult Notificate(string pesquisa, DateTime DataInicial, DateTime DataFinal)
+        {
+            return View(GetAllExamesViewModel(pesquisa, DataInicial, DataFinal));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult NotificateByList(TotalizadoresExameViewModel exames)
+        {
+            foreach (var item in ITENS_PESQUISADO)
+            { 
+                // lançar notificacao
+            }
+
+            return RedirectToAction(nameof(Notificate));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult NotificateById(int id, IFormCollection collection)
+        {
+            // lançar notificação
+
+            return RedirectToAction(nameof(Notificate));
         }
 
         public IActionResult Details(int id)
@@ -531,6 +552,8 @@ namespace MonitoraSUS.Controllers
                     foiFiltrado = true;
                 }
             }
+
+            ITENS_PESQUISADO = examesViewModel;
 
             return (foiFiltrado ? PreencheTotalizadores(examesViewModel) : new TotalizadoresExameViewModel { Exames = examesViewModel });
         }
