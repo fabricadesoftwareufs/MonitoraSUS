@@ -397,7 +397,7 @@ namespace MonitoraSUS.Controllers
 
             if (situacao != null)
             {
-                situacao.UltimaSituacaoSaude = Methods.GetResultadoExame(exame);
+                situacao.UltimaSituacaoSaude = exame.Resultado;
             }
             else
             {
@@ -405,7 +405,7 @@ namespace MonitoraSUS.Controllers
 
                 situacao.IdVirusBacteria = exame.IdVirusBacteria.IdVirusBacteria;
                 situacao.Idpessoa = _pessoaContext.GetByCpf(Methods.RemoveSpecialsCaracts(exame.IdPaciente.Cpf)).Idpessoa;
-                situacao.UltimaSituacaoSaude = Methods.GetResultadoExame(exame);
+                situacao.UltimaSituacaoSaude = exame.ResultadoStatus;
             }
 
             return situacao;
@@ -469,7 +469,7 @@ namespace MonitoraSUS.Controllers
             ex.IdPaciente = _pessoaContext.GetById(exame.IdPaciente);
             ex.IdAgenteSaude = _pessoaContext.GetById(exame.IdAgenteSaude);
             ex.IdVirusBacteria = _virusBacteriaContext.GetById(exame.IdVirusBacteria);
-            ex.Resultado = Methods.GetStatusExame(Methods.GetResultadoExame(new ExameViewModel { Pcr = exame.Pcr, IgG = exame.IgG, IgM = exame.IgM }));
+            //ex.Resultado = Methods.GetStatusExame(Methods.GetResultadoExame(new ExameViewModel { Pcr = exame.Pcr, IgG = exame.IgG, IgM = exame.IgM }));
             ex.IgG = exame.IgG;
             ex.IgM = exame.IgM;
             ex.Pcr = exame.Pcr;
@@ -482,40 +482,38 @@ namespace MonitoraSUS.Controllers
             return ex;
         }
 
-        public TotalizadoresExameViewModel GetAllExamesViewModel(string pesquisa, DateTime DataInicial, DateTime DataFinal)
-        {
-            // indica se o usuário fez um filtro nos exames
-            var foiFiltrado = false;
+		public TotalizadoresExameViewModel GetAllExamesViewModel(string pesquisa, DateTime DataInicial, DateTime DataFinal)
+		{
+			// indica se o usuário fez um filtro nos exames
+			var foiFiltrado = false;
 
-            /*
+			/*
              * Pegando usuario logado e carregando 
              * os exames que ele pode ver
              */
-            var usuario = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
+			var usuario = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
+			var secretarioMunicipio = _pessoaTrabalhaMunicipioContext.GetByIdPessoa(usuario.UsuarioModel.IdPessoa);
+			var secretarioEstado = _pessoaTrabalhaEstadoContext.GetByIdPessoa(usuario.UsuarioModel.IdPessoa);
 
 
-            var exames = new List<ExameModel>();
-            if (usuario.RoleUsuario.Equals("AGENTE") || usuario.RoleUsuario.Equals("ADM"))
-            {
-                exames = _exameContext.GetByIdAgente(usuario.UsuarioModel.IdPessoa);
-            }
-            else if (usuario.RoleUsuario.Equals("GESTOR"))
-            {
-                var secretarioMunicipio = _pessoaTrabalhaMunicipioContext.GetByIdPessoa(usuario.UsuarioModel.IdPessoa);
+			var exames = new List<ExameModel>();
+			if (usuario.RoleUsuario.Equals("AGENTE") || usuario.RoleUsuario.Equals("ADM"))
+			{
+				exames = _exameContext.GetByIdAgente(usuario.UsuarioModel.IdPessoa);
+			}
+			else if (usuario.RoleUsuario.Equals("GESTOR") || usuario.RoleUsuario.Equals("SECRETARIO"))
 
-                if (secretarioMunicipio != null)
-                    exames = _exameContext.GetByIdMunicipio(secretarioMunicipio.IdMunicipio);
-                }
-            else if (usuario.RoleUsuario.Equals("SECRETARIO"))
-                {
-                    var secretarioEstado = _pessoaTrabalhaEstadoContext.GetByIdPessoa(usuario.UsuarioModel.IdPessoa);
-
-                    if (secretarioEstado.IdEmpresaExame != 1)
-                        exames = _exameContext.GetByIdEmpresa(secretarioEstado.IdEmpresaExame);
-                    else
-                        exames = _exameContext.GetByIdEstado(secretarioEstado.IdEstado);
-                }
-
+			{
+				if (secretarioMunicipio != null)
+					exames = _exameContext.GetByIdMunicipio(secretarioMunicipio.IdMunicipio);
+				if (secretarioEstado != null)
+				{
+					if (secretarioEstado.IdEmpresaExame != EmpresaExameModel.EMPRESA_ESTADO_MUNICIPIO)
+						exames = _exameContext.GetByIdEmpresa(secretarioEstado.IdEmpresaExame);
+					else
+						exames = _exameContext.GetByIdEstado(secretarioEstado.IdEstado);
+				}
+			}
 
             /* 
              * 1º Filto - por datas 
@@ -547,7 +545,7 @@ namespace MonitoraSUS.Controllers
                 ex.IdPaciente = _pessoaContext.GetById(exame.IdPaciente);
                 ex.IdAgenteSaude = _pessoaContext.GetById(exame.IdAgenteSaude);
                 ex.IdVirusBacteria = _virusBacteriaContext.GetById(exame.IdVirusBacteria);
-                ex.Resultado = Methods.GetStatusExame(Methods.GetResultadoExame(new ExameViewModel { Pcr = exame.Pcr, IgG = exame.IgG, IgM = exame.IgM }));
+                //ex.Resultado = Methods.GetStatusExame(Methods.GetResultadoExame(new ExameViewModel { Pcr = exame.Pcr, IgG = exame.IgG, IgM = exame.IgM }));
                 ex.IgG = exame.IgG;
                 ex.IgM = exame.IgM;
                 ex.Pcr = exame.Pcr;
@@ -609,12 +607,12 @@ namespace MonitoraSUS.Controllers
 
             foreach (var item in listaExames)
             {
-                switch (item.Resultado.ToUpper())
+                switch (item.Resultado)
                 {
-                    case "POSITIVO": examesTotalizados.Positivos++; break;
-                    case "NEGATIVO": examesTotalizados.Negativos++; break;
-                    case "INDETERMINADO": examesTotalizados.Indeterminados++; break;
-                    case "CURADO": examesTotalizados.Imunizados++; break;
+                    case ExameModel.RESULTADO_POSITIVO: examesTotalizados.Positivos++; break;
+                    case ExameModel.RESULTADO_NEGATIVO: examesTotalizados.Negativos++; break;
+                    case ExameModel.RESULTADO_INDETERMINADO: examesTotalizados.Indeterminados++; break;
+                    case ExameModel.RESULTADO_IMUNIZADO: examesTotalizados.Imunizados++; break;
     }
             }
 

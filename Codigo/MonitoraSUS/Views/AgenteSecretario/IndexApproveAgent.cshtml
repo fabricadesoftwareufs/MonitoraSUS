@@ -135,27 +135,21 @@
 											</span>
 										</td>
 										<td>
-											@if (item.Status.Equals("S"))
-											{
-												<a href="#" class="btn btn-icon btn-success btn-sm" title="@ativar" data-toggle="modal" data-target="#empresaModal" data-cpf="@item.Cpf">
-													<span class="btn-inner--icon"><i class="fas fa-check"></i></span>
-												</a>
-												<a href="#" class="btn btn-icon btn-danger btn-sm" title="@descartar" data-toggle="modal" data-target="#agentModal" data-funcao="@ViewBag.entidade" data-id="@item.IdPessoa" data-nome="@item.Nome">
-													<span class="btn-inner--icon"><i class="fas fa-times"></i></span>
-												</a>
-											}
-											else if (item.Status.Equals("A"))
+											@if (item.Status.Equals("A"))
 											{
 												<a href="@Url.Action("Block", "AgenteSecretario",  new { entidade = @ViewBag.entidade, idPessoa = item.IdPessoa })" class="btn btn-icon btn-warning btn-sm" title="@bloquear">
 													<span class="btn-inner--icon"><i class="fas fa-ban"></i></span>
 												</a>
 											}
-											else if (item.Status.Equals("I"))
+											else if (item.Status.Equals("I") || item.Status.Equals("S"))
 											{
 												<a href="#" class="btn btn-icon btn-success btn-sm" title="@ativar" data-toggle="modal" data-target="#empresaModal" data-cpf="@item.Cpf">
 													<span class="btn-inner--icon"><i class="fas fa-check"></i></span>
 												</a>
 											}
+											<a href="#" class="btn btn-icon btn-danger btn-sm" title="@descartar" data-toggle="modal" data-target="#agentModal" data-funcao="@ViewBag.entidade" data-id="@item.IdPessoa" data-nome="@item.Nome">
+												<span class="btn-inner--icon"><i class="fas fa-times"></i></span>
+											</a>
 										</td>
 									</tr>
 								}

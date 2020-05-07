@@ -11,8 +11,10 @@ namespace Model
 		public const string RESULTADO_INDETERMINADO = "Indeterminado";
 
 		public int IdExame { get; set; }
-        public int IdVirusBacteria { get; set; }
-        public int IdPaciente { get; set; }
+		[Display(Name = "Virus")]
+		public int IdVirusBacteria { get; set; }
+		[Display(Name = "Paciente")]
+		public int IdPaciente { get; set; }
         public int IdAgenteSaude { get; set; }
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
@@ -42,6 +44,19 @@ namespace Model
 			}
 		}
 
-
+		public string ResultadoStatus
+		{
+			get
+			{
+				if (Resultado.Equals(RESULTADO_POSITIVO))
+					return "P";
+				else if (Resultado.Equals(RESULTADO_NEGATIVO))
+					return "N";
+				else if (Resultado.Equals(RESULTADO_IMUNIZADO))
+					return "C";
+				else
+					return "I";
+			}
+		}
 	}
 }

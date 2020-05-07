@@ -233,7 +233,7 @@ namespace MonitoraSUS.Utils
             return value;
         }
 
-        public static string GetResultadoExame(ExameViewModel exame)
+        /**public static string GetResultadoExame(ExameViewModel exame)
         {
 
             string resultado = "I";
@@ -256,10 +256,10 @@ namespace MonitoraSUS.Utils
             }
 
             return resultado;
-        }
+        }*/
 
 
-        public static string GetStatusExame(string status)
+        /**public static string GetStatusExame(string status)
         {
             switch (status)
             {
@@ -270,6 +270,6 @@ namespace MonitoraSUS.Utils
 
                 default: return "IDETERMINADO";
             }
-        }
+        }*/
     }
 }

@@ -62,7 +62,7 @@ function actionDel() {
     var idPessoa = $("#modal-id").text();
 
 	//var url = '@Url.Action("Delete", "AgenteSecretario")';
-	let url = "/AgenteSecretario/Activate";
+	let url = "/AgenteSecretario/Delete";
 
     if (action == 'Agente')
         window.location.href = url + '/Agente/' + idPessoa;

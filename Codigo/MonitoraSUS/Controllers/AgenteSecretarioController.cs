@@ -323,46 +323,27 @@ namespace MonitoraSUS.Controllers
 		public ActionResult Delete(string entidade, int idPessoa)
 		{
 			var agenteEstado = _pessoaTrabalhaEstadoService.GetByIdPessoa(idPessoa);
+			var agenteMunicipio = _pessoaTrabalhaMunicipioService.GetByIdPessoa(idPessoa);
 			if (agenteEstado != null)
+				_pessoaTrabalhaEstadoService.Delete(idPessoa);
+			if (agenteMunicipio != null)
+				_pessoaTrabalhaMunicipioService.Delete(idPessoa);
+
+			var exames = _exameService.GetByIdPaciente(idPessoa);
+			if (exames.Count() == 0)
+				exames = _exameService.GetByIdAgente(idPessoa);
+			if (exames.Count() == 0)
 			{
-
-				_pessoaTrabalhaEstadoService.Delete(agenteEstado.IdPessoa);
-
-				var exames = _exameService.GetByIdPaciente(agenteEstado.IdPessoa);
-				if (exames == null)
-				{
-					_pessoaService.Delete(agenteEstado.IdPessoa);
-					int idUsuario = _usuarioService.GetByIdPessoa(agenteEstado.IdPessoa).IdUsuario;
-					_recuperarSenhaService.DeleteByUser(idUsuario);
-					_usuarioService.Delete(idUsuario);
-				}
-				else
-				{
-					var usuario = _usuarioService.GetByIdPessoa(agenteEstado.IdPessoa);
-					usuario.TipoUsuario = 0;
-					_usuarioService.Update(usuario);
-				}
+				int idUsuario = _usuarioService.GetByIdPessoa(idPessoa).IdUsuario;
+				_recuperarSenhaService.DeleteByUser(idUsuario);
+				_usuarioService.Delete(idUsuario);
+				_pessoaService.Delete(idPessoa);
 			}
 			else
 			{
-				var agenteMunicipio = _pessoaTrabalhaMunicipioService.GetByIdPessoa(idPessoa);
-				_pessoaTrabalhaMunicipioService.Delete(agenteMunicipio.IdPessoa);
-
-				var exames = _exameService.GetByIdPaciente(agenteMunicipio.IdPessoa);
-				if (exames == null)
-				{
-					_pessoaService.Delete(agenteMunicipio.IdPessoa);
-					int idUsuario = _usuarioService.GetByIdPessoa(agenteMunicipio.IdPessoa).IdUsuario;
-					_recuperarSenhaService.DeleteByUser(idUsuario);
-					_usuarioService.Delete(idUsuario);
-				}
-				else
-				{
-					var usuario = _usuarioService.GetByIdPessoa(agenteMunicipio.IdPessoa);
-					usuario.TipoUsuario = 0;
-					_usuarioService.Update(usuario);
-				}
-
+				var usuario = _usuarioService.GetByIdPessoa(idPessoa);
+				usuario.TipoUsuario = 0;
+				_usuarioService.Update(usuario);
 			}
 
 			int responsavel;
@@ -406,11 +387,14 @@ namespace MonitoraSUS.Controllers
 				else
 				{
 					var pessoaMunicipio = _pessoaTrabalhaMunicipioService.GetByIdPessoa(idPessoa);
-					_pessoaTrabalhaMunicipioService.Delete(pessoaMunicipio.IdPessoa);
-					pessoaMunicipio.EhResponsavel = true;
-					pessoaMunicipio.SituacaoCadastro = "A";
-					pessoaMunicipio.EhSecretario = true;
-					_pessoaTrabalhaMunicipioService.Insert(pessoaMunicipio);
+					if (pessoaMunicipio != null)
+					{
+						_pessoaTrabalhaMunicipioService.Delete(idPessoa);
+						pessoaMunicipio.EhResponsavel = true;
+						pessoaMunicipio.SituacaoCadastro = "A";
+						pessoaMunicipio.EhSecretario = true;
+						_pessoaTrabalhaMunicipioService.Insert(pessoaMunicipio);
+					}
 				}
 			}
 			else if (autenticadoTrabalhaEstado != null)
