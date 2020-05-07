@@ -56,18 +56,23 @@ namespace MonitoraSUS.Controllers
             return View(GetAllExamesViewModel(pesquisa, DataInicial, DataFinal));
         }
 
+
         public IActionResult Notificate(string pesquisa, DateTime DataInicial, DateTime DataFinal)
         {
             return View(GetAllExamesViewModel(pesquisa, DataInicial, DataFinal));
         }
 
+        /* 
+        * Lançamento de notificação 
+        */
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult NotificateByList(TotalizadoresExameViewModel exames)
+        public IActionResult NotificateByList(List<ExameViewModel> exames)
         {
-            foreach (var item in ITENS_PESQUISADO)
+            foreach (var item in exames)
             { 
-                // lançar notificacao
+                
+                // TODO lançar notificacao
             }
 
             return RedirectToAction(nameof(Notificate));
@@ -77,7 +82,7 @@ namespace MonitoraSUS.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult NotificateById(int id, IFormCollection collection)
         {
-            // lançar notificação
+            // TODO lançar notificação
 
             return RedirectToAction(nameof(Notificate));
         }
