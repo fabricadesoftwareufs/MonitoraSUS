@@ -28,6 +28,8 @@ namespace Model
         public int IdEstado { get; set; }
         public int? IdMunicipio { get; set; }
         public int? IdEmpresaSaude { get; set; }
+		public bool FoiNotificado { get; set; }
+		public bool DataNotificacao { get; set; }
 
 		public string Resultado
 		{

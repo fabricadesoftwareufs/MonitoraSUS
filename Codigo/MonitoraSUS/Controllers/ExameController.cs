@@ -50,55 +50,55 @@ namespace MonitoraSUS.Controllers
             _configuration = configuration;
         }
 
-        public IActionResult Index(string pesquisa, DateTime DataInicial, DateTime DataFinal)
+        public IActionResult Index(PesquisaExameViewModel pesquisaExame)
         {
-            return View(GetAllExamesViewModel(pesquisa, DataInicial, DataFinal));
+            return View(GetAllExamesViewModel(pesquisaExame));
         }
 
 
-        public IActionResult Notificate(string pesquisa, DateTime DataInicial, DateTime DataFinal)
+        public IActionResult Notificate(PesquisaExameViewModel pesquisaExame)
         {
-            return View(GetAllExamesViewModel(pesquisa, DataInicial, DataFinal));
+            return View(GetAllExamesViewModel(pesquisaExame));
         }
 
-            /*
-        * Lançamento de notificação 
-             */
+        /*
+         * Lançamento de notificação 
+         */
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult NotificateByList(List<ExameViewModel> exames)
         {
             foreach (var item in exames)
-            { 
+            {
 
                 // TODO lançar notificacao
-	        }
-			return RedirectToAction(nameof(Notificate));
-		}
+            }
+            return RedirectToAction(nameof(Notificate));
+        }
 
-		[Authorize(Roles = "GESTOR, SECRETARIO")]
-		public IActionResult TotaisExames()
-		{
-			var usuario = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
+        [Authorize(Roles = "GESTOR, SECRETARIO")]
+        public IActionResult TotaisExames()
+        {
+            var usuario = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
 
-			var autenticadoTrabalhaEstado = _pessoaTrabalhaEstadoContext.GetByIdPessoa(usuario.UsuarioModel.IdPessoa);
-			var autenticadoTrabalhaMunicipio = _pessoaTrabalhaMunicipioContext.GetByIdPessoa(usuario.UsuarioModel.IdPessoa);
+            var autenticadoTrabalhaEstado = _pessoaTrabalhaEstadoContext.GetByIdPessoa(usuario.UsuarioModel.IdPessoa);
+            var autenticadoTrabalhaMunicipio = _pessoaTrabalhaMunicipioContext.GetByIdPessoa(usuario.UsuarioModel.IdPessoa);
 
-			List<TotalEstadoMunicipioBairro> totaisRealizado = new List<TotalEstadoMunicipioBairro>();
+            List<TotalEstadoMunicipioBairro> totaisRealizado = new List<TotalEstadoMunicipioBairro>();
 
-			if (autenticadoTrabalhaMunicipio != null)
-			{
-				totaisRealizado = _exameContext.GetTotaisRealizadosByMunicipio(autenticadoTrabalhaMunicipio.IdMunicipio);
-			}
-			else if (autenticadoTrabalhaEstado != null)
-			{
-				if (autenticadoTrabalhaEstado.IdEmpresaExame == EmpresaExameModel.EMPRESA_ESTADO_MUNICIPIO)
-					totaisRealizado = _exameContext.GetTotaisRealizadosByEstado(autenticadoTrabalhaEstado.IdEstado);
-				else
-					totaisRealizado = _exameContext.GetTotaisRealizadosByEmpresa(autenticadoTrabalhaEstado.IdEmpresaExame);
-			}
-			return View(totaisRealizado);
-		}
+            if (autenticadoTrabalhaMunicipio != null)
+            {
+                totaisRealizado = _exameContext.GetTotaisRealizadosByMunicipio(autenticadoTrabalhaMunicipio.IdMunicipio);
+            }
+            else if (autenticadoTrabalhaEstado != null)
+            {
+                if (autenticadoTrabalhaEstado.IdEmpresaExame == EmpresaExameModel.EMPRESA_ESTADO_MUNICIPIO)
+                    totaisRealizado = _exameContext.GetTotaisRealizadosByEstado(autenticadoTrabalhaEstado.IdEstado);
+                else
+                    totaisRealizado = _exameContext.GetTotaisRealizadosByEmpresa(autenticadoTrabalhaEstado.IdEmpresaExame);
+            }
+            return View(totaisRealizado);
+        }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -109,7 +109,7 @@ namespace MonitoraSUS.Controllers
             return RedirectToAction(nameof(Notificate));
         }
 
-		public IActionResult Details(int id)
+        public IActionResult Details(int id)
         {
             return View(GetExameViewModelById(id));
         }
@@ -397,7 +397,7 @@ namespace MonitoraSUS.Controllers
 
             if (situacao != null)
             {
-                situacao.UltimaSituacaoSaude = exame.Resultado;
+                situacao.UltimaSituacaoSaude = exame.ResultadoStatus;
             }
             else
             {
@@ -431,6 +431,8 @@ namespace MonitoraSUS.Controllers
             exame.DataExame = viewModel.DataExame;
             exame.IdAgenteSaude = viewModel.IdAgenteSaude.Idpessoa;
             exame.IdEmpresaSaude = viewModel.IdEmpresaSaude;
+            exame.FoiNotificado = viewModel.FoiNotificado;
+            exame.DataNotificacao = viewModel.DataNotificacao;
 
             /*
              *  pegando informações do agente de saúde logado no sistema 
@@ -482,62 +484,62 @@ namespace MonitoraSUS.Controllers
             return ex;
         }
 
-		public TotalizadoresExameViewModel GetAllExamesViewModel(string pesquisa, DateTime DataInicial, DateTime DataFinal)
-		{
-			// indica se o usuário fez um filtro nos exames
-			var foiFiltrado = false;
-
-			/*
+        public PesquisaExameViewModel GetAllExamesViewModel(PesquisaExameViewModel pesquisaExame)
+        {
+            /*
              * Pegando usuario logado e carregando 
              * os exames que ele pode ver
              */
-			var usuario = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
-			var secretarioMunicipio = _pessoaTrabalhaMunicipioContext.GetByIdPessoa(usuario.UsuarioModel.IdPessoa);
-			var secretarioEstado = _pessoaTrabalhaEstadoContext.GetByIdPessoa(usuario.UsuarioModel.IdPessoa);
+            var usuario = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
+            var secretarioMunicipio = _pessoaTrabalhaMunicipioContext.GetByIdPessoa(usuario.UsuarioModel.IdPessoa);
+            var secretarioEstado = _pessoaTrabalhaEstadoContext.GetByIdPessoa(usuario.UsuarioModel.IdPessoa);
 
 
-			var exames = new List<ExameModel>();
-			if (usuario.RoleUsuario.Equals("AGENTE") || usuario.RoleUsuario.Equals("ADM"))
-			{
-				exames = _exameContext.GetByIdAgente(usuario.UsuarioModel.IdPessoa);
-			}
-			else if (usuario.RoleUsuario.Equals("GESTOR") || usuario.RoleUsuario.Equals("SECRETARIO"))
+            var exames = new List<ExameModel>();
+            if (usuario.RoleUsuario.Equals("AGENTE") || usuario.RoleUsuario.Equals("ADM"))
+            {
+                exames = _exameContext.GetByIdAgente(usuario.UsuarioModel.IdPessoa);
+            }
+            else if (usuario.RoleUsuario.Equals("GESTOR") || usuario.RoleUsuario.Equals("SECRETARIO"))
 
-			{
-				if (secretarioMunicipio != null)
-					exames = _exameContext.GetByIdMunicipio(secretarioMunicipio.IdMunicipio);
-				if (secretarioEstado != null)
-				{
-					if (secretarioEstado.IdEmpresaExame != EmpresaExameModel.EMPRESA_ESTADO_MUNICIPIO)
-						exames = _exameContext.GetByIdEmpresa(secretarioEstado.IdEmpresaExame);
-					else
-						exames = _exameContext.GetByIdEstado(secretarioEstado.IdEstado);
-				}
-			}
+            {
+                if (secretarioMunicipio != null)
+                    exames = _exameContext.GetByIdMunicipio(secretarioMunicipio.IdMunicipio);
+                if (secretarioEstado != null)
+                {
+                    if (secretarioEstado.IdEmpresaExame != EmpresaExameModel.EMPRESA_ESTADO_MUNICIPIO)
+                        exames = _exameContext.GetByIdEmpresa(secretarioEstado.IdEmpresaExame);
+                    else
+                        exames = _exameContext.GetByIdEstado(secretarioEstado.IdEstado);
+                }
+            }
 
             /* 
              * 1º Filto - por datas 
              */
-            if (DataInicial > DateTime.MinValue && DataFinal > DateTime.MinValue)
+            if (pesquisaExame.DataInicial == DateTime.MinValue && pesquisaExame.DataFinal == DateTime.MinValue && !pesquisaExame.RealizouPesquisa)
             {
-                exames = exames.Where(exameModel => exameModel.DataExame >= DataInicial && exameModel.DataExame <= DataFinal).ToList();
-                foiFiltrado = true;
+                pesquisaExame.DataInicial = DateTime.Now.AddDays(-7);
+                pesquisaExame.DataFinal   = DateTime.Now;
+                exames = exames.Where(exameModel => exameModel.DataExame >= pesquisaExame.DataInicial && exameModel.DataExame <= DateTime.Now).OrderBy(ex => ex.DataExame).ToList();
             }
-            else if (DataInicial == DateTime.MinValue && DataFinal > DateTime.MinValue)
+            else if (pesquisaExame.DataInicial > DateTime.MinValue && pesquisaExame.DataFinal > DateTime.MinValue)
             {
-                exames = exames.Where(exameModel => exameModel.DataExame <= DataFinal).ToList();
-                foiFiltrado = true;
+                exames = exames.Where(exameModel => exameModel.DataExame >= pesquisaExame.DataInicial && exameModel.DataExame <= pesquisaExame.DataFinal).ToList();
             }
-            else if (DataFinal == DateTime.MinValue && DataInicial > DateTime.MinValue)
+            else if (pesquisaExame.DataInicial == DateTime.MinValue && pesquisaExame.DataFinal > DateTime.MinValue)
             {
-                exames = exames.Where(exameModel => exameModel.DataExame >= DataInicial).ToList();
-                foiFiltrado = true;
+                exames = exames.Where(exameModel => exameModel.DataExame <= pesquisaExame.DataFinal).ToList();
+            }
+            else if (pesquisaExame.DataFinal == DateTime.MinValue && pesquisaExame.DataInicial > DateTime.MinValue)
+            {
+                exames = exames.Where(exameModel => exameModel.DataExame >= pesquisaExame.DataInicial).ToList();
             }
 
             /* 
              * montando view model com o primeiro filtro
              */
-            var examesViewModel = new List<ExameViewModel>();
+            pesquisaExame.Exames = new List<ExameViewModel>();
             foreach (var exame in exames)
             {
                 ExameViewModel ex = new ExameViewModel();
@@ -557,28 +559,34 @@ namespace MonitoraSUS.Controllers
                 ex.MunicipioId = exame.IdMunicipio;
                 ex.IdEmpresaSaude = exame.IdEmpresaSaude;
 
-                examesViewModel.Add(ex);
+                pesquisaExame.Exames.Add(ex);
             }
 
             /*
-             * 2º Filtro - filtrando ViewModel por nome ou cpf
+             * 2º Filtro - filtrando ViewModel por nome ou cpf e resultado
              */
-            pesquisa = pesquisa ?? "";
-            if (!pesquisa.Equals(""))
-            {
-                if (Methods.SoContemLetras(pesquisa))
-                {
-                    examesViewModel = examesViewModel.Where(exameViewModel => exameViewModel.IdPaciente.Nome.ToUpper().Contains(pesquisa.ToUpper())).ToList();
-                    foiFiltrado = true;
-                }
+            pesquisaExame.Pesquisa = pesquisaExame.Pesquisa ?? "";
+            pesquisaExame.Resultado = pesquisaExame.Resultado ?? "";
+            
+            if (!pesquisaExame.Pesquisa.Equals(""))
+                if (Methods.SoContemLetras(pesquisaExame.Pesquisa))
+                    pesquisaExame.Exames = pesquisaExame.Exames.Where(exameViewModel => exameViewModel.IdPaciente.Nome.ToUpper().Contains(pesquisaExame.Pesquisa.ToUpper())).ToList();
                 else
-                {
-                    examesViewModel = examesViewModel.Where(exameViewModel => exameViewModel.IdPaciente.Cpf.ToUpper().Contains(pesquisa.ToUpper())).ToList();
-                    foiFiltrado = true;
-                }
-            }
+                    pesquisaExame.Exames = pesquisaExame.Exames.Where(exameViewModel => exameViewModel.IdPaciente.Cpf.ToUpper().Contains(pesquisaExame.Pesquisa.ToUpper())).ToList();
 
-            return (foiFiltrado ? PreencheTotalizadores(examesViewModel) : new TotalizadoresExameViewModel { Exames = examesViewModel });
+            if (!pesquisaExame.Resultado.Equals(""))
+                pesquisaExame.Exames = pesquisaExame.Exames.Where(exameViewModel => exameViewModel.Resultado.ToUpper().Equals(pesquisaExame.Resultado.ToUpper())).ToList();
+
+
+            /* 
+             * Ordenando lista por data e pegando maior e menor datas... 
+             */
+            pesquisaExame.Exames.OrderBy(ex => ex.DataExame).ToList();
+            pesquisaExame.DataInicial = exames[0].DataExame;
+            pesquisaExame.DataFinal = exames[exames.Count-1].DataExame;
+
+
+            return PreencheTotalizadores(pesquisaExame);
         }
 
         public PessoaModel CreatePessoaModelByExame(ExameViewModel exame)
@@ -601,11 +609,10 @@ namespace MonitoraSUS.Controllers
             return exame.IdPaciente;
         }
 
-        public TotalizadoresExameViewModel PreencheTotalizadores(List<ExameViewModel> listaExames)
+        public PesquisaExameViewModel PreencheTotalizadores(PesquisaExameViewModel examesTotalizados)
         {
-            var examesTotalizados = new TotalizadoresExameViewModel { Exames = listaExames };
 
-            foreach (var item in listaExames)
+            foreach (var item in examesTotalizados.Exames)
             {
                 switch (item.Resultado)
                 {
@@ -613,8 +620,9 @@ namespace MonitoraSUS.Controllers
                     case ExameModel.RESULTADO_NEGATIVO: examesTotalizados.Negativos++; break;
                     case ExameModel.RESULTADO_INDETERMINADO: examesTotalizados.Indeterminados++; break;
                     case ExameModel.RESULTADO_IMUNIZADO: examesTotalizados.Imunizados++; break;
-    }
+                }
             }
+
 
             return examesTotalizados;
         }
