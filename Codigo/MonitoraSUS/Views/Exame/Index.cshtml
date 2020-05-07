@@ -51,6 +51,15 @@
                                         </div>
                                     </div>
                                     <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="form-control-label" for="input-cpf">Cidade</label>
+                                                <input asp-for="Cidade" type="text" name="cidade" class="form-control" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label class="form-control-label" for="data-inicial"> Data Inicial</label>
@@ -74,7 +83,7 @@
                                             <div class="form-group">
                                                 <label class="form-control-label" for="input-atuacao-estado">Resultado</label>
                                                 <select asp-for="Resultado" class="form-control" id="input-resultado">
-                                                    <option>Todos as Opçoes</option>
+                                                    <option>Todas as Opçoes</option>
                                                     <option>Positivo</option>
                                                     <option>Negativo</option>
                                                     <option>Indeterminado</option>
@@ -153,6 +162,13 @@
                     </div>
                 </div>
 
+                <!-- div class="col-md-12 text-right">
+                    @using (Html.BeginForm("Export", "Exame", FormMethod.Post))
+                    {
+                        <button type="submit" class="btn btn-success btn-xs"><i class="fa fa-list"></i> Exportar Selecionados</button>
+                    }
+                </div>-->
+
                 <div class="card-body ">
                     <div class="table-responsive">
                         <table class="table align-items-center table-flush">
@@ -163,6 +179,12 @@
                                     </th>
                                     <th scope="col" class="sort" data-sort="nome-paciente">
                                         Paciente
+                                    </th>
+                                    <th scope="col" class="sort" data-sort="cidade">
+                                        Cidade
+                                    </th>
+                                    <th scope="col" class="sort" data-sort="estado">
+                                        Estado
                                     </th>
                                     <th scope="col" class="sort" data-sort="data-exame">
                                         Data do Exame
@@ -186,7 +208,27 @@
                                             <a href="#">@Html.DisplayFor(modelItem => item.IdPaciente.Cpf)</a>
                                         </td>
                                         <td>
-                                            @Html.DisplayFor(modelItem => item.IdPaciente.Nome)
+                                            @if (@item.IdPaciente.Nome.Length > 15)
+                                            {
+                                                <div>@item.IdPaciente.Nome.Substring(0, 15)...</div>
+                                            }
+                                            else
+                                            {
+                                                <div>@item.IdPaciente.Nome</div>
+                                            }
+                                        </td>
+                                        <td>
+                                            @if (@item.IdPaciente.Cidade.Length > 15)
+                                            {
+                                                <div>@item.IdPaciente.Cidade.Substring(0, 15)...</div>
+                                            }
+                                            else
+                                            {
+                                                <div>@item.IdPaciente.Cidade</div>
+                                            }
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.IdPaciente.Estado)
                                         </td>
                                         <td>
                                             @Html.DisplayFor(modelItem => item.DataExame)

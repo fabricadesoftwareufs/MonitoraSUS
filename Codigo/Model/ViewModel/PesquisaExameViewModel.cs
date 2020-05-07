@@ -25,5 +25,6 @@ namespace Model.ViewModel
         public DateTime DataFinal { get; set; }
         public string Resultado { get; set; }
         public bool RealizouPesquisa { get; set; }
+        public string Cidade { get; set; }
     }
 }
