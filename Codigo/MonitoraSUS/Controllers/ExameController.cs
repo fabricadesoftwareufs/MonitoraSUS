@@ -506,6 +506,7 @@ namespace MonitoraSUS.Controllers
             return ex;
         }
 
+
         public PesquisaExameViewModel GetAllExamesViewModel(PesquisaExameViewModel pesquisaExame)
         {
             /*
@@ -523,7 +524,6 @@ namespace MonitoraSUS.Controllers
                 exames = _exameContext.GetByIdAgente(usuario.UsuarioModel.IdPessoa);
             }
             else if (usuario.RoleUsuario.Equals("GESTOR") || usuario.RoleUsuario.Equals("SECRETARIO"))
-
             {
                 if (secretarioMunicipio != null)
                     exames = _exameContext.GetByIdMunicipio(secretarioMunicipio.IdMunicipio);
