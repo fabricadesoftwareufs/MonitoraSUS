@@ -1,11 +1,14 @@
 using Model;
+using Model.AuxModel;
 using Model.ViewModel;
+using Newtonsoft.Json;
 using System;
 using System.Linq;
+using System.Net.Http;
 using System.Security.Claims;
 using System.Text;
 using System.Text.RegularExpressions;
-
+using System.Threading.Tasks;
 
 namespace MonitoraSUS.Utils
 {
@@ -42,39 +45,39 @@ namespace MonitoraSUS.Utils
                 case 0:
                     return "<html><body>" +
                         "Foi solicitado a recuperação de sua senha para acesso ao MonitoraSUS.<br>" +
-						"Você possui 24 horas para fazer a alteração da sua senha de acesso.<br>" +
+                        "Você possui 24 horas para fazer a alteração da sua senha de acesso.<br>" +
                         link + senhaModel.Token + "'>Clique aqui mudar a senha</a>" +
-						RodapeEmail();
+                        RodapeEmail();
 
 
-				case 1:
+                case 1:
                     return "<html><body>" +
-                        "Parabéns! Seu cadastro foi aprovado para acesso ao MonitoraSUS.<br>"+
-						"Você possui 24 horas para criar sua senha de acesso ao sistema.<br>" +
+                        "Parabéns! Seu cadastro foi aprovado para acesso ao MonitoraSUS.<br>" +
+                        "Você possui 24 horas para criar sua senha de acesso ao sistema.<br>" +
                         link + senhaModel.Token + "'>Clique aqui para criar sua senha.</a>" +
-						RodapeEmail();
+                        RodapeEmail();
 
-				case 2:
+                case 2:
                     return "<html><body>" +
-                        "Parabéns! Seu cadastro foi ativado para acesso ao MonitoraSUS. <br>"+
-						"Acesse o sistema "+ site + "'>aqui</a>." +
-						"<br>Caso não lembre da sua senha de acesso, você possui 24 horas para criar uma nova senha.<br><a href='" +
-                        link + senhaModel.Token + "'>Clique aqui para criar uma nova senha.</a>"+
-						RodapeEmail();
+                        "Parabéns! Seu cadastro foi ativado para acesso ao MonitoraSUS. <br>" +
+                        "Acesse o sistema " + site + "'>aqui</a>." +
+                        "<br>Caso não lembre da sua senha de acesso, você possui 24 horas para criar uma nova senha.<br><a href='" +
+                        link + senhaModel.Token + "'>Clique aqui para criar uma nova senha.</a>" +
+                        RodapeEmail();
 
                 default: return null;
             }
         }
 
-		private static string RodapeEmail()
-		{
-			return "<br>" +
-					"Qualquer dúvida ou sugestão entre em contato com o nosso time." +
-						"<br><br>" +
-						"<br>Equipe MonitoraSUS" +
-						"<br>KNUTH-Fábrica de Software da Universidade Federal de Sergipe" +
-						"<br>fabricadesoftware@ufs.br";
-		}
+        private static string RodapeEmail()
+        {
+            return "<br>" +
+                    "Qualquer dúvida ou sugestão entre em contato com o nosso time." +
+                        "<br><br>" +
+                        "<br>Equipe MonitoraSUS" +
+                        "<br>KNUTH-Fábrica de Software da Universidade Federal de Sergipe" +
+                        "<br>fabricadesoftware@ufs.br";
+        }
 
         public static string ReturnRole(int userType)
         {
@@ -219,18 +222,45 @@ namespace MonitoraSUS.Utils
             return cnpj.EndsWith(digito);
         }
 
-        public static bool SoContemNumeros(String texto)
+        public static bool SoContemNumeros(string texto)
         {
             texto = texto.Replace(".", "").Replace("-", "");
             var value = Regex.IsMatch(texto, "^[0-9]*$");
             return value;
         }
 
-        public static bool SoContemLetras(String texto)
+        public static bool SoContemLetras(string texto)
         {
             texto = texto.Replace(".", "").Replace("-", "");
             var value = Regex.IsMatch(texto, @"^([a-zA-Z ])*$");
             return value;
+        }
+
+        /// <summary>
+        /// Realiza requisição para o google e retorna o valor do captcha.
+        /// </summary>
+        /// <param name="token">Valor do campo g-recaptcha-response do formulario.</param>
+        /// <param name="secretKey">Valor da chave secreta do AppSettings.</param>
+        /// <returns></returns>
+        public static async Task<float> ValidateCaptcha(string token, string secretKey)
+        {
+            try
+            {
+                var cliente = new HttpClient();
+                var uri = $"https://www.google.com/recaptcha/api/siteverify?secret={secretKey}&response={token}";
+
+                var resultado = await cliente.GetStringAsync(uri);
+                var jsonResponse = JsonConvert.DeserializeObject<RecaptchaModel>(resultado);
+
+                if (jsonResponse.Success)
+                    return jsonResponse.Score;
+                else
+                    throw new Exception(jsonResponse.ErrorCodes.ToString());
+            }
+            catch (Exception e)
+            {
+                throw e.InnerException;
+            }
         }
 
         /**public static string GetResultadoExame(ExameViewModel exame)

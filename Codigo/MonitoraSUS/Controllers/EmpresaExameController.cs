@@ -18,28 +18,28 @@ namespace MonitoraSUS.Controllers
         private readonly IExameService _exameContext;
         private readonly IPessoaService _pessoaContext;
         private readonly IPessoaTrabalhaEstadoService _trabalhaEstadoContext;
-		private readonly IPessoaTrabalhaMunicipioService _trabalhaMunicipioContext;
-		private readonly IEstadoService _estadoContext;
-		private readonly IMunicipioService _municipioContext;
+        private readonly IPessoaTrabalhaMunicipioService _trabalhaMunicipioContext;
+        private readonly IEstadoService _estadoContext;
+        private readonly IMunicipioService _municipioContext;
 
 
-		public EmpresaExameController(IConfiguration configuration,
+        public EmpresaExameController(IConfiguration configuration,
                                       IEmpresaExameService empresaContext,
                                       IExameService exameContext,
                                       IPessoaService pessoaContext,
                                       IPessoaTrabalhaEstadoService trabalhaEstadoContext,
-									  IPessoaTrabalhaMunicipioService trabalhaMunicipioContext,
-									  IEstadoService estadoContext,
-									  IMunicipioService municipioContext)
+                                      IPessoaTrabalhaMunicipioService trabalhaMunicipioContext,
+                                      IEstadoService estadoContext,
+                                      IMunicipioService municipioContext)
         {
             _configuration = configuration;
             _empresaContext = empresaContext;
             _exameContext = exameContext;
             _pessoaContext = pessoaContext;
             _trabalhaEstadoContext = trabalhaEstadoContext;
-			_trabalhaMunicipioContext = trabalhaMunicipioContext;
-			_estadoContext = estadoContext;
-			_municipioContext = municipioContext;
+            _trabalhaMunicipioContext = trabalhaMunicipioContext;
+            _estadoContext = estadoContext;
+            _municipioContext = municipioContext;
         }
 
         public IActionResult Index()
@@ -47,34 +47,35 @@ namespace MonitoraSUS.Controllers
             return View(GetAllEmpresas());
         }
 
-        public List<EmpresaExameModel> GetAllEmpresas() 
+        public List<EmpresaExameModel> GetAllEmpresas()
         {
             var usuario = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
-			var pessoa = _pessoaContext.GetById(usuario.UsuarioModel.IdPessoa);
+            var pessoa = _pessoaContext.GetById(usuario.UsuarioModel.IdPessoa);
             var empresas = new List<EmpresaExameModel>();
             if (usuario.RoleUsuario.Equals("SECRETARIO") || usuario.RoleUsuario.Equals("GESTOR"))
             {
 
-				var trabalhaEstado = _trabalhaEstadoContext.GetByIdPessoa(pessoa.Idpessoa);
-				if (trabalhaEstado != null)
-				{
-					if (trabalhaEstado.IdEmpresaExame != EmpresaExameModel.EMPRESA_ESTADO_MUNICIPIO)
-						empresas = new List<EmpresaExameModel>() { _empresaContext.GetById(trabalhaEstado.IdEmpresaExame) };
-					else
-					{
-						var estado = _estadoContext.GetById(trabalhaEstado.IdEstado);
-						empresas = _empresaContext.GetByUF(estado.Uf);
-					}
-				} else
-				{
-					var trabalhaMunicipio = _trabalhaMunicipioContext.GetByIdPessoa(pessoa.Idpessoa);
-					if (trabalhaMunicipio != null)
-					{
-						var municipio = _municipioContext.GetById(trabalhaMunicipio.IdMunicipio);
-						var estado = _estadoContext.GetById(int.Parse(municipio.Uf));
-						empresas = _empresaContext.GetByUF(estado.Uf);
-					}
-				}
+                var trabalhaEstado = _trabalhaEstadoContext.GetByIdPessoa(pessoa.Idpessoa);
+                if (trabalhaEstado != null)
+                {
+                    if (trabalhaEstado.IdEmpresaExame != EmpresaExameModel.EMPRESA_ESTADO_MUNICIPIO)
+                        empresas = new List<EmpresaExameModel>() { _empresaContext.GetById(trabalhaEstado.IdEmpresaExame) };
+                    else
+                    {
+                        var estado = _estadoContext.GetById(trabalhaEstado.IdEstado);
+                        empresas = _empresaContext.GetByUF(estado.Uf);
+                    }
+                }
+                else
+                {
+                    var trabalhaMunicipio = _trabalhaMunicipioContext.GetByIdPessoa(pessoa.Idpessoa);
+                    if (trabalhaMunicipio != null)
+                    {
+                        var municipio = _municipioContext.GetById(trabalhaMunicipio.IdMunicipio);
+                        var estado = _estadoContext.GetById(int.Parse(municipio.Uf));
+                        empresas = _empresaContext.GetByUF(estado.Uf);
+                    }
+                }
             }
             return empresas;
         }
@@ -222,7 +223,7 @@ namespace MonitoraSUS.Controllers
                                                   "profissionais e exames cadastrados que dependem dele!";
                 }
 
-                
+
             }
             catch
             {
@@ -232,9 +233,9 @@ namespace MonitoraSUS.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public int VerificaQtdLeitos(EmpresaExameModel empresa) 
+        public int VerificaQtdLeitos(EmpresaExameModel empresa)
         {
-            var status = 0; 
+            var status = 0;
             if (empresa.PossuiLeitosInternacao)
             {
                 if (empresa.NumeroLeitosDisponivel > empresa.NumeroLeitos)
@@ -245,7 +246,7 @@ namespace MonitoraSUS.Controllers
 
                 if (empresa.NumeroLeitosDisponivel < 0 || empresa.NumeroLeitos < 0 ||
                     empresa.NumeroLeitosUtidisponivel < 0 || empresa.NumeroLeitosUti < 0)
-                    status =  2;
+                    status = 2;
             }
 
             return status;

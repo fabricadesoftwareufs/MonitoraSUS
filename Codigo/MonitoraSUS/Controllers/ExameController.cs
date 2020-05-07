@@ -11,7 +11,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
-using System.Text.RegularExpressions;
 
 namespace MonitoraSUS.Controllers
 {
@@ -61,9 +60,9 @@ namespace MonitoraSUS.Controllers
             return View(GetAllExamesViewModel(pesquisaExame));
         }
 
-        /*
-         * Lançamento de notificação 
-         */
+            /*
+        * Lançamento de notificação 
+             */
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult NotificateByList(List<ExameViewModel> exames)
@@ -484,9 +483,12 @@ namespace MonitoraSUS.Controllers
             return ex;
         }
 
-        public PesquisaExameViewModel GetAllExamesViewModel(PesquisaExameViewModel pesquisaExame)
-        {
-            /*
+		public TotalizadoresExameViewModel GetAllExamesViewModel(string pesquisa, DateTime DataInicial, DateTime DataFinal)
+		{
+			// indica se o usuário fez um filtro nos exames
+			var foiFiltrado = false;
+
+			/*
              * Pegando usuario logado e carregando 
              * os exames que ele pode ver
              */
