@@ -4,10 +4,10 @@ namespace Model
 {
     public class EmpresaExameModel
     {
-		public const int EMPRESA_ESTADO_MUNICIPIO = 1;
-		public const string SITUACAO_CADASTRO_SOLICITADA = "S";
+        public const int EMPRESA_ESTADO_MUNICIPIO = 1;
+        public const string SITUACAO_CADASTRO_SOLICITADA = "S";
 
-		[Display(Name = "Código")]
+        [Display(Name = "Código")]
         public int Id { get; set; }
         [Required]
         [Display(Name = "Cnpj")]
@@ -43,8 +43,8 @@ namespace Model
         public string FoneCelular { get; set; }
         [Display(Name = "Telefone Fixo")]
         public string FoneFixo { get; set; }
-		[Required]
-		[Display(Name = "Email")]
+        [Required]
+        [Display(Name = "Email")]
         public string Email { get; set; }
         [Required]
         [Display(Name = "Emite Laudo de Exames ? ")]

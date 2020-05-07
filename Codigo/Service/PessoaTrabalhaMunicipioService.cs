@@ -19,12 +19,12 @@ namespace Service
         public bool Delete(int idPessoa)
         {
             var pessoas = _context.Pessoatrabalhamunicipio.Where(p => p.IdPessoa == idPessoa);
-			foreach(Pessoatrabalhamunicipio pessoa in pessoas)
-				_context.Pessoatrabalhamunicipio.Remove(pessoa);
+            foreach (Pessoatrabalhamunicipio pessoa in pessoas)
+                _context.Pessoatrabalhamunicipio.Remove(pessoa);
             return _context.SaveChanges() == 1 ? true : false;
         }
 
-        
+
         public List<PessoaTrabalhaMunicipioModel> GetAll()
             => _context
                 .Pessoatrabalhamunicipio
@@ -37,67 +37,67 @@ namespace Service
                     SituacaoCadastro = p.SituacaoCadastro
                 }).ToList();
 
-		public List<SolicitanteAprovacaoViewModel> GetAllGestores()
-			=> _context
-				.Pessoatrabalhamunicipio
-				.Where(p => p.EhResponsavel.Equals(1))
-				.Select(p => new SolicitanteAprovacaoViewModel
-				{
-					IdPessoa = p.IdPessoa,
-					Cpf = p.IdPessoaNavigation.Cpf,
-					EhSecretario = Convert.ToBoolean(p.EhSecretario),
-					Nome = p.IdPessoaNavigation.Nome,
-					Cidade = p.IdMunicipioNavigation.Nome,
-					Estado = p.IdMunicipioNavigation.Uf,
-					Status = p.SituacaoCadastro
-				}).ToList();
+        public List<SolicitanteAprovacaoViewModel> GetAllGestores()
+            => _context
+                .Pessoatrabalhamunicipio
+                .Where(p => p.EhResponsavel.Equals(1))
+                .Select(p => new SolicitanteAprovacaoViewModel
+                {
+                    IdPessoa = p.IdPessoa,
+                    Cpf = p.IdPessoaNavigation.Cpf,
+                    EhSecretario = Convert.ToBoolean(p.EhSecretario),
+                    Nome = p.IdPessoaNavigation.Nome,
+                    Cidade = p.IdMunicipioNavigation.Nome,
+                    Estado = p.IdMunicipioNavigation.Uf,
+                    Status = p.SituacaoCadastro
+                }).ToList();
 
-		public List<SolicitanteAprovacaoViewModel> GetAllGestoresMunicipio(int idMunicipio)
-			=> _context
-				.Pessoatrabalhamunicipio
-				.Where(p => p.EhResponsavel.Equals(1) && p.IdMunicipio.Equals(idMunicipio))
-				.Select(p => new SolicitanteAprovacaoViewModel
-				{
-					IdPessoa = p.IdPessoa,
-					Cpf = p.IdPessoaNavigation.Cpf,
-					EhSecretario = Convert.ToBoolean(p.EhSecretario),
-					Nome = p.IdPessoaNavigation.Nome,
-					Cidade = p.IdMunicipioNavigation.Nome,
-					Estado = p.IdMunicipioNavigation.Uf,
-					Status = p.SituacaoCadastro
-				}).ToList();
+        public List<SolicitanteAprovacaoViewModel> GetAllGestoresMunicipio(int idMunicipio)
+            => _context
+                .Pessoatrabalhamunicipio
+                .Where(p => p.EhResponsavel.Equals(1) && p.IdMunicipio.Equals(idMunicipio))
+                .Select(p => new SolicitanteAprovacaoViewModel
+                {
+                    IdPessoa = p.IdPessoa,
+                    Cpf = p.IdPessoaNavigation.Cpf,
+                    EhSecretario = Convert.ToBoolean(p.EhSecretario),
+                    Nome = p.IdPessoaNavigation.Nome,
+                    Cidade = p.IdMunicipioNavigation.Nome,
+                    Estado = p.IdMunicipioNavigation.Uf,
+                    Status = p.SituacaoCadastro
+                }).ToList();
 
-		public List<SolicitanteAprovacaoViewModel> GetAllNotificadores()
-						=> _context
-				.Pessoatrabalhamunicipio
-				.Where(p => p.EhResponsavel.Equals(0))
-				.Select(p => new SolicitanteAprovacaoViewModel
-				{
-					IdPessoa = p.IdPessoa,
-					Cpf = p.IdPessoaNavigation.Cpf,
-					EhSecretario = Convert.ToBoolean(p.EhSecretario),
-					Nome = p.IdPessoaNavigation.Nome,
-					Cidade = p.IdMunicipioNavigation.Nome,
-					Estado = p.IdMunicipioNavigation.Uf,
-					Status = p.SituacaoCadastro
-				}).ToList();
+        public List<SolicitanteAprovacaoViewModel> GetAllNotificadores()
+                        => _context
+                .Pessoatrabalhamunicipio
+                .Where(p => p.EhResponsavel.Equals(0))
+                .Select(p => new SolicitanteAprovacaoViewModel
+                {
+                    IdPessoa = p.IdPessoa,
+                    Cpf = p.IdPessoaNavigation.Cpf,
+                    EhSecretario = Convert.ToBoolean(p.EhSecretario),
+                    Nome = p.IdPessoaNavigation.Nome,
+                    Cidade = p.IdMunicipioNavigation.Nome,
+                    Estado = p.IdMunicipioNavigation.Uf,
+                    Status = p.SituacaoCadastro
+                }).ToList();
 
-		public List<SolicitanteAprovacaoViewModel> GetAllNotificadoresMunicipio(int idMunicipio)
-						=> _context
-				.Pessoatrabalhamunicipio
-				.Where(p => p.EhResponsavel.Equals(0) && p.IdMunicipio.Equals(idMunicipio))
-				.Select(p => new SolicitanteAprovacaoViewModel
-				{
-					IdPessoa = p.IdPessoa,
-					Cpf = p.IdPessoaNavigation.Cpf,
-					EhSecretario = Convert.ToBoolean(p.EhSecretario),
-					Nome = p.IdPessoaNavigation.Nome,
-					Cidade = p.IdMunicipioNavigation.Nome,
-					Estado = p.IdMunicipioNavigation.Uf,
-					Status = p.SituacaoCadastro
-				}).ToList();
+        public List<SolicitanteAprovacaoViewModel> GetAllNotificadoresMunicipio(int idMunicipio)
+                        => _context
+                .Pessoatrabalhamunicipio
+                .Where(p => p.EhResponsavel.Equals(0) && p.IdMunicipio.Equals(idMunicipio))
+                .Select(p => new SolicitanteAprovacaoViewModel
+                {
+                    IdPessoa = p.IdPessoa,
+                    Cpf = p.IdPessoaNavigation.Cpf,
+                    EhSecretario = Convert.ToBoolean(p.EhSecretario),
+                    Nome = p.IdPessoaNavigation.Nome,
+                    Cidade = p.IdMunicipioNavigation.Nome,
+                    Estado = p.IdMunicipioNavigation.Uf,
+                    Status = p.SituacaoCadastro
+                }).ToList();
 
-		public PessoaTrabalhaMunicipioModel GetByIdPessoa(int idPessoa)
+        public PessoaTrabalhaMunicipioModel GetByIdPessoa(int idPessoa)
          => _context
                 .Pessoatrabalhamunicipio
                 .Where(pessoaMunicipio => pessoaMunicipio.IdPessoa == idPessoa)

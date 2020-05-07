@@ -17,11 +17,11 @@ namespace Service.Interface
         List<ExameModel> GetByIdEmpresa(int idEempresa);
         List<ExameModel> GetByIdPaciente(int idPaciente);
         List<ExameModel> GetByIdMunicipio(int idMunicipio);
-        List<ExameModel> CheckDuplicateExamToday(int idPaciente,int idVirusBacteria, DateTime dateExame);
+        List<ExameModel> CheckDuplicateExamToday(int idPaciente, int idVirusBacteria, DateTime dateExame);
 
-		List<TotalEstadoMunicipioBairro> GetTotaisRealizadosByEmpresa(int idEempresa);
-		List<TotalEstadoMunicipioBairro> GetTotaisRealizadosByEstado(int idEstado);
-		List<TotalEstadoMunicipioBairro> GetTotaisRealizadosByMunicipio(int idMunicipio);
+        List<TotalEstadoMunicipioBairro> GetTotaisRealizadosByEmpresa(int idEempresa);
+        List<TotalEstadoMunicipioBairro> GetTotaisRealizadosByEstado(int idEstado);
+        List<TotalEstadoMunicipioBairro> GetTotaisRealizadosByMunicipio(int idMunicipio);
 
-	}
+    }
 }

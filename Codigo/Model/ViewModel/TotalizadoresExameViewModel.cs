@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace Model.ViewModel
 {
     public class TotalizadoresExameViewModel
     {
 
-        public TotalizadoresExameViewModel() 
+        public TotalizadoresExameViewModel()
         {
             Exames = new List<ExameViewModel>();
             Negativos = 0;

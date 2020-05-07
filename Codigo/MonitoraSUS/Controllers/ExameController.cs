@@ -11,7 +11,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
-using System.Text.RegularExpressions;
 
 namespace MonitoraSUS.Controllers
 {
@@ -61,44 +60,44 @@ namespace MonitoraSUS.Controllers
             return View(GetAllExamesViewModel(pesquisa, DataInicial, DataFinal));
         }
 
-            /*
-        * Lançamento de notificação 
-             */
+        /*
+    * Lançamento de notificação 
+         */
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult NotificateByList(List<ExameViewModel> exames)
         {
             foreach (var item in exames)
-            { 
+            {
 
                 // TODO lançar notificacao
-	        }
-			return RedirectToAction(nameof(Notificate));
-		}
+            }
+            return RedirectToAction(nameof(Notificate));
+        }
 
-		[Authorize(Roles = "GESTOR, SECRETARIO")]
-		public IActionResult TotaisExames()
-		{
-			var usuario = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
+        [Authorize(Roles = "GESTOR, SECRETARIO")]
+        public IActionResult TotaisExames()
+        {
+            var usuario = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
 
-			var autenticadoTrabalhaEstado = _pessoaTrabalhaEstadoContext.GetByIdPessoa(usuario.UsuarioModel.IdPessoa);
-			var autenticadoTrabalhaMunicipio = _pessoaTrabalhaMunicipioContext.GetByIdPessoa(usuario.UsuarioModel.IdPessoa);
+            var autenticadoTrabalhaEstado = _pessoaTrabalhaEstadoContext.GetByIdPessoa(usuario.UsuarioModel.IdPessoa);
+            var autenticadoTrabalhaMunicipio = _pessoaTrabalhaMunicipioContext.GetByIdPessoa(usuario.UsuarioModel.IdPessoa);
 
-			List<TotalEstadoMunicipioBairro> totaisRealizado = new List<TotalEstadoMunicipioBairro>();
+            List<TotalEstadoMunicipioBairro> totaisRealizado = new List<TotalEstadoMunicipioBairro>();
 
-			if (autenticadoTrabalhaMunicipio != null)
-			{
-				totaisRealizado = _exameContext.GetTotaisRealizadosByMunicipio(autenticadoTrabalhaMunicipio.IdMunicipio);
-			}
-			else if (autenticadoTrabalhaEstado != null)
-			{
-				if (autenticadoTrabalhaEstado.IdEmpresaExame == EmpresaExameModel.EMPRESA_ESTADO_MUNICIPIO)
-					totaisRealizado = _exameContext.GetTotaisRealizadosByEstado(autenticadoTrabalhaEstado.IdEstado);
-				else
-					totaisRealizado = _exameContext.GetTotaisRealizadosByEmpresa(autenticadoTrabalhaEstado.IdEmpresaExame);
-			}
-			return View(totaisRealizado);
-		}
+            if (autenticadoTrabalhaMunicipio != null)
+            {
+                totaisRealizado = _exameContext.GetTotaisRealizadosByMunicipio(autenticadoTrabalhaMunicipio.IdMunicipio);
+            }
+            else if (autenticadoTrabalhaEstado != null)
+            {
+                if (autenticadoTrabalhaEstado.IdEmpresaExame == EmpresaExameModel.EMPRESA_ESTADO_MUNICIPIO)
+                    totaisRealizado = _exameContext.GetTotaisRealizadosByEstado(autenticadoTrabalhaEstado.IdEstado);
+                else
+                    totaisRealizado = _exameContext.GetTotaisRealizadosByEmpresa(autenticadoTrabalhaEstado.IdEmpresaExame);
+            }
+            return View(totaisRealizado);
+        }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -109,7 +108,7 @@ namespace MonitoraSUS.Controllers
             return RedirectToAction(nameof(Notificate));
         }
 
-		public IActionResult Details(int id)
+        public IActionResult Details(int id)
         {
             return View(GetExameViewModelById(id));
         }
@@ -482,38 +481,38 @@ namespace MonitoraSUS.Controllers
             return ex;
         }
 
-		public TotalizadoresExameViewModel GetAllExamesViewModel(string pesquisa, DateTime DataInicial, DateTime DataFinal)
-		{
-			// indica se o usuário fez um filtro nos exames
-			var foiFiltrado = false;
+        public TotalizadoresExameViewModel GetAllExamesViewModel(string pesquisa, DateTime DataInicial, DateTime DataFinal)
+        {
+            // indica se o usuário fez um filtro nos exames
+            var foiFiltrado = false;
 
-			/*
+            /*
              * Pegando usuario logado e carregando 
              * os exames que ele pode ver
              */
-			var usuario = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
-			var secretarioMunicipio = _pessoaTrabalhaMunicipioContext.GetByIdPessoa(usuario.UsuarioModel.IdPessoa);
-			var secretarioEstado = _pessoaTrabalhaEstadoContext.GetByIdPessoa(usuario.UsuarioModel.IdPessoa);
+            var usuario = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
+            var secretarioMunicipio = _pessoaTrabalhaMunicipioContext.GetByIdPessoa(usuario.UsuarioModel.IdPessoa);
+            var secretarioEstado = _pessoaTrabalhaEstadoContext.GetByIdPessoa(usuario.UsuarioModel.IdPessoa);
 
 
-			var exames = new List<ExameModel>();
-			if (usuario.RoleUsuario.Equals("AGENTE") || usuario.RoleUsuario.Equals("ADM"))
-			{
-				exames = _exameContext.GetByIdAgente(usuario.UsuarioModel.IdPessoa);
-			}
-			else if (usuario.RoleUsuario.Equals("GESTOR") || usuario.RoleUsuario.Equals("SECRETARIO"))
+            var exames = new List<ExameModel>();
+            if (usuario.RoleUsuario.Equals("AGENTE") || usuario.RoleUsuario.Equals("ADM"))
+            {
+                exames = _exameContext.GetByIdAgente(usuario.UsuarioModel.IdPessoa);
+            }
+            else if (usuario.RoleUsuario.Equals("GESTOR") || usuario.RoleUsuario.Equals("SECRETARIO"))
 
-			{
-				if (secretarioMunicipio != null)
-					exames = _exameContext.GetByIdMunicipio(secretarioMunicipio.IdMunicipio);
-				if (secretarioEstado != null)
-				{
-					if (secretarioEstado.IdEmpresaExame != EmpresaExameModel.EMPRESA_ESTADO_MUNICIPIO)
-						exames = _exameContext.GetByIdEmpresa(secretarioEstado.IdEmpresaExame);
-					else
-						exames = _exameContext.GetByIdEstado(secretarioEstado.IdEstado);
-				}
-			}
+            {
+                if (secretarioMunicipio != null)
+                    exames = _exameContext.GetByIdMunicipio(secretarioMunicipio.IdMunicipio);
+                if (secretarioEstado != null)
+                {
+                    if (secretarioEstado.IdEmpresaExame != EmpresaExameModel.EMPRESA_ESTADO_MUNICIPIO)
+                        exames = _exameContext.GetByIdEmpresa(secretarioEstado.IdEmpresaExame);
+                    else
+                        exames = _exameContext.GetByIdEstado(secretarioEstado.IdEstado);
+                }
+            }
 
             /* 
              * 1º Filto - por datas 
@@ -613,7 +612,7 @@ namespace MonitoraSUS.Controllers
                     case ExameModel.RESULTADO_NEGATIVO: examesTotalizados.Negativos++; break;
                     case ExameModel.RESULTADO_INDETERMINADO: examesTotalizados.Indeterminados++; break;
                     case ExameModel.RESULTADO_IMUNIZADO: examesTotalizados.Imunizados++; break;
-    }
+                }
             }
 
             return examesTotalizados;

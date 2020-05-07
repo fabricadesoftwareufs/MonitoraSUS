@@ -43,20 +43,21 @@ namespace Model
         public int? IdEmpresaSaude { get; set; }
         public int PesquisarCpf { get; set; }
         [Display(Name = "Resultado")]
-        public string Resultado {
-			get
-			{
-				return new ExameModel() { IgM = this.IgM, IgG = this.IgG, Pcr = this.Pcr }.Resultado;
-			}
-		}
-		public string ResultadoStatus
-		{
-			get
-			{
-				return new ExameModel() { IgM = this.IgM, IgG = this.IgG, Pcr = this.Pcr }.ResultadoStatus;
-			}
-		}
-		public bool FoiNotificado {get;set;}
+        public string Resultado
+        {
+            get
+            {
+                return new ExameModel() { IgM = this.IgM, IgG = this.IgG, Pcr = this.Pcr }.Resultado;
+            }
+        }
+        public string ResultadoStatus
+        {
+            get
+            {
+                return new ExameModel() { IgM = this.IgM, IgG = this.IgG, Pcr = this.Pcr }.ResultadoStatus;
+            }
+        }
+        public bool FoiNotificado { get; set; }
 
     }
 }

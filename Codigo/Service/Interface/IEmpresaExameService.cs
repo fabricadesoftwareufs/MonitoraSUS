@@ -12,7 +12,7 @@ namespace Service.Interface
         EmpresaExameModel GetById(int id);
         EmpresaExameModel GetByCnpj(string cnpj);
         List<EmpresaExameModel> GetByUF(string uf);
-		List<EmpresaExameModel> ListByUF(string uf);
-		List<EmpresaExameModel> ListAll();
-	}
+        List<EmpresaExameModel> ListByUF(string uf);
+        List<EmpresaExameModel> ListAll();
+    }
 }
