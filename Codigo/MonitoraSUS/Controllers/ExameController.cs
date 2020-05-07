@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Text.RegularExpressions;
+using Twilio;
 
 namespace MonitoraSUS.Controllers
 {
@@ -27,6 +28,7 @@ namespace MonitoraSUS.Controllers
         private readonly ISituacaoVirusBacteriaService _situacaoPessoaContext;
         private readonly IPessoaTrabalhaEstadoService _pessoaTrabalhaEstadoContext;
         private readonly IPessoaTrabalhaMunicipioService _pessoaTrabalhaMunicipioContext;
+        private readonly IConfiguracaoNotificarService _configuracaoNotificarContext;
         private readonly IConfiguration _configuration;
         public static List<ExameViewModel> ITENS_PESQUISADO;
 
@@ -38,7 +40,8 @@ namespace MonitoraSUS.Controllers
                                IConfiguration configuration,
                                ISituacaoVirusBacteriaService situacaoPessoaContext,
                                IPessoaTrabalhaEstadoService pessoaTrabalhaEstado,
-                               IPessoaTrabalhaMunicipioService pessoaTrabalhaMunicipioContext)
+                               IPessoaTrabalhaMunicipioService pessoaTrabalhaMunicipioContext,
+                               IConfiguracaoNotificarService configuracaoNotificarContext)
         {
             _virusBacteriaContext = virusBacteriaContext;
             _exameContext = exameContext;
@@ -48,6 +51,7 @@ namespace MonitoraSUS.Controllers
             _situacaoPessoaContext = situacaoPessoaContext;
             _pessoaTrabalhaEstadoContext = pessoaTrabalhaEstado;
             _pessoaTrabalhaMunicipioContext = pessoaTrabalhaMunicipioContext;
+            _configuracaoNotificarContext = configuracaoNotificarContext;
             _configuration = configuration;
         }
 
@@ -78,12 +82,43 @@ namespace MonitoraSUS.Controllers
             return RedirectToAction(nameof(Notificate));
         }
 
+        /// <summary>
+        /// Envia uma msg para o paciente 
+        /// </summary>
+        /// <param name="id">Id do exame</param>
+        /// <param name="collection"></param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult NotificateById(int id, IFormCollection collection)
         {
-            // TODO lançar notificação
+            var exame = _exameContext.GetById(id);
+            var pessoa = _exameContext.GetById(exame.IdPaciente);
+            if (pessoa != null && exame != null)
+            {
 
+
+                try
+                {
+                    // msg
+
+                }
+                catch (Exception ex)
+                {
+                    ViewBag.responseNotificate = "Erro ao enviar notificação para o paciente.";
+                    ViewBag.successN = "error";
+                    Console.WriteLine
+                        (
+                            $" Registration Failure : {ex.Message} " + 
+                            $" responseTrace : {ex.StackTrace}"
+                        );
+                }
+            }
+            else
+            {
+                ViewBag.responseNotificate = "Erro ao enviar notificacao para o paciente.";
+                ViewBag.successN = "error";
+            }
             return RedirectToAction(nameof(Notificate));
         }
 

@@ -104,6 +104,16 @@ namespace Persistence
                     .HasMaxLength(2000)
                     .IsUnicode(false);
 
+                entity.Property(e => e.NumeroSms)
+                    .HasColumnName("numeroSMS")
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.NumeroWhatsapp)
+                    .HasColumnName("numeroWhatsapp")
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.Sid)
                     .IsRequired()
                     .HasColumnName("sid")

@@ -115,7 +115,7 @@ namespace Service
                 DataExame = exameModel.DataExame,
                 IdEmpresaSaude = exameModel.IdEmpresaSaude,
                 DataNotificacao = exameModel.DataNotificacao,
-                FoiNotificado = Convert.ToBoolean(exameModel.FoiNotificado)
+                FoiNotificado = Convert.ToByte(exameModel.FoiNotificado)
             };
         }
 
@@ -136,6 +136,8 @@ namespace Service
                     IdEstado = exame.IdEstado,
                     IdMunicipio = exame.IdMunicipio,
                     IdEmpresaSaude = exame.IdEmpresaSaude,
+                    DataNotificacao = exame.DataNotificacao,
+                    FoiNotificado = Convert.ToBoolean(exame.FoiNotificado)
                 }).ToList();
 
         public List<ExameModel> GetByIdEmpresa(int idEempresa)
@@ -155,6 +157,8 @@ namespace Service
                    IdEstado = exame.IdEstado,
                    IdMunicipio = exame.IdMunicipio,
                    IdEmpresaSaude = exame.IdEmpresaSaude,
+                   DataNotificacao = exame.DataNotificacao,
+                   FoiNotificado = Convert.ToBoolean(exame.FoiNotificado)
                }).ToList();
 
 		public List<ExameModel> GetByIdPaciente(int idPaciente)
@@ -174,6 +178,8 @@ namespace Service
                     IdEstado = exame.IdEstado,
                     IdMunicipio = exame.IdMunicipio,
                     IdEmpresaSaude = exame.IdEmpresaSaude,
+                    DataNotificacao = exame.DataNotificacao,
+                    FoiNotificado = Convert.ToBoolean(exame.FoiNotificado)
                 }).ToList();
 
         public List<ExameModel> GetByIdMunicipio(int idMunicicpio)
@@ -193,6 +199,8 @@ namespace Service
                     IdEstado = exame.IdEstado,
                     IdMunicipio = exame.IdMunicipio,
                     IdEmpresaSaude = exame.IdEmpresaSaude,
+                    DataNotificacao = exame.DataNotificacao,
+                    FoiNotificado = Convert.ToBoolean(exame.FoiNotificado)
                 }).ToList();
 
         public List<ExameModel> CheckDuplicateExamToday(int idPaciente, int idVirusBacteria, DateTime dateExame)

@@ -51,7 +51,9 @@ namespace Service
                 MensagemNegativo = model.MensagemNegativo,
                 MensagemPositivo = model.MensagemPositivo,
                 Sid = model.Sid,
-                Token = model.Token
+                Token = model.Token,
+                NumeroSms = model.NumeroSms,
+                NumeroWhatsapp = model.NumeroWhatsapp
             }).ToList();
 
 
@@ -71,7 +73,9 @@ namespace Service
                 MensagemNegativo = model.MensagemNegativo,
                 MensagemPositivo = model.MensagemPositivo,
                 Sid = model.Sid,
-                Token = model.Token
+                Token = model.Token,
+                NumeroSms = model.NumeroSms,
+                NumeroWhatsapp = model.NumeroWhatsapp
             }).FirstOrDefault();
 
         public ConfiguracaoNotificarModel GetByIdEstado(int idEstado)
@@ -90,7 +94,9 @@ namespace Service
                 MensagemNegativo = model.MensagemNegativo,
                 MensagemPositivo = model.MensagemPositivo,
                 Sid = model.Sid,
-                Token = model.Token
+                Token = model.Tokenm
+                NumeroSms = model.NumeroSms,
+                NumeroWhatsapp = model.NumeroWhatsapp
             }).FirstOrDefault();
 
         public ConfiguracaoNotificarModel GetByIdIdEmpresaExame(int idEmpresaExame)
@@ -109,7 +115,9 @@ namespace Service
                 MensagemNegativo = model.MensagemNegativo,
                 MensagemPositivo = model.MensagemPositivo,
                 Sid = model.Sid,
-                Token = model.Token
+                Token = model.Token,
+                NumeroSms = model.NumeroSms,
+                NumeroWhatsapp = model.NumeroWhatsapp
             }).FirstOrDefault();
 
         public ConfiguracaoNotificarModel GetByIdMunicipio(int idMunicipio)
@@ -128,7 +136,9 @@ namespace Service
                 MensagemNegativo = model.MensagemNegativo,
                 MensagemPositivo = model.MensagemPositivo,
                 Sid = model.Sid,
-                Token = model.Token
+                Token = model.Token,
+                NumeroSms = model.NumeroSms,
+                NumeroWhatsapp = model.NumeroWhatsapp
             }).FirstOrDefault();
 
         public bool Insert(ConfiguracaoNotificarModel configuracaoNotificarModel)
@@ -178,7 +188,9 @@ namespace Service
                 MensagemNegativo = configuracaoNotificarModel.MensagemNegativo,
                 MensagemPositivo = configuracaoNotificarModel.MensagemPositivo,
                 Sid = configuracaoNotificarModel.Sid,
-                Token = configuracaoNotificarModel.Token
+                Token = configuracaoNotificarModel.Token,
+                NumeroSms = configuracaoNotificarModel.NumeroSms,
+                NumeroWhatsapp = configuracaoNotificarModel.NumeroWhatsapp
             };
     }
 }
