@@ -169,6 +169,25 @@ namespace Service
 					IdEmpresaSaude = exame.IdEmpresaSaude,
 				}).ToList();
 
+        public List<ExameModel> GetByIdMunicipio(int idMunicicpio)
+         => _context.Exame
+                .Where(exameModel => exameModel.IdMunicipio == idMunicicpio)
+                .Select(exame => new ExameModel
+                {
+                    IdVirusBacteria = exame.IdVirusBacteria,
+                    IdExame = exame.IdExame,
+                    IdPaciente = exame.IdPaciente,
+                    IdAgenteSaude = exame.IdAgenteSaude,
+                    DataExame = exame.DataExame,
+                    DataInicioSintomas = exame.DataInicioSintomas,
+                    IgG = exame.IgG,
+                    IgM = exame.IgM,
+                    Pcr = exame.Pcr,
+                    IdEstado = exame.IdEstado,
+                    IdMunicipio = exame.IdMunicipio,
+                    IdEmpresaSaude = exame.IdEmpresaSaude,
+                }).ToList();
+
 		public List<ExameModel> CheckDuplicateExamToday(int idPaciente, int idVirusBacteria, DateTime dateExame)
 		{
 			var exames = _context.Exame.Where(exameModel => exameModel.IdVirusBacteria == idVirusBacteria &&
