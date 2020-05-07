@@ -483,11 +483,8 @@ namespace MonitoraSUS.Controllers
             return ex;
         }
 
-        public TotalizadoresExameViewModel GetAllExamesViewModel(string pesquisa, DateTime DataInicial, DateTime DataFinal)
+        public TotalizadoresExameViewModel GetAllExamesViewModel(PesquisaExameViewModel pesquisaExame)
         {
-            // indica se o usuário fez um filtro nos exames
-            var foiFiltrado = false;
-
             /*
              * Pegando usuario logado e carregando 
              * os exames que ele pode ver
