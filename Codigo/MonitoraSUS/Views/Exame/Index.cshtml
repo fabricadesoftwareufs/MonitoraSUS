@@ -1,4 +1,4 @@
-﻿@model TotalizadoresExameViewModel
+﻿@model Model.ViewModel.PesquisaExameViewModel
 @using System.Security.Claims;
 @using Model.ViewModel;
 @using MonitoraSUS.Utils;
@@ -15,8 +15,6 @@
      */
 
     var agente = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
-
-
 }
 
 
@@ -48,7 +46,7 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label class="form-control-label" for="input-cpf">CPF/RG ou NOME</label>
-                                                <input type="text" name="pesquisa" class="form-control" placeholder="000.000.000-00" />
+                                                <input asp-for="Pesquisa" type="text" name="pesquisa" class="form-control" placeholder="000.000.000-00" />
                                             </div>
                                         </div>
                                     </div>
@@ -56,13 +54,32 @@
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label class="form-control-label" for="data-inicial"> Data Inicial</label>
-                                                <input type="date" id="data-inicial" name="DataInicial" class="form-control" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                                                <input asp-for="DataInicial" type="date" id="data-inicial" name="DataInicial" class="form-control" />
                                             </div>
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label class="form-control-label" for="data-final"> Data Final</label>
-                                                <input type="date" id="data-final" name="DataFinal" class="form-control" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                                                <input asp-for="DataFinal" type="date" id="data-final" name="DataFinal" class="form-control" />
+                                            </div>
+                                            <div class="form-group" hidden>
+                                                <label class="form-control-label" for="data-final"> Data Final</label>
+                                                <input asp-for="RealizouPesquisa" type="checkbox" checked="checked" id="realizou-pesquisa" class="form-control" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label class="form-control-label" for="input-atuacao-estado">Resultado</label>
+                                                <select asp-for="Resultado" class="form-control" id="input-resultado">
+                                                    <option>Todos as Opçoes</option>
+                                                    <option>Positivo</option>
+                                                    <option>Negativo</option>
+                                                    <option>Indeterminado</option>
+                                                    <option>Imunizado</option>
+                                                </select>
                                             </div>
                                         </div>
                                     </div>
@@ -78,65 +95,60 @@
                                     </div>
                                 </form>
                             </div>
-                            @if (Model.Imunizados != 0 || Model.Positivos != 0 || Model.Negativos != 0 || Model.Indeterminados != 0)
-                            {
+                            <div class="col-md-4 text-center">
+                                <div class="table-responsive">
+                                    <table class="table align-items-center table-flush">
+                                        <thead class="thead-light">
+                                            <tr>
+                                                <th scope="col" class="sort" data-sort="resultado">
+                                                    Resultado
+                                                </th>
+                                                <th scope="col" class="sort" data-sort="total">
+                                                    Total
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
 
-                                <div class="col-md-4 text-center">
-                                    <div class="table-responsive">
-                                        <table class="table align-items-center table-flush">
-                                            <thead class="thead-light">
-                                                <tr>
-                                                    <th scope="col" class="sort" data-sort="resultado">
-                                                        Resultado
-                                                    </th>
-                                                    <th scope="col" class="sort" data-sort="total">
-                                                        Total
-                                                    </th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
+                                            <tr class="text-danger">
+                                                <td>
+                                                    Positivos
+                                                </td>
+                                                <td>
+                                                    @Model.Positivos
+                                                </td>
+                                            </tr>
 
-                                                <tr class="text-danger">
-                                                    <td>
-                                                        Positivos
-                                                    </td>
-                                                    <td>
-                                                        @Model.Positivos
-                                                    </td>
-                                                </tr>
+                                            <tr class="text-success">
+                                                <td>
+                                                    Negativos
+                                                </td>
+                                                <td>
+                                                    @Model.Negativos
+                                                </td>
+                                            </tr>
 
-                                                <tr class="text-success">
-                                                    <td>
-                                                        Negativos
-                                                    </td>
-                                                    <td>
-                                                        @Model.Negativos
-                                                    </td>
-                                                </tr>
+                                            <tr class="text-warning">
+                                                <td>
+                                                    Indeterminados
+                                                </td>
+                                                <td>
+                                                    @Model.Indeterminados
+                                                </td>
+                                            </tr>
+                                            <tr class="text-blue">
+                                                <td>
+                                                    Imunizados
+                                                </td>
+                                                <td>
+                                                    @Model.Imunizados
+                                                </td>
+                                            </tr>
 
-                                                <tr class="text-warning">
-                                                    <td>
-                                                        Indeterminados
-                                                    </td>
-                                                    <td>
-                                                        @Model.Indeterminados
-                                                    </td>
-                                                </tr>
-                                                <tr class="text-blue">
-                                                    <td>
-                                                        Imunizados
-                                                    </td>
-                                                    <td>
-                                                        @Model.Imunizados
-                                                    </td>
-                                                </tr>
-
-                                            </tbody>
-                                        </table>
-                                    </div>
+                                        </tbody>
+                                    </table>
                                 </div>
-                            }
-
+                            </div>
                         </div>
                     </div>
                 </div>

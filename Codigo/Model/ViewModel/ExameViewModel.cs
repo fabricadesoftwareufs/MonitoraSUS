@@ -57,6 +57,7 @@ namespace Model
 			}
 		}
 		public bool FoiNotificado {get;set;}
+        public bool DataNotificacao { get; set; }
 
     }
 }
