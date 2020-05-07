@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Model.ViewModel
 {
     public class PesquisaExameViewModel
     {
 
-        public PesquisaExameViewModel() 
+        public PesquisaExameViewModel()
         {
             Exames = new List<ExameViewModel>();
             Negativos = 0;

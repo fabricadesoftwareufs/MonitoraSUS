@@ -60,9 +60,9 @@ namespace MonitoraSUS.Controllers
             return View(GetAllExamesViewModel(pesquisaExame));
         }
 
-            /*
-        * Lançamento de notificação 
-             */
+        /*
+    * Lançamento de notificação 
+         */
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult NotificateByList(List<ExameViewModel> exames)
@@ -483,12 +483,12 @@ namespace MonitoraSUS.Controllers
             return ex;
         }
 
-		public TotalizadoresExameViewModel GetAllExamesViewModel(string pesquisa, DateTime DataInicial, DateTime DataFinal)
-		{
-			// indica se o usuário fez um filtro nos exames
-			var foiFiltrado = false;
+        public TotalizadoresExameViewModel GetAllExamesViewModel(string pesquisa, DateTime DataInicial, DateTime DataFinal)
+        {
+            // indica se o usuário fez um filtro nos exames
+            var foiFiltrado = false;
 
-			/*
+            /*
              * Pegando usuario logado e carregando 
              * os exames que ele pode ver
              */
@@ -522,7 +522,7 @@ namespace MonitoraSUS.Controllers
             if (pesquisaExame.DataInicial == DateTime.MinValue && pesquisaExame.DataFinal == DateTime.MinValue && !pesquisaExame.RealizouPesquisa)
             {
                 pesquisaExame.DataInicial = DateTime.Now.AddDays(-7);
-                pesquisaExame.DataFinal   = DateTime.Now;
+                pesquisaExame.DataFinal = DateTime.Now;
                 exames = exames.Where(exameModel => exameModel.DataExame >= pesquisaExame.DataInicial && exameModel.DataExame <= DateTime.Now).OrderBy(ex => ex.DataExame).ToList();
             }
             else if (pesquisaExame.DataInicial > DateTime.MinValue && pesquisaExame.DataFinal > DateTime.MinValue)
@@ -569,7 +569,7 @@ namespace MonitoraSUS.Controllers
              */
             pesquisaExame.Pesquisa = pesquisaExame.Pesquisa ?? "";
             pesquisaExame.Resultado = pesquisaExame.Resultado ?? "";
-            
+
             if (!pesquisaExame.Pesquisa.Equals(""))
                 if (Methods.SoContemLetras(pesquisaExame.Pesquisa))
                     pesquisaExame.Exames = pesquisaExame.Exames.Where(exameViewModel => exameViewModel.IdPaciente.Nome.ToUpper().Contains(pesquisaExame.Pesquisa.ToUpper())).ToList();
@@ -585,7 +585,7 @@ namespace MonitoraSUS.Controllers
              */
             pesquisaExame.Exames.OrderBy(ex => ex.DataExame).ToList();
             pesquisaExame.DataInicial = exames[0].DataExame;
-            pesquisaExame.DataFinal = exames[exames.Count-1].DataExame;
+            pesquisaExame.DataFinal = exames[exames.Count - 1].DataExame;
 
 
             return PreencheTotalizadores(pesquisaExame);
