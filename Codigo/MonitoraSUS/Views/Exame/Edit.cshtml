@@ -36,8 +36,8 @@
     var idPaciente = Model.IdPaciente.Idpessoa;
     var googleKey = ViewBag.googleKey;
     var outrasComorbidades = Model.IdPaciente.OutrasComorbidades;
-
-
+    var foiNotificado = Model.FoiNotificado;
+    var dataNotificacao = Model.DataNotificacao != DateTime.MinValue ? Model.DataNotificacao.ToString("yyyy-MM-dd") : DateTime.Now.ToString("yyyy-MM-dd");
 }
 
 <!-- Page Content -->
@@ -350,6 +350,15 @@
                             <input asp-for="IdPaciente.Idpessoa" id="paciente" class="form-control" placeholder="" value="@idPaciente">
                             <input asp-for="IdExame" id="exame" placeholder="" class="form-control" value="@idExame" />
                             <input asp-for="IdEmpresaSaude" id="empresa-saude" class="form-control" value="@idEmpresaSaude" />
+                            <input asp-for="DataNotificacao" class="form-control" required value="@dataNotificacao" id="input-data-sintomas">
+                        </div>
+                        <div class="form-group" hidden>
+                            <div class="custom-control custom-checkbox checkbox">
+                                <label>
+                                    <input asp-for="FoiNotificado" checked="@foiNotificado" class="custom-control-input" id="customCheck8" />
+                                    <label class="custom-control-label" for="customCheck8">Doença Respiratória</label>
+                                </label>
+                            </div>
                         </div>
                         <hr class="my-4" />
                         <div class="modal fade bs-example-modal-sm" id="modal-confirmar" tabindex="-1" role="dialog" aria-hidden="true">

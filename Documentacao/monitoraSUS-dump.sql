@@ -144,6 +144,7 @@ CREATE TABLE `exame` (
   `idEstado` int(11) NOT NULL,
   `idMunicipio` int(11) DEFAULT NULL,
   `idEmpresaSaude` int(11) DEFAULT NULL,
+  `FoiNotificado` tinyint(4) NOT NULL DEFAULT '0',
   `dataNotificacao` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`idExame`),
   UNIQUE KEY `fk_exame_diaPessoa` (`idVirusBacteria`,`idPaciente`,`dataExame`),

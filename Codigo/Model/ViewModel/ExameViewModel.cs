@@ -46,6 +46,7 @@ namespace Model
         [Display(Name = "Resultado")]
         public string Resultado { get; set; }
         public bool FoiNotificado {get;set;}
+        public DateTimeOffset DataNotificacao { get; set; }
 
     }
 }

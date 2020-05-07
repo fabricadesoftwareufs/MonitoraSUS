@@ -12,7 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Text.RegularExpressions;
-using Twilio;
+//using Twilio;
 
 namespace MonitoraSUS.Controllers
 {
@@ -30,7 +30,6 @@ namespace MonitoraSUS.Controllers
         private readonly IPessoaTrabalhaMunicipioService _pessoaTrabalhaMunicipioContext;
         private readonly IConfiguracaoNotificarService _configuracaoNotificarContext;
         private readonly IConfiguration _configuration;
-        public static List<ExameViewModel> ITENS_PESQUISADO;
 
         public ExameController(IVirusBacteriaService virusBacteriaContext,
                                IExameService exameContext,
@@ -444,6 +443,8 @@ namespace MonitoraSUS.Controllers
             exame.DataExame = viewModel.DataExame;
             exame.IdAgenteSaude = viewModel.IdAgenteSaude.Idpessoa;
             exame.IdEmpresaSaude = viewModel.IdEmpresaSaude;
+            exame.FoiNotificado = viewModel.FoiNotificado;
+            exame.DataNotificacao = viewModel.DataNotificacao;
 
             /*
              *  pegando informações do agente de saúde logado no sistema 
@@ -491,6 +492,8 @@ namespace MonitoraSUS.Controllers
             ex.DataInicioSintomas = exame.DataInicioSintomas;
             ex.DataExame = exame.DataExame;
             ex.IdEmpresaSaude = exame.IdEmpresaSaude;
+            ex.FoiNotificado = exame.FoiNotificado;
+            ex.DataNotificacao = exame.DataNotificacao;
 
             return ex;
         }
@@ -571,6 +574,8 @@ namespace MonitoraSUS.Controllers
                 ex.IdEstado = exame.IdEstado;
                 ex.MunicipioId = exame.IdMunicipio;
                 ex.IdEmpresaSaude = exame.IdEmpresaSaude;
+                ex.FoiNotificado = exame.FoiNotificado;
+                ex.DataNotificacao = exame.DataNotificacao;
 
                 examesViewModel.Add(ex);
             }
@@ -592,8 +597,6 @@ namespace MonitoraSUS.Controllers
                     foiFiltrado = true;
                 }
             }
-
-            ITENS_PESQUISADO = examesViewModel;
 
             return (foiFiltrado ? PreencheTotalizadores(examesViewModel) : new TotalizadoresExameViewModel { Exames = examesViewModel });
         }
