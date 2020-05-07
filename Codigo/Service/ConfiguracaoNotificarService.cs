@@ -94,7 +94,7 @@ namespace Service
                 MensagemNegativo = model.MensagemNegativo,
                 MensagemPositivo = model.MensagemPositivo,
                 Sid = model.Sid,
-                Token = model.Tokenm
+                Token = model.Token,
                 NumeroSms = model.NumeroSms,
                 NumeroWhatsapp = model.NumeroWhatsapp
             }).FirstOrDefault();

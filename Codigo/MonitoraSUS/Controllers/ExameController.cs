@@ -13,6 +13,8 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text.RegularExpressions;
 using Twilio;
+using Twilio.Rest.Api.V2010.Account;
+using Twilio.Types;
 
 namespace MonitoraSUS.Controllers
 {
@@ -73,11 +75,74 @@ namespace MonitoraSUS.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult NotificateByList(List<ExameViewModel> exames)
         {
-            foreach (var item in exames)
-            { 
-                
-                // TODO lançar notificacao
+            int qtdExames = exames.Count();
+            int qtdEnviadas = 0;
+
+            var usuario = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
+
+            var trabalhaMunicipio = _pessoaTrabalhaMunicipioContext.GetByIdPessoa(usuario.UsuarioModel.IdPessoa);
+            var trabalhaEstado = _pessoaTrabalhaEstadoContext.GetByIdPessoa(usuario.UsuarioModel.IdPessoa);
+
+
+            string comorbidade = "COVID19";
+            ConfiguracaoNotificarModel configuracaoNotificar = null;
+
+            if (trabalhaEstado != null && trabalhaEstado.IdEmpresaExame != -1)
+                configuracaoNotificar = _configuracaoNotificarContext.GetByIdIdEmpresaExame(trabalhaEstado.IdEmpresaExame);
+            else if (trabalhaMunicipio != null)
+                configuracaoNotificar = _configuracaoNotificarContext.GetByIdMunicipio(trabalhaMunicipio.IdMunicipio);
+
+            // SMS
+            if (configuracaoNotificar != null && configuracaoNotificar.HabilitadoSms)
+            {
+                // credenciais
+                string accountSid = configuracaoNotificar.Sid;
+                string authToken = configuracaoNotificar.Token;
+                TwilioClient.Init(accountSid, authToken);
+
+                foreach (var item in exames)
+                {
+                    var exame = _exameContext.GetById(item.IdExame);
+                    var pessoa = _pessoaContext.GetById(exame.IdPaciente);
+                    if (pessoa != null && exame != null)
+                    {
+                        try
+                        {
+                            // msg
+
+                            var to = new PhoneNumber(pessoa.FoneCelular);
+                            var message = MessageResource.Create(
+                                    to,
+                                    from: new PhoneNumber(configuracaoNotificar.NumeroSms),
+                                    body:
+                                     "Resultado do exame para " +
+                                     comorbidade + ": *" +
+                                     ResultadoDefinido(exame.Resultado, configuracaoNotificar) + "*."
+                                );
+
+                            qtdEnviadas++;
+
+                        }
+                        catch (Exception ex)
+                        {
+                            TempData["mensagemErro"] = "Erro ao enviar notificação para o paciente.";
+                            Console.WriteLine
+                                (
+                                    $" Registration Failure : {ex.Message} " +
+                                    $" responseTrace : {ex.StackTrace}"
+                                );
+                        }
+                    }
+                }
+
+                if (qtdEnviadas == qtdExames)
+                    TempData["mensagemSucesso"] = "Todas as notificações foram enviadas com sucesso!";
+                else
+                    TempData["mensagemErro"] = "Erro ao enviar as todas notificações,  De " + qtdExames + "exames, foram enviadas " + qtdEnviadas + " notificações";
+
             }
+            else
+                TempData["mensagemErro"] = "Erro ao enviar notificação para o paciente, pois houve um problema com a configuração de SMS.";
 
             return RedirectToAction(nameof(Notificate));
         }
@@ -92,33 +157,65 @@ namespace MonitoraSUS.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult NotificateById(int id, IFormCollection collection)
         {
+            var usuario = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
+
+            var trabalhaMunicipio = _pessoaTrabalhaMunicipioContext.GetByIdPessoa(usuario.UsuarioModel.IdPessoa);
+            var trabalhaEstado = _pessoaTrabalhaEstadoContext.GetByIdPessoa(usuario.UsuarioModel.IdPessoa);
+
             var exame = _exameContext.GetById(id);
-            var pessoa = _exameContext.GetById(exame.IdPaciente);
-            if (pessoa != null && exame != null)
+            string comorbidade = "COVID19";
+            var pessoa = _pessoaContext.GetById(exame.IdPaciente);
+            ConfiguracaoNotificarModel configuracaoNotificar = null;
+
+            if (trabalhaEstado != null && trabalhaEstado.IdEmpresaExame != -1)
+                configuracaoNotificar = _configuracaoNotificarContext.GetByIdIdEmpresaExame(trabalhaEstado.IdEmpresaExame);
+            else if (trabalhaMunicipio != null)
+                configuracaoNotificar = _configuracaoNotificarContext.GetByIdMunicipio(trabalhaMunicipio.IdMunicipio);
+
+            // SMS
+            if (configuracaoNotificar != null && configuracaoNotificar.HabilitadoSms)
             {
-
-
-                try
+                if (pessoa != null && exame != null)
                 {
-                    // msg
+                    try
+                    {
+                        // credenciais
+                        string accountSid = configuracaoNotificar.Sid;
+                        string authToken = configuracaoNotificar.Token;
+                        TwilioClient.Init(accountSid, authToken);
 
+                        // msg
+
+                        var to = new PhoneNumber(pessoa.FoneCelular);
+                         var message = MessageResource.Create(
+                                 to,
+                                 from: new PhoneNumber(configuracaoNotificar.NumeroSms),  
+                                 body: 
+                                  "Resultado do exame para " +
+                                  comorbidade + ": *" +
+                                  ResultadoDefinido(exame.Resultado, configuracaoNotificar) + "*."
+                             );
+
+                        TempData["mensagemSucesso"] = "Notificação enviado ao paciente com sucesso!";
+
+                    }
+                    catch (Exception ex)
+                    {
+                        TempData["mensagemErro"] = "Erro ao enviar notificação para o paciente.";
+                        Console.WriteLine
+                            (
+                                $" Registration Failure : {ex.Message} " +
+                                $" responseTrace : {ex.StackTrace}"
+                            );
+                    }
                 }
-                catch (Exception ex)
-                {
-                    ViewBag.responseNotificate = "Erro ao enviar notificação para o paciente.";
-                    ViewBag.successN = "error";
-                    Console.WriteLine
-                        (
-                            $" Registration Failure : {ex.Message} " + 
-                            $" responseTrace : {ex.StackTrace}"
-                        );
-                }
+                else
+                    TempData["mensagemErro"] = "Erro ao enviar notificação em virtude de um problema com dados do exame ou paciente.";
+
             }
             else
-            {
-                ViewBag.responseNotificate = "Erro ao enviar notificacao para o paciente.";
-                ViewBag.successN = "error";
-            }
+                TempData["mensagemErro"] = "Erro ao enviar notificação para o paciente, pois houve um problema com a configuração de SMS.";
+
             return RedirectToAction(nameof(Notificate));
         }
 
@@ -634,6 +731,28 @@ namespace MonitoraSUS.Controllers
             }
 
             return examesTotalizados;
+        }
+
+        private string ResultadoDefinido(string resultadoExame, ConfiguracaoNotificarModel config)
+        {
+
+            switch (resultadoExame.ToUpper())
+            {
+                case "POSITIVO":
+                    return config.MensagemPositivo;
+
+                case "NEGATIVO":
+                    return config.MensagemPositivo;
+
+                case "IMUNIZADO":
+                    return config.MensagemImunizado;
+
+                case "INDETERMINIDO":
+                    return config.MensagemIndeterminado;
+
+                default:
+                    return config.MensagemIndeterminado;
+            }
         }
 
     }
