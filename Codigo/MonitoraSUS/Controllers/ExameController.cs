@@ -241,17 +241,6 @@ namespace MonitoraSUS.Controllers
 
                 else
                     TempData["mensagemErro"] = "Erro ao enviar notificação em virtude de um problema com dados do exame ou paciente.";
-
-                catch (Exception ex)
-                {
-                    ViewBag.responseNotificate = "Erro ao enviar notificação para o paciente.";
-                    ViewBag.successN = "error";
-                    Console.WriteLine
-                        (
-                            $" Registration Failure : {ex.Message} " +
-                            $" responseTrace : {ex.StackTrace}"
-                        );
-                }
             }
             else
                 TempData["mensagemErro"] = "Erro ao enviar notificação para o paciente, pois houve um problema com a configuração de SMS.";
