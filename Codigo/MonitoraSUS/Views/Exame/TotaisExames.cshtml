@@ -1,0 +1,91 @@
+﻿@model IEnumerable<Model.ViewModel.TotalEstadoMunicipioBairro>
+@using System.Security.Claims;
+@using Model.ViewModel;
+@using MonitoraSUS.Utils;
+
+
+<div class="container-fluid mt--6">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card card-content">
+                <div class="card-header bg-transparent">
+                    <div class="row align-items-center">
+
+                        <div class="col">
+                            <h5 class="card-title text-muted mb-0">MonitoraSUS</h5>
+                            <h5 class="h3 mb-0">Totais Realizados e População Testada</h5>
+                        </div>
+                        <div class="col text-right">
+                            <!--a class="btn btn-success" asp-action="Create">Novo Exame</!--a-->
+                            <a class="btn btn-default" asp-controller="Home" asp-action="Index"> <i class="fas fa-arrow-left"></i> Voltar</a><br />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <h4 class="card-title text-muted mb-0">Total Exames Realizados: </h4>
+                </div>
+
+                <div class="card-body ">
+                    <div class="table-responsive">
+                        <table class="table align-items-center table-flush">
+                            <thead class="thead-light">
+								<tr>
+									<th scope="col" class="sort" data-sort="estado">
+										@Html.DisplayNameFor(model => model.Estado)
+									</th>
+									<th scope="col" class="sort" data-sort="minicipio">
+										@Html.DisplayNameFor(model => model.Municipio)
+									</th>
+									<th scope="col" class="sort" data-sort="bairro">
+										@Html.DisplayNameFor(model => model.Bairro)
+									</th>
+									<th scope="col" class="sort" data-sort="positivo">
+										@Html.DisplayNameFor(model => model.TotalPositivos)
+									</th>
+									<th scope="col" class="sort" data-sort="positivo">
+										@Html.DisplayNameFor(model => model.TotalNegativos)
+									</th>
+									<th scope="col" class="sort" data-sort="positivo">
+										@Html.DisplayNameFor(model => model.TotalImunizados)
+									</th>
+									<th scope="col" class="sort" data-sort="positivo">
+										@Html.DisplayNameFor(model => model.TotalIndeterminados)
+									</th>
+								</tr>
+                            </thead>
+                            <tbody class="list">
+                                @foreach (var item in Model)
+                                {
+								<tr>
+									<td>
+										@Html.DisplayFor(modelItem => item.Estado)
+									</td>
+									<td>
+										@Html.DisplayFor(modelItem => item.Municipio)
+									</td>
+									<td>
+										@Html.DisplayFor(modelItem => item.Bairro)
+									</td>
+									<td>
+										@Html.DisplayFor(modelItem => item.TotalPositivos)
+									</td>
+									<td>
+										@Html.DisplayFor(modelItem => item.TotalNegativos)
+									</td>
+									<td>
+										@Html.DisplayFor(modelItem => item.TotalImunizados)
+									</td>
+									<td>
+										@Html.DisplayFor(modelItem => item.TotalIndeterminados)
+									</td>
+								</tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

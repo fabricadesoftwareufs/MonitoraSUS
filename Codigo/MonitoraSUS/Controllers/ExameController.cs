@@ -32,7 +32,6 @@ namespace MonitoraSUS.Controllers
         private readonly IPessoaTrabalhaMunicipioService _pessoaTrabalhaMunicipioContext;
         private readonly IConfiguracaoNotificarService _configuracaoNotificarContext;
         private readonly IConfiguration _configuration;
-        public static List<ExameViewModel> ITENS_PESQUISADO;
 
         public ExameController(IVirusBacteriaService virusBacteriaContext,
                                IExameService exameContext,
@@ -68,9 +67,9 @@ namespace MonitoraSUS.Controllers
             return View(GetAllExamesViewModel(pesquisa, DataInicial, DataFinal));
         }
 
-        /* 
-        * Lançamento de notificação 
-        */
+        /*
+            * Lançamento de notificação 
+         */
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult NotificateByList(List<ExameViewModel> exames)
@@ -144,7 +143,37 @@ namespace MonitoraSUS.Controllers
             else
                 TempData["mensagemErro"] = "Erro ao enviar notificação para o paciente, pois houve um problema com a configuração de SMS.";
 
+            foreach (var item in exames)
+            {
+
+                // TODO lançar notificacao
+            }
+
             return RedirectToAction(nameof(Notificate));
+        }
+
+        [Authorize(Roles = "GESTOR, SECRETARIO")]
+        public IActionResult TotaisExames()
+        {
+            var usuario = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
+
+            var autenticadoTrabalhaEstado = _pessoaTrabalhaEstadoContext.GetByIdPessoa(usuario.UsuarioModel.IdPessoa);
+            var autenticadoTrabalhaMunicipio = _pessoaTrabalhaMunicipioContext.GetByIdPessoa(usuario.UsuarioModel.IdPessoa);
+
+            List<TotalEstadoMunicipioBairro> totaisRealizado = new List<TotalEstadoMunicipioBairro>();
+
+            if (autenticadoTrabalhaMunicipio != null)
+            {
+                totaisRealizado = _exameContext.GetTotaisRealizadosByMunicipio(autenticadoTrabalhaMunicipio.IdMunicipio);
+            }
+            else if (autenticadoTrabalhaEstado != null)
+            {
+                if (autenticadoTrabalhaEstado.IdEmpresaExame == EmpresaExameModel.EMPRESA_ESTADO_MUNICIPIO)
+                    totaisRealizado = _exameContext.GetTotaisRealizadosByEstado(autenticadoTrabalhaEstado.IdEstado);
+                else
+                    totaisRealizado = _exameContext.GetTotaisRealizadosByEmpresa(autenticadoTrabalhaEstado.IdEmpresaExame);
+            }
+            return View(totaisRealizado);
         }
 
         /// <summary>
@@ -209,9 +238,20 @@ namespace MonitoraSUS.Controllers
                             );
                     }
                 }
+
                 else
                     TempData["mensagemErro"] = "Erro ao enviar notificação em virtude de um problema com dados do exame ou paciente.";
 
+                catch (Exception ex)
+                {
+                    ViewBag.responseNotificate = "Erro ao enviar notificação para o paciente.";
+                    ViewBag.successN = "error";
+                    Console.WriteLine
+                        (
+                            $" Registration Failure : {ex.Message} " +
+                            $" responseTrace : {ex.StackTrace}"
+                        );
+                }
             }
             else
                 TempData["mensagemErro"] = "Erro ao enviar notificação para o paciente, pois houve um problema com a configuração de SMS.";
@@ -541,6 +581,8 @@ namespace MonitoraSUS.Controllers
             exame.DataExame = viewModel.DataExame;
             exame.IdAgenteSaude = viewModel.IdAgenteSaude.Idpessoa;
             exame.IdEmpresaSaude = viewModel.IdEmpresaSaude;
+            exame.FoiNotificado = viewModel.FoiNotificado;
+            exame.DataNotificacao = viewModel.DataNotificacao;
 
             /*
              *  pegando informações do agente de saúde logado no sistema 
@@ -588,6 +630,8 @@ namespace MonitoraSUS.Controllers
             ex.DataInicioSintomas = exame.DataInicioSintomas;
             ex.DataExame = exame.DataExame;
             ex.IdEmpresaSaude = exame.IdEmpresaSaude;
+            ex.FoiNotificado = exame.FoiNotificado;
+            ex.DataNotificacao = exame.DataNotificacao;
 
             return ex;
         }
@@ -668,6 +712,8 @@ namespace MonitoraSUS.Controllers
                 ex.IdEstado = exame.IdEstado;
                 ex.MunicipioId = exame.IdMunicipio;
                 ex.IdEmpresaSaude = exame.IdEmpresaSaude;
+                ex.FoiNotificado = exame.FoiNotificado;
+                ex.DataNotificacao = exame.DataNotificacao;
 
                 examesViewModel.Add(ex);
             }
@@ -689,8 +735,6 @@ namespace MonitoraSUS.Controllers
                     foiFiltrado = true;
                 }
             }
-
-            ITENS_PESQUISADO = examesViewModel;
 
             return (foiFiltrado ? PreencheTotalizadores(examesViewModel) : new TotalizadoresExameViewModel { Exames = examesViewModel });
         }
