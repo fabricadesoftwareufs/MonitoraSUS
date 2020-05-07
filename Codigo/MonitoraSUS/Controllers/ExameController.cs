@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using System.Text;
 
 namespace MonitoraSUS.Controllers
 {
@@ -107,6 +108,28 @@ namespace MonitoraSUS.Controllers
 
             return RedirectToAction(nameof(Notificate));
         }
+
+
+        private List<PessoaModel> users = new List<PessoaModel>
+        {
+            new PessoaModel { Idpessoa = 1, Nome= "DoloresAbernathy" },
+            new PessoaModel { Idpessoa = 2, Nome = "MaeveMillay" },
+            new PessoaModel { Idpessoa = 3, Nome = "BernardLowe" },
+            new PessoaModel { Idpessoa = 4, Nome = "ManInBlack" }
+        };
+
+        public IActionResult Export()
+        {
+            var builder = new StringBuilder();
+            builder.AppendLine("Id,Username");
+            foreach (var user in users)
+            {
+                builder.AppendLine($"{user.Idpessoa};{user.Nome}");
+            }
+
+            return File(Encoding.UTF8.GetBytes(builder.ToString()), "text/csv", "users.csv");
+        }
+
 
         public IActionResult Details(int id)
         {
@@ -483,7 +506,8 @@ namespace MonitoraSUS.Controllers
             return ex;
         }
 
-        public TotalizadoresExameViewModel GetAllExamesViewModel(PesquisaExameViewModel pesquisaExame)
+
+        public PesquisaExameViewModel GetAllExamesViewModel(PesquisaExameViewModel pesquisaExame)
         {
             /*
              * Pegando usuario logado e carregando 
@@ -500,7 +524,6 @@ namespace MonitoraSUS.Controllers
                 exames = _exameContext.GetByIdAgente(usuario.UsuarioModel.IdPessoa);
             }
             else if (usuario.RoleUsuario.Equals("GESTOR") || usuario.RoleUsuario.Equals("SECRETARIO"))
-
             {
                 if (secretarioMunicipio != null)
                     exames = _exameContext.GetByIdMunicipio(secretarioMunicipio.IdMunicipio);
@@ -564,8 +587,9 @@ namespace MonitoraSUS.Controllers
             /*
              * 2º Filtro - filtrando ViewModel por nome ou cpf e resultado
              */
-            pesquisaExame.Pesquisa = pesquisaExame.Pesquisa ?? "";
+            pesquisaExame.Pesquisa  = pesquisaExame.Pesquisa ?? "";
             pesquisaExame.Resultado = pesquisaExame.Resultado ?? "";
+            pesquisaExame.Cidade    = pesquisaExame.Cidade ?? "";
 
             if (!pesquisaExame.Pesquisa.Equals(""))
                 if (Methods.SoContemLetras(pesquisaExame.Pesquisa))
@@ -573,9 +597,11 @@ namespace MonitoraSUS.Controllers
                 else
                     pesquisaExame.Exames = pesquisaExame.Exames.Where(exameViewModel => exameViewModel.IdPaciente.Cpf.ToUpper().Contains(pesquisaExame.Pesquisa.ToUpper())).ToList();
 
-            if (!pesquisaExame.Resultado.Equals(""))
+            if (!pesquisaExame.Resultado.Equals("") && !pesquisaExame.Resultado.Equals("Todas as Opçoes"))
                 pesquisaExame.Exames = pesquisaExame.Exames.Where(exameViewModel => exameViewModel.Resultado.ToUpper().Equals(pesquisaExame.Resultado.ToUpper())).ToList();
 
+            if (!pesquisaExame.Cidade.Equals(""))
+                pesquisaExame.Exames = pesquisaExame.Exames.Where(exameViewModel => exameViewModel.IdPaciente.Cidade.ToUpper().Contains(pesquisaExame.Cidade.ToUpper())).ToList();
 
             /* 
              * Ordenando lista por data e pegando maior e menor datas... 
