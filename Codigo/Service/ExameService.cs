@@ -52,6 +52,8 @@ namespace Service
                     IdEstado = exame.IdEstado,
                     IdMunicipio = exame.IdMunicipio,
                     IdEmpresaSaude = exame.IdEmpresaSaude,
+                    DataNotificacao = exame.DataNotificacao,
+                    FoiNotificado = Convert.ToBoolean(exame.FoiNotificado)
                 }).ToList();
 
         public List<ExameModel> GetAll()
@@ -70,6 +72,8 @@ namespace Service
                     IdEstado = exame.IdEstado,
                     IdMunicipio = exame.IdMunicipio,
                     IdEmpresaSaude = exame.IdEmpresaSaude,
+                    DataNotificacao = exame.DataNotificacao,
+                    FoiNotificado = Convert.ToBoolean(exame.FoiNotificado)
                 }).ToList();
 
 
@@ -90,6 +94,8 @@ namespace Service
                     IdEstado = exame.IdEstado,
                     IdMunicipio = exame.IdMunicipio,
                     IdEmpresaSaude = exame.IdEmpresaSaude,
+                    DataNotificacao = exame.DataNotificacao,
+                    FoiNotificado = Convert.ToBoolean(exame.FoiNotificado)
                 }).FirstOrDefault();
 
         private Exame ModelToEntity(ExameModel exameModel)
@@ -108,6 +114,8 @@ namespace Service
                 DataInicioSintomas = exameModel.DataInicioSintomas,
                 DataExame = exameModel.DataExame,
                 IdEmpresaSaude = exameModel.IdEmpresaSaude,
+                DataNotificacao = exameModel.DataNotificacao,
+                FoiNotificado = Convert.ToBoolean(exameModel.FoiNotificado)
             };
         }
 

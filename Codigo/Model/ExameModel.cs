@@ -21,8 +21,10 @@ namespace Model
         public int IdEstado { get; set; }
         public int? IdMunicipio { get; set; }
         public int? IdEmpresaSaude { get; set; }
+        public DateTimeOffset DataNotificacao { get; set; }
+        public bool FoiNotificado { get; set; }
 
-		public string Resultado
+        public string Resultado
 		{
 			get
 			{
