@@ -4,14 +4,18 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Configuration;
 using Model;
+using Model.AuxModel;
 using Model.ViewModel;
 using MonitoraSUS.Utils;
+using Newtonsoft.Json;
 using Service.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Security.Claims;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace MonitoraSUS.Controllers
 {
@@ -62,17 +66,60 @@ namespace MonitoraSUS.Controllers
         }
 
         /*
-    * Lançamento de notificação 
+            * Lançamento de notificação 
          */
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult NotificateByList(List<ExameViewModel> exames)
+        public async Task<IActionResult> NotificateByListAsync(List<ExameViewModel> exames)
         {
+            //int qtdExames = exames.Count();
+            //int qtdEnviadas = 0;
+
+            List<SMSModel> smsModels = new List<SMSModel>();
+            /*
+            var usuario = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
+
+            var trabalhaMunicipio = _pessoaTrabalhaMunicipioContext.GetByIdPessoa(usuario.UsuarioModel.IdPessoa);
+            var trabalhaEstado = _pessoaTrabalhaEstadoContext.GetByIdPessoa(usuario.UsuarioModel.IdPessoa);
+            */
+
+            //  string comorbidade = "COVID19";
+
+            /*
+            ConfiguracaoNotificarModel configuracaoNotificar = null;
+
+            if (trabalhaEstado != null && trabalhaEstado.IdEmpresaExame != -1)
+                configuracaoNotificar = _configuracaoNotificarContext.GetByIdIdEmpresaExame(trabalhaEstado.IdEmpresaExame);
+            else if (trabalhaMunicipio != null)
+                configuracaoNotificar = _configuracaoNotificarContext.GetByIdMunicipio(trabalhaMunicipio.IdMunicipio);
+                */
+
+            // SMS
+            // if (configuracaoNotificar != null && configuracaoNotificar.HabilitadoSms)
+            // {
+            // credenciais
+
             foreach (var item in exames)
             {
-
-                // TODO lançar notificacao
+                var exame = _exameContext.GetById(item.IdExame);
+                var pessoa = _pessoaContext.GetById(exame.IdPaciente);
+                if (pessoa != null && exame != null)
+                {
+                    SMSModel sms = new SMSModel { To = "55" + pessoa.FoneCelular, Body = "sms!" };
+                    smsModels.Add(sms);
+                }
             }
+            var resultado = await SendCompostSMS(smsModels);
+
+            /*
+                if (qtdEnviadas == qtdExames)
+                    TempData["mensagemSucesso"] = "Todas as notificações foram enviadas com sucesso!";
+                else
+                    TempData["mensagemErro"] = "Erro ao enviar as todas notificações,  De " + qtdExames + "exames, foram enviadas " + qtdEnviadas + " notificações";
+*/
+            // }
+            //  else
+            //     TempData["mensagemErro"] = "Erro ao enviar notificação para o paciente, pois houve um problema com a configuração de SMS.";
             return RedirectToAction(nameof(Notificate));
         }
 
@@ -102,9 +149,59 @@ namespace MonitoraSUS.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult NotificateById(int id, IFormCollection collection)
+        public async Task<IActionResult> NotificateById(int id, IFormCollection collection)
         {
-            // TODO lançar notificação
+            /*
+            var usuario = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
+
+            var trabalhaMunicipio = _pessoaTrabalhaMunicipioContext.GetByIdPessoa(usuario.UsuarioModel.IdPessoa);
+            var trabalhaEstado = _pessoaTrabalhaEstadoContext.GetByIdPessoa(usuario.UsuarioModel.IdPessoa);
+            */
+
+            var exame = _exameContext.GetById(id);
+            string comorbidade = "COVID19";
+            var pessoa = _pessoaContext.GetById(exame.IdPaciente);
+
+            /*
+            ConfiguracaoNotificarModel configuracaoNotificar = null;
+
+            if (trabalhaEstado != null && trabalhaEstado.IdEmpresaExame != -1)
+                configuracaoNotificar = _configuracaoNotificarContext.GetByIdIdEmpresaExame(trabalhaEstado.IdEmpresaExame);
+            else if (trabalhaMunicipio != null)
+                configuracaoNotificar = _configuracaoNotificarContext.GetByIdMunicipio(trabalhaMunicipio.IdMunicipio);
+                */
+
+            // SMS
+            // if (configuracaoNotificar != null && configuracaoNotificar.HabilitadoSms)
+            //{
+            if (pessoa != null && exame != null)
+            {
+                try
+                {
+                    SMSModel sms = new SMSModel { To = "55" + pessoa.FoneCelular, Body = "msg!" };
+                    var resultado = await SendSimpleSMS(sms);
+                    exame.FoiNotificado = true;
+                    _exameContext.Update(exame);
+
+                    TempData["mensagemSucesso"] = "Notificação enviado ao paciente com sucesso!";
+
+                }
+                catch (Exception ex)
+                {
+                    TempData["mensagemErro"] = "Erro ao enviar notificação para o paciente.";
+                    Console.WriteLine
+                        (
+                            $" Registration Failure : {ex.Message} " +
+                            $" responseTrace : {ex.StackTrace}"
+                        );
+                }
+            }
+
+            else
+                TempData["mensagemErro"] = "Erro ao enviar notificação em virtude de um problema com dados do exame ou paciente.";
+            //  }
+            //  else
+            //     TempData["mensagemErro"] = "Erro ao enviar notificação para o paciente, pois houve um problema com a configuração de SMS.";
 
             return RedirectToAction(nameof(Notificate));
         }
@@ -587,9 +684,9 @@ namespace MonitoraSUS.Controllers
             /*
              * 2º Filtro - filtrando ViewModel por nome ou cpf e resultado
              */
-            pesquisaExame.Pesquisa  = pesquisaExame.Pesquisa ?? "";
+            pesquisaExame.Pesquisa = pesquisaExame.Pesquisa ?? "";
             pesquisaExame.Resultado = pesquisaExame.Resultado ?? "";
-            pesquisaExame.Cidade    = pesquisaExame.Cidade ?? "";
+            pesquisaExame.Cidade = pesquisaExame.Cidade ?? "";
 
             if (!pesquisaExame.Pesquisa.Equals(""))
                 if (Methods.SoContemLetras(pesquisaExame.Pesquisa))
@@ -652,5 +749,82 @@ namespace MonitoraSUS.Controllers
             return examesTotalizados;
         }
 
+        // pegar msg padrao do banco
+        private string ResultadoDefinido(string resultadoExame, ConfiguracaoNotificarModel config)
+        {
+
+            switch (resultadoExame.ToUpper())
+            {
+                case "POSITIVO":
+                    return config.MensagemPositivo;
+
+                case "NEGATIVO":
+                    return config.MensagemPositivo;
+
+                case "IMUNIZADO":
+                    return config.MensagemImunizado;
+
+                case "INDETERMINIDO":
+                    return config.MensagemIndeterminado;
+
+                default:
+                    return config.MensagemIndeterminado;
+            }
+        }
+
+        //SMS API DEV
+
+        public static async Task<ResponseSMSModel> SendSimpleSMS(SMSModel sms)
+        {
+            try
+            {
+                const string url = "https://api.smsdev.com.br/send?key=FHHMEV35L21PWU2CG1QQIFWR&type=9&";
+                var cliente = new HttpClient();
+                var uri = url + "number=" + sms.To + "&msg=" + sms.Body;
+                var resultado = await cliente.GetStringAsync(uri);
+                var jsonResponse = JsonConvert.DeserializeObject<ResponseSMSModel>(resultado);
+                // Console.WriteLine("\nOpa : " + jsonResponse.Descricao + "cod : " + jsonResponse.Codigo);
+                return jsonResponse;
+            }
+            catch (HttpRequestException e)
+            {
+                Console.WriteLine("\nException Caught!");
+                Console.WriteLine("Message :{0} ", e.Message);
+                throw e.InnerException;
+            }
+
+        }
+
+        public static async Task<List<ResponseMultipleSMSModel>> SendCompostSMS(List<SMSModel> smsModels)
+        {
+            try
+            {
+                const string url = "https://api.smsdev.com.br/multiple?key=FHHMEV35L21PWU2CG1QQIFWR&type=9";
+                var cliente = new HttpClient();
+                var uri = url;
+                // se por i+1 na string ele junta
+                int contador = 0;
+                for (int i = 0; i < smsModels.Count; i++)
+                {
+                    contador++;
+                    uri = uri + "&number" + contador + "=" + smsModels[i].To + "&msg" + contador + "=" + smsModels[i].Body;
+                }
+
+                var resultado = await cliente.GetStringAsync(uri);
+
+                Console.WriteLine("\nResposta: " + resultado);
+                var jsonResponse = JsonConvert.DeserializeObject<List<ResponseMultipleSMSModel>>(resultado);
+
+                // Console.WriteLine("\nOpa : " + jsonResponse);
+                return jsonResponse;
+            }
+            catch (HttpRequestException e)
+            {
+                Console.WriteLine("\nException Caught!");
+                Console.WriteLine("Message :{0} ", e.Message);
+                throw e.InnerException;
+            }
+
+        }
     }
 }
