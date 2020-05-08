@@ -39,7 +39,9 @@
     var ehProfissional = Model.EhProfissionalSaude;
     var codigoColeta = Model.CodigoColeta;
     var dataNotificacao = Model.DataNotificacao;
-    var foiNotificado = Model.FoiNotificado;
+
+    var foiNotificado = Model.StatusNotificacao;
+    var idNotificaao = Model.IdNotificacao;
 
 
 }
@@ -370,7 +372,8 @@
                             <input asp-for="IdPaciente.Idpessoa" id="paciente" class="form-control" placeholder="" value="@idPaciente">
                             <input asp-for="IdExame" id="exame" placeholder="" class="form-control" value="@idExame" />
                             <input asp-for="IdEmpresaSaude" id="empresa-saude" class="form-control" value="@idEmpresaSaude" />
-                            <input asp-for="FoiNotificado" type="checkbox" id="data-notificacao" class="form-control" checked="@foiNotificado" />
+                            <input asp-for="StatusNotificacao" type="checkbox" id="data-notificacao" class="form-control" checked="@foiNotificado" />
+                            <input asp-for="IdNotificacao" type="text" id="data-notificacao" class="form-control" checked="@idNotificaao" />
                         </div>
                         <hr class="my-4" />
                         <div class="modal fade bs-example-modal-sm" id="modal-confirmar" tabindex="-1" role="dialog" aria-hidden="true">

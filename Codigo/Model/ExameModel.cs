@@ -10,6 +10,10 @@ namespace Model
         public const string RESULTADO_IMUNIZADO = "Imunizado";
         public const string RESULTADO_INDETERMINADO = "Indeterminado";
 
+		public const string NOTIFICADO_SIM = "S";
+		public const string NOTIFICADO_NAO = "N";
+		public const string NOTIFICADO_ENVIADO = "E";
+
         public int IdExame { get; set; }
         [Display(Name = "Virus")]
         public int IdVirusBacteria { get; set; }
@@ -28,10 +32,25 @@ namespace Model
         public int IdEstado { get; set; }
         public int? IdMunicipio { get; set; }
         public int? IdEmpresaSaude { get; set; }
-        public bool FoiNotificado { get; set; }
         public DateTime DataNotificacao { get; set; }
+        public string IdNotificacao { get; set; }
         public bool EhProfissionalSaude { get; set; }
         public string CodigoColeta { get; set; }
+        public string StatusNotificacao { get; set; }
+        public string StatusNotificacaoDescricao
+        {
+            get
+            {
+                if (StatusNotificacao.Equals("N"))
+                    return "NÃO";
+                else if (StatusNotificacao.Equals("S"))
+                    return "SIM";
+                else
+                    return "ENVIADA";
+            }
+        }
+
+
 
         public string Resultado
         {

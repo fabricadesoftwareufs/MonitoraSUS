@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace Persistence
 {
@@ -13,6 +15,7 @@ namespace Persistence
         {
         }
 
+        public virtual DbSet<Configuracaonotificar> Configuracaonotificar { get; set; }
         public virtual DbSet<Empresaexame> Empresaexame { get; set; }
         public virtual DbSet<Estado> Estado { get; set; }
         public virtual DbSet<Exame> Exame { get; set; }
@@ -27,15 +30,120 @@ namespace Persistence
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+           /* if (!optionsBuilder.IsConfigured)
+            {
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
+                optionsBuilder.UseMySQL("server=localhost;port=3306;user=root;password=123456;database=monitorasus");
+            }*/
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Configuracaonotificar>(entity =>
+            {
+                entity.HasKey(e => e.IdConfiguracaoNotificar);
+
+                entity.ToTable("configuracaonotificar", "monitorasus");
+
+                entity.HasIndex(e => e.IdEmpresaExame)
+                    .HasName("fk_configuracaoNotificar_empresaexame1_idx");
+
+                entity.HasIndex(e => e.IdEstado)
+                    .HasName("fk_configuracaoNotificar_estado1_idx");
+
+                entity.HasIndex(e => e.IdMunicipio)
+                    .HasName("fk_configuracaoNotificar_municipio1_idx");
+
+                entity.Property(e => e.IdConfiguracaoNotificar)
+                    .HasColumnName("idConfiguracaoNotificar")
+                    .HasColumnType("int(11)");
+
+                entity.Property(e => e.HabilitadoSms)
+                    .HasColumnName("habilitadoSMS")
+                    .HasColumnType("tinyint(4)")
+                    .HasDefaultValueSql("0");
+
+                entity.Property(e => e.HabilitadoWhatsapp)
+                    .HasColumnName("habilitadoWhatsapp")
+                    .HasColumnType("tinyint(4)")
+                    .HasDefaultValueSql("0");
+
+                entity.Property(e => e.IdEmpresaExame)
+                    .HasColumnName("idEmpresaExame")
+                    .HasColumnType("int(11)");
+
+                entity.Property(e => e.IdEstado)
+                    .HasColumnName("idEstado")
+                    .HasColumnType("int(11)");
+
+                entity.Property(e => e.IdMunicipio)
+                    .HasColumnName("idMunicipio")
+                    .HasColumnType("int(11)");
+
+                entity.Property(e => e.MensagemImunizado)
+                    .IsRequired()
+                    .HasColumnName("mensagemImunizado")
+                    .HasMaxLength(2000)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.MensagemIndeterminado)
+                    .IsRequired()
+                    .HasColumnName("mensagemIndeterminado")
+                    .HasMaxLength(2000)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.MensagemNegativo)
+                    .IsRequired()
+                    .HasColumnName("mensagemNegativo")
+                    .HasMaxLength(2000)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.MensagemPositivo)
+                    .IsRequired()
+                    .HasColumnName("mensagemPositivo")
+                    .HasMaxLength(2000)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.QuantidadeSmsdisponivel)
+                    .HasColumnName("quantidadeSMSDisponivel")
+                    .HasColumnType("int(11)")
+                    .HasDefaultValueSql("0");
+
+                entity.Property(e => e.Sid)
+                    .IsRequired()
+                    .HasColumnName("sid")
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Token)
+                    .IsRequired()
+                    .HasColumnName("token")
+                    .HasMaxLength(45)
+                    .IsUnicode(false);
+
+                entity.HasOne(d => d.IdEmpresaExameNavigation)
+                    .WithMany(p => p.Configuracaonotificar)
+                    .HasForeignKey(d => d.IdEmpresaExame)
+                    .HasConstraintName("fk_configuracaoNotificar_empresaexame1");
+
+                entity.HasOne(d => d.IdEstadoNavigation)
+                    .WithMany(p => p.Configuracaonotificar)
+                    .HasForeignKey(d => d.IdEstado)
+                    .HasConstraintName("fk_configuracaoNotificar_estado1");
+
+                entity.HasOne(d => d.IdMunicipioNavigation)
+                    .WithMany(p => p.Configuracaonotificar)
+                    .HasForeignKey(d => d.IdMunicipio)
+                    .HasConstraintName("fk_configuracaoNotificar_municipio1");
+            });
+
             modelBuilder.Entity<Empresaexame>(entity =>
             {
                 entity.ToTable("empresaexame", "monitorasus");
 
-                entity.Property(e => e.Id).HasColumnName("id");
+                entity.Property(e => e.Id)
+                    .HasColumnName("id")
+                    .HasColumnType("int(11)");
 
                 entity.Property(e => e.Bairro)
                     .IsRequired()
@@ -73,6 +181,7 @@ namespace Persistence
 
                 entity.Property(e => e.EmiteLaudoExame)
                     .HasColumnName("emiteLaudoExame")
+                    .HasColumnType("tinyint(4)")
                     .HasDefaultValueSql("0");
 
                 entity.Property(e => e.Estado)
@@ -119,22 +228,27 @@ namespace Persistence
 
                 entity.Property(e => e.NumeroLeitos)
                     .HasColumnName("numeroLeitos")
+                    .HasColumnType("int(11)")
                     .HasDefaultValueSql("0");
 
                 entity.Property(e => e.NumeroLeitosDisponivel)
                     .HasColumnName("numeroLeitosDisponivel")
+                    .HasColumnType("int(11)")
                     .HasDefaultValueSql("0");
 
                 entity.Property(e => e.NumeroLeitosUti)
                     .HasColumnName("numeroLeitosUTI")
+                    .HasColumnType("int(11)")
                     .HasDefaultValueSql("0");
 
                 entity.Property(e => e.NumeroLeitosUtidisponivel)
                     .HasColumnName("numeroLeitosUTIDisponivel")
+                    .HasColumnType("int(11)")
                     .HasDefaultValueSql("0");
 
                 entity.Property(e => e.PossuiLeitosInternacao)
                     .HasColumnName("possuiLeitosInternacao")
+                    .HasColumnType("tinyint(4)")
                     .HasDefaultValueSql("0");
 
                 entity.Property(e => e.Rua)
@@ -148,10 +262,16 @@ namespace Persistence
             {
                 entity.ToTable("estado", "monitorasus");
 
+                entity.Property(e => e.Id).HasColumnType("int(11)");
+
+                entity.Property(e => e.CodigoUf).HasColumnType("int(11)");
+
                 entity.Property(e => e.Nome)
                     .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false);
+
+                entity.Property(e => e.Regiao).HasColumnType("int(11)");
 
                 entity.Property(e => e.Uf)
                     .IsRequired()
@@ -186,23 +306,58 @@ namespace Persistence
                     .HasName("fk_exame_diaPessoa")
                     .IsUnique();
 
-                entity.Property(e => e.IdExame).HasColumnName("idExame");
+                entity.Property(e => e.IdExame)
+                    .HasColumnName("idExame")
+                    .HasColumnType("int(11)");
+
+                entity.Property(e => e.CodigoColeta)
+                    .IsRequired()
+                    .HasColumnName("codigoColeta")
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
 
                 entity.Property(e => e.DataExame).HasColumnName("dataExame");
 
                 entity.Property(e => e.DataInicioSintomas).HasColumnName("dataInicioSintomas");
 
-                entity.Property(e => e.IdAgenteSaude).HasColumnName("idAgenteSaude");
+                entity.Property(e => e.DataNotificacao)
+                    .HasColumnName("dataNotificacao")
+                    .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
-                entity.Property(e => e.IdEmpresaSaude).HasColumnName("idEmpresaSaude");
+                entity.Property(e => e.EhProfissionalSaude)
+                    .HasColumnName("ehProfissionalSaude")
+                    .HasColumnType("tinyint(4)")
+                    .HasDefaultValueSql("0");
 
-                entity.Property(e => e.IdEstado).HasColumnName("idEstado");
+                entity.Property(e => e.IdAgenteSaude)
+                    .HasColumnName("idAgenteSaude")
+                    .HasColumnType("int(11)");
 
-                entity.Property(e => e.IdMunicipio).HasColumnName("idMunicipio");
+                entity.Property(e => e.IdEmpresaSaude)
+                    .HasColumnName("idEmpresaSaude")
+                    .HasColumnType("int(11)");
 
-                entity.Property(e => e.IdPaciente).HasColumnName("idPaciente");
+                entity.Property(e => e.IdEstado)
+                    .HasColumnName("idEstado")
+                    .HasColumnType("int(11)");
 
-                entity.Property(e => e.IdVirusBacteria).HasColumnName("idVirusBacteria");
+                entity.Property(e => e.IdMunicipio)
+                    .HasColumnName("idMunicipio")
+                    .HasColumnType("int(11)");
+
+                entity.Property(e => e.IdNotificacao)
+                    .IsRequired()
+                    .HasColumnName("idNotificacao")
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.IdPaciente)
+                    .HasColumnName("idPaciente")
+                    .HasColumnType("int(11)");
+
+                entity.Property(e => e.IdVirusBacteria)
+                    .HasColumnName("idVirusBacteria")
+                    .HasColumnType("int(11)");
 
                 entity.Property(e => e.IgG)
                     .IsRequired()
@@ -224,11 +379,7 @@ namespace Persistence
 
                 entity.Property(e => e.DataNotificacao)
                  .HasColumnName("dataNotificacao")
-                 .HasColumnType("date");
-
-                entity.Property(e => e.FoiNotificado)
-                 .HasColumnName("foiNotificado")
-                 .HasDefaultValueSql("0");
+                 .HasColumnType("timestamp");
 
                 entity.Property(e => e.EhProfissionalSaude)
                   .HasColumnName("ehProfissionalSaude")
@@ -240,6 +391,12 @@ namespace Persistence
                   .HasMaxLength(20)
                   .IsUnicode(false)
                   .HasDefaultValueSql("0");
+
+                entity.Property(e => e.StatusNotificacao)
+                    .IsRequired()
+                    .HasColumnName("statusNotificacao")
+                    .HasColumnType("enum('N','S','E')")
+                    .HasDefaultValueSql("N");
 
                 entity.HasOne(d => d.IdAgenteSaudeNavigation)
                     .WithMany(p => p.ExameIdAgenteSaudeNavigation)
@@ -280,6 +437,10 @@ namespace Persistence
             {
                 entity.ToTable("municipio", "monitorasus");
 
+                entity.Property(e => e.Id).HasColumnType("int(11)");
+
+                entity.Property(e => e.Codigo).HasColumnType("int(11)");
+
                 entity.Property(e => e.Nome)
                     .IsRequired()
                     .HasMaxLength(255)
@@ -300,7 +461,9 @@ namespace Persistence
                     .HasName("cpf_UNIQUE")
                     .IsUnique();
 
-                entity.Property(e => e.Idpessoa).HasColumnName("idpessoa");
+                entity.Property(e => e.Idpessoa)
+                    .HasColumnName("idpessoa")
+                    .HasColumnType("int(11)");
 
                 entity.Property(e => e.Bairro)
                     .IsRequired()
@@ -310,10 +473,12 @@ namespace Persistence
 
                 entity.Property(e => e.Cancer)
                     .HasColumnName("cancer")
+                    .HasColumnType("tinyint(4)")
                     .HasDefaultValueSql("0");
 
                 entity.Property(e => e.Cardiopatia)
                     .HasColumnName("cardiopatia")
+                    .HasColumnType("tinyint(4)")
                     .HasDefaultValueSql("0");
 
                 entity.Property(e => e.Cep)
@@ -345,10 +510,12 @@ namespace Persistence
 
                 entity.Property(e => e.Diabetes)
                     .HasColumnName("diabetes")
+                    .HasColumnType("tinyint(4)")
                     .HasDefaultValueSql("0");
 
                 entity.Property(e => e.DoencaRespiratoria)
                     .HasColumnName("doencaRespiratoria")
+                    .HasColumnType("tinyint(4)")
                     .HasDefaultValueSql("0");
 
                 entity.Property(e => e.Email)
@@ -375,10 +542,12 @@ namespace Persistence
 
                 entity.Property(e => e.Hipertenso)
                     .HasColumnName("hipertenso")
+                    .HasColumnType("tinyint(4)")
                     .HasDefaultValueSql("0");
 
                 entity.Property(e => e.Imunodeprimido)
                     .HasColumnName("imunodeprimido")
+                    .HasColumnType("tinyint(4)")
                     .HasDefaultValueSql("0");
 
                 entity.Property(e => e.Latitude)
@@ -408,6 +577,7 @@ namespace Persistence
 
                 entity.Property(e => e.Obeso)
                     .HasColumnName("obeso")
+                    .HasColumnType("tinyint(4)")
                     .HasDefaultValueSql("0");
 
                 entity.Property(e => e.OutrasComorbidades)
@@ -443,20 +613,26 @@ namespace Persistence
                 entity.HasIndex(e => e.Idpessoa)
                     .HasName("fk_pessoa_has_estado_pessoa1_idx");
 
-                entity.Property(e => e.Idpessoa).HasColumnName("idpessoa");
+                entity.Property(e => e.Idpessoa)
+                    .HasColumnName("idpessoa")
+                    .HasColumnType("int(11)");
 
-                entity.Property(e => e.IdEstado).HasColumnName("idEstado");
+                entity.Property(e => e.IdEstado)
+                    .HasColumnName("idEstado")
+                    .HasColumnType("int(11)");
 
                 entity.Property(e => e.IdEmpresaExame)
                     .HasColumnName("idEmpresaExame")
-                    .HasDefaultValueSql("1");
+                    .HasColumnType("int(11)");
 
                 entity.Property(e => e.EhResponsavel)
                     .HasColumnName("ehResponsavel")
+                    .HasColumnType("tinyint(4)")
                     .HasDefaultValueSql("0");
 
                 entity.Property(e => e.EhSecretario)
                     .HasColumnName("ehSecretario")
+                    .HasColumnType("tinyint(4)")
                     .HasDefaultValueSql("0");
 
                 entity.Property(e => e.SituacaoCadastro)
@@ -496,16 +672,22 @@ namespace Persistence
                 entity.HasIndex(e => e.IdPessoa)
                     .HasName("fk_pessoa_has_municipio_pessoa1_idx");
 
-                entity.Property(e => e.IdPessoa).HasColumnName("idPessoa");
+                entity.Property(e => e.IdPessoa)
+                    .HasColumnName("idPessoa")
+                    .HasColumnType("int(11)");
 
-                entity.Property(e => e.IdMunicipio).HasColumnName("idMunicipio");
+                entity.Property(e => e.IdMunicipio)
+                    .HasColumnName("idMunicipio")
+                    .HasColumnType("int(11)");
 
                 entity.Property(e => e.EhResponsavel)
                     .HasColumnName("ehResponsavel")
+                    .HasColumnType("tinyint(4)")
                     .HasDefaultValueSql("0");
 
                 entity.Property(e => e.EhSecretario)
                     .HasColumnName("ehSecretario")
+                    .HasColumnType("tinyint(4)")
                     .HasDefaultValueSql("0");
 
                 entity.Property(e => e.SituacaoCadastro)
@@ -536,15 +718,18 @@ namespace Persistence
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
-                    .HasColumnType("int unsigned");
+                    .HasColumnType("int(10) unsigned");
 
                 entity.Property(e => e.EhValido)
                     .HasColumnName("ehValido")
+                    .HasColumnType("tinyint(4)")
                     .HasDefaultValueSql("1");
 
                 entity.Property(e => e.FimToken).HasColumnName("fimToken");
 
-                entity.Property(e => e.IdUsuario).HasColumnName("idUsuario");
+                entity.Property(e => e.IdUsuario)
+                    .HasColumnName("idUsuario")
+                    .HasColumnType("int(11)");
 
                 entity.Property(e => e.InicioToken).HasColumnName("inicioToken");
 
@@ -573,9 +758,13 @@ namespace Persistence
                 entity.HasIndex(e => e.Idpessoa)
                     .HasName("fk_virusBacteria_has_pessoa_pessoa1_idx");
 
-                entity.Property(e => e.IdVirusBacteria).HasColumnName("idVirusBacteria");
+                entity.Property(e => e.IdVirusBacteria)
+                    .HasColumnName("idVirusBacteria")
+                    .HasColumnType("int(11)");
 
-                entity.Property(e => e.Idpessoa).HasColumnName("idpessoa");
+                entity.Property(e => e.Idpessoa)
+                    .HasColumnName("idpessoa")
+                    .HasColumnType("int(11)");
 
                 entity.Property(e => e.UltimaSituacaoSaude)
                     .IsRequired()
@@ -605,7 +794,9 @@ namespace Persistence
                 entity.HasIndex(e => e.IdPessoa)
                     .HasName("fk_usuario_pessoa1_idx");
 
-                entity.Property(e => e.IdUsuario).HasColumnName("idUsuario");
+                entity.Property(e => e.IdUsuario)
+                    .HasColumnName("idUsuario")
+                    .HasColumnType("int(11)");
 
                 entity.Property(e => e.Cpf)
                     .IsRequired()
@@ -619,7 +810,9 @@ namespace Persistence
                     .HasMaxLength(45)
                     .IsUnicode(false);
 
-                entity.Property(e => e.IdPessoa).HasColumnName("idPessoa");
+                entity.Property(e => e.IdPessoa)
+                    .HasColumnName("idPessoa")
+                    .HasColumnType("int(11)");
 
                 entity.Property(e => e.Senha)
                     .IsRequired()
@@ -627,7 +820,9 @@ namespace Persistence
                     .HasMaxLength(100)
                     .IsUnicode(false);
 
-                entity.Property(e => e.TipoUsuario).HasColumnName("tipoUsuario");
+                entity.Property(e => e.TipoUsuario)
+                    .HasColumnName("tipoUsuario")
+                    .HasColumnType("tinyint(4)");
 
                 entity.HasOne(d => d.IdPessoaNavigation)
                     .WithMany(p => p.Usuario)
@@ -642,10 +837,13 @@ namespace Persistence
 
                 entity.ToTable("virusbacteria", "monitorasus");
 
-                entity.Property(e => e.IdVirusBacteria).HasColumnName("idVirusBacteria");
+                entity.Property(e => e.IdVirusBacteria)
+                    .HasColumnName("idVirusBacteria")
+                    .HasColumnType("int(11)");
 
                 entity.Property(e => e.DiasRecuperacao)
                     .HasColumnName("diasRecuperacao")
+                    .HasColumnType("int(11)")
                     .HasDefaultValueSql("0");
 
                 entity.Property(e => e.Nome)
