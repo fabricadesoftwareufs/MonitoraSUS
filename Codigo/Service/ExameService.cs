@@ -1,6 +1,7 @@
 ﻿using Model;
 using Model.AuxModel;
 using Model.ViewModel;
+using Newtonsoft.Json;
 using Persistence;
 using Service.Interface;
 using System;
@@ -13,9 +14,7 @@ namespace Service
     public class ExameService : IExameService
     {
         private readonly monitorasusContext _context;
-
-        public object JsonConvert { get; private set; }
-
+		
         public ExameService(monitorasusContext context)
         {
             _context = context;
@@ -216,21 +215,40 @@ namespace Service
                 string url = "https://api.smsdev.com.br/send?key=" + configuracaoNotificar.Token + "&type=9&";
                 var uri = url + "number=" + pessoa.FoneCelular + "&msg=" + mensagem;
                 var resultadoEnvio = await cliente.GetStringAsync(uri);
-                //var jsonResponse = JsonConvert.DeserializeObject<ResponseSMSModel>(resultadoEnvio);
-                //exame.IdNotificacao = jsonResponse.
-                //Update(exame);
+				ResponseSMSModel jsonResponse = JsonConvert.DeserializeObject<ResponseSMSModel>(resultadoEnvio);
+				exame.IdNotificacao = jsonResponse.Id.ToString();
+				exame.StatusNotificacao = ExameModel.NOTIFICADO_ENVIADO;
+                Update(exame);
             }
-            catch (HttpRequestException e)
+            catch (HttpRequestException)
             {
-                Console.WriteLine("\nException Caught!");
-                Console.WriteLine("Message :{0} ", e.Message);
-                //throw e.InnerException;
                 return false;
             }
             return true;
         }
 
-        public List<ExameModel> GetByIdPaciente(int idPaciente)
+		public async System.Threading.Tasks.Task<bool> ConsultarSMSExameAsync(ConfiguracaoNotificarModel configuracaoNotificar, ExameModel exame)
+		{
+			try
+			{
+				var cliente = new HttpClient();
+				string url = "https://api.smsdev.com.br/get?key=" + configuracaoNotificar.Token + "&action=status&";
+				var uri = url + "id=" + exame.IdNotificacao;
+				var resultadoEnvio = await cliente.GetStringAsync(uri);
+				ConsultaSMSModel consulta = JsonConvert.DeserializeObject<ConsultaSMSModel>(resultadoEnvio);
+				if (consulta.Situacao.Equals(ConsultaSMSModel.SITUACAO_ENTREGUE)) {
+					exame.StatusNotificacao = ExameModel.NOTIFICADO_SIM;
+					Update(exame);
+				}
+			}
+			catch (HttpRequestException)
+			{
+				return false;
+			}
+			return true;
+		}
+
+		public List<ExameModel> GetByIdPaciente(int idPaciente)
          => _context.Exame
                 .Where(exameModel => exameModel.IdPaciente == idPaciente)
                 .Select(exame => new ExameModel

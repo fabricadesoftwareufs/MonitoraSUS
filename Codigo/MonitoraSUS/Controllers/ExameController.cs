@@ -65,10 +65,11 @@ namespace MonitoraSUS.Controllers
             return View(GetAllExamesViewModel(pesquisaExame));
         }
 
-        /*
+		/*
             * Lançamento de notificação 
          */
-        [HttpPost]
+		[Authorize(Roles = "GESTOR, SECRETARIO")]
+		[HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> NotificateByListAsync(List<ExameViewModel> exames)
         {
@@ -86,54 +87,53 @@ namespace MonitoraSUS.Controllers
             }
             if (configuracaoNotificar == null)
             {
-                TempData["mensagemErro"] = "Não possui créditos para notificações por SMS. Por favor entre em contato pelo email fabricadesoftware@ufs.br.";
+                TempData["mensagemErro"] = "Não possui créditos para notificações por SMS. Por favor entre em contato pelo email fabricadesoftware@ufs.br para saber como usar esse serviço no MonitoraSUS.";
             }
             else
             {
-                if (configuracaoNotificar.QuantidadeSmsdisponivel < exames.Count)
+				int quantidadeNotificar = exames.Where(e => e.StatusNotificacao.Equals(ExameModel.NOTIFICADO_NAO)).Count();
+				if (configuracaoNotificar.QuantidadeSmsdisponivel < quantidadeNotificar)
                 {
                     TempData["mensagemErro"] = "Não possui créditos para enviar " + exames.Count + " SMS. Seu crédito atual é para envio de " +
-                        configuracaoNotificar.QuantidadeSmsdisponivel + " SMS. Por favor entre em contato pelo email fabricadesoftware@ufs.br.";
+                        configuracaoNotificar.QuantidadeSmsdisponivel + " SMS. Por favor entre em contato pelo email fabricadesoftware@ufs.br se precisar novos créditos.";
                 }
-                int quantidadeEnviada = 0;
-                //int quantidadeEnviada = _exameContext.EnviarSMS(configuracaoNotificar, exames);
-                if (quantidadeEnviada == 0)
-                {
-                    TempData["mensagemErro"] = "Ocorreram problemas no envio das notificações. Favor entre em contato pela fabricadesoftware@ufs.br.";
-                }
-                else if (quantidadeEnviada < exames.Count)
-                {
-                    TempData["mensagemErro"] = "Ocorreram problemas no envio de algumas notificações. Favor conferir telefones.";
-                }
-                else
-                {
-                    TempData["mensagemSucesso"] = "Notificações enviadas com sucesso!";
-                }
+				else
+				{
+					int quantidadeEnviada = 0;
+					foreach (ExameViewModel exame in exames)
+					{
+						var exameModel = _exameContext.GetById(exame.IdExame);
+						if (exame.IdPaciente.TemFoneCelularValido)
+						{
+							if (exame.StatusNotificacao.Equals(ExameModel.NOTIFICADO_ENVIADO))
+								await _exameContext.ConsultarSMSExameAsync(configuracaoNotificar, exameModel);
+							else
+								if (exame.StatusNotificacao.Equals(ExameModel.NOTIFICADO_NAO))
+							{
+								{
+									if (await _exameContext.EnviarSMSResultadoExameAsync(configuracaoNotificar, exameModel, exame.IdPaciente))
+										quantidadeEnviada++;
+								}
+							}
+						}
+					}
+					if (quantidadeEnviada == 0)
+					{
+						TempData["mensagemErro"] = "Ocorreram problemas no envio das notificações. Favor entre em contato pela fabricadesoftware@ufs.br.";
+					}
+					else if (quantidadeEnviada < quantidadeNotificar)
+					{
+						TempData["mensagemErro"] = "Ocorreram problemas no envio de algumas notificações. Favor conferir telefones.";
+					}
+					else
+					{
+						if (quantidadeEnviada == 1)
+							TempData["mensagemSucesso"] = "Notificação enviada com sucesso!";
+						else
+							TempData["mensagemSucesso"] = "Notificações enviadas com sucesso!";
+					}
+				}
             }
-
-
-            List<SMSModel> smsModels = new List<SMSModel>();
-            foreach (var item in exames)
-            {
-                var exame = _exameContext.GetById(item.IdExame);
-                var pessoa = _pessoaContext.GetById(exame.IdPaciente);
-                if (pessoa != null && exame != null)
-                {
-                    SMSModel sms = new SMSModel { To = "55" + pessoa.FoneCelular, Body = "sms!" };
-                    smsModels.Add(sms);
-                }
-            }
-            var resultado = await SendCompostSMS(smsModels);
-
-            /*
-                if (qtdEnviadas == qtdExames)
-                    TempData["mensagemSucesso"] = "Todas as notificações foram enviadas com sucesso!";
-                else
-                    TempData["mensagemErro"] = "Erro ao enviar as todas notificações,  De " + qtdExames + "exames, foram enviadas " + qtdEnviadas + " notificações";
-*/
-            // }
-            //  else
-            //     TempData["mensagemErro"] = "Erro ao enviar notificação para o paciente, pois houve um problema com a configuração de SMS.";
             return RedirectToAction(nameof(Notificate));
         }
 
@@ -165,17 +165,9 @@ namespace MonitoraSUS.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> NotificateById(int id, IFormCollection collection)
         {
-            /*
-            var usuario = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
-
-            var trabalhaMunicipio = _pessoaTrabalhaMunicipioContext.GetByIdPessoa(usuario.UsuarioModel.IdPessoa);
-            var trabalhaEstado = _pessoaTrabalhaEstadoContext.GetByIdPessoa(usuario.UsuarioModel.IdPessoa);
-            */
-
             var exame = _exameContext.GetById(id);
-            var pessoa = _pessoaContext.GetById(exame.IdPaciente);
-            TempData["mensagemErro"] = "Erro ao enviar notificação em virtude de um problema com dados do exame ou paciente.";
-
+			if (exame != null)
+				await NotificateByListAsync(new List<ExameViewModel>() { GetExameViewModelById(id) });
             return RedirectToAction(nameof(Notificate));
         }
 
@@ -637,10 +629,11 @@ namespace MonitoraSUS.Controllers
              */
             if (pesquisaExame.DataInicial == DateTime.MinValue && pesquisaExame.DataFinal == DateTime.MinValue && !pesquisaExame.RealizouPesquisa)
             {
-                pesquisaExame.DataInicial = DateTime.Now.AddDays(-7);
-                pesquisaExame.DataFinal = DateTime.Now;
-                exames = exames.Where(exameModel => exameModel.DataExame >= pesquisaExame.DataInicial && exameModel.DataExame <= DateTime.Now).OrderBy(ex => ex.DataExame).ToList();
-            }
+				//pesquisaExame.DataInicial = DateTime.Now.AddDays(-7);
+				//pesquisaExame.DataFinal = DateTime.Now;
+				//exames = exames.Where(exameModel => exameModel.DataExame >= pesquisaExame.DataInicial && exameModel.DataExame <= DateTime.Now).OrderBy(ex => ex.DataExame).ToList();
+				exames = exames.TakeLast(10).ToList();
+			}
             else if (pesquisaExame.DataInicial > DateTime.MinValue && pesquisaExame.DataFinal > DateTime.MinValue)
             {
                 exames = exames.Where(exameModel => exameModel.DataExame >= pesquisaExame.DataInicial && exameModel.DataExame <= pesquisaExame.DataFinal).ToList();
@@ -708,7 +701,7 @@ namespace MonitoraSUS.Controllers
              */
             if (pesquisaExame.Exames.Count > 0)
             {
-                pesquisaExame.Exames = pesquisaExame.Exames.OrderBy(ex => ex.DataExame).ToList();
+                pesquisaExame.Exames = pesquisaExame.Exames.OrderByDescending(ex => ex.DataExame).ToList();
                 pesquisaExame.DataInicial = pesquisaExame.Exames[0].DataExame;
                 pesquisaExame.DataFinal = pesquisaExame.Exames[pesquisaExame.Exames.Count - 1].DataExame;
             }
