@@ -30,11 +30,11 @@ namespace Persistence
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            if (!optionsBuilder.IsConfigured)
+           /* if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
                 optionsBuilder.UseMySQL("server=localhost;port=3306;user=root;password=123456;database=monitorasus");
-            }
+            }*/
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -376,6 +376,21 @@ namespace Persistence
                     .HasColumnName("pcr")
                     .HasColumnType("enum('S','N','I')")
                     .HasDefaultValueSql("N");
+
+                entity.Property(e => e.DataNotificacao)
+                 .HasColumnName("dataNotificacao")
+                 .HasColumnType("timestamp");
+
+                entity.Property(e => e.EhProfissionalSaude)
+                  .HasColumnName("ehProfissionalSaude")
+                  .HasDefaultValueSql("0");
+
+                entity.Property(e => e.CodigoColeta)
+                  .IsRequired()
+                  .HasColumnName("codigoColeta")
+                  .HasMaxLength(20)
+                  .IsUnicode(false)
+                  .HasDefaultValueSql("0");
 
                 entity.Property(e => e.StatusNotificacao)
                     .IsRequired()

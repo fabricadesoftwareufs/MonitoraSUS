@@ -30,6 +30,8 @@
     string DataInicioSintomas = Model.DataInicioSintomas != DateTime.MinValue ? Model.DataInicioSintomas.ToString("yyyy-MM-dd") : DateTime.Now.ToString("yyyy-MM-dd");
     var googleKey = ViewBag.googleKey;
     var outrasComorbidades = Model.IdPaciente.OutrasComorbidades;
+    var ehProfissional = Model.EhProfissionalSaude;
+    var codigoColeta = Model.CodigoColeta;
 }
 
 
@@ -67,7 +69,7 @@
                                         <input asp-for="IdPaciente.Cpf" id="input-cpf" placeholder="000.000.000-00" type="text" value="@cpf" class="form-control" />
                                         @if (TempData["resultadoPesquisa"] != null)
                                         {
-                                        <h6 class="heading-small text-danger">@TempData["resultadoPesquisa"]</h6>
+                                            <h6 class="heading-small text-danger">@TempData["resultadoPesquisa"]</h6>
                                         }
                                     </div>
                                 </div>
@@ -93,6 +95,16 @@
                                         <div class="custom-control custom-radio custom-control-inline">
                                             @Html.RadioButtonFor(model => model.IdPaciente.Sexo, "F", new { @class = "custom-control-input", @id = "input-sexo-fem", @name = "sexo" })
                                             <label class="custom-control-label" for="input-sexo-fem">Feminino</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-2">
+                                    <div class="form-group">
+                                        <div class="custom-control custom-checkbox checkbox">
+                                            <label>
+                                                <input asp-for="EhProfissionalSaude" checked="@ehProfissional" class="custom-control-input" id="customCheck8" />
+                                                <label class="custom-control-label" for="customCheck8">Profissional de Saude?</label>
+                                            </label>
                                         </div>
                                     </div>
                                 </div>
@@ -335,6 +347,12 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <label for="input-codigo-coleta" class="form-control-label">Código da Coleta</label>
+                                        <input type="search" required id="input-codigo-coleta" class="form-control" asp-for="CodigoColeta" placeholder="" value="@codigoColeta">
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="form-group" hidden>
@@ -361,14 +379,14 @@
                                             <p id="resultado-paciente"> </p>
 
                                             <div class="form-group">
-                                                <a data-dismiss="modal" class="btn btn-danger text-white">Não</a>
-                                                <input id="btn-submit" type="submit" value="Sim" class="btn btn-success text-white" />
+                                                <button data-dismiss="modal" class="btn btn-danger text-white">Não</button>
+                                                <button id="btn-submit"  value="Sim" class="btn btn-success text-white">Sim</button>
                                             </div>
                                         </div>
 
                                         <div class="col text-center" id="ok-model-form">
                                             <h3 id="texto-erro"> </h3>
-                                            <a data-dismiss="modal" class="btn btn-success text-white">Ok</a>
+                                            <button data-dismiss="modal" class="btn btn-success text-white">Ok</button>
                                         </div>
                                     </div>
                                 </div>
