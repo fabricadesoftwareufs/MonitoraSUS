@@ -205,7 +205,7 @@ namespace MonitoraSUS.Controllers
                 dataNascimento = exame.IdPaciente.DataNascimento.ToString("dd/MM/yyyy");
                 nome = exame.IdPaciente.Nome;
 
-                builder.AppendLine($"{codigoColeta};{iniciais};{dataNascimento};{nome};{cpf};{rg};{"-"};{endereco};{contato};{estado};{municipio}");
+                builder.AppendLine($"{codigoColeta};{iniciais};{dataNascimento};{nome};{cpf};{rg};{" "};{endereco};{contato};{estado};{municipio}");
             }
 
             return File(Encoding.UTF8.GetBytes(builder.ToString()), "text/csv", "exames.csv");
@@ -548,7 +548,7 @@ namespace MonitoraSUS.Controllers
             exame.CodigoColeta = viewModel.CodigoColeta;
             exame.DataNotificacao = DateTime.Now;
             exame.StatusNotificacao = viewModel.StatusNotificacao;
-            exame.CodigoColeta = viewModel.CodigoColeta;
+            exame.CodigoColeta = viewModel.CodigoColeta == null ? "": viewModel.CodigoColeta;
             exame.IdNotificacao = viewModel.IdNotificacao;
 
             /*
