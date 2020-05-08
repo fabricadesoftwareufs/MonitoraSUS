@@ -32,7 +32,7 @@ $('#btn-submit').on('click', function () {
 
     if ($('#input-nome').val() && $('#input-data-nascimento').val().length == 10 && $('#postal_code').val() && $('#route').val() &&
         $('#sublocality_level_1').val() && $('#administrative_area_level_2').val() && $('#administrative_area_level_1').val() &&
-        $('#input-celular').val().length == 17 && $('#input-data-exame').val() && $('#input-data-sintomas').val() && $('#input-codigo-coleta').val()) {
+        $('#input-celular').val().length == 17 && $('#input-data-exame').val() && $('#input-data-sintomas').val()) {
         submitForm();
     }
 
@@ -94,8 +94,8 @@ function verificaCampoVazio() {
         mensagem = "Preencha o campo DATA DO EXAME!";
     else if ($('#input-data-sintomas').val().length == 0)
         mensagem = "Preencha o campo INICIO DOS SINTOMAS!";
-    else if ($('#input-codigo-coleta').val().length == 0)
-        mensagem = "Preencha o campo CÓDIGO DA COLETA!";
+    //else if ($('#input-codigo-coleta').val().length == 0)
+    //    mensagem = "Preencha o campo CÓDIGO DA COLETA!";
 
 
     return mensagem;
