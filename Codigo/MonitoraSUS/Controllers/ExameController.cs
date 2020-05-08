@@ -677,9 +677,12 @@ namespace MonitoraSUS.Controllers
             /* 
              * Ordenando lista por data e pegando maior e menor datas... 
              */
-            pesquisaExame.Exames.OrderBy(ex => ex.DataExame).ToList();
-            pesquisaExame.DataInicial = exames[0].DataExame;
-            pesquisaExame.DataFinal = exames[exames.Count - 1].DataExame;
+          if (pesquisaExame.Exames.Count > 0)
+            {
+                pesquisaExame.Exames = pesquisaExame.Exames.OrderBy(ex => ex.DataExame).ToList();
+                pesquisaExame.DataInicial = pesquisaExame.Exames[0].DataExame;
+                pesquisaExame.DataFinal = pesquisaExame.Exames[pesquisaExame.Exames.Count - 1].DataExame;
+            }
 
 
             return PreencheTotalizadores(pesquisaExame);
