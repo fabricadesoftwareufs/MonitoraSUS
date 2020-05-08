@@ -175,7 +175,7 @@ function PreencheFormCEP() {
 
 function removeReadOnly() {
     for (let input in formCep) {
-        if (formCep[input].readOnly) {
+        if (formCep[input].readOnly && input != "localidade" && input != "uf") {
             formCep[input].readOnly = false;
         }
     }
@@ -183,7 +183,7 @@ function removeReadOnly() {
 
 function removeReadOnlyCampoVazio() {
     for (let input in formCep) {
-        if (formCep[input].val() == '') {
+        if (formCep[input].val() == '' && input != "localidade" && input != "uf") {
             formCep[input].readOnly = false;
         }
     }
