@@ -167,8 +167,7 @@ function PreencheForm() {
 }
 
 function PreencheFormCEP() {
-    if ((!isNaN(input.value) || input.value.toString().match(/\d{5}-\d{3}/)) && input.value !== ''
-        && (input.value.length == 8 || input.value.length == 9))
+    if (input.value.length === 9 && input.value.toString().match(/\d{5}-\d{3}/))
         BuscaViaCep(input.value);
     else
         removeReadOnly();
@@ -212,6 +211,8 @@ function BuscaViaCep(cep) {
 
             if (formCep.logradouro.value != "")
                 ProcuraEndereco(formCep.logradouro.value);
+            else if (formCep.localidade.value != "")
+                ProcuraEndereco(formCep.localidade.value);
 
             removeReadOnlyCampoVazio();
 
