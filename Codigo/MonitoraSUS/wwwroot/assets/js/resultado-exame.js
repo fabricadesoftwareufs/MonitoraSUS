@@ -94,9 +94,6 @@ function verificaCampoVazio() {
         mensagem = "Preencha o campo DATA DO EXAME!";
     else if ($('#input-data-sintomas').val().length == 0)
         mensagem = "Preencha o campo INICIO DOS SINTOMAS!";
-    else if ($('#input-codigo-coleta').val().length == 0)
-        mensagem = "Preencha o campo CÓDIGO DA COLETA!";
-
 
     return mensagem;
 }

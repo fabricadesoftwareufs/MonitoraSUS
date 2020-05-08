@@ -57,7 +57,7 @@ namespace Service
                     IdEstado = exame.IdEstado,
                     IdMunicipio = exame.IdMunicipio,
                     IdEmpresaSaude = exame.IdEmpresaSaude,
-                    DataNotificacao = exame.DataNotificacao,
+                    //DataNotificacao = exame.DataNotificacao,
                     EhProfissionalSaude = Convert.ToBoolean(exame.EhProfissionalSaude),
                     CodigoColeta = exame.CodigoColeta,
                     StatusNotificacao = exame.StatusNotificacao,
@@ -80,7 +80,7 @@ namespace Service
                     IdEstado = exame.IdEstado,
                     IdMunicipio = exame.IdMunicipio,
                     IdEmpresaSaude = exame.IdEmpresaSaude,
-                    DataNotificacao = exame.DataNotificacao,
+                   // DataNotificacao = exame.DataNotificacao,
                     EhProfissionalSaude = Convert.ToBoolean(exame.EhProfissionalSaude),
                     CodigoColeta = exame.CodigoColeta,
                     StatusNotificacao = exame.StatusNotificacao,
@@ -153,7 +153,7 @@ namespace Service
                   IdEstado = exame.IdEstado,
                   IdMunicipio = exame.IdMunicipio,
                   IdEmpresaSaude = exame.IdEmpresaSaude,
-                  DataNotificacao = exame.DataNotificacao,
+                  //DataNotificacao = exame.DataNotificacao,
                   EhProfissionalSaude = Convert.ToBoolean(exame.EhProfissionalSaude),
                   CodigoColeta = exame.CodigoColeta,
                   StatusNotificacao = exame.StatusNotificacao,
@@ -491,7 +491,7 @@ namespace Service
 
         public List<ExameModel> GetByIdEstado(int idEstado)
         => _context.Exame
-               .Where(exameModel => exameModel.IdEmpresaSaude == idEstado)
+               .Where(exameModel => exameModel.IdEstado == idEstado)
                .Select(exame => new ExameModel
                {
                    IdVirusBacteria = exame.IdVirusBacteria,
@@ -506,7 +506,7 @@ namespace Service
                    IdEstado = exame.IdEstado,
                    IdMunicipio = exame.IdMunicipio,
                    IdEmpresaSaude = exame.IdEmpresaSaude,
-                   DataNotificacao = exame.DataNotificacao,
+                   //DataNotificacao = exame.DataNotificacao,
                    EhProfissionalSaude = Convert.ToBoolean(exame.EhProfissionalSaude),
                    CodigoColeta = exame.CodigoColeta,
                    StatusNotificacao = exame.StatusNotificacao,
