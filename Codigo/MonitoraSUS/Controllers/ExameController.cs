@@ -143,12 +143,6 @@ namespace MonitoraSUS.Controllers
             else
                 TempData["mensagemErro"] = "Erro ao enviar notificação para o paciente, pois houve um problema com a configuração de SMS.";
 
-            foreach (var item in exames)
-            {
-
-                // TODO lançar notificacao
-            }
-
             return RedirectToAction(nameof(Notificate));
         }
 
