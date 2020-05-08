@@ -72,34 +72,45 @@ namespace MonitoraSUS.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> NotificateByListAsync(List<ExameViewModel> exames)
         {
-            //int qtdExames = exames.Count();
-            //int qtdEnviadas = 0;
-
-            List<SMSModel> smsModels = new List<SMSModel>();
-            /*
             var usuario = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
-
-            var trabalhaMunicipio = _pessoaTrabalhaMunicipioContext.GetByIdPessoa(usuario.UsuarioModel.IdPessoa);
+			var trabalhaMunicipio = _pessoaTrabalhaMunicipioContext.GetByIdPessoa(usuario.UsuarioModel.IdPessoa);
             var trabalhaEstado = _pessoaTrabalhaEstadoContext.GetByIdPessoa(usuario.UsuarioModel.IdPessoa);
-            */
+			ConfiguracaoNotificarModel configuracaoNotificar = null;
+			if (trabalhaEstado != null)
+			{
+				configuracaoNotificar = _exameContext.BuscarConfiguracaoNotificar(trabalhaEstado.IdEstado, trabalhaEstado.IdEmpresaExame);
+			}
+			else if (trabalhaMunicipio != null)
+			{
+				configuracaoNotificar = _exameContext.BuscarConfiguracaoNotificar(trabalhaMunicipio.IdMunicipio);
+			}
+			if (configuracaoNotificar == null) {
+				TempData["mensagemErro"] = "Não possui créditos para notificações por SMS. Por favor entre em contato pelo email fabricadesoftware@ufs.br.";
+			} else
+			{
+				if (configuracaoNotificar.QuantidadeSmsdisponivel < exames.Count) {
+					TempData["mensagemErro"] = "Não possui créditos para enviar " + exames.Count + " SMS. Seu crédito atual é para envio de " +
+						configuracaoNotificar.QuantidadeSmsdisponivel + " SMS. Por favor entre em contato pelo email fabricadesoftware@ufs.br.";
+				}
+				int quantidadeEnviada = 0;
+				//int quantidadeEnviada = _exameContext.EnviarSMS(configuracaoNotificar, exames);
+				if (quantidadeEnviada == 0)
+				{
+					TempData["mensagemErro"] = "Ocorreram problemas no envio das notificações. Favor entre em contato pela fabricadesoftware@ufs.br.";
+				}
+				else if (quantidadeEnviada < exames.Count)
+				{
+					TempData["mensagemErro"] = "Ocorreram problemas no envio de algumas notificações. Favor conferir telefones.";
+				}
+				else
+				{
+					TempData["mensagemSucesso"] = "Notificações enviadas com sucesso!";
+				}
+			}
 
-            //  string comorbidade = "COVID19";
 
-            /*
-            ConfiguracaoNotificarModel configuracaoNotificar = null;
-
-            if (trabalhaEstado != null && trabalhaEstado.IdEmpresaExame != -1)
-                configuracaoNotificar = _configuracaoNotificarContext.GetByIdIdEmpresaExame(trabalhaEstado.IdEmpresaExame);
-            else if (trabalhaMunicipio != null)
-                configuracaoNotificar = _configuracaoNotificarContext.GetByIdMunicipio(trabalhaMunicipio.IdMunicipio);
-                */
-
-            // SMS
-            // if (configuracaoNotificar != null && configuracaoNotificar.HabilitadoSms)
-            // {
-            // credenciais
-
-            foreach (var item in exames)
+			List<SMSModel> smsModels = new List<SMSModel>();
+			foreach (var item in exames)
             {
                 var exame = _exameContext.GetById(item.IdExame);
                 var pessoa = _pessoaContext.GetById(exame.IdPaciente);
@@ -159,50 +170,9 @@ namespace MonitoraSUS.Controllers
             */
 
             var exame = _exameContext.GetById(id);
-            string comorbidade = "COVID19";
             var pessoa = _pessoaContext.GetById(exame.IdPaciente);
-
-            /*
-            ConfiguracaoNotificarModel configuracaoNotificar = null;
-
-            if (trabalhaEstado != null && trabalhaEstado.IdEmpresaExame != -1)
-                configuracaoNotificar = _configuracaoNotificarContext.GetByIdIdEmpresaExame(trabalhaEstado.IdEmpresaExame);
-            else if (trabalhaMunicipio != null)
-                configuracaoNotificar = _configuracaoNotificarContext.GetByIdMunicipio(trabalhaMunicipio.IdMunicipio);
-                */
-
-            // SMS
-            // if (configuracaoNotificar != null && configuracaoNotificar.HabilitadoSms)
-            //{
-            if (pessoa != null && exame != null)
-            {
-                try
-                {
-                    SMSModel sms = new SMSModel { To = "55" + pessoa.FoneCelular, Body = "msg!" };
-                    var resultado = await SendSimpleSMS(sms);
-                    exame.FoiNotificado = true;
-                    _exameContext.Update(exame);
-
-                    TempData["mensagemSucesso"] = "Notificação enviado ao paciente com sucesso!";
-
-                }
-                catch (Exception ex)
-                {
-                    TempData["mensagemErro"] = "Erro ao enviar notificação para o paciente.";
-                    Console.WriteLine
-                        (
-                            $" Registration Failure : {ex.Message} " +
-                            $" responseTrace : {ex.StackTrace}"
-                        );
-                }
-            }
-
-            else
-                TempData["mensagemErro"] = "Erro ao enviar notificação em virtude de um problema com dados do exame ou paciente.";
-            //  }
-            //  else
-            //     TempData["mensagemErro"] = "Erro ao enviar notificação para o paciente, pois houve um problema com a configuração de SMS.";
-
+			TempData["mensagemErro"] = "Erro ao enviar notificação em virtude de um problema com dados do exame ou paciente.";
+            
             return RedirectToAction(nameof(Notificate));
         }
 
@@ -381,7 +351,7 @@ namespace MonitoraSUS.Controllers
                 return View(new ExameViewModel());
 
             }
-            catch
+            catch (Exception e)
             {
                 TempData["mensagemErro"] = "Houve um problema ao atualizar as informações, tente novamente." +
                   " Se o erro persistir, entre em contato com a Fábrica de Software da UFS pelo email fabricadesoftware@ufs.br";
@@ -550,8 +520,12 @@ namespace MonitoraSUS.Controllers
             exame.DataExame = viewModel.DataExame;
             exame.IdAgenteSaude = viewModel.IdAgenteSaude.Idpessoa;
             exame.IdEmpresaSaude = viewModel.IdEmpresaSaude;
-            exame.FoiNotificado = viewModel.FoiNotificado;
-            exame.DataNotificacao = viewModel.DataNotificacao;
+            exame.CodigoColeta = viewModel.CodigoColeta;
+            exame.DataNotificacao = DateTime.Now;
+			exame.StatusNotificacao = viewModel.StatusNotificacao;
+			exame.ehProfissionalSaude = viewModel.EhProfissionalSaude;
+			exame.CodigoColeta = viewModel.CodigoColeta;
+			exame.IdNotificacao = viewModel.IdNotificacao;
 
             /*
              *  pegando informações do agente de saúde logado no sistema 

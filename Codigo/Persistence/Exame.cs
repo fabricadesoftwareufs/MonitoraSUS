@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Persistence
 {
@@ -16,6 +17,11 @@ namespace Persistence
         public int IdEstado { get; set; }
         public int? IdMunicipio { get; set; }
         public int? IdEmpresaSaude { get; set; }
+        public DateTimeOffset DataNotificacao { get; set; }
+        public byte EhProfissionalSaude { get; set; }
+        public string CodigoColeta { get; set; }
+        public string StatusNotificacao { get; set; }
+        public string IdNotificacao { get; set; }
 
         public Pessoa IdAgenteSaudeNavigation { get; set; }
         public Empresaexame IdEmpresaSaudeNavigation { get; set; }

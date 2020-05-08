@@ -23,5 +23,8 @@ namespace Service.Interface
         List<TotalEstadoMunicipioBairro> GetTotaisRealizadosByEstado(int idEstado);
         List<TotalEstadoMunicipioBairro> GetTotaisRealizadosByMunicipio(int idMunicipio);
 
-    }
+		ConfiguracaoNotificarModel BuscarConfiguracaoNotificar(int IdEstado, int IdEmpresaExame);
+		ConfiguracaoNotificarModel BuscarConfiguracaoNotificar(int IdMunicipio);
+		System.Threading.Tasks.Task<bool> EnviarSMSResultadoExameAsync(ConfiguracaoNotificarModel configuracaoNotificar, ExameModel exame, PessoaModel pessoa);
+	}
 }

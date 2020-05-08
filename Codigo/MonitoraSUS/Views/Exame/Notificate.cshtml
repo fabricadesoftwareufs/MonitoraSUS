@@ -269,7 +269,7 @@
                                         @Html.DisplayFor(modelItem => item.Resultado)
                                     </td>
                                     <td>
-                                        @if (item.FoiNotificado)
+                                        @if (item.StatusNotificacao.Equals("S"))
                                         {
                                             <p>SIM</p>
                                         }

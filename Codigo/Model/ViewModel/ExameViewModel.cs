@@ -19,9 +19,13 @@ namespace Model
             IdEstado = 0;
             MunicipioId = 0;
             PesquisarCpf = 0;
-            FoiNotificado = false;
-        }
-        public int IdExame { get; set; }
+			CodigoColeta = "";
+			EhProfissionalSaude = false;
+			IdNotificacao = "";
+			StatusNotificacao = ExameModel.NOTIFICADO_NAO;
+			
+		}
+		public int IdExame { get; set; }
         [Display(Name = "Virus")]
         public VirusBacteriaModel IdVirusBacteria { get; set; }
         [Display(Name = "Paciente")]
@@ -41,7 +45,11 @@ namespace Model
         public int IdEstado { get; set; }
         public int? MunicipioId { get; set; }
         public int? IdEmpresaSaude { get; set; }
-        public int PesquisarCpf { get; set; }
+		public bool EhProfissionalSaude { get; set; }
+		public string CodigoColeta { get; set; }
+		public string StatusNotificacao { get; set; }
+		public string IdNotificacao { get; set; }
+		public int PesquisarCpf { get; set; }
         [Display(Name = "Resultado")]
         public string Resultado
         {
@@ -57,8 +65,5 @@ namespace Model
                 return new ExameModel() { IgM = this.IgM, IgG = this.IgG, Pcr = this.Pcr }.ResultadoStatus;
             }
         }
-        public bool FoiNotificado { get; set; }
-        public bool DataNotificacao { get; set; }
-
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Persistence
 {
@@ -6,6 +7,7 @@ namespace Persistence
     {
         public Municipio()
         {
+            Configuracaonotificar = new HashSet<Configuracaonotificar>();
             Exame = new HashSet<Exame>();
             Pessoatrabalhamunicipio = new HashSet<Pessoatrabalhamunicipio>();
         }
@@ -15,6 +17,7 @@ namespace Persistence
         public string Nome { get; set; }
         public string Uf { get; set; }
 
+        public ICollection<Configuracaonotificar> Configuracaonotificar { get; set; }
         public ICollection<Exame> Exame { get; set; }
         public ICollection<Pessoatrabalhamunicipio> Pessoatrabalhamunicipio { get; set; }
     }
