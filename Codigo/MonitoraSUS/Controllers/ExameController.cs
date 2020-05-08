@@ -109,25 +109,42 @@ namespace MonitoraSUS.Controllers
             return RedirectToAction(nameof(Notificate));
         }
 
-
-        private List<PessoaModel> users = new List<PessoaModel>
-        {
-            new PessoaModel { Idpessoa = 1, Nome= "DoloresAbernathy" },
-            new PessoaModel { Idpessoa = 2, Nome = "MaeveMillay" },
-            new PessoaModel { Idpessoa = 3, Nome = "BernardLowe" },
-            new PessoaModel { Idpessoa = 4, Nome = "ManInBlack" }
-        };
-
-        public IActionResult Export()
+        public IActionResult Export(List<ExameViewModel> exames)
         {
             var builder = new StringBuilder();
-            builder.AppendLine("Id,Username");
-            foreach (var user in users)
+            builder.AppendLine("PACIENTE;INICIAIS;DATA NASC;NOME;CPF;RG;COMORBIDADES;ENDEREÇO;CONTATO;ESTADO;MUNICIPIO");
+
+            string cpf = "", rg="", endereco="", contato="", 
+                   estado="", municipio="", codigoColeta = "",
+                   iniciais = "",dataNascimento="", nome="";
+            
+            foreach (var exame in exames)
             {
-                builder.AppendLine($"{user.Idpessoa};{user.Nome}");
+                cpf = (Methods.SoContemNumeros(exame.IdPaciente.Cpf) ? exame.IdPaciente.Cpf : " - ");
+                rg  = exame.IdPaciente.Cpf[0] == 'T' ? " - " : exame.IdPaciente.Cpf;
+                endereco = exame.IdPaciente.Rua + ", Nº " + exame.IdPaciente.Numero + ", " + exame.IdPaciente.Bairro + "," + exame.IdPaciente.Complemento;
+                contato = exame.IdPaciente.FoneCelular;
+                estado = exame.IdPaciente.Estado;
+                municipio = exame.IdPaciente.Cidade;
+                codigoColeta = exame.CodigoColeta;
+                iniciais = RetornaIniciais(exame.IdPaciente.Nome);
+                dataNascimento = exame.IdPaciente.DataNascimento.ToString("dd/MM/yyyy");
+                nome = exame.IdPaciente.Nome;
+
+                builder.AppendLine($"{codigoColeta};{iniciais};{dataNascimento};{nome};{cpf};{rg};{"-"};{endereco};{contato};{estado};{municipio}");
             }
 
-            return File(Encoding.UTF8.GetBytes(builder.ToString()), "text/csv", "users.csv");
+            return File(Encoding.UTF8.GetBytes(builder.ToString()), "text/csv", "exames.csv");
+        }
+
+        public string RetornaIniciais(string nome) 
+        {
+            string[] s = nome.Split(' ');
+            var inicias = "";
+            for (int i = 0; i < s.Length; i++)
+                inicias += s[i][0];
+
+            return inicias.ToUpper();
         }
 
 
@@ -455,6 +472,8 @@ namespace MonitoraSUS.Controllers
             exame.IdEmpresaSaude = viewModel.IdEmpresaSaude;
             exame.FoiNotificado = viewModel.FoiNotificado;
             exame.DataNotificacao = viewModel.DataNotificacao;
+            exame.EhProfissionalSaude = viewModel.EhProfissionalSaude;
+            exame.CodigoColeta = viewModel.CodigoColeta;
 
             /*
              *  pegando informações do agente de saúde logado no sistema 
@@ -502,6 +521,10 @@ namespace MonitoraSUS.Controllers
             ex.DataInicioSintomas = exame.DataInicioSintomas;
             ex.DataExame = exame.DataExame;
             ex.IdEmpresaSaude = exame.IdEmpresaSaude;
+            ex.FoiNotificado = exame.FoiNotificado;
+            ex.DataNotificacao = exame.DataNotificacao;
+            ex.EhProfissionalSaude = exame.EhProfissionalSaude;
+            ex.CodigoColeta = exame.CodigoColeta;
 
             return ex;
         }
@@ -580,6 +603,10 @@ namespace MonitoraSUS.Controllers
                 ex.IdEstado = exame.IdEstado;
                 ex.MunicipioId = exame.IdMunicipio;
                 ex.IdEmpresaSaude = exame.IdEmpresaSaude;
+                ex.FoiNotificado = exame.FoiNotificado;
+                ex.DataNotificacao = exame.DataNotificacao;
+                ex.EhProfissionalSaude = exame.EhProfissionalSaude;
+                ex.CodigoColeta = exame.CodigoColeta;
 
                 pesquisaExame.Exames.Add(ex);
             }
@@ -587,9 +614,9 @@ namespace MonitoraSUS.Controllers
             /*
              * 2º Filtro - filtrando ViewModel por nome ou cpf e resultado
              */
-            pesquisaExame.Pesquisa  = pesquisaExame.Pesquisa ?? "";
+            pesquisaExame.Pesquisa = pesquisaExame.Pesquisa ?? "";
             pesquisaExame.Resultado = pesquisaExame.Resultado ?? "";
-            pesquisaExame.Cidade    = pesquisaExame.Cidade ?? "";
+            pesquisaExame.Cidade = pesquisaExame.Cidade ?? "";
 
             if (!pesquisaExame.Pesquisa.Equals(""))
                 if (Methods.SoContemLetras(pesquisaExame.Pesquisa))
@@ -606,9 +633,12 @@ namespace MonitoraSUS.Controllers
             /* 
              * Ordenando lista por data e pegando maior e menor datas... 
              */
-            pesquisaExame.Exames.OrderBy(ex => ex.DataExame).ToList();
-            pesquisaExame.DataInicial = exames[0].DataExame;
-            pesquisaExame.DataFinal = exames[exames.Count - 1].DataExame;
+            if (pesquisaExame.Exames.Count > 0)
+            {
+                pesquisaExame.Exames = pesquisaExame.Exames.OrderBy(ex => ex.DataExame).ToList();
+                pesquisaExame.DataInicial = pesquisaExame.Exames[0].DataExame;
+                pesquisaExame.DataFinal = pesquisaExame.Exames[pesquisaExame.Exames.Count - 1].DataExame;
+            }
 
 
             return PreencheTotalizadores(pesquisaExame);

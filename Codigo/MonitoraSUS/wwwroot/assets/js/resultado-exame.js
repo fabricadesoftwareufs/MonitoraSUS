@@ -35,7 +35,7 @@ $('#btn-submit').on('click', function () {
 
         if ($('#input-nome').val() && $('#input-data-nascimento').val().length == 10 && $('#postal_code').val() && $('#route').val() &&
             $('#sublocality_level_1').val() && $('#administrative_area_level_2').val() && $('#administrative_area_level_1').val() &&
-            $('#input-celular').val().length == 17 && $('#input-data-exame').val() && $('#input-data-sintomas').val()) {
+            $('#input-celular').val().length == 17 && $('#input-data-exame').val() && $('#input-data-sintomas').val() && $('#input-codigo-coleta').val()) {
             $('#modal-espera').modal('show');
         }
     }

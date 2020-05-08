@@ -36,6 +36,10 @@
     var idPaciente = Model.IdPaciente.Idpessoa;
     var googleKey = ViewBag.googleKey;
     var outrasComorbidades = Model.IdPaciente.OutrasComorbidades;
+    var ehProfissional = Model.EhProfissionalSaude;
+    var codigoColeta = Model.CodigoColeta;
+    var dataNotificacao = Model.DataNotificacao;
+    var foiNotificado = Model.FoiNotificado;
 
 
 }
@@ -98,6 +102,16 @@
                                         <div class="custom-control custom-radio custom-control-inline">
                                             @Html.RadioButtonFor(model => model.IdPaciente.Sexo, "F", new { @class = "custom-control-input", @id = "input-sexo-fem" })
                                             <label class="custom-control-label" for="input-sexo-fem">Feminino</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-2">
+                                    <div class="form-group">
+                                        <div class="custom-control custom-checkbox checkbox">
+                                            <label>
+                                                <input asp-for="EhProfissionalSaude" checked="@ehProfissional" class="custom-control-input" id="customCheck8" />
+                                                <label class="custom-control-label" for="customCheck8">Profissional de Saude?</label>
+                                            </label>
                                         </div>
                                     </div>
                                 </div>
@@ -341,6 +355,12 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <label for="input-codigo-coleta" class="form-control-label">Código da Coleta</label>
+                                        <input type="search" required id="input-codigo-coleta" class="form-control" asp-for="CodigoColeta" placeholder="" value="@codigoColeta">
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="form-group" hidden>
@@ -350,6 +370,8 @@
                             <input asp-for="IdPaciente.Idpessoa" id="paciente" class="form-control" placeholder="" value="@idPaciente">
                             <input asp-for="IdExame" id="exame" placeholder="" class="form-control" value="@idExame" />
                             <input asp-for="IdEmpresaSaude" id="empresa-saude" class="form-control" value="@idEmpresaSaude" />
+                            <input asp-for="DataNotificacao" type="datetime" id="data-notificacao" class="form-control" value="@dataNotificacao" />
+                            <input asp-for="FoiNotificado" type="checkbox" id="data-notificacao" class="form-control" checked="@foiNotificado" />
                         </div>
                         <hr class="my-4" />
                         <div class="modal fade bs-example-modal-sm" id="modal-confirmar" tabindex="-1" role="dialog" aria-hidden="true">
