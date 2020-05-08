@@ -29,7 +29,9 @@ namespace Model
         public int? IdMunicipio { get; set; }
         public int? IdEmpresaSaude { get; set; }
         public bool FoiNotificado { get; set; }
-        public bool DataNotificacao { get; set; }
+        public DateTime DataNotificacao { get; set; }
+        public bool EhProfissionalSaude { get; set; }
+        public string CodigoColeta { get; set; }
 
         public string Resultado
         {

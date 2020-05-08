@@ -222,6 +222,25 @@ namespace Persistence
                     .HasColumnType("enum('S','N','I')")
                     .HasDefaultValueSql("N");
 
+                entity.Property(e => e.DataNotificacao)
+                  .HasColumnName("dataNotificacao")
+                  .HasColumnType("date");
+
+                entity.Property(e => e.FoiNotificado)
+                 .HasColumnName("foiNotificado")
+                 .HasDefaultValueSql("0");
+
+                entity.Property(e => e.EhProfissionalSaude)
+                  .HasColumnName("ehProfissionalSaude")
+                  .HasDefaultValueSql("0");
+
+                entity.Property(e => e.CodigoColeta)
+                  .IsRequired()
+                  .HasColumnName("codigoColeta")
+                  .HasMaxLength(20)
+                  .IsUnicode(false)
+                  .HasDefaultValueSql("");
+
                 entity.HasOne(d => d.IdAgenteSaudeNavigation)
                     .WithMany(p => p.ExameIdAgenteSaudeNavigation)
                     .HasForeignKey(d => d.IdAgenteSaude)

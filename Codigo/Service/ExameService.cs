@@ -53,6 +53,11 @@ namespace Service
                     IdEstado = exame.IdEstado,
                     IdMunicipio = exame.IdMunicipio,
                     IdEmpresaSaude = exame.IdEmpresaSaude,
+                    FoiNotificado = Convert.ToBoolean(exame.FoiNotificado),
+                    DataNotificacao = exame.DataNotificacao,
+                    EhProfissionalSaude = Convert.ToBoolean(exame.EhProfissionalSaude),
+                    CodigoColeta = exame.CodigoColeta
+
                 }).ToList();
 
         public List<ExameModel> GetAll()
@@ -71,6 +76,10 @@ namespace Service
                     IdEstado = exame.IdEstado,
                     IdMunicipio = exame.IdMunicipio,
                     IdEmpresaSaude = exame.IdEmpresaSaude,
+                    FoiNotificado = Convert.ToBoolean(exame.FoiNotificado),
+                    DataNotificacao = exame.DataNotificacao,
+                    EhProfissionalSaude = Convert.ToBoolean(exame.EhProfissionalSaude),
+                    CodigoColeta = exame.CodigoColeta
                 }).ToList();
 
 
@@ -91,6 +100,10 @@ namespace Service
                     IdEstado = exame.IdEstado,
                     IdMunicipio = exame.IdMunicipio,
                     IdEmpresaSaude = exame.IdEmpresaSaude,
+                    FoiNotificado = Convert.ToBoolean(exame.FoiNotificado),
+                    DataNotificacao = exame.DataNotificacao,
+                    EhProfissionalSaude = Convert.ToBoolean(exame.EhProfissionalSaude),
+                    CodigoColeta = exame.CodigoColeta
                 }).FirstOrDefault();
 
         private Exame ModelToEntity(ExameModel exameModel)
@@ -109,6 +122,10 @@ namespace Service
                 DataInicioSintomas = exameModel.DataInicioSintomas,
                 DataExame = exameModel.DataExame,
                 IdEmpresaSaude = exameModel.IdEmpresaSaude,
+                FoiNotificado = Convert.ToByte(exameModel.FoiNotificado),
+                DataNotificacao = exameModel.DataNotificacao,
+                EhProfissionalSaude = Convert.ToByte(exameModel.EhProfissionalSaude),
+                CodigoColeta = exameModel.CodigoColeta
             };
         }
 
@@ -129,6 +146,10 @@ namespace Service
                     IdEstado = exame.IdEstado,
                     IdMunicipio = exame.IdMunicipio,
                     IdEmpresaSaude = exame.IdEmpresaSaude,
+                    FoiNotificado = Convert.ToBoolean(exame.FoiNotificado),
+                    DataNotificacao = exame.DataNotificacao,
+                    EhProfissionalSaude = Convert.ToBoolean(exame.EhProfissionalSaude),
+                    CodigoColeta = exame.CodigoColeta
                 }).ToList();
 
         public List<ExameModel> GetByIdEmpresa(int idEempresa)
@@ -148,6 +169,10 @@ namespace Service
                    IdEstado = exame.IdEstado,
                    IdMunicipio = exame.IdMunicipio,
                    IdEmpresaSaude = exame.IdEmpresaSaude,
+                   FoiNotificado = Convert.ToBoolean(exame.FoiNotificado),
+                   DataNotificacao = exame.DataNotificacao,
+                   EhProfissionalSaude = Convert.ToBoolean(exame.EhProfissionalSaude),
+                   CodigoColeta = exame.CodigoColeta
                }).ToList();
 
         public List<ExameModel> GetByIdPaciente(int idPaciente)
@@ -167,6 +192,10 @@ namespace Service
                     IdEstado = exame.IdEstado,
                     IdMunicipio = exame.IdMunicipio,
                     IdEmpresaSaude = exame.IdEmpresaSaude,
+                    FoiNotificado = Convert.ToBoolean(exame.FoiNotificado),
+                    DataNotificacao = exame.DataNotificacao,
+                    EhProfissionalSaude = Convert.ToBoolean(exame.EhProfissionalSaude),
+                    CodigoColeta = exame.CodigoColeta
                 }).ToList();
 
         public List<ExameModel> GetByIdMunicipio(int idMunicicpio)
@@ -186,6 +215,10 @@ namespace Service
                     IdEstado = exame.IdEstado,
                     IdMunicipio = exame.IdMunicipio,
                     IdEmpresaSaude = exame.IdEmpresaSaude,
+                    FoiNotificado = Convert.ToBoolean(exame.FoiNotificado),
+                    DataNotificacao = exame.DataNotificacao,
+                    EhProfissionalSaude = Convert.ToBoolean(exame.EhProfissionalSaude),
+                    CodigoColeta = exame.CodigoColeta
                 }).ToList();
 
         public List<ExameModel> CheckDuplicateExamToday(int idPaciente, int idVirusBacteria, DateTime dateExame)
