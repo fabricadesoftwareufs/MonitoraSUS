@@ -543,10 +543,8 @@ namespace MonitoraSUS.Controllers
             exame.DataInicioSintomas = viewModel.DataInicioSintomas;
             exame.DataExame = viewModel.DataExame;
             exame.IdEmpresaSaude = viewModel.IdEmpresaSaude;
-            exame.DataNotificacao = viewModel.DataNotificacao;
             exame.EhProfissionalSaude = viewModel.EhProfissionalSaude;
-            exame.CodigoColeta = viewModel.CodigoColeta;
-            exame.DataNotificacao = DateTime.Now;
+            exame.CodigoColeta = (viewModel.CodigoColeta == null) ? "" : viewModel.CodigoColeta;
             exame.StatusNotificacao = viewModel.StatusNotificacao;
             exame.CodigoColeta = viewModel.CodigoColeta;
             exame.IdNotificacao = viewModel.IdNotificacao;
@@ -597,7 +595,6 @@ namespace MonitoraSUS.Controllers
             ex.DataInicioSintomas = exame.DataInicioSintomas;
             ex.DataExame = exame.DataExame;
             ex.IdEmpresaSaude = exame.IdEmpresaSaude;
-            ex.DataNotificacao = exame.DataNotificacao;
             ex.EhProfissionalSaude = exame.EhProfissionalSaude;
             ex.CodigoColeta = exame.CodigoColeta;
             ex.StatusNotificacao = exame.StatusNotificacao;
@@ -679,7 +676,6 @@ namespace MonitoraSUS.Controllers
                 ex.IdEstado = exame.IdEstado;
                 ex.MunicipioId = exame.IdMunicipio;
                 ex.IdEmpresaSaude = exame.IdEmpresaSaude;
-                ex.DataNotificacao = exame.DataNotificacao;
                 ex.EhProfissionalSaude = exame.EhProfissionalSaude;
                 ex.CodigoColeta = exame.CodigoColeta;
                 ex.StatusNotificacao = exame.StatusNotificacao;
