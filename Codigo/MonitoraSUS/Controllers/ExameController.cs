@@ -731,8 +731,11 @@ namespace MonitoraSUS.Controllers
              * Só para garantir que a aplicação não irá quebrar
              * caso view retorne um id que ficou em cache... 
              */
-            if (exame.IdPaciente.Cpf.Equals(""))
+            var user = _pessoaContext.GetByCpf(exame.IdPaciente.Cpf.ToUpper());
+            if (user == null)
                 exame.IdPaciente.Idpessoa = 0;
+            else
+                exame.IdPaciente.Idpessoa = user.Idpessoa;
 
             return exame.IdPaciente;
         }

@@ -6,6 +6,7 @@ $(document).ready(function () {
     $('#input-data-nascimento').mask('00-00-0000', { reverse: true });
     $('#input-telefone').mask('(00) 0000 - 0000');
     $('#input-celular').mask('(00) 00000 - 0000');
+    $('#postal_code').mask('00000-000');
 
 });
 
