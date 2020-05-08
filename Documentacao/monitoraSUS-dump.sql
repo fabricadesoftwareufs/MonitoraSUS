@@ -144,7 +144,7 @@ CREATE TABLE `exame` (
   `idEstado` int(11) NOT NULL,
   `idMunicipio` int(11) DEFAULT NULL,
   `idEmpresaSaude` int(11) DEFAULT NULL,
-  `dataNotificacao` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `dataNotificacao` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `foiNotificado` tinyint(4) NOT NULL DEFAULT '0',
   `ehProfissionalSaude` tinyint(4) NOT NULL DEFAULT '0',
   `codigoColeta` varchar(20) NOT NULL DEFAULT '',

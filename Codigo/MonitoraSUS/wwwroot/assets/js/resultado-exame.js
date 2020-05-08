@@ -77,7 +77,7 @@ function verificaCampoVazio() {
     if ($('#input-nome').val().length == 0)
         mensagem = "Preencha o campo NOME!";
     else if ($('#input-data-nascimento').val().length != 10)
-        mensagem = "Preencha A Data De Nascimento corretamente!";
+        mensagem = "Preencha a DATA DE NASCIMENTO corretamente!";
     else if ($('#postal_code').val().length == 0)
         mensagem = "Preencha o campo CEP!";
     else if ($('#route').val().length == 0)
@@ -89,13 +89,13 @@ function verificaCampoVazio() {
     else if ($('#administrative_area_level_1').val().length == 0)
         mensagem = "Preencha o campo CIDADE!";
     else if ($('#input-celular').val().length != 17)
-        mensagem = "Preencha o campo CELELULAR corretamente!";
+        mensagem = "Preencha o campo CELULAR corretamente!";
     else if ($('#input-data-exame').val().length == 0)
-        mensagem = "Preencha o campo Data do Exame!";
+        mensagem = "Preencha o campo DATA DO EXAME!";
     else if ($('#input-data-sintomas').val().length == 0)
-        mensagem = "Preencha o campo Inicio dos Sintomas!";
+        mensagem = "Preencha o campo INICIO DOS SINTOMAS!";
     else if ($('#input-codigo-coleta').val().length == 0)
-        mensagem = "Preencha o campo Código da Coleta!";
+        mensagem = "Preencha o campo CÓDIGO DA COLETA!";
 
 
     return mensagem;

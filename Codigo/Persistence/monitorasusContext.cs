@@ -223,8 +223,8 @@ namespace Persistence
                     .HasDefaultValueSql("N");
 
                 entity.Property(e => e.DataNotificacao)
-                  .HasColumnName("dataNotificacao")
-                  .HasColumnType("date");
+                 .HasColumnName("dataNotificacao")
+                 .HasColumnType("date");
 
                 entity.Property(e => e.FoiNotificado)
                  .HasColumnName("foiNotificado")
@@ -239,7 +239,7 @@ namespace Persistence
                   .HasColumnName("codigoColeta")
                   .HasMaxLength(20)
                   .IsUnicode(false)
-                  .HasDefaultValueSql("");
+                  .HasDefaultValueSql("0");
 
                 entity.HasOne(d => d.IdAgenteSaudeNavigation)
                     .WithMany(p => p.ExameIdAgenteSaudeNavigation)
