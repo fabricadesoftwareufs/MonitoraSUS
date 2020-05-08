@@ -300,8 +300,8 @@ namespace Service
                      IdEstado = exame.IdEstado,
                      IdMunicipio = exame.IdMunicipio,
                      IdEmpresaSaude = exame.IdEmpresaSaude,
-                     UF = exame.IdEstadoNavigation.Uf,
-                     Municipio = exame.IdMunicipioNavigation.Nome,
+                     UF = exame.IdPacienteNavigation.Estado,
+                     Municipio = exame.IdPacienteNavigation.Cidade,
                      Bairro = ""
                  }).ToList().GroupBy(e => new { Estado = e.UF, Municipio = e.Municipio, Resultado = e.Resultado })
                  .Select(g => new TotalPorResultadoExame
@@ -333,8 +333,8 @@ namespace Service
                      IdEstado = exame.IdEstado,
                      IdMunicipio = exame.IdMunicipio,
                      IdEmpresaSaude = exame.IdEmpresaSaude,
-                     UF = exame.IdEstadoNavigation.Uf,
-                     Municipio = exame.IdMunicipioNavigation.Nome,
+                     UF = exame.IdPacienteNavigation.Estado,
+                     Municipio = exame.IdPacienteNavigation.Cidade,
                      Bairro = ""
                  }).ToList().GroupBy(e => new { Estado = e.UF, Municipio = e.Municipio, Resultado = e.Resultado })
                  .Select(g => new TotalPorResultadoExame
@@ -365,10 +365,10 @@ namespace Service
                      IdEstado = exame.IdEstado,
                      IdMunicipio = exame.IdMunicipio,
                      IdEmpresaSaude = exame.IdEmpresaSaude,
-                     UF = exame.IdEstadoNavigation.Uf,
-                     Municipio = exame.IdMunicipioNavigation.Nome,
-                     Bairro = ""
-                 }).ToList().GroupBy(e => new { Estado = e.UF, Municipio = e.Municipio, Bairro = e.Bairro, Resultado = e.Resultado })
+					 UF = exame.IdPacienteNavigation.Estado,
+					 Municipio = exame.IdPacienteNavigation.Cidade,
+					 Bairro = exame.IdPacienteNavigation.Bairro,
+				 }).ToList().GroupBy(e => new { Estado = e.UF, Municipio = e.Municipio, Bairro = e.Bairro, Resultado = e.Resultado })
                  .Select(g => new TotalPorResultadoExame
                  {
                      Estado = g.Key.Estado,
@@ -397,9 +397,9 @@ namespace Service
                      IdEstado = exame.IdEstado,
                      IdMunicipio = exame.IdMunicipio,
                      IdEmpresaSaude = exame.IdEmpresaSaude,
-                     UF = exame.IdEstadoNavigation.Uf,
-                     Municipio = exame.IdMunicipioNavigation.Nome,
-                     Bairro = ""
+					 UF = exame.IdPacienteNavigation.Estado,
+					 Municipio = exame.IdPacienteNavigation.Cidade,
+					 Bairro = ""
                  }).ToList().GroupBy(e => new { Estado = e.UF, Municipio = e.Municipio, Resultado = e.Resultado })
                  .Select(g => new TotalPorResultadoExame
                  {
@@ -419,28 +419,12 @@ namespace Service
                 bool achou = false;
                 foreach (TotalEstadoMunicipioBairro totalEMB in totalEstadoMunicipioBairros)
                 {
-                    if (totalEMB.Municipio == null)
+                    if (totalEMB.Estado.Equals(totalPorResultado.Estado) && totalEMB.Municipio.Equals(totalPorResultado.Municipio) &&
+                       (totalEMB.IdEmpresaSaude == totalPorResultado.IdEmpresaSaude) && totalEMB.Bairro.Equals(totalPorResultado.Bairro))
                     {
-                        if (totalEMB.Estado.Equals(totalPorResultado.Estado) && (totalPorResultado.Municipio == null) &&
-                            (totalEMB.IdEmpresaSaude == totalPorResultado.IdEmpresaSaude) && totalEMB.Bairro.Equals(totalPorResultado.Bairro))
-                        {
-                            AtualizarTotais(totalPorResultado, totalEMB);
-                            achou = true;
-                            break;
-                        }
-                    }
-                    else
-                    {
-                        if (totalPorResultado.Municipio != null)
-                        {
-                            if (totalEMB.Estado.Equals(totalPorResultado.Estado) && totalEMB.Municipio.Equals(totalPorResultado.Municipio) &&
-                                (totalEMB.IdEmpresaSaude == totalPorResultado.IdEmpresaSaude) && totalEMB.Bairro.Equals(totalPorResultado.Bairro))
-                            {
-                                AtualizarTotais(totalPorResultado, totalEMB);
-                                achou = true;
-                                break;
-                            }
-                        }
+                       AtualizarTotais(totalPorResultado, totalEMB);
+                       achou = true;
+                       break;
                     }
                 }
                 if (!achou)
