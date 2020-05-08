@@ -232,6 +232,59 @@
                             <tbody class="list">
                                 @foreach (var item in Model.Exames)
                                 {
+                                    <tr>
+                                        <td>
+                                            <a href="#">@Html.DisplayFor(modelItem => item.IdPaciente.Cpf)</a>
+                                        </td>
+                                        <td>
+                                            @if (@item.IdPaciente.Nome.Length > 15)
+                                            {
+                                                <div>@item.IdPaciente.Nome.Substring(0, 15)...</div>
+                                            }
+                                            else
+                                            {
+                                                <div>@item.IdPaciente.Nome</div>
+                                            }
+                                        </td>
+                                        <td>
+                                            @if (item.IdPaciente.Cidade.Length > 15)
+                                            {
+                                                <div>@item.IdPaciente.Cidade.Substring(0, 15)...</div>
+                                            }
+                                            else
+                                            {
+                                                <div>@item.IdPaciente.Cidade</div>
+                                            }
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.IdPaciente.Estado)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.DataExame)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.IdVirusBacteria.Nome)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Resultado)
+                                        </td>
+                                        <td>
+                                            @if (item.StatusNotificacao.ToUpper() == "S" || item.StatusNotificacao.ToUpper() == "E" )
+                                            {
+                                                <p>SIM</p>
+                                            }
+                                            else if (item.StatusNotificacao.ToUpper() == "N")
+                                            {
+                                                <p>NAO</p>
+                                            }
+                                        </td>
+                                        <td>
+                                            @using (Html.BeginForm("NotificateById", "Exame", new { id = item.IdExame }, FormMethod.Post))
+                                            {
+                                                <button type="submit" class="btn btn-info btn-xs"><i class="fa fa-envelope"></i> Notificar</button>
+                                            }
+                                        </td>
+                                    </tr>
                                 <tr>
                                     <td>
                                         <a href="#">@Html.DisplayFor(modelItem => item.IdPaciente.Cpf)</a>

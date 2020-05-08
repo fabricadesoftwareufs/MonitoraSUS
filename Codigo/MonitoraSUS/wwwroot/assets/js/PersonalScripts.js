@@ -50,12 +50,13 @@ function fillInAddress() {
         }
     }
 
-    removeReadOnlyCampoVazio();
-
     if ($('#postal_code').val() == "")
         $('#postal_code').focus();
     else
         $('#street_number').focus();
+
+    removeReadOnlyCampoVazio();
+
 
 }
 
@@ -209,10 +210,11 @@ function BuscaViaCep(cep) {
                 }
             }
 
-            removeReadOnlyCampoVazio();
-
             if (formCep.logradouro.value != "")
                 ProcuraEndereco(formCep.logradouro.value);
+
+            removeReadOnlyCampoVazio();
+
         } else
             span.hidden = false;
     })

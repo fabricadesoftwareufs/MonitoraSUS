@@ -1,5 +1,3 @@
-var teclaPressionada = 0; // para evitar submit com tecla enter
-
 // Mostra modal com mensagem de erro
 $(document).ready(function () {
     if (document.querySelector('#mensagem-retorno'))
@@ -12,33 +10,32 @@ $(window).keydown(function (event) {
         teclaPressionada = event.keyCode;
         event.preventDefault();
         return false;
-    } 
+    }
 });
 
 //quando o usuario der submit no exame
 $('#btn-submit').on('click', function () {
 
     // evitando submit equivocado com a tecla enter
-    if (teclaPressionada != 13) {
-        if ($("#input-cpf").val().length > 0) {
-            $("#input-cpf").unmask();
-        }
-        else {
-            $("#input-cpf").prop("disabled", true);
-            $("#input-cpf").val("");
-        }
-
-
-       $('#modal-confirmar').modal('hide');
-
-        $('#PesquisarCpf').val('0');
-
-        if ($('#input-nome').val() && $('#input-data-nascimento').val().length == 10 && $('#postal_code').val() && $('#route').val() &&
-            $('#sublocality_level_1').val() && $('#administrative_area_level_2').val() && $('#administrative_area_level_1').val() &&
-            $('#input-celular').val().length == 17 && $('#input-data-exame').val() && $('#input-data-sintomas').val()) {
-            $('#modal-espera').modal('show');
-        }
+    if ($("#input-cpf").val().length > 0) {
+        $("#input-cpf").unmask();
     }
+    else {
+        $("#input-cpf").prop("disabled", true);
+        $("#input-cpf").val("");
+    }
+
+
+    $('#modal-confirmar').modal('hide');
+
+    $('#PesquisarCpf').val('0');
+
+    if ($('#input-nome').val() && $('#input-data-nascimento').val().length == 10 && $('#postal_code').val() && $('#route').val() &&
+        $('#sublocality_level_1').val() && $('#administrative_area_level_2').val() && $('#administrative_area_level_1').val() &&
+        $('#input-celular').val().length == 17 && $('#input-data-exame').val() && $('#input-data-sintomas').val() && $('#input-codigo-coleta').val()) {
+        submitForm();
+    }
+
 });
 
 // submete o formulário completo
@@ -54,18 +51,17 @@ function mensagemResultado() {
     var idVirus = document.getElementById('input-virus-bacteria').value;
     var virus = document.getElementById('input-virus-bacteria')[idVirus - 1].text;
 
-    var mensagem = "";
+    var mensagem = verificaCampoVazio();
 
     $('#ok-model-form').hide();
     $('#acoes-model-form').hide();
 
-    if (nome === "") {
-        mensagem = "Informe o Nome do Paciente!.";
+    if (mensagem.length > 0) {
         $('#texto-erro').text(mensagem);
         $('#ok-model-form').show();
     } else {
 
-        $('#cpf-paciente').text(cpf.length == 0 ? 'Não consta':cpf);
+        $('#cpf-paciente').text(cpf.length == 0 ? 'Não consta' : cpf);
         $('#nome-paciente').text(nome);
         $('#resultado-paciente').text(resultadoExame());
         $('#virus-paciente').text(virus);
@@ -73,6 +69,36 @@ function mensagemResultado() {
         $('#acoes-model-form').show();
     }
     $('#modal-confirmar').modal('show');
+}
+
+
+function verificaCampoVazio() {
+    var mensagem = "";
+    if ($('#input-nome').val().length == 0)
+        mensagem = "Preencha o campo NOME!";
+    else if ($('#input-data-nascimento').val().length != 10)
+        mensagem = "Preencha a DATA DE NASCIMENTO corretamente!";
+    else if ($('#postal_code').val().length == 0)
+        mensagem = "Preencha o campo CEP!";
+    else if ($('#route').val().length == 0)
+        mensagem = "Preencha o campo RUA!";
+    else if ($('#sublocality_level_1').val().length == 0)
+        mensagem = "Preencha o campo BAIRRO!";
+    else if ($('#administrative_area_level_2').val().length == 0)
+        mensagem = "Preencha o campo ESTADO!";
+    else if ($('#administrative_area_level_1').val().length == 0)
+        mensagem = "Preencha o campo CIDADE!";
+    else if ($('#input-celular').val().length != 17)
+        mensagem = "Preencha o campo CELULAR corretamente!";
+    else if ($('#input-data-exame').val().length == 0)
+        mensagem = "Preencha o campo DATA DO EXAME!";
+    else if ($('#input-data-sintomas').val().length == 0)
+        mensagem = "Preencha o campo INICIO DOS SINTOMAS!";
+    else if ($('#input-codigo-coleta').val().length == 0)
+        mensagem = "Preencha o campo CÓDIGO DA COLETA!";
+
+
+    return mensagem;
 }
 
 // Calcula o resultado do exame

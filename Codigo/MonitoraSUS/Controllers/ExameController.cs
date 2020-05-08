@@ -73,44 +73,47 @@ namespace MonitoraSUS.Controllers
         public async Task<IActionResult> NotificateByListAsync(List<ExameViewModel> exames)
         {
             var usuario = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
-			var trabalhaMunicipio = _pessoaTrabalhaMunicipioContext.GetByIdPessoa(usuario.UsuarioModel.IdPessoa);
+            var trabalhaMunicipio = _pessoaTrabalhaMunicipioContext.GetByIdPessoa(usuario.UsuarioModel.IdPessoa);
             var trabalhaEstado = _pessoaTrabalhaEstadoContext.GetByIdPessoa(usuario.UsuarioModel.IdPessoa);
-			ConfiguracaoNotificarModel configuracaoNotificar = null;
-			if (trabalhaEstado != null)
-			{
-				configuracaoNotificar = _exameContext.BuscarConfiguracaoNotificar(trabalhaEstado.IdEstado, trabalhaEstado.IdEmpresaExame);
-			}
-			else if (trabalhaMunicipio != null)
-			{
-				configuracaoNotificar = _exameContext.BuscarConfiguracaoNotificar(trabalhaMunicipio.IdMunicipio);
-			}
-			if (configuracaoNotificar == null) {
-				TempData["mensagemErro"] = "Não possui créditos para notificações por SMS. Por favor entre em contato pelo email fabricadesoftware@ufs.br.";
-			} else
-			{
-				if (configuracaoNotificar.QuantidadeSmsdisponivel < exames.Count) {
-					TempData["mensagemErro"] = "Não possui créditos para enviar " + exames.Count + " SMS. Seu crédito atual é para envio de " +
-						configuracaoNotificar.QuantidadeSmsdisponivel + " SMS. Por favor entre em contato pelo email fabricadesoftware@ufs.br.";
-				}
-				int quantidadeEnviada = 0;
-				//int quantidadeEnviada = _exameContext.EnviarSMS(configuracaoNotificar, exames);
-				if (quantidadeEnviada == 0)
-				{
-					TempData["mensagemErro"] = "Ocorreram problemas no envio das notificações. Favor entre em contato pela fabricadesoftware@ufs.br.";
-				}
-				else if (quantidadeEnviada < exames.Count)
-				{
-					TempData["mensagemErro"] = "Ocorreram problemas no envio de algumas notificações. Favor conferir telefones.";
-				}
-				else
-				{
-					TempData["mensagemSucesso"] = "Notificações enviadas com sucesso!";
-				}
-			}
+            ConfiguracaoNotificarModel configuracaoNotificar = null;
+            if (trabalhaEstado != null)
+            {
+                configuracaoNotificar = _exameContext.BuscarConfiguracaoNotificar(trabalhaEstado.IdEstado, trabalhaEstado.IdEmpresaExame);
+            }
+            else if (trabalhaMunicipio != null)
+            {
+                configuracaoNotificar = _exameContext.BuscarConfiguracaoNotificar(trabalhaMunicipio.IdMunicipio);
+            }
+            if (configuracaoNotificar == null)
+            {
+                TempData["mensagemErro"] = "Não possui créditos para notificações por SMS. Por favor entre em contato pelo email fabricadesoftware@ufs.br.";
+            }
+            else
+            {
+                if (configuracaoNotificar.QuantidadeSmsdisponivel < exames.Count)
+                {
+                    TempData["mensagemErro"] = "Não possui créditos para enviar " + exames.Count + " SMS. Seu crédito atual é para envio de " +
+                        configuracaoNotificar.QuantidadeSmsdisponivel + " SMS. Por favor entre em contato pelo email fabricadesoftware@ufs.br.";
+                }
+                int quantidadeEnviada = 0;
+                //int quantidadeEnviada = _exameContext.EnviarSMS(configuracaoNotificar, exames);
+                if (quantidadeEnviada == 0)
+                {
+                    TempData["mensagemErro"] = "Ocorreram problemas no envio das notificações. Favor entre em contato pela fabricadesoftware@ufs.br.";
+                }
+                else if (quantidadeEnviada < exames.Count)
+                {
+                    TempData["mensagemErro"] = "Ocorreram problemas no envio de algumas notificações. Favor conferir telefones.";
+                }
+                else
+                {
+                    TempData["mensagemSucesso"] = "Notificações enviadas com sucesso!";
+                }
+            }
 
 
-			List<SMSModel> smsModels = new List<SMSModel>();
-			foreach (var item in exames)
+            List<SMSModel> smsModels = new List<SMSModel>();
+            foreach (var item in exames)
             {
                 var exame = _exameContext.GetById(item.IdExame);
                 var pessoa = _pessoaContext.GetById(exame.IdPaciente);
@@ -171,30 +174,51 @@ namespace MonitoraSUS.Controllers
 
             var exame = _exameContext.GetById(id);
             var pessoa = _pessoaContext.GetById(exame.IdPaciente);
-			TempData["mensagemErro"] = "Erro ao enviar notificação em virtude de um problema com dados do exame ou paciente.";
-            
+            TempData["mensagemErro"] = "Erro ao enviar notificação em virtude de um problema com dados do exame ou paciente.";
+
             return RedirectToAction(nameof(Notificate));
         }
 
-
-        private List<PessoaModel> users = new List<PessoaModel>
-        {
-            new PessoaModel { Idpessoa = 1, Nome= "DoloresAbernathy" },
-            new PessoaModel { Idpessoa = 2, Nome = "MaeveMillay" },
-            new PessoaModel { Idpessoa = 3, Nome = "BernardLowe" },
-            new PessoaModel { Idpessoa = 4, Nome = "ManInBlack" }
-        };
-
-        public IActionResult Export()
+        public IActionResult Export(List<ExameViewModel> exames)
         {
             var builder = new StringBuilder();
-            builder.AppendLine("Id,Username");
-            foreach (var user in users)
+            builder.AppendLine("PACIENTE;INICIAIS;DATA NASC;NOME;CPF;RG;COMORBIDADES;ENDEREÇO;CONTATO;ESTADO;MUNICIPIO");
+
+            string cpf = "", rg = "", endereco = "", contato = "",
+                   estado = "", municipio = "", codigoColeta = "",
+                   iniciais = "", dataNascimento = "", nome = "";
+
+            foreach (var exame in exames)
             {
-                builder.AppendLine($"{user.Idpessoa};{user.Nome}");
+                cpf = (Methods.SoContemNumeros(exame.IdPaciente.Cpf) ? exame.IdPaciente.Cpf : " ");
+                rg = exame.IdPaciente.Cpf[0] != 'T' && !Methods.SoContemNumeros(exame.IdPaciente.Cpf) ? exame.IdPaciente.Cpf : " ";
+
+                endereco = exame.IdPaciente.Numero == "" ? "" : exame.IdPaciente.Rua + ", Nº " + exame.IdPaciente.Numero;
+                endereco += exame.IdPaciente.Bairro == "" ? "" : ", " + exame.IdPaciente.Bairro;
+                endereco += exame.IdPaciente.Complemento == "" ? "" : ", " + exame.IdPaciente.Complemento;
+
+                contato = exame.IdPaciente.FoneCelular;
+                estado = exame.IdPaciente.Estado;
+                municipio = exame.IdPaciente.Cidade;
+                codigoColeta = exame.CodigoColeta;
+                iniciais = RetornaIniciais(exame.IdPaciente.Nome);
+                dataNascimento = exame.IdPaciente.DataNascimento.ToString("dd/MM/yyyy");
+                nome = exame.IdPaciente.Nome;
+
+                builder.AppendLine($"{codigoColeta};{iniciais};{dataNascimento};{nome};{cpf};{rg};{"-"};{endereco};{contato};{estado};{municipio}");
             }
 
-            return File(Encoding.UTF8.GetBytes(builder.ToString()), "text/csv", "users.csv");
+            return File(Encoding.UTF8.GetBytes(builder.ToString()), "text/csv", "exames.csv");
+        }
+
+        public string RetornaIniciais(string nome)
+        {
+            string[] s = nome.Split(' ');
+            var inicias = "";
+            for (int i = 0; i < s.Length; i++)
+                inicias += s[i][0];
+
+            return inicias.ToUpper();
         }
 
 
@@ -518,14 +542,14 @@ namespace MonitoraSUS.Controllers
             exame.IdMunicipio = viewModel.MunicipioId;
             exame.DataInicioSintomas = viewModel.DataInicioSintomas;
             exame.DataExame = viewModel.DataExame;
-            exame.IdAgenteSaude = viewModel.IdAgenteSaude.Idpessoa;
             exame.IdEmpresaSaude = viewModel.IdEmpresaSaude;
+            exame.DataNotificacao = viewModel.DataNotificacao;
+            exame.EhProfissionalSaude = viewModel.EhProfissionalSaude;
             exame.CodigoColeta = viewModel.CodigoColeta;
             exame.DataNotificacao = DateTime.Now;
-			exame.StatusNotificacao = viewModel.StatusNotificacao;
-			exame.ehProfissionalSaude = viewModel.EhProfissionalSaude;
-			exame.CodigoColeta = viewModel.CodigoColeta;
-			exame.IdNotificacao = viewModel.IdNotificacao;
+            exame.StatusNotificacao = viewModel.StatusNotificacao;
+            exame.CodigoColeta = viewModel.CodigoColeta;
+            exame.IdNotificacao = viewModel.IdNotificacao;
 
             /*
              *  pegando informações do agente de saúde logado no sistema 
@@ -573,6 +597,11 @@ namespace MonitoraSUS.Controllers
             ex.DataInicioSintomas = exame.DataInicioSintomas;
             ex.DataExame = exame.DataExame;
             ex.IdEmpresaSaude = exame.IdEmpresaSaude;
+            ex.DataNotificacao = exame.DataNotificacao;
+            ex.EhProfissionalSaude = exame.EhProfissionalSaude;
+            ex.CodigoColeta = exame.CodigoColeta;
+            ex.StatusNotificacao = exame.StatusNotificacao;
+            ex.IdNotificacao = exame.IdNotificacao;
 
             return ex;
         }
@@ -587,7 +616,6 @@ namespace MonitoraSUS.Controllers
             var usuario = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
             var secretarioMunicipio = _pessoaTrabalhaMunicipioContext.GetByIdPessoa(usuario.UsuarioModel.IdPessoa);
             var secretarioEstado = _pessoaTrabalhaEstadoContext.GetByIdPessoa(usuario.UsuarioModel.IdPessoa);
-
 
             var exames = new List<ExameModel>();
             if (usuario.RoleUsuario.Equals("AGENTE") || usuario.RoleUsuario.Equals("ADM"))
@@ -651,6 +679,11 @@ namespace MonitoraSUS.Controllers
                 ex.IdEstado = exame.IdEstado;
                 ex.MunicipioId = exame.IdMunicipio;
                 ex.IdEmpresaSaude = exame.IdEmpresaSaude;
+                ex.DataNotificacao = exame.DataNotificacao;
+                ex.EhProfissionalSaude = exame.EhProfissionalSaude;
+                ex.CodigoColeta = exame.CodigoColeta;
+                ex.StatusNotificacao = exame.StatusNotificacao;
+                ex.IdNotificacao = exame.IdNotificacao;
 
                 pesquisaExame.Exames.Add(ex);
             }
@@ -677,7 +710,7 @@ namespace MonitoraSUS.Controllers
             /* 
              * Ordenando lista por data e pegando maior e menor datas... 
              */
-          if (pesquisaExame.Exames.Count > 0)
+            if (pesquisaExame.Exames.Count > 0)
             {
                 pesquisaExame.Exames = pesquisaExame.Exames.OrderBy(ex => ex.DataExame).ToList();
                 pesquisaExame.DataInicial = pesquisaExame.Exames[0].DataExame;

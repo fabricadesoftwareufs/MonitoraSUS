@@ -14,9 +14,9 @@ namespace Service
     {
         private readonly monitorasusContext _context;
 
-		public object JsonConvert { get; private set; }
+        public object JsonConvert { get; private set; }
 
-		public ExameService(monitorasusContext context)
+        public ExameService(monitorasusContext context)
         {
             _context = context;
         }
@@ -57,6 +57,11 @@ namespace Service
                     IdEstado = exame.IdEstado,
                     IdMunicipio = exame.IdMunicipio,
                     IdEmpresaSaude = exame.IdEmpresaSaude,
+                    DataNotificacao = exame.DataNotificacao,
+                    EhProfissionalSaude = Convert.ToBoolean(exame.EhProfissionalSaude),
+                    CodigoColeta = exame.CodigoColeta,
+                    StatusNotificacao = exame.StatusNotificacao,
+                    IdNotificacao = exame.IdNotificacao,
                 }).ToList();
 
         public List<ExameModel> GetAll()
@@ -75,6 +80,11 @@ namespace Service
                     IdEstado = exame.IdEstado,
                     IdMunicipio = exame.IdMunicipio,
                     IdEmpresaSaude = exame.IdEmpresaSaude,
+                    DataNotificacao = exame.DataNotificacao,
+                    EhProfissionalSaude = Convert.ToBoolean(exame.EhProfissionalSaude),
+                    CodigoColeta = exame.CodigoColeta,
+                    StatusNotificacao = exame.StatusNotificacao,
+                    IdNotificacao = exame.IdNotificacao,
                 }).ToList();
 
 
@@ -95,143 +105,136 @@ namespace Service
                     IdEstado = exame.IdEstado,
                     IdMunicipio = exame.IdMunicipio,
                     IdEmpresaSaude = exame.IdEmpresaSaude,
+                    DataNotificacao = exame.DataNotificacao,
+                    EhProfissionalSaude = Convert.ToBoolean(exame.EhProfissionalSaude),
+                    CodigoColeta = exame.CodigoColeta,
+                    StatusNotificacao = exame.StatusNotificacao,
+                    IdNotificacao = exame.IdNotificacao,
                 }).FirstOrDefault();
 
         private Exame ModelToEntity(ExameModel exameModel)
         {
-			return new Exame
-			{
-				IdExame = exameModel.IdExame,
-				IdAgenteSaude = exameModel.IdAgenteSaude,
-				IdPaciente = exameModel.IdPaciente,
-				IdVirusBacteria = exameModel.IdVirusBacteria,
-				IgG = exameModel.IgG,
-				IgM = exameModel.IgM,
-				Pcr = exameModel.Pcr,
-				IdEstado = exameModel.IdEstado,
-				IdMunicipio = exameModel.IdMunicipio,
-				DataInicioSintomas = exameModel.DataInicioSintomas,
-				DataExame = exameModel.DataExame,
-				IdEmpresaSaude = exameModel.IdEmpresaSaude,
-				CodigoColeta = exameModel.CodigoColeta,
-				EhProfissionalSaude = Convert.ToByte(exameModel.ehProfissionalSaude),
-				IdNotificacao = exameModel.IdNotificacao,
-				StatusNotificacao = exameModel.StatusNotificacao,
-				DataNotificacao = DateTime.Now
-			};
+            return new Exame
+            {
+                IdExame = exameModel.IdExame,
+                IdAgenteSaude = exameModel.IdAgenteSaude,
+                IdPaciente = exameModel.IdPaciente,
+                IdVirusBacteria = exameModel.IdVirusBacteria,
+                IgG = exameModel.IgG,
+                IgM = exameModel.IgM,
+                Pcr = exameModel.Pcr,
+                IdEstado = exameModel.IdEstado,
+                IdMunicipio = exameModel.IdMunicipio,
+                DataInicioSintomas = exameModel.DataInicioSintomas,
+                DataExame = exameModel.DataExame,
+                IdEmpresaSaude = exameModel.IdEmpresaSaude,
+                DataNotificacao = exameModel.DataNotificacao,
+                EhProfissionalSaude = Convert.ToByte(exameModel.EhProfissionalSaude),
+                CodigoColeta = exameModel.CodigoColeta,
+                StatusNotificacao = exameModel.StatusNotificacao,
+                IdNotificacao = exameModel.IdNotificacao,
+            };
         }
 
-        public List<ExameModel> GetByIdEstado(int idEstado)
-         => _context.Exame
-                .Where(exameModel => exameModel.IdEstado == idEstado)
-                .Select(exame => new ExameModel
-                {
-                    IdVirusBacteria = exame.IdVirusBacteria,
-                    IdExame = exame.IdExame,
-                    IdPaciente = exame.IdPaciente,
-                    IdAgenteSaude = exame.IdAgenteSaude,
-                    DataExame = exame.DataExame,
-                    DataInicioSintomas = exame.DataInicioSintomas,
-                    IgG = exame.IgG,
-                    IgM = exame.IgM,
-                    Pcr = exame.Pcr,
-                    IdEstado = exame.IdEstado,
-                    IdMunicipio = exame.IdMunicipio,
-                    IdEmpresaSaude = exame.IdEmpresaSaude,
-                }).ToList();
-
         public List<ExameModel> GetByIdEmpresa(int idEempresa)
-        => _context.Exame
-               .Where(exameModel => exameModel.IdEmpresaSaude == idEempresa)
-               .Select(exame => new ExameModel
-               {
-                   IdVirusBacteria = exame.IdVirusBacteria,
-                   IdExame = exame.IdExame,
-                   IdPaciente = exame.IdPaciente,
-                   IdAgenteSaude = exame.IdAgenteSaude,
-                   DataExame = exame.DataExame,
-                   DataInicioSintomas = exame.DataInicioSintomas,
-                   IgG = exame.IgG,
-                   IgM = exame.IgM,
-                   Pcr = exame.Pcr,
-                   IdEstado = exame.IdEstado,
-                   IdMunicipio = exame.IdMunicipio,
-                   IdEmpresaSaude = exame.IdEmpresaSaude,
-               }).ToList();
+       => _context.Exame
+              .Where(exameModel => exameModel.IdEmpresaSaude == idEempresa)
+              .Select(exame => new ExameModel
+              {
+                  IdVirusBacteria = exame.IdVirusBacteria,
+                  IdExame = exame.IdExame,
+                  IdPaciente = exame.IdPaciente,
+                  IdAgenteSaude = exame.IdAgenteSaude,
+                  DataExame = exame.DataExame,
+                  DataInicioSintomas = exame.DataInicioSintomas,
+                  IgG = exame.IgG,
+                  IgM = exame.IgM,
+                  Pcr = exame.Pcr,
+                  IdEstado = exame.IdEstado,
+                  IdMunicipio = exame.IdMunicipio,
+                  IdEmpresaSaude = exame.IdEmpresaSaude,
+                  DataNotificacao = exame.DataNotificacao,
+                  EhProfissionalSaude = Convert.ToBoolean(exame.EhProfissionalSaude),
+                  CodigoColeta = exame.CodigoColeta,
+                  StatusNotificacao = exame.StatusNotificacao,
+                  IdNotificacao = exame.IdNotificacao,
+              }).ToList();
 
-		public ConfiguracaoNotificarModel BuscarConfiguracaoNotificar(int IdEstado, int IdEmpresaExame)
-		=>	_context.Configuracaonotificar
-				.Where(c => c.IdEstado == IdEstado && c.IdEmpresaExame == IdEmpresaExame)
-				.Select(conf => new ConfiguracaoNotificarModel
-				{
-					HabilitadoSms = conf.HabilitadoSms,
-					HabilitadoWhatsapp = conf.HabilitadoWhatsapp,
-					IdConfiguracaoNotificar = conf.IdConfiguracaoNotificar,
-					IdEmpresaExame = conf.IdEmpresaExame,
-					IdEstado = conf.IdEstado,
-					IdMunicipio = conf.IdMunicipio,
-					MensagemImunizado = conf.MensagemImunizado,
-					MensagemIndeterminado = conf.MensagemIndeterminado,
-					MensagemPositivo = conf.MensagemPositivo,
-					MensagemNegativo = conf.MensagemNegativo,
-					QuantidadeSmsdisponivel = conf.QuantidadeSmsdisponivel,
-					Sid = conf.Sid,
-					Token = conf.Token
-				}).FirstOrDefault();
-		
-		public ConfiguracaoNotificarModel BuscarConfiguracaoNotificar(int IdMunicipio)
-		=> _context.Configuracaonotificar
-				.Where(c => c.IdMunicipio == IdMunicipio)
-				.Select(conf => new ConfiguracaoNotificarModel
-				{
-					HabilitadoSms = conf.HabilitadoSms,
-					HabilitadoWhatsapp = conf.HabilitadoWhatsapp,
-					IdConfiguracaoNotificar = conf.IdConfiguracaoNotificar,
-					IdEmpresaExame = conf.IdEmpresaExame,
-					IdEstado = conf.IdEstado,
-					IdMunicipio = conf.IdMunicipio,
-					MensagemImunizado = conf.MensagemImunizado,
-					MensagemIndeterminado = conf.MensagemIndeterminado,
-					MensagemPositivo = conf.MensagemPositivo,
-					MensagemNegativo = conf.MensagemNegativo,
-					QuantidadeSmsdisponivel = conf.QuantidadeSmsdisponivel,
-					Sid = conf.Sid,
-					Token = conf.Token
-				}).FirstOrDefault();
+       
 
-		public async System.Threading.Tasks.Task<bool> EnviarSMSResultadoExameAsync(ConfiguracaoNotificarModel configuracaoNotificar, ExameModel exame, PessoaModel pessoa)
-		{
-			try
-			{
-				string mensagem = "[MonitoraSUS - Resultado do Exame de "+pessoa.Nome+ ", CPF "+pessoa.Cpf+"] ";
-				if (exame.Resultado.Equals(ExameModel.RESULTADO_POSITIVO))
-					mensagem += configuracaoNotificar.MensagemPositivo;
-				else if (exame.Resultado.Equals(ExameModel.RESULTADO_NEGATIVO))
-					mensagem += configuracaoNotificar.MensagemNegativo;
-				else if (exame.Resultado.Equals(ExameModel.RESULTADO_IMUNIZADO))
-					mensagem += configuracaoNotificar.MensagemImunizado;
-				else if (exame.Resultado.Equals(ExameModel.RESULTADO_INDETERMINADO))
-					mensagem += configuracaoNotificar.MensagemIndeterminado;
+        public ConfiguracaoNotificarModel BuscarConfiguracaoNotificar(int IdEstado, int IdEmpresaExame)
+        => _context.Configuracaonotificar
+                .Where(c => c.IdEstado == IdEstado && c.IdEmpresaExame == IdEmpresaExame)
+                .Select(conf => new ConfiguracaoNotificarModel
+                {
+                    HabilitadoSms = conf.HabilitadoSms,
+                    HabilitadoWhatsapp = conf.HabilitadoWhatsapp,
+                    IdConfiguracaoNotificar = conf.IdConfiguracaoNotificar,
+                    IdEmpresaExame = conf.IdEmpresaExame,
+                    IdEstado = conf.IdEstado,
+                    IdMunicipio = conf.IdMunicipio,
+                    MensagemImunizado = conf.MensagemImunizado,
+                    MensagemIndeterminado = conf.MensagemIndeterminado,
+                    MensagemPositivo = conf.MensagemPositivo,
+                    MensagemNegativo = conf.MensagemNegativo,
+                    QuantidadeSmsdisponivel = conf.QuantidadeSmsdisponivel,
+                    Sid = conf.Sid,
+                    Token = conf.Token
+                }).FirstOrDefault();
 
-				var cliente = new HttpClient();
-				string url = "https://api.smsdev.com.br/send?key=" + configuracaoNotificar.Token + "&type=9&";
-				var uri = url + "number=" + pessoa.FoneCelular + "&msg=" + mensagem;
-				var resultadoEnvio = await cliente.GetStringAsync(uri);
-				//var jsonResponse = JsonConvert.DeserializeObject<ResponseSMSModel>(resultadoEnvio);
-				//exame.IdNotificacao = jsonResponse.
-				//Update(exame);
-			}
-			catch (HttpRequestException e)
-			{
-				Console.WriteLine("\nException Caught!");
-				Console.WriteLine("Message :{0} ", e.Message);
-				//throw e.InnerException;
-				return false;
-			}
-			return true;	
-		}
+        public ConfiguracaoNotificarModel BuscarConfiguracaoNotificar(int IdMunicipio)
+        => _context.Configuracaonotificar
+                .Where(c => c.IdMunicipio == IdMunicipio)
+                .Select(conf => new ConfiguracaoNotificarModel
+                {
+                    HabilitadoSms = conf.HabilitadoSms,
+                    HabilitadoWhatsapp = conf.HabilitadoWhatsapp,
+                    IdConfiguracaoNotificar = conf.IdConfiguracaoNotificar,
+                    IdEmpresaExame = conf.IdEmpresaExame,
+                    IdEstado = conf.IdEstado,
+                    IdMunicipio = conf.IdMunicipio,
+                    MensagemImunizado = conf.MensagemImunizado,
+                    MensagemIndeterminado = conf.MensagemIndeterminado,
+                    MensagemPositivo = conf.MensagemPositivo,
+                    MensagemNegativo = conf.MensagemNegativo,
+                    QuantidadeSmsdisponivel = conf.QuantidadeSmsdisponivel,
+                    Sid = conf.Sid,
+                    Token = conf.Token
+                }).FirstOrDefault();
 
-		public List<ExameModel> GetByIdPaciente(int idPaciente)
+        public async System.Threading.Tasks.Task<bool> EnviarSMSResultadoExameAsync(ConfiguracaoNotificarModel configuracaoNotificar, ExameModel exame, PessoaModel pessoa)
+        {
+            try
+            {
+                string mensagem = "[MonitoraSUS - Resultado do Exame de " + pessoa.Nome + ", CPF " + pessoa.Cpf + "] ";
+                if (exame.Resultado.Equals(ExameModel.RESULTADO_POSITIVO))
+                    mensagem += configuracaoNotificar.MensagemPositivo;
+                else if (exame.Resultado.Equals(ExameModel.RESULTADO_NEGATIVO))
+                    mensagem += configuracaoNotificar.MensagemNegativo;
+                else if (exame.Resultado.Equals(ExameModel.RESULTADO_IMUNIZADO))
+                    mensagem += configuracaoNotificar.MensagemImunizado;
+                else if (exame.Resultado.Equals(ExameModel.RESULTADO_INDETERMINADO))
+                    mensagem += configuracaoNotificar.MensagemIndeterminado;
+
+                var cliente = new HttpClient();
+                string url = "https://api.smsdev.com.br/send?key=" + configuracaoNotificar.Token + "&type=9&";
+                var uri = url + "number=" + pessoa.FoneCelular + "&msg=" + mensagem;
+                var resultadoEnvio = await cliente.GetStringAsync(uri);
+                //var jsonResponse = JsonConvert.DeserializeObject<ResponseSMSModel>(resultadoEnvio);
+                //exame.IdNotificacao = jsonResponse.
+                //Update(exame);
+            }
+            catch (HttpRequestException e)
+            {
+                Console.WriteLine("\nException Caught!");
+                Console.WriteLine("Message :{0} ", e.Message);
+                //throw e.InnerException;
+                return false;
+            }
+            return true;
+        }
+
+        public List<ExameModel> GetByIdPaciente(int idPaciente)
          => _context.Exame
                 .Where(exameModel => exameModel.IdPaciente == idPaciente)
                 .Select(exame => new ExameModel
@@ -248,6 +251,11 @@ namespace Service
                     IdEstado = exame.IdEstado,
                     IdMunicipio = exame.IdMunicipio,
                     IdEmpresaSaude = exame.IdEmpresaSaude,
+                    DataNotificacao = exame.DataNotificacao,
+                    EhProfissionalSaude = Convert.ToBoolean(exame.EhProfissionalSaude),
+                    CodigoColeta = exame.CodigoColeta,
+                    StatusNotificacao = exame.StatusNotificacao,
+                    IdNotificacao = exame.IdNotificacao,
                 }).ToList();
 
         public List<ExameModel> GetByIdMunicipio(int idMunicicpio)
@@ -267,6 +275,11 @@ namespace Service
                     IdEstado = exame.IdEstado,
                     IdMunicipio = exame.IdMunicipio,
                     IdEmpresaSaude = exame.IdEmpresaSaude,
+                    DataNotificacao = exame.DataNotificacao,
+                    EhProfissionalSaude = Convert.ToBoolean(exame.EhProfissionalSaude),
+                    CodigoColeta = exame.CodigoColeta,
+                    StatusNotificacao = exame.StatusNotificacao,
+                    IdNotificacao = exame.IdNotificacao,
                 }).ToList();
 
         public List<ExameModel> CheckDuplicateExamToday(int idPaciente, int idVirusBacteria, DateTime dateExame)
@@ -459,5 +472,29 @@ namespace Service
             if (totalPorResultado.Resultado.Equals(ExameModel.RESULTADO_INDETERMINADO))
                 totalEMB.TotalIndeterminados += totalPorResultado.Total;
         }
+
+        public List<ExameModel> GetByIdEstado(int idEstado)
+        => _context.Exame
+               .Where(exameModel => exameModel.IdEmpresaSaude == idEstado)
+               .Select(exame => new ExameModel
+               {
+                   IdVirusBacteria = exame.IdVirusBacteria,
+                   IdExame = exame.IdExame,
+                   IdPaciente = exame.IdPaciente,
+                   IdAgenteSaude = exame.IdAgenteSaude,
+                   DataExame = exame.DataExame,
+                   DataInicioSintomas = exame.DataInicioSintomas,
+                   IgG = exame.IgG,
+                   IgM = exame.IgM,
+                   Pcr = exame.Pcr,
+                   IdEstado = exame.IdEstado,
+                   IdMunicipio = exame.IdMunicipio,
+                   IdEmpresaSaude = exame.IdEmpresaSaude,
+                   DataNotificacao = exame.DataNotificacao,
+                   EhProfissionalSaude = Convert.ToBoolean(exame.EhProfissionalSaude),
+                   CodigoColeta = exame.CodigoColeta,
+                   StatusNotificacao = exame.StatusNotificacao,
+                   IdNotificacao = exame.IdNotificacao,
+               }).ToList();
     }
 }
