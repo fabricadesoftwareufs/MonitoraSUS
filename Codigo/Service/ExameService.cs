@@ -219,7 +219,14 @@ namespace Service
 				exame.IdNotificacao = jsonResponse.Id.ToString();
 				exame.StatusNotificacao = ExameModel.NOTIFICADO_ENVIADO;
                 Update(exame);
-            }
+				Configuracaonotificar configura = _context.Configuracaonotificar.Where(s => s.IdConfiguracaoNotificar == configuracaoNotificar.IdConfiguracaoNotificar).FirstOrDefault();
+				if (configura != null)
+				{
+					configura.QuantidadeSmsdisponivel=-1;
+					_context.Update(configura);
+				}
+				return _context.SaveChanges() == 1 ? true : false;
+			}
             catch (HttpRequestException)
             {
                 return false;
