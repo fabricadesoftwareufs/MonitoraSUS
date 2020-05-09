@@ -117,7 +117,11 @@ namespace MonitoraSUS.Controllers
 							}
 						}
 					}
-					if (quantidadeEnviada == 0)
+					if (quantidadeNotificar == 0)
+					{
+						TempData["mensagemSucesso"] = "Consulta enviada com sucesso!";
+					}
+					else if (quantidadeEnviada == 0)
 					{
 						TempData["mensagemErro"] = "Ocorreram problemas no envio das notificações. Favor entre em contato pela fabricadesoftware@ufs.br.";
 					}
@@ -603,8 +607,8 @@ namespace MonitoraSUS.Controllers
              * os exames que ele pode ver
              */
             var usuario = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
-            var secretarioMunicipio = _pessoaTrabalhaMunicipioContext.GetByIdPessoa(usuario.UsuarioModel.IdPessoa);
-            var secretarioEstado = _pessoaTrabalhaEstadoContext.GetByIdPessoa(usuario.UsuarioModel.IdPessoa);
+            var pessoaTrabalhaMunicipio = _pessoaTrabalhaMunicipioContext.GetByIdPessoa(usuario.UsuarioModel.IdPessoa);
+            var pessoaTrabalhaEstado = _pessoaTrabalhaEstadoContext.GetByIdPessoa(usuario.UsuarioModel.IdPessoa);
 
             var exames = new List<ExameModel>();
             if (usuario.RoleUsuario.Equals("AGENTE") || usuario.RoleUsuario.Equals("ADM"))
@@ -613,14 +617,14 @@ namespace MonitoraSUS.Controllers
             }
             else if (usuario.RoleUsuario.Equals("GESTOR") || usuario.RoleUsuario.Equals("SECRETARIO"))
             {
-                if (secretarioMunicipio != null)
-                    exames = _exameContext.GetByIdMunicipio(secretarioMunicipio.IdMunicipio);
-                if (secretarioEstado != null)
+                if (pessoaTrabalhaMunicipio != null)
+                    exames = _exameContext.GetByIdMunicipio(pessoaTrabalhaMunicipio.IdMunicipio);
+                if (pessoaTrabalhaEstado != null)
                 {
-                    if (secretarioEstado.IdEmpresaExame != EmpresaExameModel.EMPRESA_ESTADO_MUNICIPIO)
-                        exames = _exameContext.GetByIdEmpresa(secretarioEstado.IdEmpresaExame);
+                    if (pessoaTrabalhaEstado.IdEmpresaExame != EmpresaExameModel.EMPRESA_ESTADO_MUNICIPIO)
+                        exames = _exameContext.GetByIdEmpresa(pessoaTrabalhaEstado.IdEmpresaExame);
                     else
-                        exames = _exameContext.GetByIdEstado(secretarioEstado.IdEstado);
+                        exames = _exameContext.GetByIdEstado(pessoaTrabalhaEstado.IdEstado);
                 }
             }
 
@@ -702,8 +706,8 @@ namespace MonitoraSUS.Controllers
             if (pesquisaExame.Exames.Count > 0)
             {
                 pesquisaExame.Exames = pesquisaExame.Exames.OrderByDescending(ex => ex.DataExame).ToList();
-                pesquisaExame.DataInicial = pesquisaExame.Exames[0].DataExame;
-                pesquisaExame.DataFinal = pesquisaExame.Exames[pesquisaExame.Exames.Count - 1].DataExame;
+                pesquisaExame.DataFinal = pesquisaExame.Exames[0].DataExame;
+                pesquisaExame.DataInicial = pesquisaExame.Exames[pesquisaExame.Exames.Count - 1].DataExame;
             }
 
 

@@ -47,7 +47,10 @@ namespace Model
 
 		public bool TemFoneCelularValido {
 			get
-			{	if (FoneCelular.Length != 11)
+			{
+				if (FoneCelular == null)
+					return false;
+				if (FoneCelular.Length != 11)
 					return false;
 				if (FoneCelular.StartsWith("0"))
 					return false;

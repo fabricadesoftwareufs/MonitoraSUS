@@ -201,7 +201,7 @@ namespace Service
         {
             try
             {
-                string mensagem = "[MonitoraSUS - Resultado do Exame de " + pessoa.Nome + ", CPF " + pessoa.Cpf + "] ";
+                string mensagem = "[MonitoraSUS] Paciente: " + pessoa.Nome + ". ";
                 if (exame.Resultado.Equals(ExameModel.RESULTADO_POSITIVO))
                     mensagem += configuracaoNotificar.MensagemPositivo;
                 else if (exame.Resultado.Equals(ExameModel.RESULTADO_NEGATIVO))
@@ -235,8 +235,9 @@ namespace Service
 				string url = "https://api.smsdev.com.br/get?key=" + configuracaoNotificar.Token + "&action=status&";
 				var uri = url + "id=" + exame.IdNotificacao;
 				var resultadoEnvio = await cliente.GetStringAsync(uri);
-				ConsultaSMSModel consulta = JsonConvert.DeserializeObject<ConsultaSMSModel>(resultadoEnvio);
-				if (consulta.Situacao.Equals(ConsultaSMSModel.SITUACAO_ENTREGUE)) {
+				//ConsultaSMSModel consulta = JsonConvert.DeserializeObject<ConsultaSMSModel>(resultadoEnvio);
+				//if (consulta.Situacao.Equals(ConsultaSMSModel.SITUACAO_ENTREGUE)) {
+				if (resultadoEnvio.Contains("RECEBIDA")) { 
 					exame.StatusNotificacao = ExameModel.NOTIFICADO_SIM;
 					Update(exame);
 				}

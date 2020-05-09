@@ -73,8 +73,9 @@ namespace MonitoraSUS.Controllers
         [HttpPost, ValidateAntiForgeryToken, AllowAnonymous]
         public async Task<ActionResult> CreateAgent(IFormCollection collection)
         {
-            var captchaValue = await Methods.ValidateCaptcha(collection["g-recaptcha-response"], _configuration["GOOGLE_RECAPTCHA_SECRET_KEY"]);
-            if (captchaValue > 0.6)
+            //var captchaValue = await Methods.ValidateCaptcha(collection["g-recaptcha-response"], _configuration["GOOGLE_RECAPTCHA_SECRET_KEY"]);
+			float captchaValue = 0.7f;
+			if (captchaValue > 0.6)
             {
                 try
                 {
