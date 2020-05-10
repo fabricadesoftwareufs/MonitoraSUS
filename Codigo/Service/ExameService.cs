@@ -365,15 +365,15 @@ namespace Service
 					 IdEmpresaSaude = exame.IdEmpresaSaude,
 					 UF = exame.IdPacienteNavigation.Estado,
 					 Municipio = exame.IdPacienteNavigation.Cidade,
-					 Bairro = ""
-				 }).ToList().GroupBy(e => new { Estado = e.UF, Municipio = e.Municipio, Resultado = e.Resultado })
+					 Bairro = exame.IdPacienteNavigation.Bairro
+				 }).ToList().GroupBy(e => new { Estado = e.UF, Municipio = e.Municipio, Bairro = e.Bairro, Resultado = e.Resultado })
 				 .Select(g => new TotalPorResultadoExame
 				 {
 					 Estado = g.Key.Estado,
 					 Municipio = g.Key.Municipio,
 					 IdEmpresaSaude = EmpresaExameModel.EMPRESA_ESTADO_MUNICIPIO,
 					 Resultado = g.Key.Resultado,
-					 Bairro = "",
+					 Bairro = g.Key.Bairro,
 					 Total = g.Count()
 				 }).ToList());
 
