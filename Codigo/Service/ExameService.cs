@@ -222,7 +222,7 @@ namespace Service
 				Configuracaonotificar configura = _context.Configuracaonotificar.Where(s => s.IdConfiguracaoNotificar == configuracaoNotificar.IdConfiguracaoNotificar).FirstOrDefault();
 				if (configura != null)
 				{
-					configura.QuantidadeSmsdisponivel=-1;
+					configura.QuantidadeSmsdisponivel-=1;
 					_context.Update(configura);
 				}
 				return _context.SaveChanges() == 1 ? true : false;
@@ -231,7 +231,6 @@ namespace Service
             {
                 return false;
             }
-            return true;
         }
 
 		public async System.Threading.Tasks.Task<bool> ConsultarSMSExameAsync(ConfiguracaoNotificarModel configuracaoNotificar, ExameModel exame)
@@ -242,18 +241,17 @@ namespace Service
 				string url = "https://api.smsdev.com.br/get?key=" + configuracaoNotificar.Token + "&action=status&";
 				var uri = url + "id=" + exame.IdNotificacao;
 				var resultadoEnvio = await cliente.GetStringAsync(uri);
-				//ConsultaSMSModel consulta = JsonConvert.DeserializeObject<ConsultaSMSModel>(resultadoEnvio);
-				//if (consulta.Situacao.Equals(ConsultaSMSModel.SITUACAO_ENTREGUE)) {
 				if (resultadoEnvio.Contains("RECEBIDA")) { 
 					exame.StatusNotificacao = ExameModel.NOTIFICADO_SIM;
 					Update(exame);
+					return true;
 				}
 			}
 			catch (HttpRequestException)
 			{
 				return false;
 			}
-			return true;
+			return false;
 		}
 
 		public List<ExameModel> GetByIdPaciente(int idPaciente)
@@ -315,7 +313,7 @@ namespace Service
             return exames;
         }
 
-        public List<TotalEstadoMunicipioBairro> GetTotaisPopulacaoByEstado(string siglaEstado)
+		public List<TotalEstadoMunicipioBairro> GetTotaisPopulacaoByEstado(string siglaEstado)
             => ConvertToEstadoMunicipioBairro(
             _context.Exame
                  .Where(exameModel => exameModel.IdPacienteNavigation.Estado.Equals(siglaEstado))
@@ -346,9 +344,41 @@ namespace Service
                      Bairro = "",
                      Total = g.Count()
                  }).ToList());
+		public List<TotalEstadoMunicipioBairro> GetTotaisPopulacaoByMunicipio(string siglaEstado, string cidade)
+			=> ConvertToEstadoMunicipioBairro(
+			_context.Exame
+				 .Where(exameModel => exameModel.IdPacienteNavigation.Estado.Equals(siglaEstado) &&
+					exameModel.IdPacienteNavigation.Cidade.Equals(cidade))
+				 .Select(exame => new ExameCompletoModel
+				 {
+					 IdVirusBacteria = exame.IdVirusBacteria,
+					 IdExame = exame.IdExame,
+					 IdPaciente = exame.IdPaciente,
+					 IdAgenteSaude = exame.IdAgenteSaude,
+					 DataExame = exame.DataExame,
+					 DataInicioSintomas = exame.DataInicioSintomas,
+					 IgG = exame.IgG,
+					 IgM = exame.IgM,
+					 Pcr = exame.Pcr,
+					 IdEstado = exame.IdEstado,
+					 IdMunicipio = exame.IdMunicipio,
+					 IdEmpresaSaude = exame.IdEmpresaSaude,
+					 UF = exame.IdPacienteNavigation.Estado,
+					 Municipio = exame.IdPacienteNavigation.Cidade,
+					 Bairro = ""
+				 }).ToList().GroupBy(e => new { Estado = e.UF, Municipio = e.Municipio, Resultado = e.Resultado })
+				 .Select(g => new TotalPorResultadoExame
+				 {
+					 Estado = g.Key.Estado,
+					 Municipio = g.Key.Municipio,
+					 IdEmpresaSaude = EmpresaExameModel.EMPRESA_ESTADO_MUNICIPIO,
+					 Resultado = g.Key.Resultado,
+					 Bairro = "",
+					 Total = g.Count()
+				 }).ToList());
 
 
-        public List<TotalEstadoMunicipioBairro> GetTotaisRealizadosByEstado(int idEstado)
+		public List<TotalEstadoMunicipioBairro> GetTotaisRealizadosByEstado(int idEstado)
             => ConvertToEstadoMunicipioBairro(
             _context.Exame
                  .Where(exameModel => exameModel.IdEstado == idEstado && exameModel.IdEmpresaSaude == EmpresaExameModel.EMPRESA_ESTADO_MUNICIPIO)
