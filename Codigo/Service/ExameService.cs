@@ -365,7 +365,7 @@ namespace Service
 					 IdEmpresaSaude = exame.IdEmpresaSaude,
 					 UF = exame.IdPacienteNavigation.Estado,
 					 Municipio = exame.IdPacienteNavigation.Cidade,
-					 Bairro = exame.IdPacienteNavigation.Bairro
+					 Bairro = exame.IdPacienteNavigation.Bairro.ToUpper()
 				 }).ToList().GroupBy(e => new { Estado = e.UF, Municipio = e.Municipio, Bairro = e.Bairro, Resultado = e.Resultado })
 				 .Select(g => new TotalPorResultadoExame
 				 {
