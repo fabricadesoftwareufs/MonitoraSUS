@@ -166,7 +166,7 @@ namespace MonitoraSUS.Controllers
 			if (autenticadoTrabalhaMunicipio != null)
 			{
 				var cidade = _municicpioContext.GetById(autenticadoTrabalhaMunicipio.IdMunicipio);
-				var estado = _estadoContext.GetByUf(cidade.Uf);
+				var estado = _estadoContext.GetById(Convert.ToInt32(cidade.Uf));
 				totaisPopulacao = _exameContext.GetTotaisPopulacaoByMunicipio(estado.Uf, cidade.Nome);
 			}
 			else if (autenticadoTrabalhaEstado != null)
