@@ -479,13 +479,14 @@ namespace MonitoraSUS.Controllers
                 _usuarioService.Insert(usuarioModel);
                 (bool nCpf, bool nUsuario, bool nToken) = await new
                                       LoginController(
-                                        _usuarioService, 
+                                        _usuarioService,
                                         _pessoaService,
-                                        _pessoaTrabalhaEstadoService, 
+                                        _pessoaTrabalhaEstadoService,
                                         _pessoaTrabalhaMunicipioService,
                                         _estadoService,
                                         _municipioService,
-                                        _emailService, 
+                                        _empresaExameService,
+                                        _emailService,
                                         _recuperarSenhaService)
                                       .GenerateToken(usuarioModel.Cpf, 1);
                 resposta = ReturnMsgOper(nCpf, nUsuario, nToken);
@@ -501,6 +502,7 @@ namespace MonitoraSUS.Controllers
                                         _pessoaTrabalhaMunicipioService,
                                         _estadoService,
                                         _municipioService,
+                                        _empresaExameService,
                                         _emailService,
                                         _recuperarSenhaService)
                                       .GenerateToken(usuarioModel.Cpf, 2);

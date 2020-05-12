@@ -22,11 +22,12 @@ namespace MonitoraSUS.Controllers
         private readonly IPessoaTrabalhaMunicipioService _pessoaTrabalhaMunicipio;
         private readonly IEstadoService _estadoService;
         private readonly IMunicipioService _municipioService;
+        private readonly IEmpresaExameService _empresaExameService;
         private readonly IEmailService _emailService;
         private readonly IRecuperarSenhaService _recuperarSenhaService;
         public LoginController(IUsuarioService usuarioService, IPessoaService pessoaService,
             IPessoaTrabalhaEstadoService pessoaTrabalhaEstado, IPessoaTrabalhaMunicipioService pessoaTrabalhaMunicipio,
-            IEstadoService estadoService, IMunicipioService municipioService,
+            IEstadoService estadoService, IMunicipioService municipioService, IEmpresaExameService empresaExameService,
             IEmailService emailService, IRecuperarSenhaService recuperarSenhaService)
         {
             _usuarioService = usuarioService;
@@ -35,6 +36,7 @@ namespace MonitoraSUS.Controllers
             _pessoaTrabalhaMunicipio = pessoaTrabalhaMunicipio;
             _estadoService = estadoService;
             _municipioService = municipioService;
+            _empresaExameService = empresaExameService;
             _emailService = emailService;
             _recuperarSenhaService = recuperarSenhaService;
         }
@@ -65,16 +67,20 @@ namespace MonitoraSUS.Controllers
                     var person = _pessoaService.GetById(user.IdPessoa);
                     var role = Methods.ReturnRole(user.TipoUsuario);
                     string trabalha = "";
-                    var trabalhaEstado = _pessoaTrabalhaEstado.GetByIdPessoa(person.Idpessoa);
+                    string empresa = "";
 
-                    if(trabalhaEstado != null)
+                    var trabalhaEstado = _pessoaTrabalhaEstado.GetByIdPessoa(person.Idpessoa);
+                    if (trabalhaEstado != null)
+                    {
                         trabalha = _estadoService.GetById(trabalhaEstado.IdEstado).Nome;
+                        empresa = _empresaExameService.GetById(trabalhaEstado.IdEmpresaExame).Nome;
+                    }
                     else
                     {
                         var trabalhaMunicipio = _pessoaTrabalhaMunicipio.GetByIdPessoa(person.Idpessoa);
                         trabalha = _municipioService.GetById(trabalhaMunicipio.IdMunicipio).Nome;
                     }
-                        
+
                     var claims = new List<Claim>
                     {
                         new Claim(ClaimTypes.SerialNumber, user.IdUsuario.ToString()),
@@ -85,7 +91,8 @@ namespace MonitoraSUS.Controllers
                         new Claim(ClaimTypes.Email, user.Email),
                         new Claim(ClaimTypes.NameIdentifier, user.IdPessoa.ToString()),
                         new Claim(ClaimTypes.Role, role),
-                        new Claim(ClaimTypes.Dns, trabalha)
+                        new Claim(ClaimTypes.Dns, trabalha),
+                        new Claim(ClaimTypes.Sid, empresa)
                     };
 
                     // Adicionando uma identidade as claims.

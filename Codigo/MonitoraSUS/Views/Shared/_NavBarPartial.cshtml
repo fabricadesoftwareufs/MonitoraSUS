@@ -9,6 +9,7 @@
     string cidade = "";
     string tipoUsuario = "";
     string trabalha = "";
+    string empresa = "";
     int idUsuario = 0;
 
     if (claimsIdentity != null)
@@ -19,6 +20,7 @@
         cidade = claimsIdentity.Claims.Where(s => s.Type == ClaimTypes.Locality).Select(s => s.Value).FirstOrDefault().ToUpper();
         tipoUsuario = claimsIdentity.Claims.Where(s => s.Type == ClaimTypes.Role).Select(s => s.Value).FirstOrDefault().ToUpper();
         trabalha =  claimsIdentity.Claims.Where(s => s.Type == ClaimTypes.Dns).Select(s => s.Value).FirstOrDefault().ToUpper();
+        empresa = claimsIdentity.Claims.Where(s => s.Type == ClaimTypes.Sid).Select(s => s.Value).FirstOrDefault().ToUpper();
     }
 }
 
@@ -32,10 +34,16 @@
                 <i class="fa fa-user" aria-hidden="true"></i>@nome
             </span>
             <span>
-                <i class="fas fa-briefcase"></i> @tipoUsuario
+                <i class="fas fa-briefcase"></i>@tipoUsuario
             </span>
+            @if (!empresa.Equals(""))
+            {
             <span>
-                <i class="fas fa-map-marker-alt"></i> @trabalha
+                <i class="fas fa-building"></i>@empresa
+            </span>
+            }
+            <span>
+                <i class="fas fa-map-marker-alt"></i>@trabalha
             </span>
             <span style="margin-top: 10px; ">
                 <a class="btn-logout link" href="@Url.Action("Logout", "Login")"><i class="fas fa-sign-out-alt"></i>SAIR</a>
