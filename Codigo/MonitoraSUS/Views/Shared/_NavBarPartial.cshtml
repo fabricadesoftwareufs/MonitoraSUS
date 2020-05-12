@@ -21,6 +21,18 @@
         tipoUsuario = claimsIdentity.Claims.Where(s => s.Type == ClaimTypes.Role).Select(s => s.Value).FirstOrDefault().ToUpper();
         trabalha =  claimsIdentity.Claims.Where(s => s.Type == ClaimTypes.Dns).Select(s => s.Value).FirstOrDefault().ToUpper();
         empresa = claimsIdentity.Claims.Where(s => s.Type == ClaimTypes.Sid).Select(s => s.Value).FirstOrDefault().ToUpper();
+
+        if (tipoUsuario.Equals("AGENTE")) {
+            tipoUsuario = "NOTIFICADOR";
+        }
+        else if (tipoUsuario.Equals("SECRETARIO"))
+        {
+            tipoUsuario = "ADMINISTRADOR";
+        }
+        else if(tipoUsuario.Equals("ADM"))
+        {
+            tipoUsuario = "ADMINISTRADOR DO SISTEMA";
+        }
     }
 }
 
