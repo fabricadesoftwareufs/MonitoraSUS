@@ -7,15 +7,18 @@
     string nome = "";
     string estado = "";
     string cidade = "";
+    string tipoUsuario = "";
+    string trabalha = "";
     int idUsuario = 0;
 
     if (claimsIdentity != null)
     {
         idUsuario = int.Parse(claimsIdentity.Claims.Where(s => s.Type == ClaimTypes.SerialNumber).Select(s => s.Value).FirstOrDefault());
-        nome = claimsIdentity.Claims.Where(s => s.Type == ClaimTypes.Name).Select(s => s.Value).FirstOrDefault();
-        estado = claimsIdentity.Claims.Where(s => s.Type == ClaimTypes.StateOrProvince).Select(s => s.Value).FirstOrDefault();
-        cidade = claimsIdentity.Claims.Where(s => s.Type == ClaimTypes.Locality).Select(s => s.Value).FirstOrDefault();
-
+        nome = claimsIdentity.Claims.Where(s => s.Type == ClaimTypes.Name).Select(s => s.Value).FirstOrDefault().ToUpper();
+        estado = claimsIdentity.Claims.Where(s => s.Type == ClaimTypes.StateOrProvince).Select(s => s.Value).FirstOrDefault().ToUpper();
+        cidade = claimsIdentity.Claims.Where(s => s.Type == ClaimTypes.Locality).Select(s => s.Value).FirstOrDefault().ToUpper();
+        tipoUsuario = claimsIdentity.Claims.Where(s => s.Type == ClaimTypes.Role).Select(s => s.Value).FirstOrDefault().ToUpper();
+        trabalha =  claimsIdentity.Claims.Where(s => s.Type == ClaimTypes.Dns).Select(s => s.Value).FirstOrDefault().ToUpper();
     }
 }
 
@@ -29,10 +32,13 @@
                 <i class="fa fa-user" aria-hidden="true"></i>@nome
             </span>
             <span>
-                <i class="fas fa-map-marker-alt"></i> @cidade / @estado
+                <i class="fas fa-briefcase"></i> @tipoUsuario
             </span>
-            <span style="margin-top: 15px; " >
-                <a class="btn-logout link" href="@Url.Action("Logout", "Login")"><i class="fas fa-sign-out-alt"></i> Sair</a>
+            <span>
+                <i class="fas fa-map-marker-alt"></i> @trabalha
+            </span>
+            <span style="margin-top: 10px; ">
+                <a class="btn-logout link" href="@Url.Action("Logout", "Login")"><i class="fas fa-sign-out-alt"></i>SAIR</a>
             </span>
         </div>
     </div>
