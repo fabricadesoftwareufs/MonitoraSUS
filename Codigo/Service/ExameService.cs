@@ -14,7 +14,7 @@ namespace Service
     public class ExameService : IExameService
     {
         private readonly monitorasusContext _context;
-		
+
         public ExameService(monitorasusContext context)
         {
             _context = context;
@@ -128,7 +128,7 @@ namespace Service
                 CodigoColeta = exameModel.CodigoColeta,
                 StatusNotificacao = exameModel.StatusNotificacao,
                 IdNotificacao = exameModel.IdNotificacao,
-				DataNotificacao = DateTime.Now
+                DataNotificacao = DateTime.Now
             };
         }
 
@@ -155,7 +155,7 @@ namespace Service
                   IdNotificacao = exame.IdNotificacao,
               }).ToList();
 
-       
+
 
         public ConfiguracaoNotificarModel BuscarConfiguracaoNotificar(int IdEstado, int IdEmpresaExame)
         => _context.Configuracaonotificar
@@ -215,46 +215,47 @@ namespace Service
                 string url = "https://api.smsdev.com.br/send?key=" + configuracaoNotificar.Token + "&type=9&";
                 var uri = url + "number=" + pessoa.FoneCelular + "&msg=" + mensagem;
                 var resultadoEnvio = await cliente.GetStringAsync(uri);
-				ResponseSMSModel jsonResponse = JsonConvert.DeserializeObject<ResponseSMSModel>(resultadoEnvio);
-				exame.IdNotificacao = jsonResponse.Id.ToString();
-				exame.StatusNotificacao = ExameModel.NOTIFICADO_ENVIADO;
+                ResponseSMSModel jsonResponse = JsonConvert.DeserializeObject<ResponseSMSModel>(resultadoEnvio);
+                exame.IdNotificacao = jsonResponse.Id.ToString();
+                exame.StatusNotificacao = ExameModel.NOTIFICADO_ENVIADO;
                 Update(exame);
-				Configuracaonotificar configura = _context.Configuracaonotificar.Where(s => s.IdConfiguracaoNotificar == configuracaoNotificar.IdConfiguracaoNotificar).FirstOrDefault();
-				if (configura != null)
-				{
-					configura.QuantidadeSmsdisponivel-=1;
-					_context.Update(configura);
-				}
-				return _context.SaveChanges() == 1 ? true : false;
-			}
+                Configuracaonotificar configura = _context.Configuracaonotificar.Where(s => s.IdConfiguracaoNotificar == configuracaoNotificar.IdConfiguracaoNotificar).FirstOrDefault();
+                if (configura != null)
+                {
+                    configura.QuantidadeSmsdisponivel -= 1;
+                    _context.Update(configura);
+                }
+                return _context.SaveChanges() == 1 ? true : false;
+            }
             catch (HttpRequestException)
             {
                 return false;
             }
         }
 
-		public async System.Threading.Tasks.Task<bool> ConsultarSMSExameAsync(ConfiguracaoNotificarModel configuracaoNotificar, ExameModel exame)
-		{
-			try
-			{
-				var cliente = new HttpClient();
-				string url = "https://api.smsdev.com.br/get?key=" + configuracaoNotificar.Token + "&action=status&";
-				var uri = url + "id=" + exame.IdNotificacao;
-				var resultadoEnvio = await cliente.GetStringAsync(uri);
-				if (resultadoEnvio.Contains("RECEBIDA")) { 
-					exame.StatusNotificacao = ExameModel.NOTIFICADO_SIM;
-					Update(exame);
-					return true;
-				}
-			}
-			catch (HttpRequestException)
-			{
-				return false;
-			}
-			return false;
-		}
+        public async System.Threading.Tasks.Task<bool> ConsultarSMSExameAsync(ConfiguracaoNotificarModel configuracaoNotificar, ExameModel exame)
+        {
+            try
+            {
+                var cliente = new HttpClient();
+                string url = "https://api.smsdev.com.br/get?key=" + configuracaoNotificar.Token + "&action=status&";
+                var uri = url + "id=" + exame.IdNotificacao;
+                var resultadoEnvio = await cliente.GetStringAsync(uri);
+                if (resultadoEnvio.Contains("RECEBIDA"))
+                {
+                    exame.StatusNotificacao = ExameModel.NOTIFICADO_SIM;
+                    Update(exame);
+                    return true;
+                }
+            }
+            catch (HttpRequestException)
+            {
+                return false;
+            }
+            return false;
+        }
 
-		public List<ExameModel> GetByIdPaciente(int idPaciente)
+        public List<ExameModel> GetByIdPaciente(int idPaciente)
          => _context.Exame
                 .Where(exameModel => exameModel.IdPaciente == idPaciente)
                 .Select(exame => new ExameModel
@@ -313,7 +314,7 @@ namespace Service
             return exames;
         }
 
-		public List<TotalEstadoMunicipioBairro> GetTotaisPopulacaoByEstado(string siglaEstado)
+        public List<TotalEstadoMunicipioBairro> GetTotaisPopulacaoByEstado(string siglaEstado)
             => ConvertToEstadoMunicipioBairro(
             _context.Exame
                  .Where(exameModel => exameModel.IdPacienteNavigation.Estado.Equals(siglaEstado))
@@ -344,41 +345,41 @@ namespace Service
                      Bairro = "",
                      Total = g.Count()
                  }).ToList());
-		public List<TotalEstadoMunicipioBairro> GetTotaisPopulacaoByMunicipio(string siglaEstado, string cidade)
-			=> ConvertToEstadoMunicipioBairro(
-			_context.Exame
-				 .Where(exameModel => exameModel.IdPacienteNavigation.Estado.Equals(siglaEstado) &&
-					exameModel.IdPacienteNavigation.Cidade.Equals(cidade))
-				 .Select(exame => new ExameCompletoModel
-				 {
-					 IdVirusBacteria = exame.IdVirusBacteria,
-					 IdExame = exame.IdExame,
-					 IdPaciente = exame.IdPaciente,
-					 IdAgenteSaude = exame.IdAgenteSaude,
-					 DataExame = exame.DataExame,
-					 DataInicioSintomas = exame.DataInicioSintomas,
-					 IgG = exame.IgG,
-					 IgM = exame.IgM,
-					 Pcr = exame.Pcr,
-					 IdEstado = exame.IdEstado,
-					 IdMunicipio = exame.IdMunicipio,
-					 IdEmpresaSaude = exame.IdEmpresaSaude,
-					 UF = exame.IdPacienteNavigation.Estado,
-					 Municipio = exame.IdPacienteNavigation.Cidade,
-					 Bairro = exame.IdPacienteNavigation.Bairro.ToUpper()
-				 }).ToList().GroupBy(e => new { Estado = e.UF, Municipio = e.Municipio, Bairro = e.Bairro, Resultado = e.Resultado })
-				 .Select(g => new TotalPorResultadoExame
-				 {
-					 Estado = g.Key.Estado,
-					 Municipio = g.Key.Municipio,
-					 IdEmpresaSaude = EmpresaExameModel.EMPRESA_ESTADO_MUNICIPIO,
-					 Resultado = g.Key.Resultado,
-					 Bairro = g.Key.Bairro,
-					 Total = g.Count()
-				 }).ToList());
+        public List<TotalEstadoMunicipioBairro> GetTotaisPopulacaoByMunicipio(string siglaEstado, string cidade)
+            => ConvertToEstadoMunicipioBairro(
+            _context.Exame
+                 .Where(exameModel => exameModel.IdPacienteNavigation.Estado.Equals(siglaEstado) &&
+                    exameModel.IdPacienteNavigation.Cidade.Equals(cidade))
+                 .Select(exame => new ExameCompletoModel
+                 {
+                     IdVirusBacteria = exame.IdVirusBacteria,
+                     IdExame = exame.IdExame,
+                     IdPaciente = exame.IdPaciente,
+                     IdAgenteSaude = exame.IdAgenteSaude,
+                     DataExame = exame.DataExame,
+                     DataInicioSintomas = exame.DataInicioSintomas,
+                     IgG = exame.IgG,
+                     IgM = exame.IgM,
+                     Pcr = exame.Pcr,
+                     IdEstado = exame.IdEstado,
+                     IdMunicipio = exame.IdMunicipio,
+                     IdEmpresaSaude = exame.IdEmpresaSaude,
+                     UF = exame.IdPacienteNavigation.Estado,
+                     Municipio = exame.IdPacienteNavigation.Cidade,
+                     Bairro = exame.IdPacienteNavigation.Bairro.ToUpper()
+                 }).ToList().GroupBy(e => new { Estado = e.UF, Municipio = e.Municipio, Bairro = e.Bairro, Resultado = e.Resultado })
+                 .Select(g => new TotalPorResultadoExame
+                 {
+                     Estado = g.Key.Estado,
+                     Municipio = g.Key.Municipio,
+                     IdEmpresaSaude = EmpresaExameModel.EMPRESA_ESTADO_MUNICIPIO,
+                     Resultado = g.Key.Resultado,
+                     Bairro = g.Key.Bairro,
+                     Total = g.Count()
+                 }).ToList());
 
 
-		public List<TotalEstadoMunicipioBairro> GetTotaisRealizadosByEstado(int idEstado)
+        public List<TotalEstadoMunicipioBairro> GetTotaisRealizadosByEstado(int idEstado)
             => ConvertToEstadoMunicipioBairro(
             _context.Exame
                  .Where(exameModel => exameModel.IdEstado == idEstado && exameModel.IdEmpresaSaude == EmpresaExameModel.EMPRESA_ESTADO_MUNICIPIO)
@@ -428,10 +429,10 @@ namespace Service
                      IdEstado = exame.IdEstado,
                      IdMunicipio = exame.IdMunicipio,
                      IdEmpresaSaude = exame.IdEmpresaSaude,
-					 UF = exame.IdPacienteNavigation.Estado,
-					 Municipio = exame.IdPacienteNavigation.Cidade,
-					 Bairro = exame.IdPacienteNavigation.Bairro,
-				 }).ToList().GroupBy(e => new { Estado = e.UF, Municipio = e.Municipio, Bairro = e.Bairro, Resultado = e.Resultado })
+                     UF = exame.IdPacienteNavigation.Estado,
+                     Municipio = exame.IdPacienteNavigation.Cidade,
+                     Bairro = exame.IdPacienteNavigation.Bairro,
+                 }).ToList().GroupBy(e => new { Estado = e.UF, Municipio = e.Municipio, Bairro = e.Bairro, Resultado = e.Resultado })
                  .Select(g => new TotalPorResultadoExame
                  {
                      Estado = g.Key.Estado,
@@ -460,9 +461,9 @@ namespace Service
                      IdEstado = exame.IdEstado,
                      IdMunicipio = exame.IdMunicipio,
                      IdEmpresaSaude = exame.IdEmpresaSaude,
-					 UF = exame.IdPacienteNavigation.Estado,
-					 Municipio = exame.IdPacienteNavigation.Cidade,
-					 Bairro = ""
+                     UF = exame.IdPacienteNavigation.Estado,
+                     Municipio = exame.IdPacienteNavigation.Cidade,
+                     Bairro = ""
                  }).ToList().GroupBy(e => new { Estado = e.UF, Municipio = e.Municipio, Resultado = e.Resultado })
                  .Select(g => new TotalPorResultadoExame
                  {
@@ -485,9 +486,9 @@ namespace Service
                     if (totalEMB.Estado.Equals(totalPorResultado.Estado) && totalEMB.Municipio.Equals(totalPorResultado.Municipio) &&
                        (totalEMB.IdEmpresaSaude == totalPorResultado.IdEmpresaSaude) && totalEMB.Bairro.Equals(totalPorResultado.Bairro))
                     {
-                       AtualizarTotais(totalPorResultado, totalEMB);
-                       achou = true;
-                       break;
+                        AtualizarTotais(totalPorResultado, totalEMB);
+                        achou = true;
+                        break;
                     }
                 }
                 if (!achou)

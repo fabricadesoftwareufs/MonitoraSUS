@@ -22,11 +22,11 @@ namespace Service.Interface
         List<TotalEstadoMunicipioBairro> GetTotaisRealizadosByEmpresa(int idEempresa);
         List<TotalEstadoMunicipioBairro> GetTotaisRealizadosByEstado(int idEstado);
         List<TotalEstadoMunicipioBairro> GetTotaisRealizadosByMunicipio(int idMunicipio);
-		List<TotalEstadoMunicipioBairro> GetTotaisPopulacaoByEstado(string siglaEstado);
-		List<TotalEstadoMunicipioBairro> GetTotaisPopulacaoByMunicipio(string siglaEstado, string cidade);
-		ConfiguracaoNotificarModel BuscarConfiguracaoNotificar(int IdEstado, int IdEmpresaExame);
-		ConfiguracaoNotificarModel BuscarConfiguracaoNotificar(int IdMunicipio);
-		System.Threading.Tasks.Task<bool> EnviarSMSResultadoExameAsync(ConfiguracaoNotificarModel configuracaoNotificar, ExameModel exame, PessoaModel pessoa);
-		System.Threading.Tasks.Task<bool> ConsultarSMSExameAsync(ConfiguracaoNotificarModel configuracaoNotificar, ExameModel exame);
-	}
+        List<TotalEstadoMunicipioBairro> GetTotaisPopulacaoByEstado(string siglaEstado);
+        List<TotalEstadoMunicipioBairro> GetTotaisPopulacaoByMunicipio(string siglaEstado, string cidade);
+        ConfiguracaoNotificarModel BuscarConfiguracaoNotificar(int IdEstado, int IdEmpresaExame);
+        ConfiguracaoNotificarModel BuscarConfiguracaoNotificar(int IdMunicipio);
+        System.Threading.Tasks.Task<bool> EnviarSMSResultadoExameAsync(ConfiguracaoNotificarModel configuracaoNotificar, ExameModel exame, PessoaModel pessoa);
+        System.Threading.Tasks.Task<bool> ConsultarSMSExameAsync(ConfiguracaoNotificarModel configuracaoNotificar, ExameModel exame);
+    }
 }

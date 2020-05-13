@@ -66,19 +66,22 @@ namespace MonitoraSUS.Controllers
                     // informaçoes pessoais do usuario | adicionar as claims o dado que mais precisar
                     var person = _pessoaService.GetById(user.IdPessoa);
                     var role = Methods.ReturnRole(user.TipoUsuario);
-                    string trabalha = "";
-                    string empresa = "";
+                    var trabalha = "";
+                    var empresa = "";
 
-                    var trabalhaEstado = _pessoaTrabalhaEstado.GetByIdPessoa(person.Idpessoa);
-                    if (trabalhaEstado != null)
+                    if (role != "ADM" || role != "USUARIO")
                     {
-                        trabalha = _estadoService.GetById(trabalhaEstado.IdEstado).Nome;
-                        empresa = _empresaExameService.GetById(trabalhaEstado.IdEmpresaExame).Nome;
-                    }
-                    else
-                    {
-                        var trabalhaMunicipio = _pessoaTrabalhaMunicipio.GetByIdPessoa(person.Idpessoa);
-                        trabalha = _municipioService.GetById(trabalhaMunicipio.IdMunicipio).Nome;
+                        var trabalhaEstado = _pessoaTrabalhaEstado.GetByIdPessoa(person.Idpessoa);
+                        if (trabalhaEstado != null)
+                        {
+                            trabalha = _estadoService.GetById(trabalhaEstado.IdEstado).Nome;
+                            empresa = _empresaExameService.GetById(trabalhaEstado.IdEmpresaExame).Nome;
+                        }
+                        else
+                        {
+                            var trabalhaMunicipio = _pessoaTrabalhaMunicipio.GetByIdPessoa(person.Idpessoa);
+                            trabalha = _municipioService.GetById(trabalhaMunicipio.IdMunicipio).Nome;
+                        }
                     }
 
                     var claims = new List<Claim>

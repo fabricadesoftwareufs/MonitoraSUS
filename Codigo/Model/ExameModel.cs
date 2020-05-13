@@ -10,9 +10,9 @@ namespace Model
         public const string RESULTADO_IMUNIZADO = "Imunizado";
         public const string RESULTADO_INDETERMINADO = "Indeterminado";
 
-		public const string NOTIFICADO_SIM = "S";
-		public const string NOTIFICADO_NAO = "N";
-		public const string NOTIFICADO_ENVIADO = "E";
+        public const string NOTIFICADO_SIM = "S";
+        public const string NOTIFICADO_NAO = "N";
+        public const string NOTIFICADO_ENVIADO = "E";
 
         public int IdExame { get; set; }
         [Display(Name = "Virus")]
