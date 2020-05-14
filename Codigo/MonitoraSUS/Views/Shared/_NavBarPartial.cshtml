@@ -7,15 +7,32 @@
     string nome = "";
     string estado = "";
     string cidade = "";
+    string tipoUsuario = "";
+    string trabalha = "";
+    string empresa = "";
     int idUsuario = 0;
 
     if (claimsIdentity != null)
     {
         idUsuario = int.Parse(claimsIdentity.Claims.Where(s => s.Type == ClaimTypes.SerialNumber).Select(s => s.Value).FirstOrDefault());
-        nome = claimsIdentity.Claims.Where(s => s.Type == ClaimTypes.Name).Select(s => s.Value).FirstOrDefault();
-        estado = claimsIdentity.Claims.Where(s => s.Type == ClaimTypes.StateOrProvince).Select(s => s.Value).FirstOrDefault();
-        cidade = claimsIdentity.Claims.Where(s => s.Type == ClaimTypes.Locality).Select(s => s.Value).FirstOrDefault();
+        nome = claimsIdentity.Claims.Where(s => s.Type == ClaimTypes.Name).Select(s => s.Value).FirstOrDefault().ToUpper();
+        estado = claimsIdentity.Claims.Where(s => s.Type == ClaimTypes.StateOrProvince).Select(s => s.Value).FirstOrDefault().ToUpper();
+        cidade = claimsIdentity.Claims.Where(s => s.Type == ClaimTypes.Locality).Select(s => s.Value).FirstOrDefault().ToUpper();
+        tipoUsuario = claimsIdentity.Claims.Where(s => s.Type == ClaimTypes.Role).Select(s => s.Value).FirstOrDefault().ToUpper();
+        trabalha =  claimsIdentity.Claims.Where(s => s.Type == ClaimTypes.Dns).Select(s => s.Value).FirstOrDefault().ToUpper();
+        empresa = claimsIdentity.Claims.Where(s => s.Type == ClaimTypes.Sid).Select(s => s.Value).FirstOrDefault().ToUpper();
 
+        if (tipoUsuario.Equals("AGENTE")) {
+            tipoUsuario = "NOTIFICADOR";
+        }
+        else if (tipoUsuario.Equals("SECRETARIO"))
+        {
+            tipoUsuario = "ADMINISTRADOR";
+        }
+        else if(tipoUsuario.Equals("ADM"))
+        {
+            tipoUsuario = "ADMINISTRADOR DO SISTEMA";
+        }
     }
 }
 
@@ -29,10 +46,19 @@
                 <i class="fa fa-user" aria-hidden="true"></i>@nome
             </span>
             <span>
-                <i class="fas fa-map-marker-alt"></i> @cidade / @estado
+                <i class="fas fa-briefcase"></i>@tipoUsuario
             </span>
-            <span style="margin-top: 15px; " >
-                <a class="btn-logout link" href="@Url.Action("Logout", "Login")"><i class="fas fa-sign-out-alt"></i> Sair</a>
+            @if (!empresa.Equals(""))
+            {
+            <span>
+                <i class="fas fa-building"></i>@empresa
+            </span>
+            }
+            <span>
+                <i class="fas fa-map-marker-alt"></i>@trabalha
+            </span>
+            <span style="margin-top: 10px; ">
+                <a class="btn-logout link" href="@Url.Action("Logout", "Login")"><i class="fas fa-sign-out-alt"></i>SAIR</a>
             </span>
         </div>
     </div>

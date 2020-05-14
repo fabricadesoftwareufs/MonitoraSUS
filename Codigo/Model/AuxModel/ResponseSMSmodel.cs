@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Runtime.Serialization;
-using System.Text;
-
-namespace Model.AuxModel
+﻿namespace Model.AuxModel
 {
-	public class ResponseSMSModel
+    public class ResponseSMSModel
     {
         public string Situacao { get; set; }
         public int Codigo { get; set; }
