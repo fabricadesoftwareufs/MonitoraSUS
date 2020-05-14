@@ -206,96 +206,102 @@
                     <div class="table-responsive">
                         <table class="table align-items-center table-flush">
                             <thead class="thead-light">
-                                <tr>
-                                    <th scope="col" class="sort" data-sort="cpf">
-                                        Cpf/Rg
-                                    </th>
-                                    <th scope="col" class="sort" data-sort="nome-paciente">
-                                        Paciente
-                                    </th>
-                                    <th scope="col" class="sort" data-sort="cidade">
-                                        Cidade
-                                    </th>
-                                    <th scope="col" class="sort" data-sort="estado">
-                                        Estado
-                                    </th>
-                                    <th scope="col" class="sort" data-sort="data-exame">
-                                        Data do Exame
-                                    </th>
-                                    <th scope="col" class="sort" data-sort="virus">
-                                        Vírus/Bacteria
-                                    </th>
-                                    <th scope="col" class="sort" data-sort="resultado">
-                                        Resultado
-                                    </th>
-                                    <th scope="col" class="sort" data-sort="foi-notificado">
-                                        Foi Notificado
-                                    </th>
-                                    <th scope="col" class="sort" data-sort="acoes">
-                                        Ações
-                                    </th>
-                                </tr>
+								<tr>
+									<th scope="col" class="sort" data-sort="codigo-coleta">
+										Id Coleta
+									</th>
+									<th scope="col" class="sort" data-sort="cpf">
+										Cpf/Rg
+									</th>
+									<th scope="col" class="sort" data-sort="nome-paciente">
+										Paciente
+									</th>
+									<th scope="col" class="sort" data-sort="cidade">
+										Cidade
+									</th>
+									<th scope="col" class="sort" data-sort="estado">
+										Estado
+									</th>
+									<th scope="col" class="sort" data-sort="data-exame">
+										Data do Exame
+									</th>
+									<th scope="col" class="sort" data-sort="virus">
+										Vírus
+									</th>
+									<th scope="col" class="sort" data-sort="resultado">
+										Resultado
+									</th>
+									<th scope="col" class="sort" data-sort="foi-notificado">
+										Foi Notificado
+									</th>
+									<th scope="col" class="sort" data-sort="acoes">
+										Ações
+									</th>
+								</tr>
                             </thead>
                             <tbody class="list">
                                 @foreach (var item in Model.Exames)
                                 {
-                                    <tr>
-                                        <td>
-                                            <a href="#">@Html.DisplayFor(modelItem => item.IdPaciente.Cpf)</a>
-                                        </td>
-                                        <td>
-                                            @if (@item.IdPaciente.Nome.Length > 15)
-                                            {
-                                                <div>@item.IdPaciente.Nome.Substring(0, 15)...</div>
-                                            }
-                                            else
-                                            {
-                                                <div>@item.IdPaciente.Nome</div>
-                                            }
-                                        </td>
-                                        <td>
-                                            @if (item.IdPaciente.Cidade.Length > 15)
-                                            {
-                                                <div>@item.IdPaciente.Cidade.Substring(0, 15)...</div>
-                                            }
-                                            else
-                                            {
-                                                <div>@item.IdPaciente.Cidade</div>
-                                            }
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.IdPaciente.Estado)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.DataExame)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.IdVirusBacteria.Nome)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.Resultado)
-                                        </td>
-										<td>
-											@if (item.StatusNotificacao.ToUpper() == "S")
-											{
-												<p>Sim</p>
-											}
-											else if (item.StatusNotificacao.ToUpper() == "N")
-											{
-												<p>Nao</p>
-											}
-											else if (item.StatusNotificacao.ToUpper() == "E")
-											{
-												<p>Enviada</p>
-											}
-										</td>
-                                        <td>
-                                            @using (Html.BeginForm("NotificateById", "Exame", new { id = item.IdExame }, FormMethod.Post))
-                                            {
-                                                <button type="submit" class="btn btn-info btn-xs"><i class="fa fa-envelope"></i> SMS</button>
-                                            }
-                                        </td>
-                                    </tr>
+								<tr>
+									<td>
+										<div>@Html.DisplayFor(modelItem => item.CodigoColeta)</div>
+									</td>
+									<td>
+										<a href="#">@Html.DisplayFor(modelItem => item.IdPaciente.Cpf)</a>
+									</td>
+									<td>
+										@if (@item.IdPaciente.Nome.Length > 15)
+										{
+											<div>@item.IdPaciente.Nome.Substring(0, 15)...</div>
+										}
+										else
+										{
+											<div>@item.IdPaciente.Nome</div>
+										}
+									</td>
+									<td>
+										@if (item.IdPaciente.Cidade.Length > 10)
+										{
+											<div>@item.IdPaciente.Cidade.Substring(0, 10)...</div>
+										}
+										else
+										{
+											<div>@item.IdPaciente.Cidade</div>
+										}
+									</td>
+									<td>
+										@Html.DisplayFor(modelItem => item.IdPaciente.Estado)
+									</td>
+									<td>
+										@Html.DisplayFor(modelItem => item.DataExame)
+									</td>
+									<td>
+										@Html.DisplayFor(modelItem => item.IdVirusBacteria.Nome)
+									</td>
+									<td>
+										@Html.DisplayFor(modelItem => item.Resultado)
+									</td>
+									<td>
+										@if (item.StatusNotificacao.ToUpper() == "S")
+										{
+											<p>Sim</p>
+										}
+										else if (item.StatusNotificacao.ToUpper() == "N")
+										{
+											<p>Nao</p>
+										}
+										else if (item.StatusNotificacao.ToUpper() == "E")
+										{
+											<p>Enviada</p>
+										}
+									</td>
+									<td>
+										@using (Html.BeginForm("NotificateById", "Exame", new { id = item.IdExame }, FormMethod.Post))
+										{
+											<button type="submit" class="btn btn-info btn-xs"><i class="fa fa-envelope"></i> SMS</button>
+										}
+									</td>
+								</tr>
                                 }
                             </tbody>
                         </table>
