@@ -74,8 +74,8 @@ namespace MonitoraSUS.Controllers
         public async Task<ActionResult> CreateAgent(IFormCollection collection)
         {
             //var captchaValue = await Methods.ValidateCaptcha(collection["g-recaptcha-response"], _configuration["GOOGLE_RECAPTCHA_SECRET_KEY"]);
-			float captchaValue = 0.7f;
-			if (captchaValue > 0.6)
+            float captchaValue = 0.7f;
+            if (captchaValue > 0.6)
             {
                 try
                 {
@@ -478,7 +478,16 @@ namespace MonitoraSUS.Controllers
                 };
                 _usuarioService.Insert(usuarioModel);
                 (bool nCpf, bool nUsuario, bool nToken) = await new
-                                      LoginController(_usuarioService, _pessoaService, _emailService, _recuperarSenhaService)
+                                      LoginController(
+                                        _usuarioService,
+                                        _pessoaService,
+                                        _pessoaTrabalhaEstadoService,
+                                        _pessoaTrabalhaMunicipioService,
+                                        _estadoService,
+                                        _municipioService,
+                                        _empresaExameService,
+                                        _emailService,
+                                        _recuperarSenhaService)
                                       .GenerateToken(usuarioModel.Cpf, 1);
                 resposta = ReturnMsgOper(nCpf, nUsuario, nToken);
             }
@@ -486,7 +495,16 @@ namespace MonitoraSUS.Controllers
             {
                 _usuarioService.Update(usuarioModel);
                 (bool nCpf, bool nUsuario, bool nToken) = await new
-                                      LoginController(_usuarioService, _pessoaService, _emailService, _recuperarSenhaService)
+                                      LoginController(
+                                        _usuarioService,
+                                        _pessoaService,
+                                        _pessoaTrabalhaEstadoService,
+                                        _pessoaTrabalhaMunicipioService,
+                                        _estadoService,
+                                        _municipioService,
+                                        _empresaExameService,
+                                        _emailService,
+                                        _recuperarSenhaService)
                                       .GenerateToken(usuarioModel.Cpf, 2);
                 resposta = ReturnMsgOper(nCpf, nUsuario, nToken);
             }

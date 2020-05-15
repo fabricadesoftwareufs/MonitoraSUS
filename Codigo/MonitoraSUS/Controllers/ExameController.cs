@@ -117,7 +117,7 @@ namespace MonitoraSUS.Controllers
 					}
 					if (quantidadeNotificar == 0)
 					{
-						TempData["mensagemSucesso"] = "Consulta enviada com sucesso!";
+						TempData["mensagemSucesso"] = "SMS foi recebido pelo paciente com sucesso!";
 					}
 					else if (quantidadeEnviada == 0)
 					{
@@ -736,6 +736,7 @@ namespace MonitoraSUS.Controllers
 				pesquisaExame.DataInicial = pesquisaExame.Exames[pesquisaExame.Exames.Count - 1].DataExame;
 			}
 
+			pesquisaExame.Exames = pesquisaExame.Exames.OrderBy(ex => ex.CodigoColeta).ToList();
 
 			return PreencheTotalizadores(pesquisaExame);
 		}

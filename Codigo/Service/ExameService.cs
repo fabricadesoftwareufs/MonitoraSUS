@@ -201,7 +201,7 @@ namespace Service
         {
             try
             {
-                string mensagem = "[MonitoraSUS] Paciente: " + pessoa.Nome + ". ";
+                string mensagem = "[MonitoraSUS]Olá, " + pessoa.Nome + ". ";
                 if (exame.Resultado.Equals(ExameModel.RESULTADO_POSITIVO))
                     mensagem += configuracaoNotificar.MensagemPositivo;
                 else if (exame.Resultado.Equals(ExameModel.RESULTADO_NEGATIVO))
@@ -365,7 +365,7 @@ namespace Service
 					 IdEmpresaSaude = exame.IdEmpresaSaude,
 					 UF = exame.IdPacienteNavigation.Estado,
 					 Municipio = exame.IdPacienteNavigation.Cidade,
-					 Bairro = exame.IdPacienteNavigation.Bairro.ToUpper()
+					 Bairro = exame.IdPacienteNavigation.Bairro.ToUpper().Trim()
 				 }).ToList().GroupBy(e => new { Estado = e.UF, Municipio = e.Municipio, Bairro = e.Bairro, Resultado = e.Resultado })
 				 .Select(g => new TotalPorResultadoExame
 				 {

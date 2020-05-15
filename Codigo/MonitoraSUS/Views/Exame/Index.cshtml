@@ -244,6 +244,9 @@
 						<table class="table align-items-center table-flush">
 							<thead class="thead-light">
 								<tr>
+									<th scope="col" class="sort" data-sort="codigo-coleta">
+										Id Coleta
+									</th>
 									<th scope="col" class="sort" data-sort="cpf">
 										Cpf/Rg
 									</th>
@@ -260,7 +263,7 @@
 										Data do Exame
 									</th>
 									<th scope="col" class="sort" data-sort="virus">
-										Vírus/Bacteria
+										Vírus
 									</th>
 									<th scope="col" class="sort" data-sort="resultado">
 										Resultado
@@ -273,68 +276,71 @@
 							<tbody class="list">
 								@foreach (var item in Model.Exames)
 								{
-									<tr>
-										<td>
-											<a href="#">@Html.DisplayFor(modelItem => item.IdPaciente.Cpf)</a>
-										</td>
-										<td>
-											@if (@item.IdPaciente.Nome.Length > 15)
-											{
-												<div>@item.IdPaciente.Nome.Substring(0, 15)...</div>
-											}
-											else
-											{
-												<div>@item.IdPaciente.Nome</div>
-											}
-										</td>
-										<td>
-											@if (@item.IdPaciente.Cidade.Length > 15)
-											{
-												<div>@item.IdPaciente.Cidade.Substring(0, 15)...</div>
-											}
-											else
-											{
-												<div>@item.IdPaciente.Cidade</div>
-											}
-										</td>
-										<td>
-											@Html.DisplayFor(modelItem => item.IdPaciente.Estado)
-										</td>
-										<td>
-											@Html.DisplayFor(modelItem => item.DataExame)
-										</td>
-										<td>
-											@Html.DisplayFor(modelItem => item.IdVirusBacteria.Nome)
-										</td>
-										<td>
-											@Html.DisplayFor(modelItem => item.Resultado)
-										</td>
-										<td>
-											<!-- a href="@Url.Action("Details", "Exame", new { id = item.IdExame})" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> Detalhes </!a-->
-											<a href="@Url.Action("Edit", "Exame", new { id = item.IdExame })" class="btn btn-info btn-xs"><i class="fa fa-edit"></i> Editar </a>
+								<tr>
+									<td>
+										<div>@Html.DisplayFor(modelItem => item.CodigoColeta)</div>
+									</td>
+									<td>
+										<a href="#">@Html.DisplayFor(modelItem => item.IdPaciente.Cpf)</a>
+									</td>
+									<td>
+										@if (@item.IdPaciente.Nome.Length > 15)
+										{
+											<div>@item.IdPaciente.Nome.Substring(0, 15)...</div>
+										}
+										else
+										{
+											<div>@item.IdPaciente.Nome</div>
+										}
+									</td>
+									<td>
+										@if (@item.IdPaciente.Cidade.Length > 10)
+										{
+											<div>@item.IdPaciente.Cidade.Substring(0, 10)...</div>
+										}
+										else
+										{
+											<div>@item.IdPaciente.Cidade</div>
+										}
+									</td>
+									<td>
+										@Html.DisplayFor(modelItem => item.IdPaciente.Estado)
+									</td>
+									<td>
+										@Html.DisplayFor(modelItem => item.DataExame)
+									</td>
+									<td>
+										@Html.DisplayFor(modelItem => item.IdVirusBacteria.Nome)
+									</td>
+									<td>
+										@Html.DisplayFor(modelItem => item.Resultado)
+									</td>
+									<td>
+										<!-- a href="@Url.Action("Details", "Exame", new { id = item.IdExame})" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> Detalhes </!a-->
+										<a href="@Url.Action("Edit", "Exame", new { id = item.IdExame })" class="btn btn-info btn-xs"><i class="fa fa-edit"></i> Editar </a>
 
-											<a data-toggle="modal" data-target="#modal-confirmar-@item.IdExame" class="btn btn-danger btn-xs text-white"><i class="fa fa-trash "></i> Remover </a>
-											<div class="modal fade bs-example-modal-sm" id="modal-confirmar-@item.IdExame" tabindex="-1" role="dialog" aria-hidden="true">
-												<div class="modal-dialog modal-sm">
-													<div class="modal-content text-center" style="padding: 10pt">
-														<h3> Confirmar Remoção do Exame ? </h3>
+										<a data-toggle="modal" data-target="#modal-confirmar-@item.IdExame" class="btn btn-danger btn-xs text-white"><i class="fa fa-trash "></i> Remover </a>
+										<div class="modal fade bs-example-modal-sm" id="modal-confirmar-@item.IdExame" tabindex="-1" role="dialog" aria-hidden="true">
+											<div class="modal-dialog modal-sm">
+												<div class="modal-content text-center" style="padding: 10pt">
+													<h3> Confirmar Remoção do Exame ? </h3>
 
-														<h4>CPF/RG</h4><p>@item.IdPaciente.Cpf</p>
-														<h4>Paciente</h4> <p>@item.IdPaciente.Nome </p>
-														<h4>Virus/Bacteria</h4> <p>@item.IdVirusBacteria.Nome</p>
-														<h4>Resultado</h4> <p>@item.Resultado </p>
+													<h4>CPF/RG</h4><p>@item.IdPaciente.Cpf</p>
+													<h4>Paciente</h4> <p>@item.IdPaciente.Nome </p>
+													<h4>Virus/Bacteria</h4> <p>@item.IdVirusBacteria.Nome</p>
+													<h4>Resultado</h4> <p>@item.Resultado </p>
 
-														@using (Html.BeginForm("Delete", "Exame", new { id = item.IdExame }, FormMethod.Post))
-														{
-															<a class="btn btn-danger text-white" data-dismiss="modal">Cancelar</a>
-															<button type="submit" value="Remover" class="btn btn-success btn-xs">Confimar</button>
-														}
-													</div>
+													@using (Html.BeginForm("Delete", "Exame", new { id = item.IdExame }, FormMethod.Post))
+													{
+														<a class="btn btn-danger text-white" data-dismiss="modal">Cancelar</a>
+														<button type="submit" value="Remover" class="btn btn-success btn-xs">Confimar</button>
+													}
 												</div>
 											</div>
+										</div>
 
-										</td>
-									</tr>
+									</td>
+								</tr>
 								}
 							</tbody>
 						</table>

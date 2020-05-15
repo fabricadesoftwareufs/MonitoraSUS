@@ -45,17 +45,18 @@ namespace Model
         public bool DoencaRespiratoria { get; set; }
         public string OutrasComorbidades { get; set; }
 
-		public bool TemFoneCelularValido {
-			get
-			{
-				if (FoneCelular == null)
-					return false;
-				if (FoneCelular.Length != 11)
-					return false;
-				if (FoneCelular.StartsWith("0"))
-					return false;
-				return true;
-			}
-		}
+        public bool TemFoneCelularValido
+        {
+            get
+            {
+                if (FoneCelular == null)
+                    return false;
+                if (FoneCelular.Length != 11)
+                    return false;
+                if (FoneCelular.StartsWith("0"))
+                    return false;
+                return true;
+            }
+        }
     }
 }
