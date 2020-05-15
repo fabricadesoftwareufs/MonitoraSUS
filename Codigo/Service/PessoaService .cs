@@ -180,6 +180,71 @@ namespace Service
                     OutrasComorbidades = pessoa.OutrasComorbidades
                 }).FirstOrDefault();
 
+        public List<PessoaModel> GetByCidade(string cidade)
+          => _context.Pessoa
+                .Where(p => p.Cidade.ToUpper().Equals(cidade.ToUpper()))
+                .Select(pessoa => new PessoaModel
+                {
+                    Idpessoa = pessoa.Idpessoa,
+                    Nome = pessoa.Nome,
+                    Cpf = pessoa.Cpf,
+                    Email = pessoa.Email,
+                    FoneFixo = pessoa.FoneFixo,
+                    FoneCelular = pessoa.FoneCelular,
+                    DataNascimento = pessoa.DataNascimento,
+                    Sexo = pessoa.Sexo,
+                    Cep = pessoa.Cep,
+                    Rua = pessoa.Rua,
+                    Estado = pessoa.Estado,
+                    Cidade = pessoa.Cidade,
+                    Complemento = pessoa.Complemento,
+                    Bairro = pessoa.Bairro,
+                    Numero = pessoa.Numero,
+                    Latitude = pessoa.Latitude,
+                    Longitude = pessoa.Longitude,
+                    Imunodeprimido = Convert.ToBoolean(pessoa.Imunodeprimido),
+                    Cancer = Convert.ToBoolean(pessoa.Cancer),
+                    Hipertenso = Convert.ToBoolean(pessoa.Hipertenso),
+                    Obeso = Convert.ToBoolean(pessoa.Obeso),
+                    Diabetes = Convert.ToBoolean(pessoa.Diabetes),
+                    DoencaRespiratoria = Convert.ToBoolean(pessoa.DoencaRespiratoria),
+                    Cardiopatia = Convert.ToBoolean(pessoa.Cardiopatia),
+                    OutrasComorbidades = pessoa.OutrasComorbidades
+                }).ToList();
+
+        public List<PessoaModel> GetByEstado(string estado)
+          => _context.Pessoa
+                .Where(p => p.Estado.ToUpper().Equals(estado.ToUpper()))
+                .Select(pessoa => new PessoaModel
+                {
+                    Idpessoa = pessoa.Idpessoa,
+                    Nome = pessoa.Nome,
+                    Cpf = pessoa.Cpf,
+                    Email = pessoa.Email,
+                    FoneFixo = pessoa.FoneFixo,
+                    FoneCelular = pessoa.FoneCelular,
+                    DataNascimento = pessoa.DataNascimento,
+                    Sexo = pessoa.Sexo,
+                    Cep = pessoa.Cep,
+                    Rua = pessoa.Rua,
+                    Estado = pessoa.Estado,
+                    Cidade = pessoa.Cidade,
+                    Complemento = pessoa.Complemento,
+                    Bairro = pessoa.Bairro,
+                    Numero = pessoa.Numero,
+                    Latitude = pessoa.Latitude,
+                    Longitude = pessoa.Longitude,
+                    Imunodeprimido = Convert.ToBoolean(pessoa.Imunodeprimido),
+                    Cancer = Convert.ToBoolean(pessoa.Cancer),
+                    Hipertenso = Convert.ToBoolean(pessoa.Hipertenso),
+                    Obeso = Convert.ToBoolean(pessoa.Obeso),
+                    Diabetes = Convert.ToBoolean(pessoa.Diabetes),
+                    DoencaRespiratoria = Convert.ToBoolean(pessoa.DoencaRespiratoria),
+                    Cardiopatia = Convert.ToBoolean(pessoa.Cardiopatia),
+                    OutrasComorbidades = pessoa.OutrasComorbidades
+                }).ToList();
+
+
         private Pessoa ModelToEntity(PessoaModel model, Pessoa entity)
         {
             entity.Idpessoa = model.Idpessoa;

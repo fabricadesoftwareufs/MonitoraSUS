@@ -358,21 +358,26 @@ CREATE TABLE `situacaopessoavirusbacteria` (
   `idVirusBacteria` int(11) NOT NULL,
   `idpessoa` int(11) NOT NULL,
   `ultimaSituacaoSaude` enum('P','N','A','I','C') NOT NULL DEFAULT 'N',
+  `dataUltimoMonitoramento` DATE NULL,
+  `descricao` varchar(5000) NULL,
+  `idGestor`  int(11) NULL,
   PRIMARY KEY (`idVirusBacteria`,`idpessoa`),
   KEY `fk_virusBacteria_has_pessoa_pessoa1_idx` (`idpessoa`),
   KEY `fk_virusBacteria_has_pessoa_virusBacteria1_idx` (`idVirusBacteria`),
+  KEY `fk_virusBacteria_has_pessoa_pessoa2_idx` (`idGestor`),
   CONSTRAINT `fk_virusBacteria_has_pessoa_pessoa1` FOREIGN KEY (`idpessoa`) REFERENCES `pessoa` (`idpessoa`),
-  CONSTRAINT `fk_virusBacteria_has_pessoa_virusBacteria1` FOREIGN KEY (`idVirusBacteria`) REFERENCES `virusbacteria` (`idVirusBacteria`)
+  CONSTRAINT `fk_virusBacteria_has_pessoa_virusBacteria1` FOREIGN KEY (`idVirusBacteria`) REFERENCES `virusbacteria` (`idVirusBacteria`),
+  CONSTRAINT `fk_virusBacteria_has_pessoa_pessoa2` FOREIGN KEY (`idGestor`) REFERENCES `pessoa` (`idpessoa`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `situacaopessoavirusbacteria`
 --
-
 LOCK TABLES `situacaopessoavirusbacteria` WRITE;
 /*!40000 ALTER TABLE `situacaopessoavirusbacteria` DISABLE KEYS */;
-INSERT INTO `situacaopessoavirusbacteria` VALUES (1,5,'P'),(1,6,'P'),(1,7,'P'),(1,8,'I'),(1,9,'N'),(1,11,'P'),(1,17,'P'),(1,18,'P'),(1,19,'P'),(1,21,'P'),(1,24,'P'),(1,25,'P'),(1,26,'P'),(1,27,'C'),(1,28,'P'),(1,29,'P');
+INSERT INTO `situacaopessoavirusbacteria` 
+VALUES (1,5,'P',NULL,NULL,NULL),(1,6,'P',NULL,NULL,NULL),(1,7,'P',NULL,NULL,NULL),(1,8,'I',NULL,NULL,NULL),(1,9,'N',NULL,NULL,NULL),(1,11,'P',NULL,NULL,NULL),(1,17,'P',NULL,NULL,NULL),(1,18,'P',NULL,NULL,NULL),(1,19,'P',NULL,NULL,NULL),(1,21,'P',NULL,NULL,NULL),(1,24,'P',NULL,NULL,NULL),(1,25,'P',NULL,NULL,NULL),(1,26,'P',NULL,NULL,NULL),(1,27,'C',NULL,NULL,NULL),(1,28,'P',NULL,NULL,NULL),(1,29,'P',NULL,NULL,NULL);
 /*!40000 ALTER TABLE `situacaopessoavirusbacteria` ENABLE KEYS */;
 UNLOCK TABLES;
 
