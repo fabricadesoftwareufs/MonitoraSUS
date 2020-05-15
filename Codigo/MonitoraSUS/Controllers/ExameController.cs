@@ -20,7 +20,6 @@ using System.Threading.Tasks;
 namespace MonitoraSUS.Controllers
 {
 	[Authorize(Roles = "AGENTE, GESTOR, SECRETARIO")]
-
 	public class ExameController : Controller
 	{
 		private readonly IVirusBacteriaService _virusBacteriaContext;

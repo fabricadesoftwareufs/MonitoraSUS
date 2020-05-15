@@ -6,6 +6,11 @@ namespace Model.ViewModel
 {
     public class MonitoraPacienteViewModel
     {
+
+        public MonitoraPacienteViewModel() 
+        {
+            ExamesPaciente = new List<ExameViewModel>();
+        }
         public int Idpessoa { get; set; }
         public string Cpf { get; set; }
         public string Nome { get; set; }
@@ -45,11 +50,12 @@ namespace Model.ViewModel
                 return true;
             }
         }
+
         public VirusBacteriaModel VirusBacteria { get; set; }
+        public List<ExameViewModel> ExamesPaciente { get; set; }
+        public PessoaModel Gestor { get; set; }
         public string UltimaSituacao { get; set; }
         public DateTime? DataUltimoMonitoramento { get; set; }
         public string Descricao { get; set; }
-        public PessoaModel Gestor { get; set; }
-
     }
 }

@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Configuration;
 using Model;
 using Model.ViewModel;
 using MonitoraSUS.Utils;
@@ -11,6 +13,7 @@ using System.Security.Claims;
 
 namespace MonitoraSUS.Controllers
 {
+    [Authorize(Roles = "GESTOR, SECRETARIO")]
     public class MonitorarPacienteController : Controller
     {
         private readonly IVirusBacteriaService _virusBacteriaContext;
@@ -21,12 +24,13 @@ namespace MonitoraSUS.Controllers
         private readonly IExameService _exameContext;
         private readonly IMunicipioService _municicpioContext;
         private readonly IEstadoService _estadoContext;
-
+        private readonly IConfiguration _configuration;
 
 
         public MonitorarPacienteController(IVirusBacteriaService virusBacteriaContext,
                                IPessoaService pessoaContext,
                                IExameService exameContext,
+                               IConfiguration configuration,
                                ISituacaoVirusBacteriaService situacaoPessoaContext,
                                IPessoaTrabalhaEstadoService pessoaTrabalhaEstado,
                                IPessoaTrabalhaMunicipioService pessoaTrabalhaMunicipioContext,
@@ -41,17 +45,174 @@ namespace MonitoraSUS.Controllers
             _exameContext = exameContext;
             _municicpioContext = municicpioContext;
             _estadoContext = estadoContext;
+            _configuration = configuration;
         }
 
-        public IActionResult Index(PesquisaPacienteViewModel pesquisa)
+        public IActionResult Index(DateTime DataInicial,DateTime DataFinal,string Pesquisa,
+                                   string Resultado, int VirusBacteria,bool RealizouPesquisa)
         {
+            var pesquisa = new PesquisaPacienteViewModel
+            {
+                Pacientes = new List<MonitoraPacienteViewModel>(),
+                Resultado = Resultado,
+                DataFinal = DataFinal,
+                DataInicial = DataInicial,
+                Pesquisa = Pesquisa,
+                VirusBacteria = VirusBacteria,
+                RealizouPesquisa = RealizouPesquisa
+            };
+
             var virus = _virusBacteriaContext.GetAll();
-            virus.Add(new VirusBacteriaModel { Nome = "Todas as Opções", IdVirusBacteria = 0 });
+            virus.Insert(0, new VirusBacteriaModel { Nome = "Todas as Opções", IdVirusBacteria = 0 });
             ViewBag.VirusBacteria = new SelectList(virus, "IdVirusBacteria", "Nome");
 
             return View(GetAllPacientesViewModel(pesquisa));
         }
 
+
+        public IActionResult Edit(int idPaciente, int IdVirusBacteria)
+        {
+            ViewBag.googleKey = _configuration["GOOGLE_KEY"];
+            return View(GetPacienteViewModel(idPaciente, IdVirusBacteria));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(MonitoraPacienteViewModel paciente)
+        {
+            ViewBag.googleKey = _configuration["GOOGLE_KEY"];
+            /*
+             * Fazendo validações no cpf
+             */
+            paciente.Cpf = paciente.Cpf ?? "";
+            if (Methods.SoContemNumeros(paciente.Cpf) && !paciente.Cpf.Equals(""))
+            {
+                if (!Methods.ValidarCpf(paciente.Cpf))
+                {
+                    TempData["resultadoPesquisa"] = "Esse esse cpf não é válido!";
+                    return View(paciente);
+                }
+            }
+            var usuarioDuplicado = _pessoaContext.GetByCpf(paciente.Cpf);
+            if (usuarioDuplicado != null)
+            {
+                if (!(usuarioDuplicado.Idpessoa == paciente.Idpessoa))
+                {
+                    TempData["resultadoPesquisa"] = "Já existe outro paciente com esse CPF/RG, tente novamente!";
+                    return View(paciente);
+                }
+            }
+
+            try
+            {
+                UpdateSituacaoPessoaVirusBacteria(paciente);
+            }
+            catch
+            {
+                TempData["mensagemErro"] = "Houve um problema ao atualizar informações do paciente, por favor, tente novamente!";
+                return View(paciente);
+            }
+
+            try
+            {
+                UpdatePaciente(paciente);
+            }
+            catch
+            {
+                TempData["mensagemErro"] = "Houve um problema ao atualizar informações do paciente, por favor, tente novamente!";
+                return View(paciente);
+            }
+
+            TempData["mensagemSucesso"] = "Monitoramento realizado com sucesso!";
+            return View(paciente);
+        }
+
+
+        public bool UpdateSituacaoPessoaVirusBacteria(MonitoraPacienteViewModel paciente)
+        {
+            var usuario = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
+
+            var situacaoModel = _situacaoPessoaContext.GetById(paciente.Idpessoa, paciente.VirusBacteria.IdVirusBacteria);
+            situacaoModel.IdGestor = usuario.UsuarioModel.IdPessoa;
+            situacaoModel.DataUltimoMonitoramento = DateTime.Now;
+            situacaoModel.Descricao = paciente.Descricao;
+
+
+            return _situacaoPessoaContext.Update(situacaoModel);
+        }
+
+        public bool UpdatePaciente(MonitoraPacienteViewModel paciente)
+        {
+            var pacienteModel = new PessoaModel
+            {
+                Idpessoa = paciente.Idpessoa,
+                Nome = paciente.Nome,
+                Cpf = Methods.RemoveSpecialsCaracts(paciente.Cpf),
+                DataNascimento = paciente.DataNascimento,
+                Sexo = paciente.Sexo,
+                Cep = Methods.RemoveSpecialsCaracts(paciente.Cep),
+                Rua = paciente.Rua,
+                Numero = paciente.Numero,
+                Bairro = paciente.Bairro,
+                Cidade = paciente.Cidade,
+                Estado = paciente.Estado,
+                Latitude = paciente.Latitude,
+                Longitude = paciente.Longitude,
+                Complemento = paciente.Complemento,
+                FoneFixo = paciente.FoneFixo != null ? Methods.RemoveSpecialsCaracts(paciente.FoneFixo):"",
+                FoneCelular = Methods.RemoveSpecialsCaracts(paciente.FoneCelular),
+                Email = paciente.Email,
+                Cancer = paciente.Cancer,
+                Diabetes = paciente.Diabetes,
+                Hipertenso = paciente.Hipertenso,
+                Imunodeprimido = paciente.Imunodeprimido,
+                Cardiopatia = paciente.Cardiopatia,
+                Obeso = paciente.Obeso,
+                DoencaRespiratoria = paciente.DoencaRespiratoria,
+                OutrasComorbidades = paciente.OutrasComorbidades,
+            };
+
+            return _pessoaContext.Update(pacienteModel) != null ? true : false;
+        }
+
+        public MonitoraPacienteViewModel GetPacienteViewModel(int idPaciente, int IdVirusBacteria)
+        {
+            var situacao = _situacaoPessoaContext.GetById(idPaciente, IdVirusBacteria);
+            var pessoa = _pessoaContext.GetById(idPaciente);
+
+            return new MonitoraPacienteViewModel
+            {
+                Idpessoa = pessoa.Idpessoa,
+                Nome = pessoa.Nome,
+                Cpf = pessoa.Cpf,
+                DataNascimento = pessoa.DataNascimento,
+                Sexo = pessoa.Sexo,
+                Cep = pessoa.Cep,
+                Rua = pessoa.Rua,
+                Numero = pessoa.Numero,
+                Bairro = pessoa.Bairro,
+                Cidade = pessoa.Cidade,
+                Estado = pessoa.Estado,
+                Latitude = pessoa.Latitude,
+                Longitude = pessoa.Longitude,
+                Complemento = pessoa.Complemento,
+                FoneCelular = pessoa.FoneCelular,
+                FoneFixo = pessoa.FoneFixo,
+                Email = pessoa.Email,
+                Cancer = pessoa.Cancer,
+                Diabetes = pessoa.Diabetes,
+                Hipertenso = pessoa.Hipertenso,
+                Imunodeprimido = pessoa.Imunodeprimido,
+                Cardiopatia = pessoa.Cardiopatia,
+                Obeso = pessoa.Obeso,
+                DoencaRespiratoria = pessoa.DoencaRespiratoria,
+                OutrasComorbidades = pessoa.OutrasComorbidades,
+                Descricao = situacao.Descricao,
+                VirusBacteria = _virusBacteriaContext.GetById(situacao.IdVirusBacteria),
+                ExamesPaciente = GetExamesPaciente(pessoa.Idpessoa),
+                UltimaSituacao = GetUltimaSituacaoSaude(_situacaoPessoaContext.GetById(idPaciente, IdVirusBacteria).UltimaSituacaoSaude)
+            };
+        }
 
 
         public PesquisaPacienteViewModel GetAllPacientesViewModel(PesquisaPacienteViewModel pesquisa)
@@ -158,6 +319,39 @@ namespace MonitoraSUS.Controllers
                 pc.Gestor = new PessoaModel { Nome = " - " };
 
             return pc;
+        }
+
+        public List<ExameViewModel> GetExamesPaciente(int idPaciente)
+        {
+            var examesViewModel = new List<ExameViewModel>();
+            var exames = _exameContext.GetByIdPaciente(idPaciente);
+
+            foreach (var exame in exames)
+            {
+                ExameViewModel ex = new ExameViewModel();
+                ex.IdExame = exame.IdExame;
+                ex.IdPaciente = _pessoaContext.GetById(exame.IdPaciente);
+                ex.IdAgenteSaude = _pessoaContext.GetById(exame.IdAgenteSaude);
+                ex.IdVirusBacteria = _virusBacteriaContext.GetById(exame.IdVirusBacteria);
+                ex.IgG = exame.IgG;
+                ex.IgM = exame.IgM;
+                ex.Pcr = exame.Pcr;
+                ex.IdEstado = exame.IdEstado;
+                ex.MunicipioId = exame.IdMunicipio;
+                ex.DataInicioSintomas = exame.DataInicioSintomas;
+                ex.DataExame = exame.DataExame;
+                ex.IdEstado = exame.IdEstado;
+                ex.MunicipioId = exame.IdMunicipio;
+                ex.IdEmpresaSaude = exame.IdEmpresaSaude;
+                ex.EhProfissionalSaude = exame.EhProfissionalSaude;
+                ex.CodigoColeta = exame.CodigoColeta;
+                ex.StatusNotificacao = exame.StatusNotificacao;
+                ex.IdNotificacao = exame.IdNotificacao;
+
+                examesViewModel.Add(ex);
+            }
+
+            return examesViewModel;
         }
 
         public PesquisaPacienteViewModel PreencheTotalizadores(PesquisaPacienteViewModel pacientesTotalizados)

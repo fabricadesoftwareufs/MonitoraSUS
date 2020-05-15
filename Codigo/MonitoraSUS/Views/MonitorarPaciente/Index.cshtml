@@ -1,6 +1,5 @@
 ﻿@model Model.ViewModel.PesquisaPacienteViewModel
 
-
 @{
     ViewData["Title"] = "Index";
 }
@@ -14,7 +13,7 @@
 
                         <div class="col">
                             <h5 class="card-title text-muted mb-0">MonitoraSUS</h5>
-                            <h5 class="h3 mb-0">MOnitoramento de Pacientes</h5>
+                            <h5 class="h3 mb-0">Monitoramento de Pacientes</h5>
                         </div>
                         <div class="col text-right">
                             <!--a class="btn btn-success" asp-action="Create">Novo Exame</!--a-->
@@ -22,18 +21,17 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="card-body">
-                    <h4 class="card-title text-muted mb-0">Filtre Exames por Data e CPF/RG</h4>
+                    <h4 class="card-title text-muted mb-0">Filtre Pacientes</h4>
                     <div class="pl-lg-0">
                         <div class="row">
                             <div class="col">
-                                <form asp-controller="MonitorarPaciente" asp-action="Index">
+                                <form asp-action="Index">
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label class="form-control-label" for="input-cpf">CPF/RG ou NOME</label>
-                                                <input asp-for="Pesquisa" type="text" name="pesquisa" class="form-control" placeholder="000.000.000-00" />
+                                                <input asp-for="Pesquisa" type="text" name="Pesquisa" class="form-control" placeholder="cpf,rg ou nome do paciente" />
                                             </div>
                                         </div>
                                     </div>
@@ -51,7 +49,7 @@
                                             </div>
                                             <div class="form-group" hidden>
                                                 <label class="form-control-label" for="data-final"> Data Final</label>
-                                                <input asp-for="RealizouPesquisa" type="checkbox" checked="checked" id="realizou-pesquisa" class="form-control" />
+                                                <input asp-for="RealizouPesquisa" type="checkbox" name="RealizouPesquisa" checked="checked" id="realizou-pesquisa" class="form-control" />
                                             </div>
                                         </div>
                                     </div>
@@ -61,7 +59,7 @@
                                             <div class="form-group">
                                                 <label class="form-control-label" for="input-virus-bacteria">Exame</label>
                                                 @Html.DropDownListFor(model => model.VirusBacteria, ViewBag.VirusBacteria as SelectList, new
-                                                { @class = "form-control", @id = "input-virus-bacteria" })
+                                                { @class = "form-control", @id = "input-virus-bacteria", @name = "VirusBacteria" })
                                             </div>
                                         </div>
                                     </div>
@@ -70,11 +68,11 @@
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label class="form-control-label" for="input-atuacao-estado">Situacao</label>
-                                                <select asp-for="Resultado" class="form-control" id="input-resultado">
+                                                <select asp-for="Resultado" name="Resultado" class="form-control" id="input-resultado">
+                                                    <option>Todas as Opçoes</option>
                                                     <option>Positivo</option>
                                                     <option>Indeterminado</option>
                                                     <option>Imunizado</option>
-                                                    <option>Todas as Opçoes</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -139,7 +137,7 @@
                     </div>
                 </div>
 
-                <div class="card-body ">
+                <div class="card-body">
                     <div class="table-responsive">
                         <table class="table align-items-center table-flush">
                             <thead class="thead-light">
@@ -188,7 +186,7 @@
                                             @Html.DisplayFor(modelItem => item.Gestor.Nome)
                                         </th>
                                         <td>
-                                            <a href="@Url.Action("Edit", "Exame", new { idPessoa = item.Idpessoa, IdVirusBacteria = item.VirusBacteria.IdVirusBacteria })" class="btn btn-info btn-xs"><i class="fa fa-edit"></i> Editar </a>
+                                            <a href="@Url.Action("Edit", "MonitorarPaciente", new { idPaciente = item.Idpessoa, IdVirusBacteria = item.VirusBacteria.IdVirusBacteria })" class="btn btn-info btn-xs"><i class="fa fa-edit"></i> Monitorar </a>
                                         </td>
                                     </tr>
                                 }
@@ -200,3 +198,4 @@
         </div>
     </div>
 </div>
+
