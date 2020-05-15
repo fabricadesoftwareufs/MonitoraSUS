@@ -48,9 +48,15 @@ namespace MonitoraSUS.Controllers
             _configuration = configuration;
         }
 
-        public IActionResult Index(DateTime DataInicial,DateTime DataFinal,string Pesquisa,
-                                   string Resultado, int VirusBacteria,bool RealizouPesquisa)
+        /* O formulário só enviava os campos vazios.
+         * Essa solução com a lista de parâmetros extensa é provisória.*/
+        public IActionResult Index(DateTime DataInicial, DateTime DataFinal, string Pesquisa,
+                                       string Resultado, int VirusBacteria, bool RealizouPesquisa)
         {
+            var virus = _virusBacteriaContext.GetAll();
+            virus.Insert(0, new VirusBacteriaModel { Nome = "Todas as Opções", IdVirusBacteria = 0 });
+            ViewBag.VirusBacteria = new SelectList(virus, "IdVirusBacteria", "Nome");
+
             var pesquisa = new PesquisaPacienteViewModel
             {
                 Pacientes = new List<MonitoraPacienteViewModel>(),
@@ -61,10 +67,6 @@ namespace MonitoraSUS.Controllers
                 VirusBacteria = VirusBacteria,
                 RealizouPesquisa = RealizouPesquisa
             };
-
-            var virus = _virusBacteriaContext.GetAll();
-            virus.Insert(0, new VirusBacteriaModel { Nome = "Todas as Opções", IdVirusBacteria = 0 });
-            ViewBag.VirusBacteria = new SelectList(virus, "IdVirusBacteria", "Nome");
 
             return View(GetAllPacientesViewModel(pesquisa));
         }
@@ -159,7 +161,7 @@ namespace MonitoraSUS.Controllers
                 Latitude = paciente.Latitude,
                 Longitude = paciente.Longitude,
                 Complemento = paciente.Complemento,
-                FoneFixo = paciente.FoneFixo != null ? Methods.RemoveSpecialsCaracts(paciente.FoneFixo):"",
+                FoneFixo = paciente.FoneFixo != null ? Methods.RemoveSpecialsCaracts(paciente.FoneFixo) : "",
                 FoneCelular = Methods.RemoveSpecialsCaracts(paciente.FoneCelular),
                 Email = paciente.Email,
                 Cancer = paciente.Cancer,
@@ -222,17 +224,29 @@ namespace MonitoraSUS.Controllers
             var pessoaTrabalhaEstado = _pessoaTrabalhaEstadoContext.GetByIdPessoa(usuario.UsuarioModel.IdPessoa);
 
             var pacientes = new List<PessoaModel>();
-            if (usuario.RoleUsuario.Equals("GESTOR"))
+            if (usuario.RoleUsuario.Equals("GESTOR") || usuario.RoleUsuario.Equals("SECRETARIO"))
             {
                 if (pessoaTrabalhaMunicipio != null)
-                    pacientes = _pessoaContext.GetByCidade(_municicpioContext.GetById(pessoaTrabalhaMunicipio.IdMunicipio).Nome);
-
+                {
+                    /*
+                     * Filtrando por municipio depois pelo estado do municipio, 
+                     * pois cidades com mesmo nome existem em diversos estados...
+                     */
+                    var municicpio = _municicpioContext.GetById(pessoaTrabalhaMunicipio.IdMunicipio);
+                    var estado = _estadoContext.GetByCodUf(Convert.ToInt32(municicpio.Uf));
+                    pacientes = _pessoaContext.GetByCidade(municicpio.Nome).Where(p => p.Estado.ToUpper().Equals(estado.Uf.ToUpper())).ToList();
+                }
                 if (pessoaTrabalhaEstado != null)
                 {
                     if (pessoaTrabalhaEstado.IdEmpresaExame != EmpresaExameModel.EMPRESA_ESTADO_MUNICIPIO)
-                        TempData["mensagemErro"] = "Essa funcionalidade está disponível apenas para Estados e Municípios.";
+                    {
+                        TempData["mensagemAviso"] = "Essa Funcionalidade Não está Disponível Para Organizações Privadas!";
+                        return new PesquisaPacienteViewModel();
+                    }
                     else
+                    {
                         pacientes = _pessoaContext.GetByEstado(_estadoContext.GetById(pessoaTrabalhaEstado.IdEstado).Uf);
+                    }
                 }
             }
 

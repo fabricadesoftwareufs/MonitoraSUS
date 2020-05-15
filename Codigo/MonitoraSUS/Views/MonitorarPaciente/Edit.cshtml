@@ -19,7 +19,7 @@
                             <h4>Monitoramento Referente ao Exame @Model.VirusBacteria.Nome/@Model.UltimaSituacao</h4>
                         </div>
                         <div class="col text-right">
-                            <a class="btn btn-default" asp-controller="Home" asp-action="Index"> <i class="fas fa-arrow-left"></i> Voltar</a><br />
+                            <a class="btn btn-default" asp-controller="MonitorarPaciente" asp-action="Index"> <i class="fas fa-arrow-left"></i> Voltar</a><br />
                         </div>
                     </div>
                 </div>
@@ -354,7 +354,7 @@
 
 @if (TempData["mensagemSucesso"] != null)
 {
-    <div id="mensagem-retorno" onclick="swtAlertRedirectIndex('success','Parabéns!', '@TempData["mensagemSucesso"]','MonitorarPaciente/Index')"></div>
+    <div id="mensagem-retorno" onclick="swtAlertRedirectIndex('success','Parabéns!', '@TempData["mensagemSucesso"]','/MonitorarPaciente/Index')"></div>
 }
 else if (TempData["mensagemErro"] != null)
 {

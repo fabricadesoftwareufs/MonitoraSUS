@@ -168,7 +168,7 @@
                                 {
                                     <tr>
                                         <td>
-                                            @Html.DisplayFor(modelItem => item.Cpf)
+                                            <a href="#">@Html.DisplayFor(modelItem => item.Cpf)</a>
                                         </td>
                                         <td>
                                             @Html.DisplayFor(modelItem => item.Nome)
@@ -180,7 +180,14 @@
                                             @Html.DisplayFor(modelItem => item.UltimaSituacao)
                                         </td>
                                         <td>
-                                            @Html.DisplayFor(modelItem => item.DataUltimoMonitoramento)
+                                            @if (item.DataUltimoMonitoramento.HasValue)
+                                            {
+                                                <div>@item.DataUltimoMonitoramento.Value.ToString("dd/MM/yyyy")</div>
+                                            }
+                                            else
+                                            {
+                                                <p> - </p>
+                                            }
                                         </td>
                                         <th>
                                             @Html.DisplayFor(modelItem => item.Gestor.Nome)
@@ -199,3 +206,21 @@
     </div>
 </div>
 
+@if (TempData["mensagemAviso"] != null)
+{
+    <div id="mensagem-retorno" onclick="swtAlertRedirectIndex('warning','Aviso', '@TempData["mensagemAviso"]','/Home/Index')"></div>
+}
+
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            if (document.querySelector('#mensagem-retorno'))
+                document.getElementById("mensagem-retorno").click();
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+    <script src="~/assets/js/sweet-alert.js"></script>
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

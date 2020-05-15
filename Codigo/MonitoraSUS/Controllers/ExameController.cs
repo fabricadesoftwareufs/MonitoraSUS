@@ -540,6 +540,7 @@ namespace MonitoraSUS.Controllers
 				situacao.IdVirusBacteria = exame.IdVirusBacteria.IdVirusBacteria;
 				situacao.Idpessoa = _pessoaContext.GetByCpf(Methods.RemoveSpecialsCaracts(exame.IdPaciente.Cpf)).Idpessoa;
 				situacao.UltimaSituacaoSaude = exame.ResultadoStatus;
+				situacao.DataUltimoMonitoramento = DateTime.Now;
 			}
 
 			return situacao;
