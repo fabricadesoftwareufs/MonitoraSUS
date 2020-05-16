@@ -75,7 +75,8 @@ namespace MonitoraSUS.Controllers
 			var usuario = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
 			var trabalhaMunicipio = _pessoaTrabalhaMunicipioContext.GetByIdPessoa(usuario.UsuarioModel.IdPessoa);
 			var trabalhaEstado = _pessoaTrabalhaEstadoContext.GetByIdPessoa(usuario.UsuarioModel.IdPessoa);
-			ConfiguracaoNotificarModel configuracaoNotificar = null;
+
+            ConfiguracaoNotificarModel configuracaoNotificar = null;
 			if (trabalhaEstado != null)
 			{
 				configuracaoNotificar = _exameContext.BuscarConfiguracaoNotificar(trabalhaEstado.IdEstado, trabalhaEstado.IdEmpresaExame);
@@ -136,7 +137,7 @@ namespace MonitoraSUS.Controllers
 					}
 				}
 			}
-			return RedirectToAction(nameof(Notificate));
+            return RedirectToAction(nameof(Notificate));
 		}
 
 		[Authorize(Roles = "GESTOR, SECRETARIO")]
@@ -278,6 +279,13 @@ namespace MonitoraSUS.Controllers
 			try
 			{
 				_exameContext.Delete(id);
+
+				var situacoes = _exameContext.GetByIdPaciente(exame.IdPaciente);
+				var pessoaTrabalhaEstado = _pessoaTrabalhaEstadoContext.GetByIdPessoa(exame.IdPaciente);
+				var pessoaTrabalhaMunicipio = _pessoaTrabalhaMunicipioContext.GetByIdPessoa(exame.IdPaciente);
+
+				if (situacoes.Count == 0 && pessoaTrabalhaEstado == null && pessoaTrabalhaMunicipio == null)
+					_pessoaContext.Delete(exame.IdPaciente);
 			}
 			catch
 			{
@@ -294,6 +302,7 @@ namespace MonitoraSUS.Controllers
 
 				return RedirectToAction(nameof(Index));
 			}
+
 
 			TempData["mensagemSucesso"] = "O Exame foi removido com sucesso!";
 			return RedirectToAction(nameof(Index));
