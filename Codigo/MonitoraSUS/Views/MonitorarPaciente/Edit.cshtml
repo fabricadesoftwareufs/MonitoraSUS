@@ -313,8 +313,9 @@
                             <div class="row">
                                 <div class="col-lg-12">
                                     <div class="form-group">
-                                        <label class="form-control-label" for="input-descricao">Descrição</label>
+                                        <label class="form-control-label" for="input-descricao">Descrição (até 5000 caracteres)</label>
                                         <textarea type="text" id="input-descricao" class="form-control" asp-for="Descricao" placeholder="Descricao"></textarea>
+                                        <span hidden id="span-descricao" class="text-danger">Você excedeu o limite de caracteres, por favor, exclua algumas palavras.</span>
                                     </div>
                                 </div>
                             </div>
@@ -328,7 +329,7 @@
 
                                             <div class="form-group">
                                                 <button data-dismiss="modal" class="btn btn-danger text-white">Não</button>
-                                                <button id="btn-submit" type="submit" value="Sim" class="btn btn-success text-white">Sim</button>
+                                                <button id="btn-submit" data-dismiss="modal" type="submit" value="Sim" class="btn btn-success text-white">Sim</button>
                                             </div>
                                         </div>
                                     </div>
@@ -366,6 +367,16 @@ else if (TempData["mensagemErro"] != null)
         $(document).ready(function () {
             if (document.querySelector('#mensagem-retorno'))
                 document.getElementById("mensagem-retorno").click();
+        });
+
+        
+        var input = document.getElementById('input-descricao');
+        input.addEventListener("keyup", function () {
+            if ($('#input-descricao').val().length > 5000) {
+                document.getElementById('span-descricao').hidden = false;
+            } else {
+                document.getElementById('span-descricao').hidden = true;
+            }
         });
     </script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
