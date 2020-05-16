@@ -20,7 +20,6 @@ using System.Threading.Tasks;
 namespace MonitoraSUS.Controllers
 {
 	[Authorize(Roles = "AGENTE, GESTOR, SECRETARIO")]
-
 	public class ExameController : Controller
 	{
 		private readonly IVirusBacteriaService _virusBacteriaContext;
@@ -541,6 +540,7 @@ namespace MonitoraSUS.Controllers
 				situacao.IdVirusBacteria = exame.IdVirusBacteria.IdVirusBacteria;
 				situacao.Idpessoa = _pessoaContext.GetByCpf(Methods.RemoveSpecialsCaracts(exame.IdPaciente.Cpf)).Idpessoa;
 				situacao.UltimaSituacaoSaude = exame.ResultadoStatus;
+				situacao.DataUltimoMonitoramento = DateTime.Now;
 			}
 
 			return situacao;

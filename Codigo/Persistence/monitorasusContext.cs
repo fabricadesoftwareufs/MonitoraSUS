@@ -28,11 +28,10 @@ namespace Persistence
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            /* if (!optionsBuilder.IsConfigured)
-             {
- #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                 optionsBuilder.UseMySQL("server=localhost;port=3306;user=root;password=123456;database=monitorasus");
-             }*/
+            /*if (!optionsBuilder.IsConfigured)
+            {
+                optionsBuilder.UseMySQL("server=localhost;port=3306;user=root;password=igorb95;database=monitorasus");
+            }*/
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -374,21 +373,6 @@ namespace Persistence
                     .HasColumnName("pcr")
                     .HasColumnType("enum('S','N','I')")
                     .HasDefaultValueSql("N");
-
-                entity.Property(e => e.DataNotificacao)
-                 .HasColumnName("dataNotificacao")
-                 .HasColumnType("timestamp");
-
-                entity.Property(e => e.EhProfissionalSaude)
-                  .HasColumnName("ehProfissionalSaude")
-                  .HasDefaultValueSql("0");
-
-                entity.Property(e => e.CodigoColeta)
-                  .IsRequired()
-                  .HasColumnName("codigoColeta")
-                  .HasMaxLength(20)
-                  .IsUnicode(false)
-                  .HasDefaultValueSql("0");
 
                 entity.Property(e => e.StatusNotificacao)
                     .IsRequired()
@@ -750,6 +734,9 @@ namespace Persistence
 
                 entity.ToTable("situacaopessoavirusbacteria", "monitorasus");
 
+                entity.HasIndex(e => e.IdGestor)
+                    .HasName("fk_virusBacteria_has_pessoa_pessoa2_idx");
+
                 entity.HasIndex(e => e.IdVirusBacteria)
                     .HasName("fk_virusBacteria_has_pessoa_virusBacteria1_idx");
 
@@ -764,11 +751,29 @@ namespace Persistence
                     .HasColumnName("idpessoa")
                     .HasColumnType("int(11)");
 
+                entity.Property(e => e.DataUltimoMonitoramento)
+                    .HasColumnName("dataUltimoMonitoramento")
+                    .HasColumnType("date");
+
+                entity.Property(e => e.Descricao)
+                    .HasColumnName("descricao")
+                    .HasMaxLength(5000)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.IdGestor)
+                    .HasColumnName("idGestor")
+                    .HasColumnType("int(11)");
+
                 entity.Property(e => e.UltimaSituacaoSaude)
                     .IsRequired()
                     .HasColumnName("ultimaSituacaoSaude")
                     .HasColumnType("enum('P','N','A','I','C')")
                     .HasDefaultValueSql("N");
+
+                entity.HasOne(d => d.IdGestorNavigation)
+                    .WithMany(p => p.SituacaopessoavirusbacteriaIdGestorNavigation)
+                    .HasForeignKey(d => d.IdGestor)
+                    .HasConstraintName("fk_virusBacteria_has_pessoa_pessoa2");
 
                 entity.HasOne(d => d.IdVirusBacteriaNavigation)
                     .WithMany(p => p.Situacaopessoavirusbacteria)
@@ -777,7 +782,7 @@ namespace Persistence
                     .HasConstraintName("fk_virusBacteria_has_pessoa_virusBacteria1");
 
                 entity.HasOne(d => d.IdpessoaNavigation)
-                    .WithMany(p => p.Situacaopessoavirusbacteria)
+                    .WithMany(p => p.SituacaopessoavirusbacteriaIdpessoaNavigation)
                     .HasForeignKey(d => d.Idpessoa)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk_virusBacteria_has_pessoa_pessoa1");

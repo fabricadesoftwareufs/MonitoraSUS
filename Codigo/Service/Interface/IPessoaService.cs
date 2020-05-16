@@ -11,5 +11,7 @@ namespace Service.Interface
         List<PessoaModel> GetAll();
         PessoaModel GetById(int id);
         PessoaModel GetByCpf(string cpf);
+        List<PessoaModel> GetByCidade(string cidade);
+        List<PessoaModel> GetByEstado(string estado);
     }
 }

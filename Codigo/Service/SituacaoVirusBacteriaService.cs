@@ -30,8 +30,10 @@ namespace Service
 
                     Idpessoa = situacao.Idpessoa,
                     IdVirusBacteria = situacao.IdVirusBacteria,
-                    UltimaSituacaoSaude = situacao.UltimaSituacaoSaude
-
+                    UltimaSituacaoSaude = situacao.UltimaSituacaoSaude,
+                    DataUltimoMonitoramento = situacao.DataUltimoMonitoramento,
+                    IdGestor = situacao.IdGestor,
+                    Descricao = situacao.Descricao,
                 }).ToList();
 
         public SituacaoPessoaVirusBacteriaModel GetById(int idPessoa, int idVirus)
@@ -42,7 +44,10 @@ namespace Service
 
                     Idpessoa = situacao.Idpessoa,
                     IdVirusBacteria = situacao.IdVirusBacteria,
-                    UltimaSituacaoSaude = situacao.UltimaSituacaoSaude
+                    UltimaSituacaoSaude = situacao.UltimaSituacaoSaude,
+                    DataUltimoMonitoramento = situacao.DataUltimoMonitoramento,
+                    IdGestor = situacao.IdGestor,
+                    Descricao = situacao.Descricao,
 
                 }).FirstOrDefault();
 
@@ -60,6 +65,9 @@ namespace Service
             s.IdVirusBacteria = situacaoModel.IdVirusBacteria;
             s.Idpessoa = situacaoModel.Idpessoa;
             s.UltimaSituacaoSaude = situacaoModel.UltimaSituacaoSaude;
+            s.DataUltimoMonitoramento = situacaoModel.DataUltimoMonitoramento;
+            s.IdGestor = situacaoModel.IdGestor;
+            s.Descricao = situacaoModel.Descricao;
 
             return s;
         }
@@ -69,5 +77,19 @@ namespace Service
             _context.Update(ModelToEntity(situacaoModel));
             return _context.SaveChanges() == 1 ? true : false;
         }
+
+        public List<SituacaoPessoaVirusBacteriaModel> GetByIdPaciente(int idPaciente)
+         => _context.Situacaopessoavirusbacteria
+          .Where(situacaoPessoa => situacaoPessoa.Idpessoa == idPaciente)
+          .Select(situacao => new SituacaoPessoaVirusBacteriaModel
+          {
+
+              Idpessoa = situacao.Idpessoa,
+              IdVirusBacteria = situacao.IdVirusBacteria,
+              UltimaSituacaoSaude = situacao.UltimaSituacaoSaude,
+              DataUltimoMonitoramento = situacao.DataUltimoMonitoramento,
+              IdGestor = situacao.IdGestor,
+              Descricao = situacao.Descricao,
+          }).ToList();
     }
 }
