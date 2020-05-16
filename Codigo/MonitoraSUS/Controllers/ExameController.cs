@@ -75,7 +75,8 @@ namespace MonitoraSUS.Controllers
 			var usuario = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
 			var trabalhaMunicipio = _pessoaTrabalhaMunicipioContext.GetByIdPessoa(usuario.UsuarioModel.IdPessoa);
 			var trabalhaEstado = _pessoaTrabalhaEstadoContext.GetByIdPessoa(usuario.UsuarioModel.IdPessoa);
-			ConfiguracaoNotificarModel configuracaoNotificar = null;
+
+            ConfiguracaoNotificarModel configuracaoNotificar = null;
 			if (trabalhaEstado != null)
 			{
 				configuracaoNotificar = _exameContext.BuscarConfiguracaoNotificar(trabalhaEstado.IdEstado, trabalhaEstado.IdEmpresaExame);
@@ -136,7 +137,7 @@ namespace MonitoraSUS.Controllers
 					}
 				}
 			}
-			return RedirectToAction(nameof(Notificate));
+            return RedirectToAction(nameof(Notificate));
 		}
 
 		[Authorize(Roles = "GESTOR, SECRETARIO")]
