@@ -163,145 +163,145 @@
                         </div>
                     </div>
                 </div>
-				<div class="col-md-12 text-right">
-					@using (Html.BeginForm("NotificateByListAsync", "Exame", FormMethod.Post))
-					{
-						@for (int i = 0; i < Model.Exames.Count; i++)
-						{
-							<div class="form-group" hidden>
-								@Html.LabelFor(model => model.Exames[i].IdExame, htmlAttributes: new { @class = "control-label col-md-2" })
-								<div class="col-md-10">
-									@Html.EditorFor(model => model.Exames[i].IdExame, new { htmlAttributes = new { @class = "form-control" } })
-									@Html.ValidationMessageFor(model => model.Exames[i].IdExame, "", new { @class = "text-danger" })
-								</div>
-							</div>
-							<div class="form-group" hidden>
-								@Html.LabelFor(model => model.Exames[i].IdPaciente.Idpessoa, htmlAttributes: new { @class = "control-label col-md-2" })
-								<div class="col-md-10">
-									@Html.EditorFor(model => model.Exames[i].IdPaciente.Idpessoa, new { htmlAttributes = new { @class = "form-control" } })
-									@Html.ValidationMessageFor(model => model.Exames[i].IdPaciente.Idpessoa, "", new { @class = "text-danger" })
-								</div>
-							</div>
-							<div class="form-group" hidden>
-								@Html.LabelFor(model => model.Exames[i].Resultado, htmlAttributes: new { @class = "control-label col-md-2" })
-								<div class="col-md-10">
-									@Html.EditorFor(model => model.Exames[i].Resultado, new { htmlAttributes = new { @class = "form-control" } })
-									@Html.ValidationMessageFor(model => model.Exames[i].Resultado, "", new { @class = "text-danger" })
-								</div>
-							</div>
-							<div class="form-group" hidden>
-								@Html.LabelFor(model => model.Exames[i].StatusNotificacao, htmlAttributes: new { @class = "control-label col-md-2" })
-								<div class="col-md-10">
-									@Html.EditorFor(model => model.Exames[i].StatusNotificacao, new { htmlAttributes = new { @class = "form-control" } })
-									@Html.ValidationMessageFor(model => model.Exames[i].StatusNotificacao, "", new { @class = "text-danger" })
-								</div>
-							</div>
-						}
+                <div class="col-md-12 text-right">
+                    @using (Html.BeginForm("NotificateByListAsync", "Exame", FormMethod.Post))
+                    {
+                        @for (int i = 0; i < Model.Exames.Count; i++)
+                        {
+                            <div class="form-group" hidden>
+                                @Html.LabelFor(model => model.Exames[i].IdExame, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.Exames[i].IdExame, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.Exames[i].IdExame, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group" hidden>
+                                @Html.LabelFor(model => model.Exames[i].IdPaciente.Idpessoa, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.Exames[i].IdPaciente.Idpessoa, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.Exames[i].IdPaciente.Idpessoa, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group" hidden>
+                                @Html.LabelFor(model => model.Exames[i].Resultado, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.Exames[i].Resultado, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.Exames[i].Resultado, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group" hidden>
+                                @Html.LabelFor(model => model.Exames[i].StatusNotificacao, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.Exames[i].StatusNotificacao, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.Exames[i].StatusNotificacao, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        }
 
-						<button type="submit" class="btn btn-info btn-xs"><i class="fa fa-envelope"></i> SMS Todos</button>
-					}
-				</div>
+                        <button type="submit" class="btn btn-info btn-xs"><i class="fa fa-envelope"></i> SMS Todos</button>
+                    }
+                </div>
 
                 <div class="card-body ">
                     <div class="table-responsive">
                         <table class="table align-items-center table-flush">
                             <thead class="thead-light">
-								<tr>
-									<th scope="col" class="sort" data-sort="codigo-coleta">
-										Id Coleta
-									</th>
-									<th scope="col" class="sort" data-sort="cpf">
-										Cpf/Rg
-									</th>
-									<th scope="col" class="sort" data-sort="nome-paciente">
-										Paciente
-									</th>
-									<th scope="col" class="sort" data-sort="cidade">
-										Cidade
-									</th>
-									<th scope="col" class="sort" data-sort="estado">
-										Estado
-									</th>
-									<th scope="col" class="sort" data-sort="data-exame">
-										Data do Exame
-									</th>
-									<th scope="col" class="sort" data-sort="virus">
-										Vírus
-									</th>
-									<th scope="col" class="sort" data-sort="resultado">
-										Resultado
-									</th>
-									<th scope="col" class="sort" data-sort="foi-notificado">
-										Foi Notificado
-									</th>
-									<th scope="col" class="sort" data-sort="acoes">
-										Ações
-									</th>
-								</tr>
+                                <tr>
+                                    <th scope="col" class="sort" data-sort="codigo-coleta">
+                                        Id Coleta
+                                    </th>
+                                    <th scope="col" class="sort" data-sort="cpf">
+                                        Cpf/Rg
+                                    </th>
+                                    <th scope="col" class="sort" data-sort="nome-paciente">
+                                        Paciente
+                                    </th>
+                                    <th scope="col" class="sort" data-sort="cidade">
+                                        Cidade
+                                    </th>
+                                    <th scope="col" class="sort" data-sort="estado">
+                                        Estado
+                                    </th>
+                                    <th scope="col" class="sort" data-sort="data-exame">
+                                        Data do Exame
+                                    </th>
+                                    <th scope="col" class="sort" data-sort="virus">
+                                        Vírus
+                                    </th>
+                                    <th scope="col" class="sort" data-sort="resultado">
+                                        Resultado
+                                    </th>
+                                    <th scope="col" class="sort" data-sort="foi-notificado">
+                                        Foi Notificado
+                                    </th>
+                                    <th scope="col" class="sort" data-sort="acoes">
+                                        Ações
+                                    </th>
+                                </tr>
                             </thead>
                             <tbody class="list">
                                 @foreach (var item in Model.Exames)
                                 {
-								<tr>
-									<td>
-										<div>@Html.DisplayFor(modelItem => item.CodigoColeta)</div>
-									</td>
-									<td>
-										<a href="#">@Html.DisplayFor(modelItem => item.IdPaciente.Cpf)</a>
-									</td>
-									<td>
-										@if (@item.IdPaciente.Nome.Length > 15)
-										{
-											<div>@item.IdPaciente.Nome.Substring(0, 15)...</div>
-										}
-										else
-										{
-											<div>@item.IdPaciente.Nome</div>
-										}
-									</td>
-									<td>
-										@if (item.IdPaciente.Cidade.Length > 10)
-										{
-											<div>@item.IdPaciente.Cidade.Substring(0, 10)...</div>
-										}
-										else
-										{
-											<div>@item.IdPaciente.Cidade</div>
-										}
-									</td>
-									<td>
-										@Html.DisplayFor(modelItem => item.IdPaciente.Estado)
-									</td>
-									<td>
-										@Html.DisplayFor(modelItem => item.DataExame)
-									</td>
-									<td>
-										@Html.DisplayFor(modelItem => item.IdVirusBacteria.Nome)
-									</td>
-									<td>
-										@Html.DisplayFor(modelItem => item.Resultado)
-									</td>
-									<td>
-										@if (item.StatusNotificacao.ToUpper() == "S")
-										{
-											<p>Sim</p>
-										}
-										else if (item.StatusNotificacao.ToUpper() == "N")
-										{
-											<p>Nao</p>
-										}
-										else if (item.StatusNotificacao.ToUpper() == "E")
-										{
-											<p>Enviada</p>
-										}
-									</td>
-									<td>
-										@using (Html.BeginForm("NotificateById", "Exame", new { id = item.IdExame }, FormMethod.Post))
-										{
-											<button type="submit" class="btn btn-info btn-xs"><i class="fa fa-envelope"></i> SMS</button>
-										}
-									</td>
-								</tr>
+                                    <tr>
+                                        <td>
+                                            <div>@Html.DisplayFor(modelItem => item.CodigoColeta)</div>
+                                        </td>
+                                        <td>
+                                            <a href="#">@Html.DisplayFor(modelItem => item.IdPaciente.Cpf)</a>
+                                        </td>
+                                        <td>
+                                            @if (@item.IdPaciente.Nome.Length > 15)
+                                            {
+                                                <div>@item.IdPaciente.Nome.Substring(0, 15)...</div>
+                                            }
+                                            else
+                                            {
+                                                <div>@item.IdPaciente.Nome</div>
+                                            }
+                                        </td>
+                                        <td>
+                                            @if (item.IdPaciente.Cidade.Length > 10)
+                                            {
+                                                <div>@item.IdPaciente.Cidade.Substring(0, 10)...</div>
+                                            }
+                                            else
+                                            {
+                                                <div>@item.IdPaciente.Cidade</div>
+                                            }
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.IdPaciente.Estado)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.DataExame)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.IdVirusBacteria.Nome)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Resultado)
+                                        </td>
+                                        <td>
+                                            @if (item.StatusNotificacao.ToUpper() == "S")
+                                            {
+                                                <p>Sim</p>
+                                            }
+                                            else if (item.StatusNotificacao.ToUpper() == "N")
+                                            {
+                                                <p>Nao</p>
+                                            }
+                                            else if (item.StatusNotificacao.ToUpper() == "E")
+                                            {
+                                                <p>Enviada</p>
+                                            }
+                                        </td>
+                                        <td>
+                                            @using (Html.BeginForm("NotificateById", "Exame", new { id = item.IdExame }, FormMethod.Post))
+                                            {
+                                                <button type="submit" class="btn btn-info btn-xs"><i class="fa fa-envelope"></i> SMS</button>
+                                            }
+                                        </td>
+                                    </tr>
                                 }
                             </tbody>
                         </table>
@@ -329,9 +329,23 @@ else if (TempData["mensagemErro"] != null)
 
     <script>
         $(document).ready(function () {
-            if (document.querySelector('#mensagem-retorno'))
+            if (document.querySelector('#mensagem-retorno')) {
+                swal.close();
                 document.getElementById("mensagem-retorno").click();
+                $('.btn btn-info btn-xs').prop("disabled", false);
+            }
+
+            $('.btn btn-info btn-xs').on('click', function () {
+                $(this).prop("disabled", true);
+                loading();
+            });
         });
+        function loading() {
+            swal({
+                title: 'Enviando SMS...'
+            });
+            swal.showLoading();
+        }
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
