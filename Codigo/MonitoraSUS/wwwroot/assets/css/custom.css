@@ -1,50 +1,46 @@
-.link {
-    color: #fff;
+.card-content {
+    margin-top: 3rem !important;
 }
 
-.card-content{
-    margin-top: 3rem !important;
-} 
-.top-user{
+.top-user {
     margin-top: 1rem !important;
     color: #fff !important;
 }
 
-.top-user span{
-    display: block;
-}
-.top-user i{
-    margin-right: 10px;
-}
+    .top-user span {
+        display: block;
+    }
 
-.text-muted-white
-{
+    .top-user i {
+        margin-right: 10px;
+    }
+
+.text-muted-white {
     color: #f2f2f2 !important;
     font-weight: bold;
 }
 
-.card-button{
+.card-button {
     cursor: pointer;
 }
 
-.logo-header{
+.logo-header {
     height: 80px;
     width: 80px;
     margin-top: 15px;
 }
 
-.footer-transparent
-{
+.footer-transparent {
     color: #fff !important;
-    padding: 30px 0; 
+    padding: 30px 0;
 }
 
-.card-round{
+.card-round {
     border-radius: 10px !important;
 }
 
 
-.card-button-home:hover{
+.card-button-home:hover {
     color: #fff;
     border-color: #eeeeee;
     -webkit-transform: scale(1.05);
@@ -53,26 +49,36 @@
 }
 
 
-.card-button-home{
+.card-button-home {
     background: linear-gradient(87deg, #007bff 0, #224abe 100%) !important;
     border-color: #eeeeee;
     color: #fff;
     font-size: .8rem;
-    border-radius: 5px; 
+    border-radius: 5px;
     padding: 1.15rem 1rem !important;
     margin-bottom: 0.75rem;
 }
 
-.card-button-home i{
-    margin-bottom: 10px;
-}
+    .card-button-home i {
+        margin-bottom: 10px;
+    }
 
-.btn-logout{
+.btn-logout {
     text-decoration: none;
     color: #fff;
 }
 
-.btn-logout:hover{
-    text-decoration: none;
-    color: #eee;
+    .btn-logout:hover {
+        text-decoration: none;
+        color: #eee;
+    }
+
+.link {
+    color: #fff;
+}
+.no-space {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
 }
