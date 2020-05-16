@@ -87,10 +87,9 @@ function ProcuraEndereco(endereco) {
         } else {
             alert('ERRO AO INICIALIZAR O GEOCODE: ' + status);
         }
+
+        $('#street_number').focus();
     });
-
-    $('#street_number').focus();
-
 }
 
 function clearSelect() {

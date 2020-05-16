@@ -279,6 +279,13 @@ namespace MonitoraSUS.Controllers
 			try
 			{
 				_exameContext.Delete(id);
+
+				var situacoes = _exameContext.GetByIdPaciente(exame.IdPaciente);
+				var pessoaTrabalhaEstado = _pessoaTrabalhaEstadoContext.GetByIdPessoa(exame.IdPaciente);
+				var pessoaTrabalhaMunicipio = _pessoaTrabalhaMunicipioContext.GetByIdPessoa(exame.IdPaciente);
+
+				if (situacoes.Count == 0 && pessoaTrabalhaEstado == null && pessoaTrabalhaMunicipio == null)
+					_pessoaContext.Delete(exame.IdPaciente);
 			}
 			catch
 			{
@@ -295,6 +302,7 @@ namespace MonitoraSUS.Controllers
 
 				return RedirectToAction(nameof(Index));
 			}
+
 
 			TempData["mensagemSucesso"] = "O Exame foi removido com sucesso!";
 			return RedirectToAction(nameof(Index));
