@@ -330,22 +330,20 @@ else if (TempData["mensagemErro"] != null)
     <script>
         $(document).ready(function () {
             if (document.querySelector('#mensagem-retorno')) {
-                swal.close();
+                Swal.close();
                 document.getElementById("mensagem-retorno").click();
-                $('.btn btn-info btn-xs').prop("disabled", false);
+                $('.btn-info').prop("disabled", false);
             }
 
-            $('.btn btn-info btn-xs').on('click', function () {
+            $('.btn-info').on('click', function () {
                 $(this).prop("disabled", true);
-                loading();
+                Swal.fire({
+                    title: 'Enviando SMS...'
+                });
+
+                Swal.showLoading();
             });
         });
-        function loading() {
-            swal({
-                title: 'Enviando SMS...'
-            });
-            swal.showLoading();
-        }
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
