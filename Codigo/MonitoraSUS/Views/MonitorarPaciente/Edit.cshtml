@@ -2,7 +2,7 @@
 
 @{
     ViewData["Title"] = "Edit";
-    var googleKey = "";
+    var googleKey = ViewBag.googleKey;
 }
 
 
@@ -332,6 +332,11 @@
                                                 <button id="btn-submit" type="submit" value="Sim" class="btn btn-success text-white">Sim</button>
                                             </div>
                                         </div>
+
+                                        <div class="col text-center" id="ok-model-form">
+                                            <h3 id="texto-erro"> </h3>
+                                            <button data-dismiss="modal" class="btn btn-success text-white">Ok</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -343,7 +348,7 @@
                             <button value="Cancelar" asp-action="Index" asp-controller="MonitorarPaciente" class="btn btn-danger">Cancelar</button>
                         </div>
                         <div class="col text-right">
-                            <button id="btn-monitorar-paciente" data-toggle="modal" data-target=".bs-example-modal-sm" class="btn btn-success">Monitorar</button>
+                            <button id="btn-monitorar-paciente" onclick='validacao()' class="btn btn-success">Monitorar</button>
                         </div>
                     </div>
                 </div>
@@ -369,7 +374,7 @@ else if (TempData["mensagemErro"] != null)
                 document.getElementById("mensagem-retorno").click();
         });
 
-        
+
         var input = document.getElementById('input-descricao');
         input.addEventListener("keyup", function () {
             if ($('#input-descricao').val().length > 5000) {
@@ -378,6 +383,49 @@ else if (TempData["mensagemErro"] != null)
                 document.getElementById('span-descricao').hidden = true;
             }
         });
+
+
+        function validacao() {
+            var mensagem = verificaCampoVazio();
+
+            $('#ok-model-form').hide();
+            $('#acoes-model-form').hide();
+
+            if (mensagem.length > 0)
+            {
+                $('#texto-erro').text(mensagem);
+                $('#ok-model-form').show();
+            }
+            else
+            {
+                $('#acoes-model-form').show();
+            }
+
+            $('#modal-confirmar').modal('show');
+        }
+
+
+        function verificaCampoVazio() {
+            var mensagem = "";
+            if ($('#input-nome').val().length == 0)
+                mensagem = "Preencha o campo NOME!";
+            else if ($('#input-data-nascimento').val().length != 10)
+                mensagem = "Preencha a DATA DE NASCIMENTO corretamente!";
+            else if ($('#postal_code').val().length == 0)
+                mensagem = "Preencha o campo CEP!";
+            else if ($('#route').val().length == 0)
+                mensagem = "Preencha o campo RUA!";
+            else if ($('#sublocality_level_1').val().length == 0)
+                mensagem = "Preencha o campo BAIRRO!";
+            else if ($('#administrative_area_level_2').val().length == 0)
+                mensagem = "Preencha o campo ESTADO!";
+            else if ($('#administrative_area_level_1').val().length == 0)
+                mensagem = "Preencha o campo CIDADE!";
+            else if ($('#input-celular').val().length != 17)
+                mensagem = "Preencha o campo CELULAR corretamente!";
+
+                return mensagem;
+        }
     </script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
     <script src="~/assets/js/sweet-alert.js"></script>
