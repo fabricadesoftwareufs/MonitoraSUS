@@ -259,10 +259,10 @@
                                                 <div class="tooltip">@item.IdPaciente.Nome</div>
                                             }
                                         </td>
-                                        <td  data-toggle="tooltip" title="@item.IdPaciente.Cidade">
+                                        <td>
                                             @if (item.IdPaciente.Cidade.Length > 10)
                                             {
-                                                <div>@item.IdPaciente.Cidade.Substring(0, 10)...</div>
+                                                <div data-toggle="tooltip" title="@item.IdPaciente.Cidade">@item.IdPaciente.Cidade.Substring(0, 10)...</div>
                                             }
                                             else
                                             {
