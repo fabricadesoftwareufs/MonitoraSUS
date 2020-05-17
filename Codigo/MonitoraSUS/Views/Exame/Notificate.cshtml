@@ -107,7 +107,7 @@
                             </div>
 
                             <div class="col-md-4 text-center">
-                                <div class="table-responsive">
+                                <div class="table-responsive-md">
                                     <table class="table align-items-center table-flush">
                                         <thead class="thead-light">
                                             <tr>
@@ -202,7 +202,7 @@
                     }
                 </div>
 
-                <div class="card-body ">
+                <div class="card-body">
                     <div class="table-responsive">
                         <table class="table align-items-center table-flush">
                             <thead class="thead-light">
@@ -252,17 +252,17 @@
                                         <td>
                                             @if (@item.IdPaciente.Nome.Length > 15)
                                             {
-                                                <div>@item.IdPaciente.Nome.Substring(0, 15)...</div>
+                                                <div data-toggle="tooltip" title="@item.IdPaciente.Nome">@item.IdPaciente.Nome.Substring(0, 15)...</div>
                                             }
                                             else
                                             {
-                                                <div>@item.IdPaciente.Nome</div>
+                                                <div class="tooltip">@item.IdPaciente.Nome</div>
                                             }
                                         </td>
                                         <td>
                                             @if (item.IdPaciente.Cidade.Length > 10)
                                             {
-                                                <div>@item.IdPaciente.Cidade.Substring(0, 10)...</div>
+                                                <div data-toggle="tooltip" title="@item.IdPaciente.Cidade">@item.IdPaciente.Cidade.Substring(0, 10)...</div>
                                             }
                                             else
                                             {

@@ -1,50 +1,46 @@
-.link {
-    color: #fff;
+.card-content {
+    margin-top: 3rem !important;
 }
 
-.card-content{
-    margin-top: 3rem !important;
-} 
-.top-user{
+.top-user {
     margin-top: 1rem !important;
     color: #fff !important;
 }
 
-.top-user span{
-    display: block;
-}
-.top-user i{
-    margin-right: 10px;
-}
+    .top-user span {
+        display: block;
+    }
 
-.text-muted-white
-{
+    .top-user i {
+        margin-right: 10px;
+    }
+
+.text-muted-white {
     color: #f2f2f2 !important;
     font-weight: bold;
 }
 
-.card-button{
+.card-button {
     cursor: pointer;
 }
 
-.logo-header{
+.logo-header {
     height: 80px;
     width: 80px;
     margin-top: 15px;
 }
 
-.footer-transparent
-{
+.footer-transparent {
     color: #fff !important;
-    padding: 30px 0; 
+    padding: 30px 0;
 }
 
-.card-round{
+.card-round {
     border-radius: 10px !important;
 }
 
 
-.card-button-home:hover{
+.card-button-home:hover {
     color: #fff;
     border-color: #eeeeee;
     -webkit-transform: scale(1.05);
@@ -53,26 +49,74 @@
 }
 
 
-.card-button-home{
+.card-button-home {
     background: linear-gradient(87deg, #007bff 0, #224abe 100%) !important;
     border-color: #eeeeee;
     color: #fff;
     font-size: .8rem;
-    border-radius: 5px; 
+    border-radius: 5px;
     padding: 1.15rem 1rem !important;
     margin-bottom: 0.75rem;
 }
 
-.card-button-home i{
-    margin-bottom: 10px;
-}
+    .card-button-home i {
+        margin-bottom: 10px;
+    }
 
-.btn-logout{
+.btn-logout {
     text-decoration: none;
     color: #fff;
 }
 
-.btn-logout:hover{
-    text-decoration: none;
-    color: #eee;
+    .btn-logout:hover {
+        text-decoration: none;
+        color: #eee;
+    }
+
+.link {
+    color: #fff;
 }
+
+.no-space-rl {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+/* class applies to select element itself, not a wrapper element */
+
+.select-css {
+    --radius: 2px;
+    --baseFg: dimgray;
+    --baseBg: white;
+    --accentFg: #006fc2;
+    --accentBg: #bae1ff;
+    margin-right: 2px;
+    margin-left: 2px;
+    font: 400 12px/1.3 sans-serif;
+    -webkit-appearance: none;
+    appearance: none;
+    color: var(--baseFg);
+    border: 1px solid var(--baseFg);
+    line-height: 1;
+    outline: 0;
+    padding: 0.65em 2.5em 0.55em 0.75em;
+    border-radius: var(--radius);
+    background-color: var(--baseBg);
+    background-image: linear-gradient(var(--baseFg), var(--baseFg)), linear-gradient(-135deg, transparent 50%, var(--accentBg) 50%), linear-gradient(-225deg, transparent 50%, var(--accentBg) 50%), linear-gradient(var(--accentBg) 42%, var(--accentFg) 42%);
+    background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
+    background-size: 1px 100%, 20px 22px, 20px 22px, 20px 100%;
+    background-position: right 20px center, right bottom, right bottom, right bottom;
+}
+
+    .select-css:hover {
+        background-image: linear-gradient(var(--accentFg), var(--accentFg)), linear-gradient(-135deg, transparent 50%, var(--accentFg) 50%), linear-gradient(-225deg, transparent 50%, var(--accentFg) 50%), linear-gradient(var(--accentFg) 42%, var(--accentBg) 42%);
+    }
+
+    .select-css:active {
+        background-image: linear-gradient(var(--accentFg), var(--accentFg)), linear-gradient(-135deg, transparent 50%, var(--accentFg) 50%), linear-gradient(-225deg, transparent 50%, var(--accentFg) 50%), linear-gradient(var(--accentFg) 42%, var(--accentBg) 42%);
+        color: var(--accentBg);
+        border-color: var(--accentFg);
+        background-color: var(--accentFg);
+    }

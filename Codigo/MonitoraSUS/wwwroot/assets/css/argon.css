@@ -29668,9 +29668,7 @@ html:not([dir='rtl']) .noUi-horizontal .noUi-handle
 .table-condensed > thead > tr > th
 {
     z-index: 1;
-
     padding: 1px;
-
     cursor: pointer; 
     text-align: center;
 }
