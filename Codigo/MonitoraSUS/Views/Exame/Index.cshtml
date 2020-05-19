@@ -238,40 +238,39 @@
 						<button type="submit" class="btn btn-success btn-xs"><i class="fa fa-list"></i> Exportar Selecionados</button>
 					}
 				</div>
-
 				<div class="card-body ">
 					<div class="table-responsive">
-						<table class="table align-items-center table-flush">
+						<table class="table table-custom align-items-center table-flush">
 							<thead class="thead-light">
-								<tr>
-									<th scope="col" class="sort" data-sort="codigo-coleta">
-										Id Coleta
-									</th>
-									<th scope="col" class="sort" data-sort="cpf">
-										Cpf/Rg
-									</th>
-									<th scope="col" class="sort" data-sort="nome-paciente">
-										Paciente
-									</th>
-									<th scope="col" class="sort" data-sort="cidade">
-										Cidade
-									</th>
-									<th scope="col" class="sort" data-sort="estado">
-										Estado
-									</th>
-									<th scope="col" class="sort" data-sort="data-exame">
-										Data do Exame
-									</th>
-									<th scope="col" class="sort" data-sort="virus">
-										Vírus
-									</th>
-									<th scope="col" class="sort" data-sort="resultado">
-										Resultado
-									</th>
-									<th scope="col" class="sort" data-sort="acoes">
-										Ações
-									</th>
-								</tr>
+							    <tr>
+                                    <th scope="col" class="sort w5" data-sort="codigo-coleta">
+                                        Id <br>Coleta
+                                    </th>
+                                    <th scope="col" class="sor w7" data-sort="cpf">
+                                        Cpf/Rg
+                                    </th>
+                                    <th scope="col" class="sort w26" data-sort="nome-paciente">
+                                        Paciente
+                                    </th>
+                                    <th scope="col" class="sort w15" data-sort="cidade">
+                                        Cidade
+                                    </th>
+                                    <th scope="col" class="sort w3" data-sort="estado">
+                                        UF
+                                    </th>
+                                    <th scope="col" class="sort w5" data-sort="data-exame">
+                                        Data <br>do Exame
+                                    </th>
+                                    <th scope="col" class="sort w15" data-sort="virus">
+                                        Vírus
+                                    </th>
+                                    <th scope="col" class="sort w7" data-sort="resultado">
+                                        Resultado
+                                    </th>
+                                    <th scope="col" class="sort w5" data-sort="acoes">
+                                        Ações
+                                    </th>
+                                </tr>
 							</thead>
 							<tbody class="list">
 								@foreach (var item in Model.Exames)
@@ -286,7 +285,7 @@
 									<td>
 										@if (@item.IdPaciente.Nome.Length > 15)
 										{
-											<div>@item.IdPaciente.Nome.Substring(0, 15)...</div>
+											<div>@item.IdPaciente.Nome</div>
 										}
 										else
 										{
@@ -296,7 +295,7 @@
 									<td>
 										@if (@item.IdPaciente.Cidade.Length > 10)
 										{
-											<div>@item.IdPaciente.Cidade.Substring(0, 10)...</div>
+											<div>@item.IdPaciente.Cidade</div>
 										}
 										else
 										{
@@ -317,9 +316,9 @@
 									</td>
 									<td>
 										<!-- a href="@Url.Action("Details", "Exame", new { id = item.IdExame})" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> Detalhes </!a-->
-										<a href="@Url.Action("Edit", "Exame", new { id = item.IdExame })" class="btn btn-info btn-xs"><i class="fa fa-edit"></i> Editar </a>
+										<a href="@Url.Action("Edit", "Exame", new { id = item.IdExame })" class="btn btn-info btn-sm btn-custom"><i class="fa fa-edit text-center"></i>Editar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a> 
 
-										<a data-toggle="modal" data-target="#modal-confirmar-@item.IdExame" class="btn btn-danger btn-xs text-white"><i class="fa fa-trash "></i> Remover </a>
+										<a data-toggle="modal" data-target="#modal-confirmar-@item.IdExame" class="btn btn-danger btn-sm btn-custom text-white"><i class="fa fa-trash "></i>Remover</a>
 										<div class="modal fade bs-example-modal-sm" id="modal-confirmar-@item.IdExame" tabindex="-1" role="dialog" aria-hidden="true">
 											<div class="modal-dialog modal-sm">
 												<div class="modal-content text-center" style="padding: 10pt">
