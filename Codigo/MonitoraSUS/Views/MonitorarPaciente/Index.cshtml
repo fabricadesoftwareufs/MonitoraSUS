@@ -139,28 +139,29 @@
 
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table align-items-center table-flush">
+                        <table class="table table-custom align-items-center table-flush">
                             <thead class="thead-light">
                                 <tr>
-                                    <th scope="col" class="sort" data-sort="cpf">
+                                    <th scope="col" class="sort w10" data-sort="cpf">
                                         CPF/RG
                                     </th>
-                                    <th scope="col" class="sort" data-sort="nome">
+                                    <th scope="col" class="sort w26" data-sort="nome">
                                         Nome
                                     </th>
-                                    <th scope="col" class="sort" data-sort="virus-bacteria">
+                                    <th scope="col" class="sort w15" data-sort="virus-bacteria">
                                         Exame
                                     </th>
-                                    <th scope="col" class="sort" data-sort="ultima-situacao">
-                                        Última Situação
+                                    <th scope="col" class="sort w5 text-center" data-sort="ultima-situacao">
+                                        Última <br> Situação
                                     </th>
-                                    <th scope="col" class="sort" data-sort="data-monitoramento">
-                                        último Monitoramento
+                                    <th scope="col" class="sort w7 text-center" data-sort="data-monitoramento">
+                                        último <br> Monitoramento
                                     </th>
-                                    <th scope="col" class="sort" data-sort="nome">
+                                    <th scope="col" class="sort w20" data-sort="nome">
                                         Gestor
                                     </th>
-                                    <th></th>
+                                    <th class="w10">
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -176,24 +177,24 @@
                                         <th>
                                             @Html.DisplayFor(modelItem => item.VirusBacteria.Nome)
                                         </th>
-                                        <td>
+                                        <td class="text-center">
                                             @Html.DisplayFor(modelItem => item.UltimaSituacao)
                                         </td>
-                                        <td>
+                                        <td class="text-center">
                                             @if (item.DataUltimoMonitoramento.HasValue)
                                             {
                                                 <div>@item.DataUltimoMonitoramento.Value.ToString("dd/MM/yyyy")</div>
                                             }
                                             else
                                             {
-                                                <p> - </p>
+                                                @: - 
                                             }
                                         </td>
                                         <th>
                                             @Html.DisplayFor(modelItem => item.Gestor.Nome)
                                         </th>
                                         <td>
-                                            <a href="@Url.Action("Edit", "MonitorarPaciente", new { idPaciente = item.Idpessoa, IdVirusBacteria = item.VirusBacteria.IdVirusBacteria })" class="btn btn-info btn-xs"><i class="fa fa-edit"></i> Monitorar </a>
+                                            <a href="@Url.Action("Edit", "MonitorarPaciente", new { idPaciente = item.Idpessoa, IdVirusBacteria = item.VirusBacteria.IdVirusBacteria })" class="btn btn-info btn-sm"><i class="fa fa-edit"></i> Monitorar </a>
                                         </td>
                                     </tr>
                                 }
