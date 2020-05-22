@@ -476,19 +476,39 @@ namespace MonitoraSUS.Controllers
                     TipoUsuario = tipoUsuario
                 };
                 _usuarioService.Insert(usuarioModel);
-                (bool nCpf, bool nUsuario, bool nToken) = await new
-                                      LoginController(
-                                        _usuarioService,
-                                        _pessoaService,
-                                        _pessoaTrabalhaEstadoService,
-                                        _pessoaTrabalhaMunicipioService,
-                                        _estadoService,
-                                        _municipioService,
-                                        _empresaExameService,
-                                        _emailService,
-                                        _recuperarSenhaService)
-                                      .GenerateToken(usuarioModel.Cpf, 1);
-                resposta = ReturnMsgOper(nCpf, nUsuario, nToken);
+				if (tipoUsuario == UsuarioModel.PERFIL_SECRETARIO)
+				{
+					(bool nCpf, bool nUsuario, bool nToken) = await new
+										  LoginController(
+											_usuarioService,
+											_pessoaService,
+											_pessoaTrabalhaEstadoService,
+											_pessoaTrabalhaMunicipioService,
+											_estadoService,
+											_municipioService,
+											_empresaExameService,
+											_emailService,
+											_recuperarSenhaService)
+										  .GenerateToken(usuarioModel.Cpf, 4);
+					resposta = ReturnMsgOper(nCpf, nUsuario, nToken);
+				}
+				else
+				{
+					(bool nCpf, bool nUsuario, bool nToken) = await new
+										  LoginController(
+											_usuarioService,
+											_pessoaService,
+											_pessoaTrabalhaEstadoService,
+											_pessoaTrabalhaMunicipioService,
+											_estadoService,
+											_municipioService,
+											_empresaExameService,
+											_emailService,
+											_recuperarSenhaService)
+										  .GenerateToken(usuarioModel.Cpf, 1);
+					resposta = ReturnMsgOper(nCpf, nUsuario, nToken);
+				}
+               
             }
             else
             {

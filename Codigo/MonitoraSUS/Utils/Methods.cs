@@ -36,7 +36,7 @@ namespace MonitoraSUS.Utils
 
         public static string MessageEmail(RecuperarSenhaModel senhaModel, int finalidadeEmail)
         {
-            var uri = new Uri("http://www.monitorasus.ufs.br/");
+            var uri = new Uri("https://www.monitorasus.ufs.br/");
             var site = "<a href='" + uri.Scheme + "://" + uri.Host + ":" + uri.Port;
             var link = site + "/Login/RecuperarSenha/";
 
@@ -64,8 +64,21 @@ namespace MonitoraSUS.Utils
                         "<br>Caso não lembre da sua senha de acesso, você possui 24 horas para criar uma nova senha.<br><a href='" +
                         link + senhaModel.Token + "'>Clique aqui para criar uma nova senha.</a>" +
                         RodapeEmail();
+				case 4:
+					return "<html><body>" +
+						"Obrigado por solicitar o cadastro no MonitoraSUS! <br/>" +
+						"O objetivo do sistema é auxiliar gestores municipais e estaduais no monitoramento de pacientes <br/>" +
+	  					"através da integração dos resultados de testes que estão sendo realizados em todo Brasil. <br/>" +
+						"O sistema permite gerenciar os testes realizados pela gestão e fazer o monitoramento dos pacientes <br/>" +
+						"residentes no município que foram positivados e notificados pelo MonitoraSUS. <br/>" +
+						"Seu cadastro foi aprovado com perfil de ADMINISTRADOR do Município ou Estado solicitado.<br/>" +
+						"Acesse o sistema através da url " + site + " e consulte o manual do sistema." +
+						"Entraremos em contato para agendarmos uma apresentação das funcionalidades." +
+						"Você possui 24 horas para criar sua senha de acesso ao sistema.<br><a href='" + 
+						link + senhaModel.Token + "'>Clique aqui para criar sua senha.</a>" +
+						RodapeEmail();
 
-                default: return null;
+				default: return null;
             }
         }
 
