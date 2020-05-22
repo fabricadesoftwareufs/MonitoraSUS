@@ -120,3 +120,64 @@
         border-color: var(--accentFg);
         background-color: var(--accentFg);
     }
+    /* table custom */
+    .w3{
+        width:3% !important;
+    }
+    
+    .w5{
+        width:5% !important;
+    }
+
+    .w7{
+        width:7% !important;
+    } 
+
+    .w10{
+        width:10% !important;
+    }
+
+    .w15{
+        width:15% !important;
+    }              
+
+    
+    .w18{
+        width:18% !important;
+    } 
+
+    
+    .w20{
+        width:20% !important;
+    } 
+
+    .w26{
+        width:26% !important;
+    } 
+
+    .m-10px{
+        margin-top: 10px;
+    }
+
+    .normal-wrap{
+        white-space: normal !important;
+    }
+    
+    .card .table-custom td,
+    .card .table-custom th
+    {
+        padding-right: .5rem;
+        padding-left: .5rem;
+        white-space: normal !important;
+    }
+
+    .btn-custom{
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        margin-top:8px !important;
+    }
+
+    .btn-custom i{
+        margin-right:8px !important;
+    }

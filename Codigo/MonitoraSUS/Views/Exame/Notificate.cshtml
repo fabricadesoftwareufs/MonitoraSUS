@@ -201,40 +201,39 @@
                         <button type="submit" class="btn btn-info btn-xs"><i class="fa fa-envelope"></i> SMS Todos</button>
                     }
                 </div>
-
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table align-items-center table-flush">
+                        <table class="table table-custom align-items-center table-flush">
                             <thead class="thead-light">
                                 <tr>
-                                    <th scope="col" class="sort" data-sort="codigo-coleta">
-                                        Id Coleta
+                                    <th scope="col" class="sort w5" data-sort="codigo-coleta">
+                                        Id <br>Coleta
                                     </th>
-                                    <th scope="col" class="sort" data-sort="cpf">
+                                    <th scope="col" class="sor w7" data-sort="cpf">
                                         Cpf/Rg
                                     </th>
-                                    <th scope="col" class="sort" data-sort="nome-paciente">
+                                    <th scope="col" class="sort w26" data-sort="nome-paciente">
                                         Paciente
                                     </th>
-                                    <th scope="col" class="sort" data-sort="cidade">
+                                    <th scope="col" class="sort w15" data-sort="cidade">
                                         Cidade
                                     </th>
-                                    <th scope="col" class="sort" data-sort="estado">
-                                        Estado
+                                    <th scope="col" class="sort w3" data-sort="estado">
+                                        UF
                                     </th>
-                                    <th scope="col" class="sort" data-sort="data-exame">
-                                        Data do Exame
+                                    <th scope="col" class="sort w5" data-sort="data-exame">
+                                        Data <br>do Exame
                                     </th>
-                                    <th scope="col" class="sort" data-sort="virus">
+                                    <th scope="col" class="sort w15" data-sort="virus">
                                         Vírus
                                     </th>
-                                    <th scope="col" class="sort" data-sort="resultado">
+                                    <th scope="col" class="sort w7" data-sort="resultado">
                                         Resultado
                                     </th>
-                                    <th scope="col" class="sort" data-sort="foi-notificado">
-                                        Foi Notificado
+                                    <th scope="col" class="sort w5" data-sort="foi-notificado">
+                                        Foi <br>Notificado
                                     </th>
-                                    <th scope="col" class="sort" data-sort="acoes">
+                                    <th scope="col" class="sort w5" data-sort="acoes">
                                         Ações
                                     </th>
                                 </tr>
@@ -252,7 +251,7 @@
                                         <td>
                                             @if (@item.IdPaciente.Nome.Length > 15)
                                             {
-                                                <div data-toggle="tooltip" title="@item.IdPaciente.Nome">@item.IdPaciente.Nome.Substring(0, 15)...</div>
+                                                <div data-toggle="tooltip" title="@item.IdPaciente.Nome">@item.IdPaciente.Nome</div>
                                             }
                                             else
                                             {
@@ -262,7 +261,7 @@
                                         <td>
                                             @if (item.IdPaciente.Cidade.Length > 10)
                                             {
-                                                <div data-toggle="tooltip" title="@item.IdPaciente.Cidade">@item.IdPaciente.Cidade.Substring(0, 10)...</div>
+                                                <div data-toggle="tooltip" title="@item.IdPaciente.Cidade">@item.IdPaciente.Cidade</div>
                                             }
                                             else
                                             {
@@ -284,21 +283,21 @@
                                         <td>
                                             @if (item.StatusNotificacao.ToUpper() == "S")
                                             {
-                                                <p>Sim</p>
+                                                @:Sim
                                             }
                                             else if (item.StatusNotificacao.ToUpper() == "N")
                                             {
-                                                <p>Nao</p>
+                                                @:Não
                                             }
                                             else if (item.StatusNotificacao.ToUpper() == "E")
                                             {
-                                                <p>Enviada</p>
+                                                @:Enviado
                                             }
                                         </td>
                                         <td>
                                             @using (Html.BeginForm("NotificateById", "Exame", new { id = item.IdExame }, FormMethod.Post))
                                             {
-                                                <button type="submit" class="btn btn-info btn-xs"><i class="fa fa-envelope"></i> SMS</button>
+                                                <button type="submit" class="btn btn-info btn-sm"><i class="fa fa-envelope"></i> SMS</button>
                                             }
                                         </td>
                                     </tr>
