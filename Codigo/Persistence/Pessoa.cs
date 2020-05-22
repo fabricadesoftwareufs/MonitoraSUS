@@ -41,6 +41,7 @@ namespace Persistence
         public byte Cancer { get; set; }
         public byte DoencaRespiratoria { get; set; }
         public string OutrasComorbidades { get; set; }
+        public string SituacaoSaude { get; set; }
 
         public ICollection<Exame> ExameIdAgenteSaudeNavigation { get; set; }
         public ICollection<Exame> ExameIdPacienteNavigation { get; set; }

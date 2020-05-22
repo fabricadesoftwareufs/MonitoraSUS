@@ -50,7 +50,8 @@ namespace Model
         public bool EhProfissionalSaude { get; set; }
         public string CodigoColeta { get; set; }
         public string StatusNotificacao { get; set; }
-        public string IdNotificacao { get; set; }
+		//public string SituacaoSaude { get; set; }
+		public string IdNotificacao { get; set; }
         public DateTime DataNotificacao { get; set; }
 
         [Display(Name = "Resultado")]

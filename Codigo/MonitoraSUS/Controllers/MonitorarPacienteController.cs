@@ -51,21 +51,22 @@ namespace MonitoraSUS.Controllers
         /* O formulário só enviava os campos vazios.
          * Essa solução com a lista de parâmetros extensa é provisória.*/
         public IActionResult Index(DateTime DataInicial, DateTime DataFinal, string Pesquisa,
-                                       string Resultado, int VirusBacteria, bool RealizouPesquisa)
+                                       string Resultado, int VirusBacteria)
         {
             var virus = _virusBacteriaContext.GetAll();
-            virus.Insert(0, new VirusBacteriaModel { Nome = "Todas as Opções", IdVirusBacteria = 0 });
             ViewBag.VirusBacteria = new SelectList(virus, "IdVirusBacteria", "Nome");
+			if (VirusBacteria == 0)
+				VirusBacteria = virus.First().IdVirusBacteria;
+			int	diasRecuperacao = virus.Where(v => v.IdVirusBacteria == VirusBacteria).First().DiasRecuperacao;
 
-            var pesquisa = new PesquisaPacienteViewModel
+			var pesquisa = new PesquisaPacienteViewModel
             {
                 Pacientes = new List<MonitoraPacienteViewModel>(),
                 Resultado = Resultado,
-                DataFinal = DataFinal,
-                DataInicial = DataInicial,
+                DataFinal = DataFinal.Equals(DateTime.MinValue) ? DateTime.Now : DataFinal,
+                DataInicial = DataInicial.Equals(DateTime.MinValue) ? DateTime.Now.AddDays(-diasRecuperacao) : DataInicial,
                 Pesquisa = Pesquisa,
                 VirusBacteria = VirusBacteria,
-                RealizouPesquisa = RealizouPesquisa
             };
 
             return View(GetAllPacientesViewModel(pesquisa));
@@ -109,7 +110,7 @@ namespace MonitoraSUS.Controllers
             {
                 UpdateSituacaoPessoaVirusBacteria(paciente);
             }
-            catch
+            catch (Exception e)
             {
                 TempData["mensagemErro"] = "Houve um problema ao atualizar informações do paciente, por favor, tente novamente!";
                 return View(paciente);
@@ -172,6 +173,7 @@ namespace MonitoraSUS.Controllers
                 Obeso = paciente.Obeso,
                 DoencaRespiratoria = paciente.DoencaRespiratoria,
                 OutrasComorbidades = paciente.OutrasComorbidades,
+				SituacaoSaude = paciente.SituacaoSaude
             };
 
             return _pessoaContext.Update(pacienteModel) != null ? true : false;
@@ -210,6 +212,7 @@ namespace MonitoraSUS.Controllers
                 DoencaRespiratoria = pessoa.DoencaRespiratoria,
                 OutrasComorbidades = pessoa.OutrasComorbidades,
                 Descricao = situacao.Descricao,
+				SituacaoSaude = pessoa.SituacaoSaude,
                 VirusBacteria = _virusBacteriaContext.GetById(situacao.IdVirusBacteria),
                 ExamesPaciente = GetExamesPaciente(pessoa.Idpessoa),
                 UltimaSituacao = GetUltimaSituacaoSaude(_situacaoPessoaContext.GetById(idPaciente, IdVirusBacteria).UltimaSituacaoSaude)
@@ -223,18 +226,13 @@ namespace MonitoraSUS.Controllers
             var pessoaTrabalhaMunicipio = _pessoaTrabalhaMunicipioContext.GetByIdPessoa(usuario.UsuarioModel.IdPessoa);
             var pessoaTrabalhaEstado = _pessoaTrabalhaEstadoContext.GetByIdPessoa(usuario.UsuarioModel.IdPessoa);
 
-            var pacientes = new List<PessoaModel>();
-            if (usuario.RoleUsuario.Equals("GESTOR") || usuario.RoleUsuario.Equals("SECRETARIO"))
+			if (usuario.RoleUsuario.Equals("GESTOR") || usuario.RoleUsuario.Equals("SECRETARIO"))
             {
                 if (pessoaTrabalhaMunicipio != null)
                 {
-                    /*
-                     * Filtrando por municipio depois pelo estado do municipio, 
-                     * pois cidades com mesmo nome existem em diversos estados...
-                     */
                     var municicpio = _municicpioContext.GetById(pessoaTrabalhaMunicipio.IdMunicipio);
                     var estado = _estadoContext.GetByCodUf(Convert.ToInt32(municicpio.Uf));
-                    pacientes = _pessoaContext.GetByCidade(municicpio.Nome).Where(p => p.Estado.ToUpper().Equals(estado.Uf.ToUpper())).ToList();
+                    pesquisa.Pacientes = _exameContext.GetByCidadeResidenciaPaciente(municicpio.Nome, estado.Uf.ToUpper(), pesquisa.VirusBacteria, pesquisa.DataInicial, pesquisa.DataFinal).ToList();
                 }
                 if (pessoaTrabalhaEstado != null)
                 {
@@ -245,45 +243,10 @@ namespace MonitoraSUS.Controllers
                     }
                     else
                     {
-                        pacientes = _pessoaContext.GetByEstado(_estadoContext.GetById(pessoaTrabalhaEstado.IdEstado).Uf);
+						var estado = _estadoContext.GetById(pessoaTrabalhaEstado.IdEstado);
+						pesquisa.Pacientes = _exameContext.GetByEstadoResidenciaPaciente(estado.Uf.ToUpper(), pesquisa.VirusBacteria, pesquisa.DataInicial, pesquisa.DataFinal).ToList();
                     }
                 }
-            }
-
-            pesquisa.Pacientes = new List<MonitoraPacienteViewModel>();
-            foreach (var item in pacientes)
-            {
-                List<SituacaoPessoaVirusBacteriaModel> situacao = _situacaoPessoaContext.GetByIdPaciente(item.Idpessoa);
-                if (situacao.Count > 0)
-                {
-                    foreach (var sit in situacao)
-                    {
-                        if (!sit.UltimaSituacaoSaude.Equals("N"))
-                            pesquisa.Pacientes.Add(GetPaciente(item, sit));
-                    }
-                }
-            }
-
-            /*
-             * Filrando por datas
-             */
-            if (pesquisa.DataInicial == DateTime.MinValue && pesquisa.DataFinal == DateTime.MinValue && !pesquisa.RealizouPesquisa)
-            {
-                pesquisa.DataInicial = DateTime.Now.AddDays(-7);
-                pesquisa.DataFinal = DateTime.Now;
-                pesquisa.Pacientes = pesquisa.Pacientes.Where(paciente => paciente.DataUltimoMonitoramento >= pesquisa.DataInicial && paciente.DataUltimoMonitoramento <= pesquisa.DataFinal).ToList();
-            }
-            else if (pesquisa.DataInicial > DateTime.MinValue && pesquisa.DataFinal > DateTime.MinValue)
-            {
-                pesquisa.Pacientes = pesquisa.Pacientes.Where(paciente => paciente.DataUltimoMonitoramento >= pesquisa.DataInicial && paciente.DataUltimoMonitoramento <= pesquisa.DataFinal).ToList();
-            }
-            else if (pesquisa.DataInicial == DateTime.MinValue && pesquisa.DataFinal > DateTime.MinValue)
-            {
-                pesquisa.Pacientes = pesquisa.Pacientes.Where(paciente => paciente.DataUltimoMonitoramento <= pesquisa.DataFinal).ToList();
-            }
-            else if (pesquisa.DataFinal == DateTime.MinValue && pesquisa.DataInicial > DateTime.MinValue)
-            {
-                pesquisa.Pacientes = pesquisa.Pacientes.Where(paciente => paciente.DataUltimoMonitoramento >= pesquisa.DataInicial).ToList();
             }
 
             /*
@@ -301,41 +264,11 @@ namespace MonitoraSUS.Controllers
             if (!pesquisa.Resultado.Equals("") && !pesquisa.Resultado.Equals("Todas as Opçoes"))
                 pesquisa.Pacientes = pesquisa.Pacientes.Where(paciente => paciente.UltimaSituacao.ToUpper().Equals(pesquisa.Resultado.ToUpper())).ToList();
 
-            if (pesquisa.VirusBacteria != 0)
-                pesquisa.Pacientes = pesquisa.Pacientes.Where(paciente => paciente.VirusBacteria.IdVirusBacteria == pesquisa.VirusBacteria).ToList();
-            /* 
-             * Ordenando lista por data e pegando maior e menor datas... 
-             */
-            if (pesquisa.Pacientes.Count > 0)
-            {
-                pesquisa.Pacientes = pesquisa.Pacientes.OrderByDescending(ex => ex.DataUltimoMonitoramento).ToList();
-                pesquisa.DataFinal = pesquisa.Pacientes[0].DataUltimoMonitoramento.Value;
-                pesquisa.DataInicial = pesquisa.Pacientes[pesquisa.Pacientes.Count - 1].DataUltimoMonitoramento.Value;
-            }
-
-            return PreencheTotalizadores(pesquisa);
+           pesquisa.Pacientes = pesquisa.Pacientes.OrderByDescending(ex => ex.DataExame).ToList();
+           return PreencheTotalizadores(pesquisa);
         }
 
-        public MonitoraPacienteViewModel GetPaciente(PessoaModel pessoa, SituacaoPessoaVirusBacteriaModel situacao)
-        {
-            MonitoraPacienteViewModel pc = new MonitoraPacienteViewModel();
-
-            pc.Idpessoa = pessoa.Idpessoa;
-            pc.Nome = pessoa.Nome;
-            pc.Cpf = pessoa.Cpf;
-            pc.UltimaSituacao = GetUltimaSituacaoSaude(situacao.UltimaSituacaoSaude);
-            pc.DataUltimoMonitoramento = situacao.DataUltimoMonitoramento;
-            pc.VirusBacteria = _virusBacteriaContext.GetById(situacao.IdVirusBacteria);
-
-            if (situacao.IdGestor.HasValue && situacao.IdGestor != 0)
-                pc.Gestor = _pessoaContext.GetById(situacao.IdGestor.Value);
-            else
-                pc.Gestor = new PessoaModel { Nome = " - " };
-
-            return pc;
-        }
-
-        public List<ExameViewModel> GetExamesPaciente(int idPaciente)
+		public List<ExameViewModel> GetExamesPaciente(int idPaciente)
         {
             var examesViewModel = new List<ExameViewModel>();
             var exames = _exameContext.GetByIdPaciente(idPaciente);
@@ -364,7 +297,6 @@ namespace MonitoraSUS.Controllers
 
                 examesViewModel.Add(ex);
             }
-
             return examesViewModel;
         }
 
@@ -379,9 +311,14 @@ namespace MonitoraSUS.Controllers
                     case ExameModel.RESULTADO_INDETERMINADO: pacientesTotalizados.Indeterminados++; break;
                     case ExameModel.RESULTADO_IMUNIZADO: pacientesTotalizados.Imunizados++; break;
                 }
-            }
-
-
+				switch (item.SituacaoSaude)
+				{
+					case PessoaModel.SITUACAO_ISOLAMENTO: pacientesTotalizados.Isolamento++; break;
+					case PessoaModel.SITUACAO_HOSPITALIZADO: pacientesTotalizados.Hospitalizado++; break;
+					case PessoaModel.SITUACAO_UTI: pacientesTotalizados.UTI++; break;
+					case PessoaModel.SITUACAO_SAUDAVEL: pacientesTotalizados.Saudavel++; break;
+				}
+			}
             return pacientesTotalizados;
         }
 

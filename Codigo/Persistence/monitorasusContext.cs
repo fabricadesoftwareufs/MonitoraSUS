@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace Persistence
 {
@@ -28,10 +30,11 @@ namespace Persistence
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            /*if (!optionsBuilder.IsConfigured)
+            if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseMySQL("server=localhost;port=3306;user=root;password=igorb95;database=monitorasus");
-            }*/
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
+                optionsBuilder.UseMySQL("server=localhost;port=3306;user=root;password=123456;database=monitorasus");
+            }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -578,6 +581,12 @@ namespace Persistence
                     .HasColumnName("sexo")
                     .HasColumnType("enum('M','F')")
                     .HasDefaultValueSql("M");
+
+                entity.Property(e => e.SituacaoSaude)
+                    .IsRequired()
+                    .HasColumnName("situacaoSaude")
+                    .HasColumnType("enum('S','I','H','U','O')")
+                    .HasDefaultValueSql("S");
             });
 
             modelBuilder.Entity<Pessoatrabalhaestado>(entity =>
@@ -735,7 +744,7 @@ namespace Persistence
                 entity.ToTable("situacaopessoavirusbacteria", "monitorasus");
 
                 entity.HasIndex(e => e.IdGestor)
-                    .HasName("fk_virusBacteria_has_pessoa_pessoa2_idx");
+                    .HasName("fk_situacaopessoavirusbacteria_pessoa1_idx");
 
                 entity.HasIndex(e => e.IdVirusBacteria)
                     .HasName("fk_virusBacteria_has_pessoa_virusBacteria1_idx");
@@ -773,7 +782,7 @@ namespace Persistence
                 entity.HasOne(d => d.IdGestorNavigation)
                     .WithMany(p => p.SituacaopessoavirusbacteriaIdGestorNavigation)
                     .HasForeignKey(d => d.IdGestor)
-                    .HasConstraintName("fk_virusBacteria_has_pessoa_pessoa2");
+                    .HasConstraintName("fk_situacaopessoavirusbacteria_pessoa1");
 
                 entity.HasOne(d => d.IdVirusBacteriaNavigation)
                     .WithMany(p => p.Situacaopessoavirusbacteria)

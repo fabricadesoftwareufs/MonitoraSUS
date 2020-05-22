@@ -300,7 +300,142 @@ namespace Service
                     IdNotificacao = exame.IdNotificacao,
                 }).ToList();
 
-        public List<ExameModel> CheckDuplicateExamToday(int idPaciente, int idVirusBacteria, DateTime dateExame)
+
+		public List<MonitoraPacienteViewModel> GetByCidadeResidenciaPaciente(string cidade, string siglaEstado,
+			int idVirusBacteria, DateTime dataInicio, DateTime dataFim)
+		{
+			var monitoraPacientes = _context.Exame
+				 .Where(e => e.IdPacienteNavigation.Cidade.ToUpper().Equals(cidade.ToUpper()) &&
+						 e.IdPacienteNavigation.Estado.ToUpper().Equals(siglaEstado.ToUpper()) &&
+						 e.IdVirusBacteria == idVirusBacteria &&
+						 e.DataExame >= dataInicio && e.DataExame <= dataFim).OrderByDescending(e => e.DataExame)
+				 .Select(exame => new MonitoraPacienteViewModel
+				 {
+					 Bairro = exame.IdPacienteNavigation.Bairro,
+					 Cancer = Convert.ToBoolean(exame.IdPacienteNavigation.Cancer),
+					 Cardiopatia = Convert.ToBoolean(exame.IdPacienteNavigation.Cardiopatia),
+					 Cep = exame.IdPacienteNavigation.Cep,
+					 Cidade = exame.IdPacienteNavigation.Cidade,
+					 Complemento = exame.IdPacienteNavigation.Complemento,
+					 Cpf = exame.IdPacienteNavigation.Cpf,
+					 DataNascimento = exame.IdPacienteNavigation.DataNascimento,
+					 Diabetes = Convert.ToBoolean(exame.IdPacienteNavigation.Diabetes),
+					 DoencaRespiratoria = Convert.ToBoolean(exame.IdPacienteNavigation.DoencaRespiratoria),
+					 Email = exame.IdPacienteNavigation.Email,
+					 Estado = exame.IdPacienteNavigation.Estado,
+					 FoneCelular = exame.IdPacienteNavigation.FoneCelular,
+					 FoneFixo = exame.IdPacienteNavigation.FoneFixo,
+					 Hipertenso = Convert.ToBoolean(exame.IdPacienteNavigation.Hipertenso),
+					 Idpessoa = exame.IdPacienteNavigation.Idpessoa,
+					 Imunodeprimido = Convert.ToBoolean(exame.IdPacienteNavigation.Imunodeprimido),
+					 Latitude = exame.IdPacienteNavigation.Latitude,
+					 Longitude = exame.IdPacienteNavigation.Longitude,
+					 Nome = exame.IdPacienteNavigation.Nome,
+					 Numero = exame.IdPacienteNavigation.Numero,
+					 Obeso = Convert.ToBoolean(exame.IdPacienteNavigation.Obeso),
+					 OutrasComorbidades = exame.IdPacienteNavigation.OutrasComorbidades,
+					 Rua = exame.IdPacienteNavigation.Rua,
+					 Sexo = exame.IdPacienteNavigation.Sexo,
+					 SituacaoSaude = exame.IdPacienteNavigation.SituacaoSaude,
+					 DataExame = exame.DataExame
+				 }).ToList();
+			List<MonitoraPacienteViewModel> listaMonitoramentoNaoNegativos = BuscarNaoNegativos(idVirusBacteria, monitoraPacientes);
+			return listaMonitoramentoNaoNegativos;
+		}
+
+		private List<MonitoraPacienteViewModel> BuscarNaoNegativos(int idVirusBacteria, List<MonitoraPacienteViewModel> monitoraPacientes)
+		{
+			var listaMonitoramentoNaoNegativos = new List<MonitoraPacienteViewModel>();
+			if (monitoraPacientes.Count() > 0)
+			{
+				var virus = _context.Virusbacteria.Where(v => v.IdVirusBacteria == idVirusBacteria).First();
+				var virusBacteria = new VirusBacteriaModel() { IdVirusBacteria = virus.IdVirusBacteria, DiasRecuperacao = virus.DiasRecuperacao, Nome = virus.Nome };
+				HashSet<int> idPacientes = new HashSet<int>();
+				foreach (MonitoraPacienteViewModel paciente in monitoraPacientes)
+				{
+					var situacaoVirus = _context.Situacaopessoavirusbacteria.Where(s => s.Idpessoa == paciente.Idpessoa && s.IdVirusBacteria == idVirusBacteria).FirstOrDefault();
+					if (situacaoVirus != null)
+					{
+						if (situacaoVirus.UltimaSituacaoSaude != "N")
+						{
+							if (!idPacientes.Contains(paciente.Idpessoa))
+							{
+								idPacientes.Add(paciente.Idpessoa);
+								paciente.UltimaSituacao = UltimaSituacaoExameDescricao(situacaoVirus.UltimaSituacaoSaude);
+								paciente.Descricao = situacaoVirus.Descricao;
+								paciente.DataUltimoMonitoramento = situacaoVirus.DataUltimoMonitoramento;
+								if (situacaoVirus.IdGestor == null)
+									paciente.Gestor = new PessoaModel() { Nome = "-" };
+								else
+									paciente.Gestor = new PessoaModel() { Nome = _context.Pessoa.Where(p => p.Idpessoa == situacaoVirus.IdGestor).First().Nome };
+								paciente.VirusBacteria = virusBacteria;
+								listaMonitoramentoNaoNegativos.Add(paciente);
+							}
+						}
+					}
+				}
+			}
+
+			return listaMonitoramentoNaoNegativos;
+		}
+
+		public List<MonitoraPacienteViewModel> GetByEstadoResidenciaPaciente(string siglaEstado,
+			int idVirusBacteria, DateTime dataInicio, DateTime dataFim)
+		{
+			var monitoraPacientes = _context.Exame
+				 .Where(e => e.IdPacienteNavigation.Estado.ToUpper().Equals(siglaEstado.ToUpper()) &&
+						 e.IdVirusBacteria == idVirusBacteria &&
+						 e.DataExame >= dataInicio && e.DataExame <= dataFim).OrderByDescending(e=> e.DataExame)
+				 .Select(exame => new MonitoraPacienteViewModel
+				 {
+					 Bairro = exame.IdPacienteNavigation.Bairro,
+					 Cancer = Convert.ToBoolean(exame.IdPacienteNavigation.Cancer),
+					 Cardiopatia = Convert.ToBoolean(exame.IdPacienteNavigation.Cardiopatia),
+					 Cep = exame.IdPacienteNavigation.Cep,
+					 Cidade = exame.IdPacienteNavigation.Cidade,
+					 Complemento = exame.IdPacienteNavigation.Complemento,
+					 Cpf = exame.IdPacienteNavigation.Cpf,
+					 DataNascimento = exame.IdPacienteNavigation.DataNascimento,
+					 Diabetes = Convert.ToBoolean(exame.IdPacienteNavigation.Diabetes),
+					 DoencaRespiratoria = Convert.ToBoolean(exame.IdPacienteNavigation.DoencaRespiratoria),
+					 Email = exame.IdPacienteNavigation.Email,
+					 Estado = exame.IdPacienteNavigation.Estado,
+					 FoneCelular = exame.IdPacienteNavigation.FoneCelular,
+					 FoneFixo = exame.IdPacienteNavigation.FoneFixo,
+					 Hipertenso = Convert.ToBoolean(exame.IdPacienteNavigation.Hipertenso),
+					 Idpessoa = exame.IdPacienteNavigation.Idpessoa,
+					 Imunodeprimido = Convert.ToBoolean(exame.IdPacienteNavigation.Imunodeprimido),
+					 Latitude = exame.IdPacienteNavigation.Latitude,
+					 Longitude = exame.IdPacienteNavigation.Longitude,
+					 Nome = exame.IdPacienteNavigation.Nome,
+					 Numero = exame.IdPacienteNavigation.Numero,
+					 Obeso = Convert.ToBoolean(exame.IdPacienteNavigation.Obeso),
+					 OutrasComorbidades = exame.IdPacienteNavigation.OutrasComorbidades,
+					 Rua = exame.IdPacienteNavigation.Rua,
+					 Sexo = exame.IdPacienteNavigation.Sexo,
+					 SituacaoSaude = exame.IdPacienteNavigation.SituacaoSaude,
+					 DataExame = exame.DataExame
+				 }).ToList();
+			List<MonitoraPacienteViewModel> listaMonitoramentoNaoNegativos = BuscarNaoNegativos(idVirusBacteria, monitoraPacientes);
+			return listaMonitoramentoNaoNegativos;
+		}
+
+		private string UltimaSituacaoExameDescricao(string situacao)
+		{
+			switch (situacao)
+			{
+				case "P":
+					return "Positivo";
+				case "C":
+					return "Imunizado";
+				case "I":
+					return "Indeterminado";
+
+				default: return "Indeterminado";
+			}
+		}
+
+		public List<ExameModel> CheckDuplicateExamToday(int idPaciente, int idVirusBacteria, DateTime dateExame)
         {
             var exames = _context.Exame.Where(exameModel => exameModel.IdVirusBacteria == idVirusBacteria &&
                          exameModel.IdPaciente == idPaciente && dateExame.ToString("dd/MM/yyyy").Equals(exameModel.DataExame.ToString("dd/MM/yyyy")))

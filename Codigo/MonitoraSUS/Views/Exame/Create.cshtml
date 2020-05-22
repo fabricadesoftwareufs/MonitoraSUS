@@ -26,6 +26,7 @@
     bool doenRespiatoria = Model.IdPaciente.DoencaRespiratoria;
     bool obeso = Model.IdPaciente.Obeso;
     bool imunodeprimido = Model.IdPaciente.Imunodeprimido;
+	String situacaoSaude = Model.IdPaciente.SituacaoSaude;
     string dataExame = Model.DataExame != DateTime.MinValue ? Model.DataExame.ToString("yyyy-MM-dd") : DateTime.Now.ToString("yyyy-MM-dd");
     string DataInicioSintomas = Model.DataInicioSintomas != DateTime.MinValue ? Model.DataInicioSintomas.ToString("yyyy-MM-dd") : DateTime.Now.ToString("yyyy-MM-dd");
     var googleKey = ViewBag.googleKey;
@@ -113,81 +114,87 @@
                         <hr class="my-4" />
                         <h6 class="heading-small text-muted mb-4">Informações de Contato</h6>
                         <div class="pl-lg-4">
-                            <div class="row">
-                                <div class="col-lg-2">
-                                    <div class="form-group">
-                                        <label class="form-control-label" for="postal_code">CEP (Não sabe? </label> <a href="http://www.buscacep.correios.com.br/sistemas/buscacep/" target="_blank">Busque aqui</a>)
-                                        <input asp-for="IdPaciente.Cep" oninput="PreencheFormCEP()" id="postal_code" class="form-control" required placeholder="CEP" value="@cep">
-                                        <span id="spanInvalidCep" hidden class="text-danger text-center" style="padding: 10px">Cep Invalido!!</span>
-                                    </div>
-                                </div>
-                                <div class="col-lg-5">
-                                    <div class="form-group">
-                                        <label class="form-control-label" for="route">Logradouro</label>
-                                        <input asp-for="IdPaciente.Rua" type="search" oninput="PreencheForm()" required placeholder="Pesquise pelo CEP, Rua, Bairro, Número" autocomplete="off" id="route" class="form-control" value="@rua">
-                                    </div>
-                                </div>
-                                <div class="col-lg-1">
-                                    <div class="form-group">
-                                        <label class="form-control-label" for="street_number">Número</label>
-                                        <input asp-for="IdPaciente.Numero" id="street_number" class="form-control" placeholder="" value="@numero">
-                                    </div>
-                                </div>
-                                <div class="col-lg-4">
-                                    <div class="form-group">
-                                        <label class="form-control-label" for="sublocality_level_1">Bairro</label>
-                                        <input asp-for="IdPaciente.Bairro" id="sublocality_level_1" required class="form-control" placeholder="Bairro" value="@bairro">
-                                    </div>
-                                </div>
-                                <div class="col-lg-4">
-                                    <div class="form-group">
-                                        <label class="form-control-label" for="administrative_area_level_2">Cidade</label>
-                                        <input asp-for="IdPaciente.Cidade" readonly id="administrative_area_level_2" required class="form-control" placeholder="Cidade" value="@cidade">
-                                    </div>
-                                </div>
-                                <div class="col-lg-4">
-                                    <div class="form-group">
-                                        <label class="form-control-label" for="administrative_area_level_1">Estado</label>
-                                        <input asp-for="IdPaciente.Estado" readonly id="administrative_area_level_1" class="form-control" placeholder="Estado" value="@estado">
-                                    </div>
-                                </div>
-                                <div class="col-lg-4">
-                                    <div class="form-group">
-                                        <label class="form-control-label" for="input-complemento">Complemento</label>
-                                        <input asp-for="IdPaciente.Complemento" id="input-complemento" class="form-control" placeholder="Complemento" value="@complemento">
-                                    </div>
-                                </div>
-                                <div class="col-lg-4" hidden>
-                                    <div class="form-group">
-                                        <label class="form-control-label" for="input-latitude">Latitude</label>
-                                        <input asp-for="IdPaciente.Latitude" id="latitude" class="form-control" placeholder="" value="@latitude">
-                                    </div>
-                                </div>
-                                <div class="col-lg-4" hidden>
-                                    <div class="form-group">
-                                        <label class="form-control-label" for="input-longitude">Longitude</label>
-                                        <input asp-for="IdPaciente.Longitude" id="longitude" class="form-control" placeholder="" value="@longitude">
-                                    </div>
-                                </div>
-                                <div class="col-lg-4">
-                                    <div class="form-group">
-                                        <label class="form-control-label" for="input-celular">Celular</label>
-                                        <input asp-for="IdPaciente.FoneCelular" id="input-celular" required class="form-control" placeholder=" (99) 99999 9999" value="@foneCelular">
-                                    </div>
-                                </div>
-                                <div class="col-lg-4">
-                                    <div class="form-group">
-                                        <label class="form-control-label" for="input-telefone">Telefone</label>
-                                        <input asp-for="IdPaciente.FoneFixo" id="input-telefone" class="form-control" placeholder=" (99) 9999 9999" value="@foneFixo">
-                                    </div>
-                                </div>
-                                <div class="col-lg-4">
-                                    <div class="form-group">
-                                        <label class="form-control-label" for="input-email">E-mail</label>
-                                        <input asp-for="IdPaciente.Email" id="input-email" class="form-control" placeholder="email@example.com" value="@email">
-                                    </div>
-                                </div>
-                            </div>
+							<div class="row">
+								<div class="col-lg-2">
+									<div class="form-group">
+										<label class="form-control-label" for="postal_code">CEP (Não sabe? </label> <a href="http://www.buscacep.correios.com.br/sistemas/buscacep/" target="_blank">Busque aqui</a>)
+										<input asp-for="IdPaciente.Cep" oninput="PreencheFormCEP()" id="postal_code" class="form-control" required placeholder="CEP" value="@cep">
+										<span id="spanInvalidCep" hidden class="text-danger text-center" style="padding: 10px">Cep Invalido!!</span>
+									</div>
+								</div>
+								<div class="col-lg-5">
+									<div class="form-group">
+										<label class="form-control-label" for="route">Logradouro</label>
+										<input asp-for="IdPaciente.Rua" type="search" oninput="PreencheForm()" required placeholder="Pesquise pelo CEP, Rua, Bairro, Número" autocomplete="off" id="route" class="form-control" value="@rua">
+									</div>
+								</div>
+								<div class="col-lg-1">
+									<div class="form-group">
+										<label class="form-control-label" for="street_number">Número</label>
+										<input asp-for="IdPaciente.Numero" id="street_number" class="form-control" placeholder="" value="@numero">
+									</div>
+								</div>
+								<div class="col-lg-4">
+									<div class="form-group">
+										<label class="form-control-label" for="sublocality_level_1">Bairro</label>
+										<input asp-for="IdPaciente.Bairro" id="sublocality_level_1" required class="form-control" placeholder="Bairro" value="@bairro">
+									</div>
+								</div>
+								<div class="col-lg-4">
+									<div class="form-group">
+										<label class="form-control-label" for="administrative_area_level_2">Cidade</label>
+										<input asp-for="IdPaciente.Cidade" readonly id="administrative_area_level_2" required class="form-control" placeholder="Cidade" value="@cidade">
+									</div>
+								</div>
+								<div class="col-lg-4">
+									<div class="form-group">
+										<label class="form-control-label" for="administrative_area_level_1">Estado</label>
+										<input asp-for="IdPaciente.Estado" readonly id="administrative_area_level_1" class="form-control" placeholder="Estado" value="@estado">
+									</div>
+								</div>
+								<div class="col-lg-4">
+									<div class="form-group">
+										<label class="form-control-label" for="input-complemento">Complemento</label>
+										<input asp-for="IdPaciente.Complemento" id="input-complemento" class="form-control" placeholder="Complemento" value="@complemento">
+									</div>
+								</div>
+								<div class="col-lg-4" hidden>
+									<div class="form-group">
+										<label class="form-control-label" for="input-latitude">Latitude</label>
+										<input asp-for="IdPaciente.Latitude" id="latitude" class="form-control" placeholder="" value="@latitude">
+									</div>
+								</div>
+								<div class="col-lg-4" hidden>
+									<div class="form-group">
+										<label class="form-control-label" for="input-longitude">Longitude</label>
+										<input asp-for="IdPaciente.Longitude" id="longitude" class="form-control" placeholder="" value="@longitude">
+									</div>
+								</div>
+								<div class="col-lg-4" hidden>
+									<div class="form-group">
+										<label class="form-control-label" for="input-situacaoSaude">SituacaoSaude</label>
+										<input asp-for="IdPaciente.SituacaoSaude" id="situacaoSaude" class="form-control" placeholder="" value="@situacaoSaude">
+									</div>
+								</div>
+								<div class="col-lg-4">
+									<div class="form-group">
+										<label class="form-control-label" for="input-celular">Celular</label>
+										<input asp-for="IdPaciente.FoneCelular" id="input-celular" required class="form-control" placeholder=" (99) 99999 9999" value="@foneCelular">
+									</div>
+								</div>
+								<div class="col-lg-4">
+									<div class="form-group">
+										<label class="form-control-label" for="input-telefone">Telefone</label>
+										<input asp-for="IdPaciente.FoneFixo" id="input-telefone" class="form-control" placeholder=" (99) 9999 9999" value="@foneFixo">
+									</div>
+								</div>
+								<div class="col-lg-4">
+									<div class="form-group">
+										<label class="form-control-label" for="input-email">E-mail</label>
+										<input asp-for="IdPaciente.Email" id="input-email" class="form-control" placeholder="email@example.com" value="@email">
+									</div>
+								</div>
+							</div>
                         </div>
                         <hr class="my-4" />
                         <h6 class="heading-small text-muted mb-4">Comobirdades</h6>

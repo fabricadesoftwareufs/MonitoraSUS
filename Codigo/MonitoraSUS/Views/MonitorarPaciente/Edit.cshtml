@@ -25,328 +25,359 @@
                 </div>
 
                 <div class="card-body">
-                    <form asp-action="Edit" name="form-exame" id="form-exame" autocomplete="off">
-                        <h6 class="heading-small text-muted mb-4">Dados Pessoais</h6>
-                        <h6 class="heading-small text-muted pl-lg-4">Digite um CPF para carregar as informações do paciente ou cadastre-o agora mesmo</h6>
-                        <div class="pl-lg-4">
-                            <div class="row">
-                                <div class="col-md-2" hidden>
-                                    <div class="form-group">
-                                        <input asp-for="Idpessoa" required id="input-id-pessoa" class="form-control" />
-                                    </div>
-                                </div>
-                                <div class="col-md-2" hidden>
-                                    <div class="form-group">
-                                        <!--virus ou bacteria do monitoramento atual-->
-                                        <input asp-for="VirusBacteria.IdVirusBacteria" required id="input-id-virus" class="form-control" />
-                                    </div>
-                                </div>
-                                <div class="col-md-2">
-                                    <div class="form-group">
-                                        <label class="form-control-label" for="input-cpf">CPF ou RG</label>
-                                        <input asp-for="Cpf" id="input-cpf" placeholder="000.000.000-00" type="text" class="form-control" />
-                                        @if (TempData["resultadoPesquisa"] != null)
-                                        {
-                                            <h6 class="heading-small text-danger">@TempData["resultadoPesquisa"]</h6>
-                                        }
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="form-control-label" for="input-nome">Paciente</label>
-                                        <input asp-for="Nome" required id="input-nome" placeholder="Nome Completo" class="form-control" />
-                                    </div>
-                                </div>
-                                <div class="col-md-2">
-                                    <div class="form-group">
-                                        <label for="input-data-nascimento" class="form-control-label">Data de Nascimento</label>
-                                        <input asp-for="DataNascimento" type="text" id="input-data-nascimento" placeholder="dd-mm-aaaa" class="form-control" required value="@Model.DataNascimento.ToString("dd/MM/yyyy")" />
-                                    </div>
-                                </div>
-                                <div class="col-md-2">
-                                    <div class="form-group">
-                                        <label class="form-control-label" for="sexo">Sexo</label><br>
-                                        <div class="custom-control custom-radio custom-control-inline">
-                                            @Html.RadioButtonFor(model => model.Sexo, "M", new { @class = "custom-control-input", @id = "input-sexo-masc", @name = "sexo" })
-                                            <label class="custom-control-label" for="input-sexo-masc">Masculino</label>
-                                        </div>
-                                        <div class="custom-control custom-radio custom-control-inline">
-                                            @Html.RadioButtonFor(model => model.Sexo, "F", new { @class = "custom-control-input", @id = "input-sexo-fem", @name = "sexo" })
-                                            <label class="custom-control-label" for="input-sexo-fem">Feminino</label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <hr class="my-4" />
-                        <h6 class="heading-small text-muted mb-4">Informações de Contato</h6>
-                        <div class="pl-lg-4">
-                            <div class="row">
-                                <div class="col-lg-2">
-                                    <div class="form-group">
-                                        <label class="form-control-label" for="postal_code">CEP (Não sabe? </label> <a href="http://www.buscacep.correios.com.br/sistemas/buscacep/" target="_blank">Busque aqui</a>)
-                                        <input asp-for="Cep" oninput="PreencheFormCEP()" id="postal_code" class="form-control" required placeholder="CEP" />
-                                        <span id="spanInvalidCep" hidden class="text-danger text-center" style="padding: 10px">Cep Invalido!!</span>
-                                    </div>
-                                </div>
-                                <div class="col-lg-5">
-                                    <div class="form-group">
-                                        <label class="form-control-label" for="route">Logradouro</label>
-                                        <input asp-for="Rua" type="search" oninput="PreencheForm()" required placeholder="Pesquise pelo CEP, Rua, Bairro, Número" autocomplete="off" id="route" class="form-control" />
-                                    </div>
-                                </div>
-                                <div class="col-lg-1">
-                                    <div class="form-group">
-                                        <label class="form-control-label" for="street_number">Número</label>
-                                        <input asp-for="Numero" id="street_number" class="form-control" placeholder="" />
-                                    </div>
-                                </div>
-                                <div class="col-lg-4">
-                                    <div class="form-group">
-                                        <label class="form-control-label" for="sublocality_level_1">Bairro</label>
-                                        <input asp-for="Bairro" id="sublocality_level_1" required class="form-control" placeholder="Bairro" />
-                                    </div>
-                                </div>
-                                <div class="col-lg-4">
-                                    <div class="form-group">
-                                        <label class="form-control-label" for="administrative_area_level_2">Cidade</label>
-                                        <input asp-for="Cidade" readonly id="administrative_area_level_2" required class="form-control" placeholder="Cidade" />
-                                    </div>
-                                </div>
-                                <div class="col-lg-4">
-                                    <div class="form-group">
-                                        <label class="form-control-label" for="administrative_area_level_1">Estado</label>
-                                        <input asp-for="Estado" readonly id="administrative_area_level_1" class="form-control" placeholder="Estado" />
-                                    </div>
-                                </div>
-                                <div class="col-lg-4">
-                                    <div class="form-group">
-                                        <label class="form-control-label" for="input-complemento">Complemento</label>
-                                        <input asp-for="Complemento" id="input-complemento" class="form-control" placeholder="Complemento" />
-                                    </div>
-                                </div>
-                                <div class="col-lg-4" hidden>
-                                    <div class="form-group">
-                                        <label class="form-control-label" for="input-latitude">Latitude</label>
-                                        <input asp-for="Latitude" id="latitude" class="form-control" placeholder="" />
-                                    </div>
-                                </div>
-                                <div class="col-lg-4" hidden>
-                                    <div class="form-group">
-                                        <label class="form-control-label" for="input-longitude">Longitude</label>
-                                        <input asp-for="Longitude" id="longitude" class="form-control" placeholder="" />
-                                    </div>
-                                </div>
-                                <div class="col-lg-4">
-                                    <div class="form-group">
-                                        <label class="form-control-label" for="input-celular">Celular</label>
-                                        <input asp-for="FoneCelular" id="input-celular" required class="form-control" placeholder=" (99) 99999 9999" />
-                                    </div>
-                                </div>
-                                <div class="col-lg-4">
-                                    <div class="form-group">
-                                        <label class="form-control-label" for="input-telefone">Telefone</label>
-                                        <input asp-for="FoneFixo" id="input-telefone" class="form-control" placeholder=" (99) 9999 9999" />
-                                    </div>
-                                </div>
-                                <div class="col-lg-4">
-                                    <div class="form-group">
-                                        <label class="form-control-label" for="input-email">E-mail</label>
-                                        <input asp-for="Email" id="input-email" class="form-control" placeholder="email@example.com" />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <hr class="my-4" />
-                        <h6 class="heading-small text-muted mb-4">Comobirdades</h6>
-                        <div class="pl-lg-4">
-                            <div class="row">
-                                <div class="col-lg-3">
-                                    <div class="form-group">
-                                        <div class="custom-control custom-checkbox checkbox">
-                                            <label>
-                                                <input asp-for="Cardiopatia" class="custom-control-input" id="customCheck1" />
-                                                <label class="custom-control-label" for="customCheck1">Cardiopatia</label>
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-3">
-                                    <div class="form-group">
-                                        <div class="custom-control custom-checkbox checkbox">
-                                            <label>
-                                                <input asp-for="Diabetes" class="custom-control-input" id="customCheck2" />
-                                                <label class="custom-control-label" for="customCheck2">Diabetes</label>
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-3">
-                                    <div class="form-group">
-                                        <div class="custom-control custom-checkbox checkbox">
-                                            <label>
-                                                <input asp-for="Obeso" class="custom-control-input" id="customCheck3" />
-                                                <label class="custom-control-label" for="customCheck3">Obesidade</label>
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-3">
-                                    <div class="form-group">
-                                        <div class="custom-control custom-checkbox checkbox">
-                                            <label>
-                                                <input asp-for="Hipertenso" class="custom-control-input" id="customCheck4" />
-                                                <label class="custom-control-label" for="customCheck4">Hipertenso</label>
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-3">
-                                    <div class="form-group">
-                                        <div class="custom-control custom-checkbox checkbox">
-                                            <label>
-                                                <input asp-for="Imunodeprimido" class="custom-control-input" id="customCheck5" />
-                                                <label class="custom-control-label" for="customCheck5">Imunodeprimido</label>
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-3">
-                                    <div class="form-group">
-                                        <div class="custom-control custom-checkbox checkbox">
-                                            <label>
-                                                <input asp-for="Cancer" class="custom-control-input" id="customCheck6" />
-                                                <label class="custom-control-label" for="customCheck6">Câncer</label>
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-3">
-                                    <div class="form-group">
-                                        <div class="custom-control custom-checkbox checkbox">
-                                            <label>
-                                                <input asp-for="DoencaRespiratoria" class="custom-control-input" id="customCheck7" />
-                                                <label class="custom-control-label" for="customCheck7">Doença Respiratória</label>
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-3">
-                                    <div class="form-group">
-                                        <input type="search" id="input-outrasComorbidades" class="form-control" style="margin-top: 1px;" asp-for="OutrasComorbidades" placeholder="Outras comorbidades">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <hr class="my-4" />
-                        <h6 class="heading-small text-muted mb-4">Histórico do paciente</h6>
-                        <div class="pl-lg-2">
-                            <div class="row">
-                                <div class="col-lg-12">
-                                    <div class="card-body">
-                                        <div class="table-responsive">
-                                            <table class="table align-items-center table-flush">
-                                                <thead class="thead-light">
-                                                    <tr>
-                                                        <th scope="col" class="sort" data-sort="cpf">
-                                                            Cpf/Rg
-                                                        </th>
-                                                        <th scope="col" class="sort" data-sort="nome-paciente">
-                                                            Paciente
-                                                        </th>
-                                                        <th scope="col" class="sort" data-sort="cidade">
-                                                            Cidade
-                                                        </th>
-                                                        <th scope="col" class="sort" data-sort="estado">
-                                                            Estado
-                                                        </th>
-                                                        <th scope="col" class="sort" data-sort="data-exame">
-                                                            Data do Exame
-                                                        </th>
-                                                        <th scope="col" class="sort" data-sort="virus">
-                                                            Vírus/Bacteria
-                                                        </th>
-                                                        <th scope="col" class="sort" data-sort="resultado">
-                                                            Resultado
-                                                        </th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    @foreach (var item in Model.ExamesPaciente)
-                                                    {
-                                                        <tr>
-                                                            <td>
-                                                                <a href="#">@Html.DisplayFor(modelItem => item.IdPaciente.Cpf)</a>
-                                                            </td>
-                                                            <td>
-                                                                @Html.DisplayFor(modelItem => item.IdPaciente.Nome)
-                                                            </td>
-                                                            <td>
-                                                                @Html.DisplayFor(modelItem => item.IdPaciente.Cidade)
-                                                            </td>
-                                                            <td>
-                                                                @Html.DisplayFor(modelItem => item.IdPaciente.Estado)
-                                                            </td>
-                                                            <td>
-                                                                @Html.DisplayFor(modelItem => item.DataExame)
-                                                            </td>
-                                                            <td>
-                                                                @Html.DisplayFor(modelItem => item.IdVirusBacteria.Nome)
-                                                            </td>
-                                                            <td>
-                                                                @Html.DisplayFor(modelItem => item.Resultado)
-                                                            </td>
-                                                        </tr>
-                                                    }
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <hr class="my-4" />
-                        <h6 class="heading-small text-muted mb-4">Informações adicionais</h6>
-                        <div class="pl-lg-4">
-                            <div class="row">
-                                <div class="col-lg-12">
-                                    <div class="form-group">
-                                        <label class="form-control-label" for="input-descricao">Descrição (até 5000 caracteres)</label>
-                                        <textarea type="text" id="input-descricao" class="form-control" asp-for="Descricao" placeholder="Descricao"></textarea>
-                                        <span hidden id="span-descricao" class="text-danger">Você excedeu o limite de caracteres, por favor, exclua algumas palavras.</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="modal fade bs-example-modal-sm" id="modal-confirmar" tabindex="-1" role="dialog" aria-hidden="true">
-                            <div class="modal-dialog modal-sm">
-                                <div class="modal-content">
-                                    <div style="padding: 10pt;text-align: center">
-                                        <div class="col text-center form-group" id="acoes-model-form">
-                                            <h3 id="h3-confirmacao"> Confirmar Monitoramento do Paciente ? </h3>
+					<form asp-action="Edit" name="form-exame" id="form-exame" autocomplete="off">
+						<h6 class="heading-small text-muted mb-4">Dados Pessoais</h6>
+						<h6 class="heading-small text-muted pl-lg-4">Digite um CPF para carregar as informações do paciente ou cadastre-o agora mesmo</h6>
+						<div class="pl-lg-4">
+							<div class="row">
+								<div class="col-md-2" hidden>
+									<div class="form-group">
+										<input asp-for="Idpessoa" required id="input-id-pessoa" class="form-control" />
+									</div>
+								</div>
+								<div class="col-md-2" hidden>
+									<div class="form-group">
+										<!--virus ou bacteria do monitoramento atual-->
+										<input asp-for="VirusBacteria.IdVirusBacteria" required id="input-id-virus" class="form-control" />
+									</div>
+								</div>
+								<div class="col-md-2">
+									<div class="form-group">
+										<label class="form-control-label" for="input-cpf">CPF ou RG</label>
+										<input asp-for="Cpf" id="input-cpf" placeholder="000.000.000-00" type="text" class="form-control" />
+										@if (TempData["resultadoPesquisa"] != null)
+										{
+											<h6 class="heading-small text-danger">@TempData["resultadoPesquisa"]</h6>
+										}
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group">
+										<label class="form-control-label" for="input-nome">Paciente</label>
+										<input asp-for="Nome" required id="input-nome" placeholder="Nome Completo" class="form-control" />
+									</div>
+								</div>
+								<div class="col-md-2">
+									<div class="form-group">
+										<label for="input-data-nascimento" class="form-control-label">Data de Nascimento</label>
+										<input asp-for="DataNascimento" type="text" id="input-data-nascimento" placeholder="dd-mm-aaaa" class="form-control" required value="@Model.DataNascimento.ToString("dd/MM/yyyy")" />
+									</div>
+								</div>
+								<div class="col-md-2">
+									<div class="form-group">
+										<label class="form-control-label" for="sexo">Sexo</label><br>
+										<div class="custom-control custom-radio custom-control-inline">
+											@Html.RadioButtonFor(model => model.Sexo, "M", new { @class = "custom-control-input", @id = "input-sexo-masc", @name = "sexo" })
+											<label class="custom-control-label" for="input-sexo-masc">Masculino</label>
+										</div>
+										<div class="custom-control custom-radio custom-control-inline">
+											@Html.RadioButtonFor(model => model.Sexo, "F", new { @class = "custom-control-input", @id = "input-sexo-fem", @name = "sexo" })
+											<label class="custom-control-label" for="input-sexo-fem">Feminino</label>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<hr class="my-4" />
+						<h6 class="heading-small text-muted mb-4">Informações de Contato</h6>
+						<div class="pl-lg-4">
+							<div class="row">
+								<div class="col-lg-2">
+									<div class="form-group">
+										<label class="form-control-label" for="postal_code">CEP (Não sabe? </label> <a href="http://www.buscacep.correios.com.br/sistemas/buscacep/" target="_blank">Busque aqui</a>)
+										<input asp-for="Cep" oninput="PreencheFormCEP()" id="postal_code" class="form-control" required placeholder="CEP" />
+										<span id="spanInvalidCep" hidden class="text-danger text-center" style="padding: 10px">Cep Invalido!!</span>
+									</div>
+								</div>
+								<div class="col-lg-5">
+									<div class="form-group">
+										<label class="form-control-label" for="route">Logradouro</label>
+										<input asp-for="Rua" type="search" oninput="PreencheForm()" required placeholder="Pesquise pelo CEP, Rua, Bairro, Número" autocomplete="off" id="route" class="form-control" />
+									</div>
+								</div>
+								<div class="col-lg-1">
+									<div class="form-group">
+										<label class="form-control-label" for="street_number">Número</label>
+										<input asp-for="Numero" id="street_number" class="form-control" placeholder="" />
+									</div>
+								</div>
+								<div class="col-lg-4">
+									<div class="form-group">
+										<label class="form-control-label" for="sublocality_level_1">Bairro</label>
+										<input asp-for="Bairro" id="sublocality_level_1" required class="form-control" placeholder="Bairro" />
+									</div>
+								</div>
+								<div class="col-lg-4">
+									<div class="form-group">
+										<label class="form-control-label" for="administrative_area_level_2">Cidade</label>
+										<input asp-for="Cidade" readonly id="administrative_area_level_2" required class="form-control" placeholder="Cidade" />
+									</div>
+								</div>
+								<div class="col-lg-4">
+									<div class="form-group">
+										<label class="form-control-label" for="administrative_area_level_1">Estado</label>
+										<input asp-for="Estado" readonly id="administrative_area_level_1" class="form-control" placeholder="Estado" />
+									</div>
+								</div>
+								<div class="col-lg-4">
+									<div class="form-group">
+										<label class="form-control-label" for="input-complemento">Complemento</label>
+										<input asp-for="Complemento" id="input-complemento" class="form-control" placeholder="Complemento" />
+									</div>
+								</div>
+								<div class="col-lg-4" hidden>
+									<div class="form-group">
+										<label class="form-control-label" for="input-latitude">Latitude</label>
+										<input asp-for="Latitude" id="latitude" class="form-control" placeholder="" />
+									</div>
+								</div>
+								<div class="col-lg-4" hidden>
+									<div class="form-group">
+										<label class="form-control-label" for="input-longitude">Longitude</label>
+										<input asp-for="Longitude" id="longitude" class="form-control" placeholder="" />
+									</div>
+								</div>
+								<div class="col-lg-4">
+									<div class="form-group">
+										<label class="form-control-label" for="input-celular">Celular</label>
+										<input asp-for="FoneCelular" id="input-celular" required class="form-control" placeholder=" (99) 99999 9999" />
+									</div>
+								</div>
+								<div class="col-lg-4">
+									<div class="form-group">
+										<label class="form-control-label" for="input-telefone">Telefone</label>
+										<input asp-for="FoneFixo" id="input-telefone" class="form-control" placeholder=" (99) 9999 9999" />
+									</div>
+								</div>
+								<div class="col-lg-4">
+									<div class="form-group">
+										<label class="form-control-label" for="input-email">E-mail</label>
+										<input asp-for="Email" id="input-email" class="form-control" placeholder="email@example.com" />
+									</div>
+								</div>
+							</div>
+						</div>
+						<hr class="my-4" />
+						<h6 class="heading-small text-muted mb-4">Comorbidades</h6>
+						<div class="pl-lg-4">
+							<div class="row">
+								<div class="col-lg-3">
+									<div class="form-group">
+										<div class="custom-control custom-checkbox checkbox">
+											<label>
+												<input asp-for="Cardiopatia" class="custom-control-input" id="customCheck1" />
+												<label class="custom-control-label" for="customCheck1">Cardiopatia</label>
+											</label>
+										</div>
+									</div>
+								</div>
+								<div class="col-lg-3">
+									<div class="form-group">
+										<div class="custom-control custom-checkbox checkbox">
+											<label>
+												<input asp-for="Diabetes" class="custom-control-input" id="customCheck2" />
+												<label class="custom-control-label" for="customCheck2">Diabetes</label>
+											</label>
+										</div>
+									</div>
+								</div>
+								<div class="col-lg-3">
+									<div class="form-group">
+										<div class="custom-control custom-checkbox checkbox">
+											<label>
+												<input asp-for="Obeso" class="custom-control-input" id="customCheck3" />
+												<label class="custom-control-label" for="customCheck3">Obesidade</label>
+											</label>
+										</div>
+									</div>
+								</div>
+								<div class="col-lg-3">
+									<div class="form-group">
+										<div class="custom-control custom-checkbox checkbox">
+											<label>
+												<input asp-for="Hipertenso" class="custom-control-input" id="customCheck4" />
+												<label class="custom-control-label" for="customCheck4">Hipertenso</label>
+											</label>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-lg-3">
+									<div class="form-group">
+										<div class="custom-control custom-checkbox checkbox">
+											<label>
+												<input asp-for="Imunodeprimido" class="custom-control-input" id="customCheck5" />
+												<label class="custom-control-label" for="customCheck5">Imunodeprimido</label>
+											</label>
+										</div>
+									</div>
+								</div>
+								<div class="col-lg-3">
+									<div class="form-group">
+										<div class="custom-control custom-checkbox checkbox">
+											<label>
+												<input asp-for="Cancer" class="custom-control-input" id="customCheck6" />
+												<label class="custom-control-label" for="customCheck6">Câncer</label>
+											</label>
+										</div>
+									</div>
+								</div>
+								<div class="col-lg-3">
+									<div class="form-group">
+										<div class="custom-control custom-checkbox checkbox">
+											<label>
+												<input asp-for="DoencaRespiratoria" class="custom-control-input" id="customCheck7" />
+												<label class="custom-control-label" for="customCheck7">Doença Respiratória</label>
+											</label>
+										</div>
+									</div>
+								</div>
+								<div class="col-lg-3">
+									<div class="form-group">
+										<input type="search" id="input-outrasComorbidades" class="form-control" style="margin-top: 1px;" asp-for="OutrasComorbidades" placeholder="Outras comorbidades">
+									</div>
+								</div>
+							</div>
+						</div>
+						<hr class="my-4" />
+						<h6 class="heading-small text-muted mb-4">Exames Realizados pelo Paciente</h6>
+						<div class="pl-lg-2">
+							<div class="row">
+								<div class="col-lg-12">
+									<div class="card-body">
+										<div class="table-responsive">
+											<table class="table align-items-center table-flush">
+												<thead class="thead-light">
+													<tr>
+														<th scope="col" class="sort" data-sort="cpf">
+															Cpf/Rg
+														</th>
+														<th scope="col" class="sort" data-sort="nome-paciente">
+															Paciente
+														</th>
+														<th scope="col" class="sort" data-sort="cidade">
+															Cidade
+														</th>
+														<th scope="col" class="sort" data-sort="estado">
+															Estado
+														</th>
+														<th scope="col" class="sort" data-sort="data-exame">
+															Data do Exame
+														</th>
+														<th scope="col" class="sort" data-sort="virus">
+															Vírus/Bacteria
+														</th>
+														<th scope="col" class="sort" data-sort="resultado">
+															Resultado
+														</th>
+													</tr>
+												</thead>
+												<tbody>
+													@foreach (var item in Model.ExamesPaciente)
+													{
+														<tr>
+															<td>
+																<a href="#">@Html.DisplayFor(modelItem => item.IdPaciente.Cpf)</a>
+															</td>
+															<td>
+																@Html.DisplayFor(modelItem => item.IdPaciente.Nome)
+															</td>
+															<td>
+																@Html.DisplayFor(modelItem => item.IdPaciente.Cidade)
+															</td>
+															<td>
+																@Html.DisplayFor(modelItem => item.IdPaciente.Estado)
+															</td>
+															<td>
+																@Html.DisplayFor(modelItem => item.DataExame)
+															</td>
+															<td>
+																@Html.DisplayFor(modelItem => item.IdVirusBacteria.Nome)
+															</td>
+															<td>
+																@Html.DisplayFor(modelItem => item.Resultado)
+															</td>
+														</tr>
+													}
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<hr class="my-4" />
+						<h6 class="heading-small text-muted mb-4">Saúde do Paciente</h6>
+						<div class="pl-lg-4">
+							<div class="row">
+								<div class="col-lg-12">
+									<div class="form-group">
+										<div class="custom-control custom-radio custom-control-inline">
+											@Html.RadioButtonFor(model => model.SituacaoSaude, "S", new { @class = "custom-control-input", @id = "input-situacao-saudavel", @name = "situacaoSaude" })
+											<label class="custom-control-label" for="input-situacao-saudavel">Saudável</label>
+										</div>
+										<div class="custom-control custom-radio custom-control-inline">
+											@Html.RadioButtonFor(model => model.SituacaoSaude, "I", new { @class = "custom-control-input", @id = "input-situacao-isolamento", @name = "situacaoSaude" })
+											<label class="custom-control-label" for="input-situacao-isolamento">Isolamento Social</label>
+										</div>
+										<div class="custom-control custom-radio custom-control-inline">
+											@Html.RadioButtonFor(model => model.SituacaoSaude, "H", new { @class = "custom-control-input", @id = "input-situacao-hospitalizado", @name = "situacaoSaude" })
+											<label class="custom-control-label" for="input-situacao-hospitalizado">Hospitalizado</label>
+										</div>
+										<div class="custom-control custom-radio custom-control-inline">
+											@Html.RadioButtonFor(model => model.SituacaoSaude, "U", new { @class = "custom-control-input", @id = "input-situacao-uti", @name = "situacaoSaude" })
+											<label class="custom-control-label" for="input-situacao-uti">UTI</label>
+										</div>
+										<div class="custom-control custom-radio custom-control-inline">
+											@Html.RadioButtonFor(model => model.SituacaoSaude, "O", new { @class = "custom-control-input", @id = "input-situacao-obito", @name = "situacaoSaude" })
+											<label class="custom-control-label" for="input-situacao-obito">Óbito</label>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
 
-                                            <div class="form-group">
-                                                <button data-dismiss="modal" class="btn btn-danger text-white">Não</button>
-                                                <button id="btn-submit" type="submit" value="Sim" class="btn btn-success text-white">Sim</button>
-                                            </div>
-                                        </div>
+						<hr class="my-4" />
+						<h6 class="heading-small text-muted mb-4">Informações adicionais</h6>
+						<div class="pl-lg-4">
+							<div class="row">
+								<div class="col-lg-12">
+									<div class="form-group">
+										<label class="form-control-label" for="input-descricao">Observações (até 5000 caracteres)</label>
+										<textarea type="text" id="input-descricao" class="form-control" asp-for="Descricao" rows="10" placeholder="Descricao"></textarea>
+										<span hidden id="span-descricao" class="text-danger">Você excedeu o limite de caracteres, por favor, exclua algumas palavras.</span>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="modal fade bs-example-modal-sm" id="modal-confirmar" tabindex="-1" role="dialog" aria-hidden="true">
+							<div class="modal-dialog modal-sm">
+								<div class="modal-content">
+									<div style="padding: 10pt;text-align: center">
+										<div class="col text-center form-group" id="acoes-model-form">
+											<h3 id="h3-confirmacao"> Confirmar Monitoramento Paciente? </h3>
 
-                                        <div class="col text-center" id="ok-model-form">
-                                            <h3 id="texto-erro"> </h3>
-                                            <button data-dismiss="modal" class="btn btn-success text-white">Ok</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
+											<div class="form-group">
+												<button data-dismiss="modal" class="btn btn-danger text-white">Não</button>
+												<button id="btn-submit" type="submit" value="Sim" class="btn btn-success text-white">Sim</button>
+											</div>
+										</div>
+
+										<div class="col text-center" id="ok-model-form">
+											<h3 id="texto-erro"> </h3>
+											<button data-dismiss="modal" class="btn btn-success text-white">Ok</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</form>
                     <hr class="my-4" />
                     <div class="row align-items-center">
-                        <div class="col text-left">
+                        <!--div class="col text-left">
                             <button value="Cancelar" asp-action="Index" asp-controller="MonitorarPaciente" class="btn btn-danger">Cancelar</button>
-                        </div>
+                        </!--div--->
                         <div class="col text-right">
                             <button id="btn-monitorar-paciente" onclick='validacao()' class="btn btn-success">Monitorar</button>
                         </div>

@@ -484,11 +484,21 @@ namespace MonitoraSUS.Controllers
 
 				try
 				{
-					// inserindo ou atualizando o paciente
-					if (_pessoaContext.GetByCpf(pessoa.Cpf) == null)
-						pessoa = _pessoaContext.Insert(pessoa);
+					var pessoaBusca = _pessoaContext.GetByCpf(pessoa.Cpf);
+					if (pessoaBusca == null)
+					{
+						if (exame.Resultado.Equals(ExameModel.RESULTADO_POSITIVO))
+						{
+							pessoa.SituacaoSaude = PessoaModel.SITUACAO_ISOLAMENTO;
+							pessoa = _pessoaContext.Insert(pessoa);
+						}
+					}
 					else
+					{
+						if (pessoaBusca.SituacaoSaude.Equals(PessoaModel.SITUACAO_SAUDAVEL) && exame.Resultado.Equals(ExameModel.RESULTADO_POSITIVO))
+							pessoa.SituacaoSaude = PessoaModel.SITUACAO_ISOLAMENTO;
 						pessoa = _pessoaContext.Update(pessoa);
+					}
 				}
 				catch
 				{
@@ -517,10 +527,11 @@ namespace MonitoraSUS.Controllers
 
 				try
 				{
+					var exameModel = CreateExameModel(exame, pessoa.Idpessoa, true);
 					// inserindo o exame
-					_exameContext.Insert(CreateExameModel(exame, pessoa.Idpessoa, true));
+					_exameContext.Insert(exameModel);
 				}
-				catch
+				catch (Exception e)
 				{
 					TempData["mensagemErro"] = "Cadastro não pode ser concluido pois houve um problema ao inserir os dados do exame, tente novamente." +
 											   " Se o erro persistir, entre em contato com a Fábrica de Software da UFS pelo email fabricadesoftware@ufs.br";
@@ -545,11 +556,10 @@ namespace MonitoraSUS.Controllers
 			else
 			{
 				situacao = new SituacaoPessoaVirusBacteriaModel();
-
 				situacao.IdVirusBacteria = exame.IdVirusBacteria.IdVirusBacteria;
 				situacao.Idpessoa = _pessoaContext.GetByCpf(Methods.RemoveSpecialsCaracts(exame.IdPaciente.Cpf)).Idpessoa;
 				situacao.UltimaSituacaoSaude = exame.ResultadoStatus;
-				situacao.DataUltimoMonitoramento = DateTime.Now;
+				situacao.DataUltimoMonitoramento = null;
 			}
 
 			return situacao;
@@ -757,6 +767,7 @@ namespace MonitoraSUS.Controllers
 			exame.IdPaciente.FoneCelular = Methods.RemoveSpecialsCaracts(exame.IdPaciente.FoneCelular);
 			exame.IdPaciente.Sexo = exame.IdPaciente.Sexo.Equals("M") ? "Masculino" : "Feminino";
 
+			
 			if (exame.IdPaciente.FoneFixo != null)
 				exame.IdPaciente.FoneFixo = Methods.RemoveSpecialsCaracts(exame.IdPaciente.FoneFixo);
 
@@ -768,7 +779,15 @@ namespace MonitoraSUS.Controllers
 			if (user == null)
 				exame.IdPaciente.Idpessoa = 0;
 			else
+			{
 				exame.IdPaciente.Idpessoa = user.Idpessoa;
+
+				if (exame.IdPaciente.SituacaoSaude.Equals(PessoaModel.SITUACAO_SAUDAVEL) && exame.Resultado.Equals(ExameModel.RESULTADO_POSITIVO))
+				{
+					exame.IdPaciente.SituacaoSaude = PessoaModel.SITUACAO_ISOLAMENTO;
+					_pessoaContext.Update(exame.IdPaciente);
+				}
+			}
 
 			return exame.IdPaciente;
 		}

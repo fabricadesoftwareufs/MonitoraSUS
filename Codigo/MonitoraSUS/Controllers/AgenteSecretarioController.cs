@@ -266,10 +266,9 @@ namespace MonitoraSUS.Controllers
             var solicitantes = new List<SolicitanteAprovacaoViewModel>();
             var autenticadoTrabalhaEstado = _pessoaTrabalhaEstadoService.GetByIdPessoa(usuarioAutenticado.UsuarioModel.IdPessoa);
             var autenticadoTrabalhaMunicipio = _pessoaTrabalhaMunicipioService.GetByIdPessoa(usuarioAutenticado.UsuarioModel.IdPessoa);
-            var estadoAutenticado = _estadoService.GetById(autenticadoTrabalhaEstado.IdEstado);
             if (autenticadoTrabalhaEstado != null || ehAdmin)
             {
-                var ehEmpresa = autenticadoTrabalhaEstado.IdEmpresaExame != EmpresaExameModel.EMPRESA_ESTADO_MUNICIPIO;
+				var ehEmpresa = autenticadoTrabalhaEstado.IdEmpresaExame != EmpresaExameModel.EMPRESA_ESTADO_MUNICIPIO;
 
                 if (ehAdmin)
                     solicitantes = _pessoaTrabalhaEstadoService.GetAllGestores();
@@ -321,7 +320,7 @@ namespace MonitoraSUS.Controllers
             else if (autenticadoTrabalhaEstado != null && autenticadoTrabalhaEstado.IdEmpresaExame != EmpresaExameModel.EMPRESA_ESTADO_MUNICIPIO)
                 empresas = new List<EmpresaExameModel>() { _empresaExameService.GetById(autenticadoTrabalhaEstado.IdEmpresaExame) };
             else
-                empresas = _empresaExameService.ListByUF(estadoAutenticado.Uf);
+                empresas = _empresaExameService.ListByUF(_estadoService.GetById(autenticadoTrabalhaEstado.IdEstado).Uf);
 
             if (empresas != null)
                 tupleModel = new Tuple<List<SolicitanteAprovacaoViewModel>, List<EmpresaExameModel>>(solicitantes, empresas);

@@ -5,7 +5,18 @@ namespace Model
 {
     public class PessoaModel
     {
-        public int Idpessoa { get; set; }
+		public const string SITUACAO_SAUDAVEL = "S";
+		public const string SITUACAO_ISOLAMENTO = "I";
+		public const string SITUACAO_HOSPITALIZADO = "H";
+		public const string SITUACAO_UTI = "U";
+		public const string SITUACAO_OBITO = "O";
+
+		public PessoaModel()
+		{
+			SituacaoSaude = SITUACAO_SAUDAVEL;
+		}
+
+		public int Idpessoa { get; set; }
         [Required]
         [Display(Name = "CPF")]
         [StringLength(11)]
@@ -44,8 +55,24 @@ namespace Model
         public bool Cancer { get; set; }
         public bool DoencaRespiratoria { get; set; }
         public string OutrasComorbidades { get; set; }
-
-        public bool TemFoneCelularValido
+		public string SituacaoSaude { get; set; }
+		public string SituacaoSaudeDescricao
+		{
+			get
+			{
+				if (SituacaoSaude.Equals(SITUACAO_ISOLAMENTO))
+					return "Isolamento";
+				if (SituacaoSaude.Equals(SITUACAO_HOSPITALIZADO))
+					return "Hospitalizado";
+				if (SituacaoSaude.Equals(SITUACAO_UTI))
+					return "UTI";
+				if (SituacaoSaude.Equals(SITUACAO_OBITO))
+					return "Óbito";
+				else
+					return "Saudável";
+			}
+		}
+		public bool TemFoneCelularValido
         {
             get
             {

@@ -47,10 +47,6 @@
                                                 <label class="form-control-label" for="data-final"> Data Final</label>
                                                 <input asp-for="DataFinal" type="date" id="data-final" name="DataFinal" class="form-control" />
                                             </div>
-                                            <div class="form-group" hidden>
-                                                <label class="form-control-label" for="data-final"> Data Final</label>
-                                                <input asp-for="RealizouPesquisa" type="checkbox" name="RealizouPesquisa" checked="checked" id="realizou-pesquisa" class="form-control" />
-                                            </div>
                                         </div>
                                     </div>
 
@@ -90,48 +86,101 @@
                                 </form>
                             </div>
                             <div class="col-md-4 text-center">
-                                <div class="table-responsive">
-                                    <table class="table align-items-center table-flush">
-                                        <thead class="thead-light">
-                                            <tr>
-                                                <th scope="col" class="sort" data-sort="resultado">
-                                                    Resultado
-                                                </th>
-                                                <th scope="col" class="sort" data-sort="total">
-                                                    Total
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
+								<div class="table-responsive">
+									<table class="table align-items-center table-flush">
+										<thead class="thead-light">
+											<tr>
+												<th scope="col" class="sort" data-sort="resultado">
+													Exames
+												</th>
+												<th scope="col" class="sort" data-sort="total">
+													Total
+												</th>
+											</tr>
+										</thead>
+										<tbody>
 
-                                            <tr class="text-danger">
-                                                <td>
-                                                    Positivos
-                                                </td>
-                                                <td>
-                                                    @Model.Positivos
-                                                </td>
-                                            </tr>
-                                            <tr class="text-warning">
-                                                <td>
-                                                    Indeterminados
-                                                </td>
-                                                <td>
-                                                    @Model.Indeterminados
-                                                </td>
-                                            </tr>
-                                            <tr class="text-blue">
-                                                <td>
-                                                    Imunizados
-                                                </td>
-                                                <td>
-                                                    @Model.Imunizados
-                                                </td>
-                                            </tr>
-
-                                        </tbody>
-                                    </table>
-                                </div>
+											<tr class="text-danger">
+												<td>
+													Positivos
+												</td>
+												<td>
+													@Model.Positivos
+												</td>
+											</tr>
+											<tr class="text-warning">
+												<td>
+													Indeterminados
+												</td>
+												<td>
+													@Model.Indeterminados
+												</td>
+											</tr>
+											<tr class="text-blue">
+												<td>
+													Imunizados
+												</td>
+												<td>
+													@Model.Imunizados
+												</td>
+											</tr>
+										</tbody>
+									</table>
+									<table class="table align-items-center table-flush">
+										<thead class="thead-light">
+											<tr>
+												<th scope="col" class="sort" data-sort="resultado">
+													Pacientes
+												</th>
+												<th scope="col" class="sort" data-sort="total">
+													Total
+												</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr class="text-blue">
+												<td>
+													Recuperados
+												</td>
+												<td>
+													@Model.Saudavel
+												</td>
+											</tr>
+											<tr class="text-blue">
+												<td>
+													Isolamento
+												</td>
+												<td>
+													@Model.Isolamento
+												</td>
+											</tr>
+											<tr class="text-green">
+												<td>
+													Hospitalizado
+												</td>
+												<td>
+													@Model.Hospitalizado
+												</td>
+											</tr>
+											<tr class="text-warning">
+												<td>
+													UTI
+												</td>
+												<td>
+													@Model.UTI
+												</td>
+											</tr>
+											<tr class="text-danger">
+												<td>
+													Óbitos
+												</td>
+												<td>
+													@Model.Obito
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
                             </div>
                         </div>
                     </div>
@@ -141,61 +190,70 @@
                     <div class="table-responsive">
                         <table class="table align-items-center table-flush">
                             <thead class="thead-light">
-                                <tr>
-                                    <th scope="col" class="sort" data-sort="cpf">
-                                        CPF/RG
-                                    </th>
-                                    <th scope="col" class="sort" data-sort="nome">
-                                        Nome
-                                    </th>
-                                    <th scope="col" class="sort" data-sort="virus-bacteria">
-                                        Exame
-                                    </th>
-                                    <th scope="col" class="sort" data-sort="ultima-situacao">
-                                        Última Situação
-                                    </th>
-                                    <th scope="col" class="sort" data-sort="data-monitoramento">
-                                        último Monitoramento
-                                    </th>
-                                    <th scope="col" class="sort" data-sort="nome">
-                                        Gestor
-                                    </th>
-                                    <th></th>
-                                </tr>
+								<tr>
+									<th scope="col" class="sort" data-sort="cpf">
+										CPF/RG
+									</th>
+									<th scope="col" class="sort" data-sort="nome">
+										Nome
+									</th>
+									<th scope="col" class="sort" data-sort="data-exame">
+										Data Exame
+									</th>
+									<th scope="col" class="sort" data-sort="resultado-exame">
+										Resultado
+									</th>
+									<th scope="col" class="sort" data-sort="resultado-exame">
+										Situação
+									</th>
+									<th scope="col" class="sort" data-sort="data-monitoramento">
+										Último Monitoramento
+									</th>
+									<th scope="col" class="sort" data-sort="nome">
+										Gestor
+									</th>
+									<th></th>
+								</tr>
                             </thead>
                             <tbody>
                                 @foreach (var item in Model.Pacientes)
                                 {
-                                    <tr>
-                                        <td>
-                                            <a href="#">@Html.DisplayFor(modelItem => item.Cpf)</a>
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.Nome)
-                                        </td>
-                                        <th>
-                                            @Html.DisplayFor(modelItem => item.VirusBacteria.Nome)
-                                        </th>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.UltimaSituacao)
-                                        </td>
-                                        <td>
-                                            @if (item.DataUltimoMonitoramento.HasValue)
-                                            {
-                                                <div>@item.DataUltimoMonitoramento.Value.ToString("dd/MM/yyyy")</div>
-                                            }
-                                            else
-                                            {
-                                                <p> - </p>
-                                            }
-                                        </td>
-                                        <th>
-                                            @Html.DisplayFor(modelItem => item.Gestor.Nome)
-                                        </th>
-                                        <td>
-                                            <a href="@Url.Action("Edit", "MonitorarPaciente", new { idPaciente = item.Idpessoa, IdVirusBacteria = item.VirusBacteria.IdVirusBacteria })" class="btn btn-info btn-xs"><i class="fa fa-edit"></i> Monitorar </a>
-                                        </td>
-                                    </tr>
+								<tr>
+									<td>
+										<a href="#">@Html.DisplayFor(modelItem => item.Cpf)</a>
+									</td>
+									<td>
+										@Html.DisplayFor(modelItem => item.Nome)
+									</td>
+									<th>
+										@Html.DisplayFor(modelItem => item.DataExame)
+									</th>
+									<td>
+										@Html.DisplayFor(modelItem => item.UltimaSituacao)
+									</td>
+									<td>
+										@Html.DisplayFor(modelItem => item.SituacaoSaudeDescricao)
+									</td>
+									<td>
+										@if (item.DataUltimoMonitoramento.HasValue)
+										{
+											<div>@item.DataUltimoMonitoramento.Value.ToString("dd/MM/yyyy")</div>
+										}
+										else
+										{
+											<p> - </p>
+										}
+									</td>
+									<th>
+										@if (item.Gestor != null)
+										{
+											@Html.DisplayFor(modelItem => item.Gestor.Nome)
+										}
+									</th>
+									<td>
+										<a href="@Url.Action("Edit", "MonitorarPaciente", new { idPaciente = item.Idpessoa, IdVirusBacteria = item.VirusBacteria.IdVirusBacteria })" class="btn btn-info btn-xs"><i class="fa fa-edit"></i> Monitorar </a>
+									</td>
+								</tr>
                                 }
                             </tbody>
                         </table>

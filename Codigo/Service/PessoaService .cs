@@ -113,7 +113,8 @@ namespace Service
                     Diabetes = Convert.ToBoolean(pessoa.Diabetes),
                     DoencaRespiratoria = Convert.ToBoolean(pessoa.DoencaRespiratoria),
                     Cardiopatia = Convert.ToBoolean(pessoa.Cardiopatia),
-                    OutrasComorbidades = pessoa.OutrasComorbidades
+                    OutrasComorbidades = pessoa.OutrasComorbidades,
+					SituacaoSaude = pessoa.SituacaoSaude
                 }).ToList();
 
         public PessoaModel GetById(int id)
@@ -145,8 +146,9 @@ namespace Service
                     Diabetes = Convert.ToBoolean(pessoa.Diabetes),
                     DoencaRespiratoria = Convert.ToBoolean(pessoa.DoencaRespiratoria),
                     Cardiopatia = Convert.ToBoolean(pessoa.Cardiopatia),
-                    OutrasComorbidades = pessoa.OutrasComorbidades
-                }).FirstOrDefault();
+                    OutrasComorbidades = pessoa.OutrasComorbidades,
+					SituacaoSaude = pessoa.SituacaoSaude
+				}).FirstOrDefault();
 
         public PessoaModel GetByCpf(string cpf)
          => _context.Pessoa
@@ -177,8 +179,9 @@ namespace Service
                     Diabetes = Convert.ToBoolean(pessoa.Diabetes),
                     DoencaRespiratoria = Convert.ToBoolean(pessoa.DoencaRespiratoria),
                     Cardiopatia = Convert.ToBoolean(pessoa.Cardiopatia),
-                    OutrasComorbidades = pessoa.OutrasComorbidades
-                }).FirstOrDefault();
+                    OutrasComorbidades = pessoa.OutrasComorbidades,
+					SituacaoSaude = pessoa.SituacaoSaude
+				}).FirstOrDefault();
 
         public List<PessoaModel> GetByCidade(string cidade)
           => _context.Pessoa
@@ -209,10 +212,11 @@ namespace Service
                     Diabetes = Convert.ToBoolean(pessoa.Diabetes),
                     DoencaRespiratoria = Convert.ToBoolean(pessoa.DoencaRespiratoria),
                     Cardiopatia = Convert.ToBoolean(pessoa.Cardiopatia),
-                    OutrasComorbidades = pessoa.OutrasComorbidades
-                }).ToList();
+                    OutrasComorbidades = pessoa.OutrasComorbidades,
+					SituacaoSaude = pessoa.SituacaoSaude
+				}).ToList();
 
-        public List<PessoaModel> GetByEstado(string estado)
+		public List<PessoaModel> GetByEstado(string estado)
           => _context.Pessoa
                 .Where(p => p.Estado.ToUpper().Equals(estado.ToUpper()))
                 .Select(pessoa => new PessoaModel
@@ -241,11 +245,12 @@ namespace Service
                     Diabetes = Convert.ToBoolean(pessoa.Diabetes),
                     DoencaRespiratoria = Convert.ToBoolean(pessoa.DoencaRespiratoria),
                     Cardiopatia = Convert.ToBoolean(pessoa.Cardiopatia),
-                    OutrasComorbidades = pessoa.OutrasComorbidades
-                }).ToList();
+                    OutrasComorbidades = pessoa.OutrasComorbidades,
+					SituacaoSaude = pessoa.SituacaoSaude
+				}).ToList();
+		
 
-
-        private Pessoa ModelToEntity(PessoaModel model, Pessoa entity)
+		private Pessoa ModelToEntity(PessoaModel model, Pessoa entity)
         {
             entity.Idpessoa = model.Idpessoa;
             entity.Nome = model.Nome;
@@ -272,7 +277,7 @@ namespace Service
             entity.Cancer = Convert.ToByte(model.Cancer);
             entity.DoencaRespiratoria = Convert.ToByte(model.DoencaRespiratoria);
             entity.OutrasComorbidades = model.OutrasComorbidades;
-
+			entity.SituacaoSaude = model.SituacaoSaude;
             return entity;
         }
     }

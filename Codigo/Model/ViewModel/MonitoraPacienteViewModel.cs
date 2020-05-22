@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace Model.ViewModel
@@ -11,7 +12,11 @@ namespace Model.ViewModel
         {
             ExamesPaciente = new List<ExameViewModel>();
         }
-        public int Idpessoa { get; set; }
+		[Display(Name = "Data do Exame")]
+		[DataType(DataType.Date)]
+		[DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
+		public DateTime DataExame { get; set; }
+		public int Idpessoa { get; set; }
         public string Cpf { get; set; }
         public string Nome { get; set; }
         public string Sexo { get; set; }
@@ -36,18 +41,22 @@ namespace Model.ViewModel
         public bool Cancer { get; set; }
         public bool DoencaRespiratoria { get; set; }
         public string OutrasComorbidades { get; set; }
+		public string SituacaoSaude { get; set; }
 
-        public bool TemFoneCelularValido
+		public string SituacaoSaudeDescricao
+		{
+			get
+			{
+				return new PessoaModel() { SituacaoSaude = this.SituacaoSaude }.SituacaoSaudeDescricao;
+			}
+		}
+
+
+		public bool TemFoneCelularValido
         {
             get
             {
-                if (FoneCelular == null)
-                    return false;
-                if (FoneCelular.Length != 11)
-                    return false;
-                if (FoneCelular.StartsWith("0"))
-                    return false;
-                return true;
+				return new PessoaModel() { FoneCelular = this.FoneCelular }.TemFoneCelularValido;
             }
         }
 

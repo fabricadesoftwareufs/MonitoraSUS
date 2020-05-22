@@ -26,6 +26,7 @@
     bool doenRespiatoria = Model.IdPaciente.DoencaRespiratoria;
     bool obeso = Model.IdPaciente.Obeso;
     bool imunodeprimido = Model.IdPaciente.Imunodeprimido;
+	String situacaoSaude = Model.IdPaciente.SituacaoSaude;
     string dataExame = Model.DataExame != DateTime.MinValue ? Model.DataExame.ToString("yyyy-MM-dd") : DateTime.Now.ToString("yyyy-MM-dd");
     string DataInicioSintomas = Model.DataInicioSintomas != DateTime.MinValue ? Model.DataInicioSintomas.ToString("yyyy-MM-dd") : DateTime.Now.ToString("yyyy-MM-dd");
     var estadoid = Model.IdEstado;
@@ -38,6 +39,7 @@
     var outrasComorbidades = Model.IdPaciente.OutrasComorbidades;
     var ehProfissional = Model.EhProfissionalSaude;
     var codigoColeta = Model.CodigoColeta;
+
 }
 
 <!-- Page Content -->
@@ -170,6 +172,12 @@
 									<div class="form-group">
 										<label class="form-control-label" for="input-longitude">Longitude</label>
 										<input asp-for="IdPaciente.Longitude" id="longitude" class="form-control" placeholder="" value="@longitude">
+									</div>
+								</div>
+								<div class="col-lg-4" hidden>
+									<div class="form-group">
+										<label class="form-control-label" for="input-situacaoSaude">SituacaoSaude</label>
+										<input asp-for="IdPaciente.SituacaoSaude" id="situacaoSaude" class="form-control" placeholder="" value="@situacaoSaude">
 									</div>
 								</div>
 								<div class="col-lg-4">
