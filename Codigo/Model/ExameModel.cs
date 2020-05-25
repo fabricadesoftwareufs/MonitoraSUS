@@ -13,8 +13,9 @@ namespace Model
         public const string NOTIFICADO_SIM = "S";
         public const string NOTIFICADO_NAO = "N";
         public const string NOTIFICADO_ENVIADO = "E";
+		public const string NOTIFICADO_PROBLEMAS = "P";
 
-        public int IdExame { get; set; }
+		public int IdExame { get; set; }
         [Display(Name = "Virus")]
         public int IdVirusBacteria { get; set; }
         [Display(Name = "Paciente")]
@@ -40,12 +41,14 @@ namespace Model
         {
             get
             {
-                if (StatusNotificacao.Equals("N"))
-                    return "NÃO";
-                else if (StatusNotificacao.Equals("S"))
-                    return "SIM";
-                else
-                    return "ENVIADA";
+				if (StatusNotificacao.Equals("N"))
+					return "NÃO";
+				else if (StatusNotificacao.Equals("S"))
+					return "SIM";
+				else if (StatusNotificacao.Equals("E"))
+					return "ENVIADA";
+				else
+					return "ERRO NO ENVIO";
             }
         }
 

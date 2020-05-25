@@ -12,12 +12,11 @@ function swtAlert(type, title, message) {
     });
 }
 
-$('#empresaModal').on('show.bs.modal', function (e) {
-    let cpf = document.getElementById('input-cpf').value;
-    if (cpf == "") {
-        cpf = e.relatedTarget.dataset.cpf;
-    }
-    $(".modal-body #modal-cpf").text(cpf);
+$('#ativarModal').on('show.bs.modal', function (e) {
+	let action = e.relatedTarget.dataset.action;
+	let cpf = e.relatedTarget.dataset.cpf;
+	let idEmpresa = e.relatedTarget.dataset.idempresa;
+	confirmarAssociacao(action, cpf, idEmpresa);
 });
 
 $('#agentModal').on('show.bs.modal', function (e) {
@@ -41,26 +40,31 @@ $('#btnActivate').on('click', function () {
         } else if (idEmpresa == null) {
             swtAlert('error', 'Falha', 'Por favor, selecione uma empresa.');
         }
-        else {
-            Swal.fire({
-                title: 'Confirmar associação?',
-                type: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Sim ',
-                cancelButtonText: 'Não'
-            }).then(function (result) {
-                if (result.value) {
-
-                    let url = "/AgenteSecretario/Activate";
-                    if (action == 'Agente')
-                        window.location.href = url + '/Agente/' + cpf + "/" + idEmpresa;
-                    else if (action == 'Gestor')
-                        window.location.href = url + '/Gestor/' + cpf + "/" + idEmpresa;
-                }
-            });
+		else {
+			confirmarAssociacao(action, cpf, idEmpresa);     
         }
     });
 });
+
+
+function confirmarAssociacao(action, cpf, idEmpresa) {
+	Swal.fire({
+		title: 'Confirmar associação?',
+		type: 'warning',
+		showCancelButton: true,
+		confirmButtonText: 'Sim ',
+		cancelButtonText: 'Não'
+	}).then(function (result) {
+		if (result.value) {
+
+			let url = "/AgenteSecretario/Activate";
+			if (action == 'Agente')
+				window.location.href = url + '/Agente/' + cpf + "/" + idEmpresa;
+			else if (action == 'Gestor')
+				window.location.href = url + '/Gestor/' + cpf + "/" + idEmpresa;
+		}
+	});
+}
 
 function actionDel() {
     var action = $("#modal-funcao").text();

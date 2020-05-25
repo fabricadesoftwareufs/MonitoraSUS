@@ -61,7 +61,7 @@
                             <div class="form-inline">
                                 <input type="text" required class="form-control form-control-user cpf" name="cpf" id="input-cpf" oninput="validaCpf()" value="" placeholder="CPF">
                                 <!-- DropDown Empresas-->
-                                <select class="select-css" id="selectEmpresa">
+                                <select class="form-control select-item" id="selectEmpresa">
                                     <option selected disabled>Selecione associação...</option>
                                     @foreach (var item in Model.Item2)
                                     {
@@ -84,85 +84,91 @@
                     <div class="table-responsive">
                         <table class="table align-items-center table-flush">
                             <thead class="thead-light">
-                                <tr>
-                                    <th scope="col" class="sort" data-sort="nome">
-                                        @Html.DisplayNameFor(model => model.Item1.FirstOrDefault().Nome)
-                                    </th>
-                                    <th scope="col" class="sort" data-sort="cpf">
-                                        @Html.DisplayNameFor(model => model.Item1.FirstOrDefault().Cpf)
-                                    </th>
-                                    <th scope="col" class="sort" data-sort="estado">
-                                        @Html.DisplayNameFor(model => model.Item1.FirstOrDefault().Estado)
-                                    </th>
-                                    <th scope="col" class="sort" data-sort="cidade">
-                                        @Html.DisplayNameFor(model => model.Item1.FirstOrDefault().Cidade)
-                                    </th>
-                                    <th scope="col" class="sort" data-sort="status">
-                                        @Html.DisplayNameFor(model => model.Item1.FirstOrDefault().Status)
-                                    </th>
-                                    <th scope="col" class="sort" data-sort="acoes">
-                                        Ações
-                                    </th>
-                                </tr>
+								<tr>
+									<th scope="col" class="sort" data-sort="nome">
+										@Html.DisplayNameFor(model => model.Item1.FirstOrDefault().Nome)
+									</th>
+									<th scope="col" class="sort" data-sort="cpf">
+										@Html.DisplayNameFor(model => model.Item1.FirstOrDefault().Cpf)
+									</th>
+									<th scope="col" class="sort" data-sort="estado">
+										@Html.DisplayNameFor(model => model.Item1.FirstOrDefault().Estado)
+									</th>
+									<th scope="col" class="sort" data-sort="cidade">
+										@Html.DisplayNameFor(model => model.Item1.FirstOrDefault().Cidade)
+									</th>
+									<th scope="col" class="sort" data-sort="fonecelular">
+										@Html.DisplayNameFor(model => model.Item1.FirstOrDefault().FoneCelular)
+									</th>
+									<th scope="col" class="sort" data-sort="status">
+										@Html.DisplayNameFor(model => model.Item1.FirstOrDefault().Status)
+									</th>
+									<th scope="col" class="sort" data-sort="acoes">
+										Ações
+									</th>
+								</tr>
                             </thead>
                             <tbody class="list">
                                 @foreach (var item in Model.Item1)
                                 {
-                                    <tr>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.Nome)
-                                        </td>
-                                        <td>
-                                            <a href="#">@Html.DisplayFor(modelItem => item.Cpf)</a>
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.Estado)
-                                        </td>
-                                        <td>
-                                            @if (item.Cidade != null)
-                                            {
-                                                @Html.DisplayFor(modelItem => item.Cidade)
-                                            }
-                                            else
-                                            {
-                                                <span><b>N/A</b></span>
-                                            }
-                                        </td>
-                                        <td>
-                                            <span class="badge badge-dot mr-4">
-                                                @if (item.Status.Equals("A"))
-                                                {
-                                                    <i class="bg-success"></i>
-                                                }
-                                                else if (item.Status.Equals("I"))
-                                                {
-                                                    <i class="bg-danger"></i>
-                                                }
-                                                else if (item.Status.Equals("S"))
-                                                {
-                                                    <i class="bg-warning"></i>
-                                                }
-                                                <span class="status">@Html.DisplayFor(itemModel => item.StatusDescricao)</span>
-                                            </span>
-                                        </td>
-                                        <td>
-                                            @if (item.Status.Equals("A"))
-                                            {
-                                                <a href="@Url.Action("Block", "AgenteSecretario",  new { entidade = @ViewBag.entidade, idPessoa = item.IdPessoa })" class="btn btn-icon btn-warning btn-sm" title="@bloquear">
-                                                    <span class="btn-inner--icon"><i class="fas fa-ban"></i></span>
-                                                </a>
-                                            }
-                                            else if (item.Status.Equals("I") || item.Status.Equals("S"))
-                                            {
-                                                <a href="#" class="btn btn-icon btn-success btn-sm" title="@ativar" data-toggle="modal" data-target="#empresaModal" data-cpf="@item.Cpf">
-                                                    <span class="btn-inner--icon"><i class="fas fa-check"></i></span>
-                                                </a>
-                                            }
-                                            <a href="#" class="btn btn-icon btn-danger btn-sm" title="@descartar" data-toggle="modal" data-target="#agentModal" data-funcao="@ViewBag.entidade" data-id="@item.IdPessoa" data-nome="@item.Nome">
-                                                <span class="btn-inner--icon"><i class="fas fa-times"></i></span>
-                                            </a>
-                                        </td>
-                                    </tr>
+								<tr>
+									<td>
+										@Html.DisplayFor(modelItem => item.Nome)
+									</td>
+									<td>
+										<a href="#">@Html.DisplayFor(modelItem => item.Cpf)</a>
+									</td>
+									<td>
+										@Html.DisplayFor(modelItem => item.Estado)
+									</td>
+									<td>
+										@if (item.Cidade != null)
+										{
+											@Html.DisplayFor(modelItem => item.Cidade)
+										}
+										else
+										{
+											<span><b>N/A</b></span>
+										}
+									</td>
+									<td>
+										@Html.DisplayFor(modelItem => item.FoneCelular)
+									</td>
+									<td>
+										<span class="badge badge-dot mr-4">
+											@if (item.Status.Equals("A"))
+											{
+												<i class="bg-success"></i>
+											}
+											else if (item.Status.Equals("I"))
+											{
+												<i class="bg-danger"></i>
+											}
+											else if (item.Status.Equals("S"))
+											{
+												<i class="bg-warning"></i>
+											}
+											<span class="status">@Html.DisplayFor(itemModel => item.StatusDescricao)</span>
+										</span>
+									</td>
+									<td>
+										@if (item.Status.Equals("A"))
+										{
+											<a href="@Url.Action("Block", "AgenteSecretario",  new { entidade = @ViewBag.entidade, idPessoa = item.IdPessoa })" class="btn btn-icon btn-warning btn-sm" title="@bloquear">
+												<span class="btn-inner--icon"><i class="fas fa-ban"></i></span>
+											</a>
+										}
+										else if (item.Status.Equals("I") || item.Status.Equals("S"))
+										{
+											<a href="#" class="btn btn-icon btn-success btn-sm" title="@ativar" data-toggle="modal" data-target="#ativarModal" data-action="@ViewBag.entidade" data-cpf="@item.Cpf" data-idEmpresa="@item.IdEmpresa">
+												<span class="btn-inner--icon"><i class="fas fa-check"></i></span>
+											</a>
+										}
+										<a href="#" class="btn btn-icon btn-danger btn-sm" title="@descartar" data-toggle="modal" data-target="#agentModal" data-funcao="@ViewBag.entidade" data-id="@item.IdPessoa" data-nome="@item.Nome">
+											<span class="btn-inner--icon"><i class="fas fa-times"></i></span>
+										</a>
+									</td>
+								</tr>
                                 }
                             </tbody>
                         </table>
@@ -195,6 +201,10 @@
     </div>
 </div>
 
+
+<div class="modal fade  bs-example-modal-sm" id="ativarModal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	
+</div>
 @section Scripts {
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>

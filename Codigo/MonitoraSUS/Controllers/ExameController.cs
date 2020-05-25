@@ -64,13 +64,78 @@ namespace MonitoraSUS.Controllers
 			return View(GetAllExamesViewModel(pesquisaExame));
 		}
 
-		/*
-            * Lançamento de notificação 
-         */
 		[Authorize(Roles = "GESTOR, SECRETARIO")]
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> NotificateByListAsync(List<ExameViewModel> exames)
+		public async Task<IActionResult> EnviarSMS(int id, IFormCollection collection)
+		{
+			var exame = _exameContext.GetById(id);
+			var usuario = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
+			var trabalhaMunicipio = _pessoaTrabalhaMunicipioContext.GetByIdPessoa(usuario.UsuarioModel.IdPessoa);
+			var trabalhaEstado = _pessoaTrabalhaEstadoContext.GetByIdPessoa(usuario.UsuarioModel.IdPessoa);
+
+			ConfiguracaoNotificarModel configuracaoNotificar = null;
+			if (trabalhaEstado != null)
+			{
+				configuracaoNotificar = _exameContext.BuscarConfiguracaoNotificar(trabalhaEstado.IdEstado, trabalhaEstado.IdEmpresaExame);
+			}
+			else if (trabalhaMunicipio != null)
+			{
+				configuracaoNotificar = _exameContext.BuscarConfiguracaoNotificar(trabalhaMunicipio.IdMunicipio);
+			}
+			if (configuracaoNotificar == null)
+			{
+				TempData["mensagemErro"] = "Não possui créditos para notificações por SMS. Por favor entre em contato pelo email fabricadesoftware@ufs.br para saber como usar esse serviço no MonitoraSUS.";
+			}
+			else
+			{
+				if (configuracaoNotificar.QuantidadeSmsdisponivel == 0 && exame.StatusNotificacao.Equals(ExameModel.NOTIFICADO_NAO))
+				{
+					TempData["mensagemErro"] = "Não possui créditos para enviar SMS. " +
+						"Por favor entre em contato pelo email fabricadesoftware@ufs.br se precisar novos créditos.";
+				}
+				else
+				{
+					var pacienteModel = _pessoaContext.GetById(exame.IdPaciente);
+					string statusAnteriorSMS = exame.StatusNotificacao;
+					if (pacienteModel.TemFoneCelularValido)
+					{
+						if (exame.StatusNotificacao.Equals(ExameModel.NOTIFICADO_ENVIADO)) {
+							exame = await _exameContext.ConsultarSMSExameAsync(configuracaoNotificar, exame);
+						}
+						else if (exame.StatusNotificacao.Equals(ExameModel.NOTIFICADO_NAO) || exame.StatusNotificacao.Equals(ExameModel.NOTIFICADO_PROBLEMAS)) {
+							exame = await _exameContext.EnviarSMSResultadoExameAsync(configuracaoNotificar, exame, pacienteModel);
+						}
+					}
+					if (statusAnteriorSMS.Equals(ExameModel.NOTIFICADO_ENVIADO) && exame.StatusNotificacao.Equals(ExameModel.NOTIFICADO_SIM))
+					{
+						TempData["mensagemSucesso"] = "SMS foi entregue com SUCESSO!";
+					}
+					else if (statusAnteriorSMS.Equals(ExameModel.NOTIFICADO_NAO) && exame.StatusNotificacao.Equals(ExameModel.NOTIFICADO_ENVIADO))
+					{
+						TempData["mensagemSucesso"] = "SMS enviado com SUCESSO!";
+					}
+					else if (statusAnteriorSMS.Equals(ExameModel.NOTIFICADO_NAO) && exame.StatusNotificacao.Equals(ExameModel.NOTIFICADO_NAO))
+					{
+						TempData["mensagemErro"] = "Ocorreram problemas no envio do SMS. Favor conferir telefone e repetir operação em alguns minutos.";
+					}
+					else if (statusAnteriorSMS.Equals(ExameModel.NOTIFICADO_ENVIADO) && exame.StatusNotificacao.Equals(ExameModel.NOTIFICADO_ENVIADO))
+					{
+						TempData["mensagemErro"] = "Ainda aguardando resposta da operadora. Favor repetir a consulta em alguns minutos.";
+					}
+					else if (statusAnteriorSMS.Equals(ExameModel.NOTIFICADO_ENVIADO) && exame.StatusNotificacao.Equals(ExameModel.NOTIFICADO_PROBLEMAS))
+					{
+						TempData["mensagemErro"] = "Operadora não conseguiu entregar o SMS. Favor conferir telefone e repetir envio em alguns minutos.";
+					}
+				}
+			}
+			return RedirectToAction(nameof(Notificate));
+		}
+
+		[Authorize(Roles = "GESTOR, SECRETARIO")]
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> ConsultarSMSEnviados(List<ExameViewModel> exames)
 		{
 			var usuario = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
 			var trabalhaMunicipio = _pessoaTrabalhaMunicipioContext.GetByIdPessoa(usuario.UsuarioModel.IdPessoa);
@@ -87,57 +152,39 @@ namespace MonitoraSUS.Controllers
 			}
 			if (configuracaoNotificar == null)
 			{
-				TempData["mensagemErro"] = "Não possui créditos para notificações por SMS. Por favor entre em contato pelo email fabricadesoftware@ufs.br para saber como usar esse serviço no MonitoraSUS.";
+				TempData["mensagemErro"] = "Não possui configuração para notificações por SMS. Por favor entre em contato pelo email fabricadesoftware@ufs.br para saber como usar esse serviço no MonitoraSUS.";
 			}
 			else
 			{
-				int quantidadeNotificar = exames.Where(e => e.StatusNotificacao.Equals(ExameModel.NOTIFICADO_NAO)).Count();
-				if (configuracaoNotificar.QuantidadeSmsdisponivel < quantidadeNotificar)
+				int entregasSucesso = 0;
+				int entregasFalhas = 0;
+				int entregasAguardando = 0;
+				foreach (ExameViewModel exame in exames)
 				{
-					TempData["mensagemErro"] = "Não possui créditos para enviar " + exames.Count + " SMS. Seu crédito atual é para envio de " +
-						configuracaoNotificar.QuantidadeSmsdisponivel + " SMS. Por favor entre em contato pelo email fabricadesoftware@ufs.br se precisar novos créditos.";
-				}
-				else
-				{
-					int quantidadeEnviada = 0;
-					foreach (ExameViewModel exame in exames)
+					var exameModel = _exameContext.GetById(exame.IdExame);
+					var pacienteModel = _pessoaContext.GetById(exame.IdPaciente.Idpessoa);
+					if (pacienteModel.TemFoneCelularValido)
 					{
-						var exameModel = _exameContext.GetById(exame.IdExame);
-						var pacienteModel = _pessoaContext.GetById(exame.IdPaciente.Idpessoa);
-						if (pacienteModel.TemFoneCelularValido)
+						if (exameModel.StatusNotificacao.Equals(ExameModel.NOTIFICADO_ENVIADO))
 						{
-							if (exameModel.StatusNotificacao.Equals(ExameModel.NOTIFICADO_ENVIADO))
-								await _exameContext.ConsultarSMSExameAsync(configuracaoNotificar, exameModel);
+							var exameNotificado = await _exameContext.ConsultarSMSExameAsync(configuracaoNotificar, exameModel);
+							if (exameNotificado.StatusNotificacao.Equals(ExameModel.NOTIFICADO_SIM))
+								entregasSucesso++;
+							else if (exameNotificado.StatusNotificacao.Equals(ExameModel.NOTIFICADO_PROBLEMAS))
+								entregasFalhas++;
 							else
-								if (exameModel.StatusNotificacao.Equals(ExameModel.NOTIFICADO_NAO) &&
-										await _exameContext.EnviarSMSResultadoExameAsync(configuracaoNotificar, exameModel, pacienteModel))
-								{
-									quantidadeEnviada++;
-								}
+								entregasAguardando++;
 						}
 					}
-					if (quantidadeNotificar == 0)
-					{
-						TempData["mensagemSucesso"] = "SMS foi recebido pelo paciente com sucesso!";
-					}
-					else if (quantidadeEnviada == 0)
-					{
-						TempData["mensagemErro"] = "Ocorreram problemas no envio das notificações. Favor entre em contato pela fabricadesoftware@ufs.br.";
-					}
-					else if (quantidadeEnviada < quantidadeNotificar)
-					{
-						TempData["mensagemErro"] = "Ocorreram problemas no envio de algumas notificações. Favor conferir telefones.";
-					}
-					else
-					{
-						if (quantidadeEnviada == 1)
-							TempData["mensagemSucesso"] = "Notificação enviada com sucesso!";
-						else
-							TempData["mensagemSucesso"] = "Notificações enviadas com sucesso!";
-					}
 				}
+				string mensagem = "";
+				mensagem += (entregasSucesso > 0) ? "Foram entregues " + entregasSucesso + " SMS com SUCESSO. " : "";
+				mensagem += (entregasFalhas > 0) ? "Ocorreram problemas no envio de " + entregasFalhas + " SMS. " : "";
+				mensagem += (entregasAguardando > 0) ? "Aguardando resposta da operadora de " + entregasAguardando + " SMS." : "";
+
+				TempData["mensagemSucesso"] = "Consultas aos SMS enviadas com sucesso! "+mensagem;
 			}
-            return RedirectToAction(nameof(Notificate));
+	        return RedirectToAction(nameof(Notificate));
 		}
 
 		[Authorize(Roles = "GESTOR, SECRETARIO")]
@@ -191,43 +238,37 @@ namespace MonitoraSUS.Controllers
 			return View(totais);
 		}
 
-		[HttpPost]
-		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> NotificateById(int id, IFormCollection collection)
-		{
-			var exame = _exameContext.GetById(id);
-			if (exame != null)
-				await NotificateByListAsync(new List<ExameViewModel>() { GetExameViewModelById(id) });
-			return RedirectToAction(nameof(Notificate));
-		}
-
+		
 		public IActionResult Export(List<ExameViewModel> exames)
 		{
 			var builder = new StringBuilder();
-			builder.AppendLine("PACIENTE;INICIAIS;DATA NASC;NOME;CPF;RG;COMORBIDADES;ENDEREÇO;CONTATO;ESTADO;MUNICIPIO");
-
-			string cpf = "", rg = "", endereco = "", contato = "",
-				   estado = "", municipio = "", codigoColeta = "",
-				   iniciais = "", dataNascimento = "", nome = "";
-
-			foreach (var exame in exames)
+			builder.AppendLine("Código Coleta;Vírus;Data Exame;Resultado;CPF/RG/Temp; Nome; Data Nascimento;Estado;Município;Bairro;Rua;Numero;Complemento;Fone;Diabetes;Cardiopatia;Hipertenso;Imunodeprimido;Obeso;Cancer;Doença Respiratória;Outras Comorbidades");
+			foreach (var e in exames)
 			{
-				cpf = (Methods.SoContemNumeros(exame.IdPaciente.Cpf) ? exame.IdPaciente.Cpf : " ");
-				rg = exame.IdPaciente.Cpf[0] != 'T' && !Methods.SoContemNumeros(exame.IdPaciente.Cpf) ? exame.IdPaciente.Cpf : " ";
-
-				endereco = exame.IdPaciente.Numero == "" ? "" : exame.IdPaciente.Rua + ", Nº " + exame.IdPaciente.Numero;
-				endereco += exame.IdPaciente.Bairro == "" ? "" : ", " + exame.IdPaciente.Bairro;
-				endereco += exame.IdPaciente.Complemento == "" ? "" : ", " + exame.IdPaciente.Complemento;
-
-				contato = exame.IdPaciente.FoneCelular;
-				estado = exame.IdPaciente.Estado;
-				municipio = exame.IdPaciente.Cidade;
-				codigoColeta = exame.CodigoColeta;
-				iniciais = RetornaIniciais(exame.IdPaciente.Nome);
-				dataNascimento = exame.IdPaciente.DataNascimento.ToString("dd/MM/yyyy");
-				nome = exame.IdPaciente.Nome;
-
-				builder.AppendLine($"{codigoColeta};{iniciais};{dataNascimento};{nome};{cpf};{rg};{" "};{endereco};{contato};{estado};{municipio}");
+				var exame = GetExameViewModelById(e.IdExame);
+				string coleta = exame.CodigoColeta;
+				string cpfRgTemp = exame.IdPaciente.Cpf;
+				string nome = exame.IdPaciente.Nome;
+				string dataNascimento = exame.IdPaciente.DataNascimento.ToString("dd/MM/yyyy");
+				string estado = exame.IdPaciente.Estado;
+				string municipio = exame.IdPaciente.Cidade;
+				string bairro = exame.IdPaciente.Bairro;
+				string rua = exame.IdPaciente.Rua;
+				string numero = exame.IdPaciente.Numero;
+				string complemento = exame.IdPaciente.Complemento;
+				string foneCelular = exame.IdPaciente.FoneCelular;
+				string diabetes = exame.IdPaciente.Diabetes ? "Sim" : "Não";
+				string cardiopatia = exame.IdPaciente.Cardiopatia? "Sim" : "Não";
+				string hipertenso = exame.IdPaciente.Hipertenso ? "Sim" : "Não";
+				string imunodeprimido = exame.IdPaciente.Imunodeprimido ? "Sim" : "Não";
+				string obeso = exame.IdPaciente.Obeso ? "Sim" : "Não";
+				string cancer = exame.IdPaciente.Cancer ? "Sim" : "Não";
+				string doencaRespiratoria = exame.IdPaciente.DoencaRespiratoria ? "Sim" : "Não";
+				string outrasComorbidades = exame.IdPaciente.OutrasComorbidades ;
+				string dataExame = exame.DataExame.ToString("dd/MM/yyyy");
+				string resultadoExame = exame.Resultado;
+				string virus = exame.IdVirusBacteria.Nome;
+				builder.AppendLine($"{coleta};{virus};{dataExame};{resultadoExame};{cpfRgTemp};{nome};{dataNascimento};{estado};{municipio};{bairro};{rua};{numero};{complemento};{foneCelular};{diabetes};{cardiopatia};{hipertenso};{imunodeprimido};{obeso};{cancer};{doencaRespiratoria};{outrasComorbidades};");
 			}
 
 			return File(Encoding.UTF8.GetBytes(builder.ToString()), "text/csv", "exames.csv");

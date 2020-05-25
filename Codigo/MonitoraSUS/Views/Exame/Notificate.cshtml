@@ -164,7 +164,7 @@
                     </div>
                 </div>
                 <div class="col-md-12 text-right">
-                    @using (Html.BeginForm("NotificateByListAsync", "Exame", FormMethod.Post))
+                    @using (Html.BeginForm("ConsultarSMSEnviados", "Exame", FormMethod.Post))
                     {
                         @for (int i = 0; i < Model.Exames.Count; i++)
                         {
@@ -198,7 +198,7 @@
                             </div>
                         }
 
-                        <button type="submit" class="btn btn-info btn-xs"><i class="fa fa-envelope"></i> SMS Todos</button>
+                        <button type="submit" class="btn btn-info btn-xs"><i class="fa fa-envelope"></i> Atualizar SMS </button>
                     }
                 </div>
                 <div class="card-body">
@@ -212,28 +212,28 @@
                                     <th scope="col" class="sor w7" data-sort="cpf">
                                         Cpf/Rg
                                     </th>
-                                    <th scope="col" class="sort w26" data-sort="nome-paciente">
+                                    <th scope="col" class="sort w25" data-sort="nome-paciente">
                                         Paciente
                                     </th>
-                                    <th scope="col" class="sort w15" data-sort="cidade">
+                                    <th scope="col" class="sort w10" data-sort="cidade">
                                         Cidade
                                     </th>
                                     <th scope="col" class="sort w3" data-sort="estado">
                                         UF
                                     </th>
                                     <th scope="col" class="sort w5" data-sort="data-exame">
-                                        Data <br>do Exame
+                                        Data Exame
                                     </th>
-                                    <th scope="col" class="sort w15" data-sort="virus">
+                                    <th scope="col" class="sort w12" data-sort="virus">
                                         Vírus
                                     </th>
                                     <th scope="col" class="sort w7" data-sort="resultado">
                                         Resultado
                                     </th>
                                     <th scope="col" class="sort w5" data-sort="foi-notificado">
-                                        Foi <br>Notificado
+                                        Notificado
                                     </th>
-                                    <th scope="col" class="sort w5" data-sort="acoes">
+                                    <th scope="col" class="sort w10" data-sort="acoes">
                                         Ações
                                     </th>
                                 </tr>
@@ -280,22 +280,26 @@
                                         <td>
                                             @Html.DisplayFor(modelItem => item.Resultado)
                                         </td>
+										<td>
+											@if (item.StatusNotificacao.ToUpper() == "S")
+											{
+												@:Sim
+											}
+											else if (item.StatusNotificacao.ToUpper() == "N")
+											{
+												@:Não
+											}
+											else if (item.StatusNotificacao.ToUpper() == "E")
+											{
+												@:Enviada
+											}
+											else if (item.StatusNotificacao.ToUpper() == "P")
+											{
+												@:Erro
+											}
+										</td>
                                         <td>
-                                            @if (item.StatusNotificacao.ToUpper() == "S")
-                                            {
-                                                @:Sim
-                                            }
-                                            else if (item.StatusNotificacao.ToUpper() == "N")
-                                            {
-                                                @:Não
-                                            }
-                                            else if (item.StatusNotificacao.ToUpper() == "E")
-                                            {
-                                                @:Enviado
-                                            }
-                                        </td>
-                                        <td>
-                                            @using (Html.BeginForm("NotificateById", "Exame", new { id = item.IdExame }, FormMethod.Post))
+                                            @using (Html.BeginForm("EnviarSMS", "Exame", new { id = item.IdExame }, FormMethod.Post))
                                             {
                                                 <button type="submit" class="btn btn-info btn-sm"><i class="fa fa-envelope"></i> SMS</button>
                                             }
@@ -329,21 +333,19 @@ else if (TempData["mensagemErro"] != null)
     <script>
         $(document).ready(function () {
             if (document.querySelector('#mensagem-retorno')) {
-                Swal.close();
+                //Swal.close();
                 document.getElementById("mensagem-retorno").click();
-                $('.btn-info').prop("disabled", false);
+                //$('.btn-info').prop("disabled", false);
             }
-
-            $('.btn-info').on('click', function () {
-                $(this).prop("disabled", true);
-                Swal.fire({
-                    title: 'Enviando SMS...'
-                });
-
-                Swal.showLoading();
-            });
         });
-    </script>
+        //$('.btn-info').on('click', function () {
+        //     $(this).prop("disabled", true);
+        //     Swal.fire({
+           //        title: 'Por favor, aguarde o envio...'
+          //    });
+		//	Swal.showLoading();
+//        });
+	</script>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
     <script src="~/assets/js/sweet-alert.js"></script>

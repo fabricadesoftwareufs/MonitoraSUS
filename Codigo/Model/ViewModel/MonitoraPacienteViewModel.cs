@@ -16,6 +16,7 @@ namespace Model.ViewModel
 		[DataType(DataType.Date)]
 		[DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
 		public DateTime DataExame { get; set; }
+		public int IdExame { get; set; }
 		public int Idpessoa { get; set; }
         public string Cpf { get; set; }
         public string Nome { get; set; }

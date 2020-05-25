@@ -33,6 +33,10 @@
         {
             tipoUsuario = "ADMINISTRADOR DO SISTEMA";
         }
+		else if(tipoUsuario.Equals("GESTOR"))
+        {
+            tipoUsuario = "GESTOR";
+        }
     }
 }
 
@@ -48,7 +52,7 @@
             <span>
                 <i class="fas fa-briefcase"></i>@tipoUsuario
             </span>
-            @if (!empresa.Equals(""))
+            @if (!empresa.Equals("MUNICIPIO OU ESTADO"))
             {
             <span>
                 <i class="fas fa-building"></i>@empresa

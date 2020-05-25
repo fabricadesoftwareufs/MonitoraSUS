@@ -45,7 +45,7 @@ namespace MonitoraSUS.Utils
                 case 0:
                     return "<html><body>" +
                         "Foi solicitado a recuperação de sua senha para acesso ao MonitoraSUS.<br>" +
-                        "Você possui 24 horas para fazer a alteração da sua senha de acesso.<br>" +
+						"Você possui 24 horas para fazer a alteração da sua senha de acesso.<br><a href='" +
                         link + senhaModel.Token + "'>Clique aqui mudar a senha</a>" +
                         RodapeEmail();
 
@@ -53,7 +53,7 @@ namespace MonitoraSUS.Utils
                 case 1:
                     return "<html><body>" +
                         "Parabéns! Seu cadastro foi aprovado para acesso ao MonitoraSUS.<br>" +
-                        "Você possui 24 horas para criar sua senha de acesso ao sistema.<br>" +
+						"Você possui 24 horas para criar sua senha de acesso ao sistema.<br><a href='" +
                         link + senhaModel.Token + "'>Clique aqui para criar sua senha.</a>" +
                         RodapeEmail();
 
@@ -67,12 +67,10 @@ namespace MonitoraSUS.Utils
 				case 4:
 					return "<html><body>" +
 						"Obrigado por solicitar o cadastro no MonitoraSUS! <br/>" +
-						"O objetivo do sistema é auxiliar gestores municipais e estaduais no monitoramento de pacientes <br/>" +
-	  					"através da integração dos resultados de testes que estão sendo realizados em todo Brasil. <br/>" +
-						"O sistema permite gerenciar os testes realizados pela gestão e fazer o monitoramento dos pacientes <br/>" +
+						"O sistema permite gerenciar os testes virais realizados pela gestão e fazer o monitoramento dos pacientes <br/>" +
 						"residentes no município que foram positivados e notificados pelo MonitoraSUS. <br/>" +
 						"Seu cadastro foi aprovado com perfil de ADMINISTRADOR do Município ou Estado solicitado.<br/>" +
-						"Acesse o sistema através da url " + site + " e consulte o manual do sistema." +
+						"Acesse o sistema através da url www.monitorasus.ufs.br e consulte o manual do sistema." +
 						"Entraremos em contato para agendarmos uma apresentação das funcionalidades." +
 						"Você possui 24 horas para criar sua senha de acesso ao sistema.<br><a href='" + 
 						link + senhaModel.Token + "'>Clique aqui para criar sua senha.</a>" +

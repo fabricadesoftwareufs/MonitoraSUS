@@ -7,85 +7,85 @@
 <div class="container-fluid mt--6">
     <div class="row">
         <div class="col-md-12">
-            <div class="card card-content">
-                <div class="card-header bg-transparent">
-                    <div class="row align-items-center">
+			<div class="card card-content">
+				<div class="card-header bg-transparent">
+					<div class="row align-items-center">
 
-                        <div class="col">
-                            <h5 class="card-title text-muted mb-0">MonitoraSUS</h5>
-                            <h5 class="h3 mb-0">Monitoramento de Pacientes</h5>
-                        </div>
-                        <div class="col text-right">
-                            <!--a class="btn btn-success" asp-action="Create">Novo Exame</!--a-->
-                            <a class="btn btn-default" asp-controller="Home" asp-action="Index"> <i class="fas fa-arrow-left"></i> Voltar</a><br />
-                        </div>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <h4 class="card-title text-muted mb-0">Filtre Pacientes</h4>
-                    <div class="pl-lg-0">
-                        <div class="row">
-                            <div class="col">
-                                <form asp-action="Index">
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label class="form-control-label" for="input-cpf">CPF/RG ou NOME</label>
-                                                <input asp-for="Pesquisa" type="text" name="Pesquisa" class="form-control" placeholder="" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label class="form-control-label" for="data-inicial"> Data Inicial</label>
-                                                <input asp-for="DataInicial" type="date" id="data-inicial" name="DataInicial" class="form-control" />
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label class="form-control-label" for="data-final"> Data Final</label>
-                                                <input asp-for="DataFinal" type="date" id="data-final" name="DataFinal" class="form-control" />
-                                            </div>
-                                        </div>
-                                    </div>
+						<div class="col">
+							<h5 class="card-title text-muted mb-0">MonitoraSUS</h5>
+							<h5 class="h3 mb-0">Monitoramento de Pacientes</h5>
+						</div>
+						<div class="col text-right">
+							<!--a class="btn btn-success" asp-action="Create">Novo Exame</!--a-->
+							<a class="btn btn-default" asp-controller="Home" asp-action="Index"> <i class="fas fa-arrow-left"></i> Voltar</a><br />
+						</div>
+					</div>
+				</div>
+				<div class="card-body">
+					<h4 class="card-title text-muted mb-0">Filtre Pacientes</h4>
+					<div class="pl-lg-0">
+						<div class="row">
+							<div class="col">
+								<form asp-action="Index">
+									<div class="row">
+										<div class="col-md-6">
+											<div class="form-group">
+												<label class="form-control-label" for="input-cpf">CPF/RG ou NOME</label>
+												<input asp-for="Pesquisa" type="text" name="Pesquisa" class="form-control" placeholder="" />
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-3">
+											<div class="form-group">
+												<label class="form-control-label" for="data-inicial"> Data Inicial</label>
+												<input asp-for="DataInicial" type="date" id="data-inicial" name="DataInicial" class="form-control" />
+											</div>
+										</div>
+										<div class="col-md-3">
+											<div class="form-group">
+												<label class="form-control-label" for="data-final"> Data Final</label>
+												<input asp-for="DataFinal" type="date" id="data-final" name="DataFinal" class="form-control" />
+											</div>
+										</div>
+									</div>
 
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label class="form-control-label" for="input-virus-bacteria">Exame</label>
-                                                @Html.DropDownListFor(model => model.VirusBacteria, ViewBag.VirusBacteria as SelectList, new
-                                                { @class = "form-control", @id = "input-virus-bacteria", @name = "VirusBacteria" })
-                                            </div>
-                                        </div>
-                                    </div>
+									<div class="row">
+										<div class="col-md-6">
+											<div class="form-group">
+												<label class="form-control-label" for="input-virus-bacteria">Exame</label>
+												@Html.DropDownListFor(model => model.VirusBacteria, ViewBag.VirusBacteria as SelectList, new
+												{ @class = "form-control", @id = "input-virus-bacteria", @name = "VirusBacteria" })
+											</div>
+										</div>
+									</div>
 
-                                    <div class="row">
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-                                                <label class="form-control-label" for="input-atuacao-estado">Situacao</label>
-                                                <select asp-for="Resultado" name="Resultado" class="form-control" id="input-resultado">
-                                                    <option>Todas as Opçoes</option>
-                                                    <option>Positivo</option>
-                                                    <option>Indeterminado</option>
-                                                    <option>Imunizado</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
+									<div class="row">
+										<div class="col-lg-6">
+											<div class="form-group">
+												<label class="form-control-label" for="input-atuacao-estado">Situacao</label>
+												<select asp-for="Resultado" name="Resultado" class="form-control" id="input-resultado">
+													<option>Todas as Opçoes</option>
+													<option>Positivo</option>
+													<option>Indeterminado</option>
+													<option>Imunizado</option>
+												</select>
+											</div>
+										</div>
+									</div>
 
-                                    <div class="col-md-0">
-                                        <div class="row">
-                                            <div class="col-md-3">
-                                                <div class="form-group">
-                                                    <button type="submit" id="btn-filtar" class="form-control btn btn-default"><i class="fa fa-search"></i> Filtrar</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                            <div class="col-md-4 text-center">
+									<div class="col-md-0">
+										<div class="row">
+											<div class="col-md-3">
+												<div class="form-group">
+													<button type="submit" id="btn-filtar" class="form-control btn btn-default"><i class="fa fa-search"></i> Filtrar</button>
+												</div>
+											</div>
+										</div>
+									</div>
+								</form>
+							</div>
+							<div class="col-md-4 text-center">
 								<div class="table-responsive">
 									<table class="table align-items-center table-flush">
 										<thead class="thead-light">
@@ -181,16 +181,29 @@
 										</tbody>
 									</table>
 								</div>
-                            </div>
+							</div>
 
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-custom align-items-center table-flush">
-                            <thead class="thead-light">
+						</div>
+					</div>
+				</div>
+				<div class="col-md-12 text-right">
+					@using (Html.BeginForm("Export", "Exame", FormMethod.Post))
+					{
+						@for (int i = 0; i < Model.Pacientes.Count; i++)
+						{
+							<div class="form-group" hidden>
+								<div class="col-md-10">
+									@Html.EditorFor(model => Model.Pacientes[i].IdExame , new { htmlAttribu5tes = new { @class = "form-control" } })
+								</div>
+							</div>
+						}
+						<button type="submit" class="btn btn-success btn-xs"><i class="fa fa-list"></i> Exportar Planilha</button>
+					}
+				</div>
+				<div class="card-body">
+					<div class="table-responsive">
+						<table class="table table-custom align-items-center table-flush">
+							<thead class="thead-light">
 								<tr>
 									<th scope="col" class="sort w10" data-sort="cpf">
 										CPF/RG
@@ -216,49 +229,49 @@
 									<th class="w10">
 									</th>
 								</tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var item in Model.Pacientes)
-                                {
-								<tr>
-									<td>
-										<a href="#">@Html.DisplayFor(modelItem => item.Cpf)</a>
-									</td>
-									<td>
-										@Html.DisplayFor(modelItem => item.Nome)
-									</td>
-									<th>
-										@Html.DisplayFor(modelItem => item.DataExame)
-									</th>
-									<td class="text-center">
-										@Html.DisplayFor(modelItem => item.UltimaSituacao)
-									</td>
-									<td class="text-center">
-										@Html.DisplayFor(modelItem => item.SituacaoSaudeDescricao)
-									</td>
-									<td class="text-center">
-										@if (item.DataUltimoMonitoramento.HasValue)
-										{
-											<div>@item.DataUltimoMonitoramento.Value.ToString("dd/MM/yyyy")</div>
-										}
-										else
-										{
-											@: -
-										}
-									</td>
-									<th>
-										@Html.DisplayFor(modelItem => item.Gestor.Nome)
-									</th>
-									<td>
-										<a href="@Url.Action("Edit", "MonitorarPaciente", new { idPaciente = item.Idpessoa, IdVirusBacteria = item.VirusBacteria.IdVirusBacteria })" class="btn btn-info btn-sm"><i class="fa fa-edit"></i> Monitorar </a>
-									</td>
-								</tr>
-                                }
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
+							</thead>
+							<tbody>
+								@foreach (var item in Model.Pacientes)
+								{
+									<tr>
+										<td>
+											<a href="#">@Html.DisplayFor(modelItem => item.Cpf)</a>
+										</td>
+										<td>
+											@Html.DisplayFor(modelItem => item.Nome)
+										</td>
+										<th>
+											@Html.DisplayFor(modelItem => item.DataExame)
+										</th>
+										<td class="text-center">
+											@Html.DisplayFor(modelItem => item.UltimaSituacao)
+										</td>
+										<td class="text-center">
+											@Html.DisplayFor(modelItem => item.SituacaoSaudeDescricao)
+										</td>
+										<td class="text-center">
+											@if (item.DataUltimoMonitoramento.HasValue)
+											{
+												<div>@item.DataUltimoMonitoramento.Value.ToString("dd/MM/yyyy")</div>
+											}
+											else
+											{
+												@: -
+											}
+										</td>
+										<th>
+											@Html.DisplayFor(modelItem => item.Gestor.Nome)
+										</th>
+										<td>
+											<a href="@Url.Action("Edit", "MonitorarPaciente", new { idPaciente = item.Idpessoa, IdVirusBacteria = item.VirusBacteria.IdVirusBacteria })" class="btn btn-info btn-sm"><i class="fa fa-edit"></i> Monitorar </a>
+										</td>
+									</tr>
+								}
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
         </div>
     </div>
 </div>

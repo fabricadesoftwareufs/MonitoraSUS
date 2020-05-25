@@ -197,7 +197,7 @@ namespace Service
                     Token = conf.Token
                 }).FirstOrDefault();
 
-        public async System.Threading.Tasks.Task<bool> EnviarSMSResultadoExameAsync(ConfiguracaoNotificarModel configuracaoNotificar, ExameModel exame, PessoaModel pessoa)
+        public async System.Threading.Tasks.Task<ExameModel> EnviarSMSResultadoExameAsync(ConfiguracaoNotificarModel configuracaoNotificar, ExameModel exame, PessoaModel pessoa)
         {
             try
             {
@@ -225,15 +225,15 @@ namespace Service
 					configura.QuantidadeSmsdisponivel-=1;
 					_context.Update(configura);
 				}
-				return _context.SaveChanges() == 1 ? true : false;
+				return exame;
 			}
             catch (HttpRequestException)
             {
-                return false;
+                return exame;
             }
         }
 
-		public async System.Threading.Tasks.Task<bool> ConsultarSMSExameAsync(ConfiguracaoNotificarModel configuracaoNotificar, ExameModel exame)
+		public async System.Threading.Tasks.Task<ExameModel> ConsultarSMSExameAsync(ConfiguracaoNotificarModel configuracaoNotificar, ExameModel exame)
 		{
 			try
 			{
@@ -241,17 +241,23 @@ namespace Service
 				string url = "https://api.smsdev.com.br/get?key=" + configuracaoNotificar.Token + "&action=status&";
 				var uri = url + "id=" + exame.IdNotificacao;
 				var resultadoEnvio = await cliente.GetStringAsync(uri);
-				if (resultadoEnvio.Contains("RECEBIDA")) { 
+
+				ConsultaSMSModel jsonResponse = JsonConvert.DeserializeObject<ConsultaSMSModel>(resultadoEnvio);
+				if (jsonResponse.Descricao.Equals("RECEBIDA")) {
 					exame.StatusNotificacao = ExameModel.NOTIFICADO_SIM;
 					Update(exame);
-					return true;
+				}
+				else if (jsonResponse.Descricao.Equals("ERRO"))
+				{
+					exame.StatusNotificacao = ExameModel.NOTIFICADO_PROBLEMAS;
+					Update(exame);
 				}
 			}
 			catch (HttpRequestException)
 			{
-				return false;
+				return exame;
 			}
-			return false;
+			return exame;
 		}
 
 		public List<ExameModel> GetByIdPaciente(int idPaciente)
@@ -337,7 +343,8 @@ namespace Service
 					 Rua = exame.IdPacienteNavigation.Rua,
 					 Sexo = exame.IdPacienteNavigation.Sexo,
 					 SituacaoSaude = exame.IdPacienteNavigation.SituacaoSaude,
-					 DataExame = exame.DataExame
+					 DataExame = exame.DataExame,
+					 IdExame = exame.IdExame
 				 }).ToList();
 			List<MonitoraPacienteViewModel> listaMonitoramentoNaoNegativos = BuscarNaoNegativos(idVirusBacteria, monitoraPacientes);
 			return listaMonitoramentoNaoNegativos;
@@ -414,7 +421,8 @@ namespace Service
 					 Rua = exame.IdPacienteNavigation.Rua,
 					 Sexo = exame.IdPacienteNavigation.Sexo,
 					 SituacaoSaude = exame.IdPacienteNavigation.SituacaoSaude,
-					 DataExame = exame.DataExame
+					 DataExame = exame.DataExame,
+					 IdExame = exame.IdExame
 				 }).ToList();
 			List<MonitoraPacienteViewModel> listaMonitoramentoNaoNegativos = BuscarNaoNegativos(idVirusBacteria, monitoraPacientes);
 			return listaMonitoramentoNaoNegativos;

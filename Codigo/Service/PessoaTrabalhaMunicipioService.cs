@@ -49,8 +49,10 @@ namespace Service
                     Nome = p.IdPessoaNavigation.Nome,
                     Cidade = p.IdMunicipioNavigation.Nome,
                     Estado = p.IdMunicipioNavigation.Uf,
-                    Status = p.SituacaoCadastro
-                }).ToList();
+                    Status = p.SituacaoCadastro,
+					IdEmpresa = 1,
+					FoneCelular = p.IdPessoaNavigation.FoneCelular
+				}).ToList();
 
         public List<SolicitanteAprovacaoViewModel> GetAllGestoresMunicipio(int idMunicipio)
             => _context
@@ -64,8 +66,10 @@ namespace Service
                     Nome = p.IdPessoaNavigation.Nome,
                     Cidade = p.IdMunicipioNavigation.Nome,
                     Estado = p.IdMunicipioNavigation.Uf,
-                    Status = p.SituacaoCadastro
-                }).ToList();
+                    Status = p.SituacaoCadastro,
+					IdEmpresa = 1,
+					FoneCelular = p.IdPessoaNavigation.FoneCelular
+				}).ToList();
 
         public List<SolicitanteAprovacaoViewModel> GetAllNotificadores()
                         => _context
@@ -79,8 +83,10 @@ namespace Service
                     Nome = p.IdPessoaNavigation.Nome,
                     Cidade = p.IdMunicipioNavigation.Nome,
                     Estado = p.IdMunicipioNavigation.Uf,
-                    Status = p.SituacaoCadastro
-                }).ToList();
+                    Status = p.SituacaoCadastro,
+					IdEmpresa = 1,
+					FoneCelular = p.IdPessoaNavigation.FoneCelular
+				}).ToList();
 
         public List<SolicitanteAprovacaoViewModel> GetAllNotificadoresMunicipio(int idMunicipio)
                         => _context
@@ -94,8 +100,10 @@ namespace Service
                     Nome = p.IdPessoaNavigation.Nome,
                     Cidade = p.IdMunicipioNavigation.Nome,
                     Estado = p.IdMunicipioNavigation.Uf,
-                    Status = p.SituacaoCadastro
-                }).ToList();
+                    Status = p.SituacaoCadastro,
+					IdEmpresa = 1,
+					FoneCelular = p.IdPessoaNavigation.FoneCelular
+				}).ToList();
 
 
         public PessoaTrabalhaMunicipioModel GetByIdPessoa(int idPessoa)
