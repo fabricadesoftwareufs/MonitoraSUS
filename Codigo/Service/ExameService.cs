@@ -168,7 +168,7 @@ namespace Service
                     IdEmpresaExame = conf.IdEmpresaExame,
                     IdEstado = conf.IdEstado,
                     IdMunicipio = conf.IdMunicipio,
-                    MensagemImunizado = conf.MensagemImunizado,
+                    MensagemCurado = conf.MensagemImunizado,
                     MensagemIndeterminado = conf.MensagemIndeterminado,
                     MensagemPositivo = conf.MensagemPositivo,
                     MensagemNegativo = conf.MensagemNegativo,
@@ -188,7 +188,7 @@ namespace Service
                     IdEmpresaExame = conf.IdEmpresaExame,
                     IdEstado = conf.IdEstado,
                     IdMunicipio = conf.IdMunicipio,
-                    MensagemImunizado = conf.MensagemImunizado,
+                    MensagemCurado = conf.MensagemImunizado,
                     MensagemIndeterminado = conf.MensagemIndeterminado,
                     MensagemPositivo = conf.MensagemPositivo,
                     MensagemNegativo = conf.MensagemNegativo,
@@ -206,8 +206,8 @@ namespace Service
                     mensagem += configuracaoNotificar.MensagemPositivo;
                 else if (exame.Resultado.Equals(ExameModel.RESULTADO_NEGATIVO))
                     mensagem += configuracaoNotificar.MensagemNegativo;
-                else if (exame.Resultado.Equals(ExameModel.RESULTADO_IMUNIZADO))
-                    mensagem += configuracaoNotificar.MensagemImunizado;
+                else if (exame.Resultado.Equals(ExameModel.RESULTADO_CURADO))
+                    mensagem += configuracaoNotificar.MensagemCurado;
                 else if (exame.Resultado.Equals(ExameModel.RESULTADO_INDETERMINADO))
                     mensagem += configuracaoNotificar.MensagemIndeterminado;
 
@@ -435,7 +435,7 @@ namespace Service
 				case "P":
 					return "Positivo";
 				case "C":
-					return "Imunizado";
+					return "Curado";
 				case "I":
 					return "Indeterminado";
 
@@ -641,7 +641,7 @@ namespace Service
                         Estado = totalPorResultado.Estado,
                         Municipio = totalPorResultado.Municipio,
                         IdEmpresaSaude = totalPorResultado.IdEmpresaSaude,
-                        TotalImunizados = 0,
+                        TotalCurados = 0,
                         TotalIndeterminados = 0,
                         TotalNegativos = 0,
                         TotalPositivos = 0
@@ -660,8 +660,8 @@ namespace Service
                 totalEMB.TotalPositivos += totalPorResultado.Total;
             if (totalPorResultado.Resultado.Equals(ExameModel.RESULTADO_NEGATIVO))
                 totalEMB.TotalNegativos += totalPorResultado.Total;
-            if (totalPorResultado.Resultado.Equals(ExameModel.RESULTADO_IMUNIZADO))
-                totalEMB.TotalImunizados += totalPorResultado.Total;
+            if (totalPorResultado.Resultado.Equals(ExameModel.RESULTADO_CURADO))
+                totalEMB.TotalCurados += totalPorResultado.Total;
             if (totalPorResultado.Resultado.Equals(ExameModel.RESULTADO_INDETERMINADO))
                 totalEMB.TotalIndeterminados += totalPorResultado.Total;
         }

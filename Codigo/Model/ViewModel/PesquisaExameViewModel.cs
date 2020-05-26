@@ -11,14 +11,14 @@ namespace Model.ViewModel
             Exames = new List<ExameViewModel>();
             Negativos = 0;
             Positivos = 0;
-            Imunizados = 0;
+            Curados = 0;
             Indeterminados = 0;
         }
 
         public List<ExameViewModel> Exames { get; set; }
         public int Negativos { get; set; }
         public int Positivos { get; set; }
-        public int Imunizados { get; set; }
+        public int Curados { get; set; }
         public int Indeterminados { get; set; }
         public string Pesquisa { get; set; }
         public DateTime DataInicial { get; set; }

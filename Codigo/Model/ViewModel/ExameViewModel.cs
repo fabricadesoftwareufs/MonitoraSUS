@@ -20,8 +20,8 @@ namespace Model
             MunicipioId = 0;
             PesquisarCpf = 0;
             CodigoColeta = "";
-            CodigoColeta = "";
-            EhProfissionalSaude = false;
+			ResponsavelRealizacaoExame = "";
+			EhProfissionalSaude = false;
             IdNotificacao = "";
             StatusNotificacao = ExameModel.NOTIFICADO_NAO;
         }
@@ -53,8 +53,9 @@ namespace Model
 		//public string SituacaoSaude { get; set; }
 		public string IdNotificacao { get; set; }
         public DateTime DataNotificacao { get; set; }
+		public String ResponsavelRealizacaoExame { get; set; }
 
-        [Display(Name = "Resultado")]
+		[Display(Name = "Resultado")]
         public string Resultado
         {
             get

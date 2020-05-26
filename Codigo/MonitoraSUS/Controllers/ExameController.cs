@@ -4,15 +4,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Configuration;
 using Model;
-using Model.AuxModel;
 using Model.ViewModel;
 using MonitoraSUS.Utils;
-using Newtonsoft.Json;
 using Service.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -100,10 +97,12 @@ namespace MonitoraSUS.Controllers
 					string statusAnteriorSMS = exame.StatusNotificacao;
 					if (pacienteModel.TemFoneCelularValido)
 					{
-						if (exame.StatusNotificacao.Equals(ExameModel.NOTIFICADO_ENVIADO)) {
+						if (exame.StatusNotificacao.Equals(ExameModel.NOTIFICADO_ENVIADO))
+						{
 							exame = await _exameContext.ConsultarSMSExameAsync(configuracaoNotificar, exame);
 						}
-						else if (exame.StatusNotificacao.Equals(ExameModel.NOTIFICADO_NAO) || exame.StatusNotificacao.Equals(ExameModel.NOTIFICADO_PROBLEMAS)) {
+						else if (exame.StatusNotificacao.Equals(ExameModel.NOTIFICADO_NAO) || exame.StatusNotificacao.Equals(ExameModel.NOTIFICADO_PROBLEMAS))
+						{
 							exame = await _exameContext.EnviarSMSResultadoExameAsync(configuracaoNotificar, exame, pacienteModel);
 						}
 					}
@@ -141,7 +140,7 @@ namespace MonitoraSUS.Controllers
 			var trabalhaMunicipio = _pessoaTrabalhaMunicipioContext.GetByIdPessoa(usuario.UsuarioModel.IdPessoa);
 			var trabalhaEstado = _pessoaTrabalhaEstadoContext.GetByIdPessoa(usuario.UsuarioModel.IdPessoa);
 
-            ConfiguracaoNotificarModel configuracaoNotificar = null;
+			ConfiguracaoNotificarModel configuracaoNotificar = null;
 			if (trabalhaEstado != null)
 			{
 				configuracaoNotificar = _exameContext.BuscarConfiguracaoNotificar(trabalhaEstado.IdEstado, trabalhaEstado.IdEmpresaExame);
@@ -182,9 +181,9 @@ namespace MonitoraSUS.Controllers
 				mensagem += (entregasFalhas > 0) ? "Ocorreram problemas no envio de " + entregasFalhas + " SMS. " : "";
 				mensagem += (entregasAguardando > 0) ? "Aguardando resposta da operadora de " + entregasAguardando + " SMS." : "";
 
-				TempData["mensagemSucesso"] = "Consultas aos SMS enviadas com sucesso! "+mensagem;
+				TempData["mensagemSucesso"] = "Consultas aos SMS enviadas com sucesso! " + mensagem;
 			}
-	        return RedirectToAction(nameof(Notificate));
+			return RedirectToAction(nameof(Notificate));
 		}
 
 		[Authorize(Roles = "GESTOR, SECRETARIO")]
@@ -224,13 +223,13 @@ namespace MonitoraSUS.Controllers
 			}
 			TotalTestesGestaoPopulacao totais = new TotalTestesGestaoPopulacao();
 			totais.Gestao = totaisRealizado;
-			totais.TotalGestaoImunizados = totaisRealizado.Sum(t => t.TotalImunizados);
+			totais.TotalGestaoCurados = totaisRealizado.Sum(t => t.TotalCurados);
 			totais.TotalGestaoIndeterminados = totaisRealizado.Sum(t => t.TotalIndeterminados);
 			totais.TotalGestaoNegativos = totaisRealizado.Sum(t => t.TotalNegativos);
 			totais.TotalGestaoPositivos = totaisRealizado.Sum(t => t.TotalPositivos);
 
 			totais.Populacao = totaisPopulacao;
-			totais.TotalPopulacaoImunizados = totaisPopulacao.Sum(t => t.TotalImunizados);
+			totais.TotalPopulacaoCurados = totaisPopulacao.Sum(t => t.TotalCurados);
 			totais.TotalPopulacaoIndeterminados = totaisPopulacao.Sum(t => t.TotalIndeterminados);
 			totais.TotalPopulacaoNegativos = totaisPopulacao.Sum(t => t.TotalNegativos);
 			totais.TotalPopulacaoPositivos = totaisPopulacao.Sum(t => t.TotalPositivos);
@@ -238,17 +237,18 @@ namespace MonitoraSUS.Controllers
 			return View(totais);
 		}
 
-		
+
 		public IActionResult Export(List<ExameViewModel> exames)
 		{
 			var builder = new StringBuilder();
-			builder.AppendLine("Código Coleta;Vírus;Data Exame;Resultado;CPF/RG/Temp; Nome; Data Nascimento;Estado;Município;Bairro;Rua;Numero;Complemento;Fone;Diabetes;Cardiopatia;Hipertenso;Imunodeprimido;Obeso;Cancer;Doença Respiratória;Outras Comorbidades");
+			builder.AppendLine("Código Coleta;Vírus;Data Exame;Resultado;Situação Paciente;CPF/RG/Temp; Nome; Data Nascimento;Estado;Município;Bairro;Rua;Numero;Complemento;Fone;Diabetes;Cardiopatia;Hipertenso;Imunodeprimido;Obeso;Cancer;Doença Respiratória;Outras Comorbidades");
 			foreach (var e in exames)
 			{
 				var exame = GetExameViewModelById(e.IdExame);
 				string coleta = exame.CodigoColeta;
 				string cpfRgTemp = exame.IdPaciente.Cpf;
 				string nome = exame.IdPaciente.Nome;
+				string situacaoSaude = exame.IdPaciente.SituacaoSaudeDescricao;
 				string dataNascimento = exame.IdPaciente.DataNascimento.ToString("dd/MM/yyyy");
 				string estado = exame.IdPaciente.Estado;
 				string municipio = exame.IdPaciente.Cidade;
@@ -258,17 +258,17 @@ namespace MonitoraSUS.Controllers
 				string complemento = exame.IdPaciente.Complemento;
 				string foneCelular = exame.IdPaciente.FoneCelular;
 				string diabetes = exame.IdPaciente.Diabetes ? "Sim" : "Não";
-				string cardiopatia = exame.IdPaciente.Cardiopatia? "Sim" : "Não";
+				string cardiopatia = exame.IdPaciente.Cardiopatia ? "Sim" : "Não";
 				string hipertenso = exame.IdPaciente.Hipertenso ? "Sim" : "Não";
 				string imunodeprimido = exame.IdPaciente.Imunodeprimido ? "Sim" : "Não";
 				string obeso = exame.IdPaciente.Obeso ? "Sim" : "Não";
 				string cancer = exame.IdPaciente.Cancer ? "Sim" : "Não";
 				string doencaRespiratoria = exame.IdPaciente.DoencaRespiratoria ? "Sim" : "Não";
-				string outrasComorbidades = exame.IdPaciente.OutrasComorbidades ;
+				string outrasComorbidades = exame.IdPaciente.OutrasComorbidades;
 				string dataExame = exame.DataExame.ToString("dd/MM/yyyy");
 				string resultadoExame = exame.Resultado;
 				string virus = exame.IdVirusBacteria.Nome;
-				builder.AppendLine($"{coleta};{virus};{dataExame};{resultadoExame};{cpfRgTemp};{nome};{dataNascimento};{estado};{municipio};{bairro};{rua};{numero};{complemento};{foneCelular};{diabetes};{cardiopatia};{hipertenso};{imunodeprimido};{obeso};{cancer};{doencaRespiratoria};{outrasComorbidades};");
+				builder.AppendLine($"{coleta};{virus};{dataExame};{resultadoExame};{situacaoSaude};{cpfRgTemp};{nome};{dataNascimento};{estado};{municipio};{bairro};{rua};{numero};{complemento};{foneCelular};{diabetes};{cardiopatia};{hipertenso};{imunodeprimido};{obeso};{cancer};{doencaRespiratoria};{outrasComorbidades};");
 			}
 
 			return File(Encoding.UTF8.GetBytes(builder.ToString()), "text/csv", "exames.csv");
@@ -808,7 +808,7 @@ namespace MonitoraSUS.Controllers
 			exame.IdPaciente.FoneCelular = Methods.RemoveSpecialsCaracts(exame.IdPaciente.FoneCelular);
 			exame.IdPaciente.Sexo = exame.IdPaciente.Sexo.Equals("M") ? "Masculino" : "Feminino";
 
-			
+
 			if (exame.IdPaciente.FoneFixo != null)
 				exame.IdPaciente.FoneFixo = Methods.RemoveSpecialsCaracts(exame.IdPaciente.FoneFixo);
 
@@ -843,35 +843,12 @@ namespace MonitoraSUS.Controllers
 					case ExameModel.RESULTADO_POSITIVO: examesTotalizados.Positivos++; break;
 					case ExameModel.RESULTADO_NEGATIVO: examesTotalizados.Negativos++; break;
 					case ExameModel.RESULTADO_INDETERMINADO: examesTotalizados.Indeterminados++; break;
-					case ExameModel.RESULTADO_IMUNIZADO: examesTotalizados.Imunizados++; break;
+					case ExameModel.RESULTADO_CURADO: examesTotalizados.Curados++; break;
 				}
 			}
 
 
 			return examesTotalizados;
-		}
-
-		// pegar msg padrao do banco
-		private string ResultadoDefinido(string resultadoExame, ConfiguracaoNotificarModel config)
-		{
-
-			switch (resultadoExame.ToUpper())
-			{
-				case "POSITIVO":
-					return config.MensagemPositivo;
-
-				case "NEGATIVO":
-					return config.MensagemPositivo;
-
-				case "IMUNIZADO":
-					return config.MensagemImunizado;
-
-				case "INDETERMINIDO":
-					return config.MensagemIndeterminado;
-
-				default:
-					return config.MensagemIndeterminado;
-			}
 		}
 	}
 }

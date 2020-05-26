@@ -14,8 +14,8 @@ namespace Model.ViewModel
         public int TotalPositivos { get; set; }
         [Display(Name = "Negativos")]
         public int TotalNegativos { get; set; }
-        [Display(Name = "Imunizados")]
-        public int TotalImunizados { get; set; }
+        [Display(Name = "Curados")]
+        public int TotalCurados { get; set; }
         [Display(Name = "Indeterminados")]
         public int TotalIndeterminados { get; set; }
     }

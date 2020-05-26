@@ -88,7 +88,7 @@
                                                     <option>Positivo</option>
                                                     <option>Negativo</option>
                                                     <option>Indeterminado</option>
-                                                    <option>Imunizado</option>
+                                                    <option>Curado</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -149,10 +149,10 @@
                                             </tr>
                                             <tr class="text-blue">
                                                 <td>
-                                                    Imunizados
+                                                    Curados
                                                 </td>
                                                 <td>
-                                                    @Model.Imunizados
+                                                    @Model.Curados
                                                 </td>
                                             </tr>
 
@@ -255,7 +255,7 @@
                                             }
                                             else
                                             {
-                                                <div class="tooltip">@item.IdPaciente.Nome</div>
+                                                <div>@item.IdPaciente.Nome</div>
                                             }
                                         </td>
                                         <td>

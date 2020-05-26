@@ -9,7 +9,7 @@
         public string Token { get; set; }
         public string MensagemPositivo { get; set; }
         public string MensagemNegativo { get; set; }
-        public string MensagemImunizado { get; set; }
+        public string MensagemCurado { get; set; }
         public string MensagemIndeterminado { get; set; }
         public int? IdEstado { get; set; }
         public int? IdMunicipio { get; set; }

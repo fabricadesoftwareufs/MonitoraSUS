@@ -257,10 +257,7 @@
 															Paciente
 														</th>
 														<th scope="col" class="sort" data-sort="cidade">
-															Cidade
-														</th>
-														<th scope="col" class="sort" data-sort="estado">
-															Estado
+															Responsável pela Realização Exame
 														</th>
 														<th scope="col" class="sort" data-sort="data-exame">
 															Data do Exame
@@ -284,10 +281,7 @@
 																@Html.DisplayFor(modelItem => item.IdPaciente.Nome)
 															</td>
 															<td>
-																@Html.DisplayFor(modelItem => item.IdPaciente.Cidade)
-															</td>
-															<td>
-																@Html.DisplayFor(modelItem => item.IdPaciente.Estado)
+																@Html.DisplayFor(modelItem => item.ResponsavelRealizacaoExame)
 															</td>
 															<td>
 																@Html.DisplayFor(modelItem => item.DataExame)
@@ -315,7 +309,7 @@
 									<div class="form-group">
 										<div class="custom-control custom-radio custom-control-inline">
 											@Html.RadioButtonFor(model => model.SituacaoSaude, "S", new { @class = "custom-control-input", @id = "input-situacao-saudavel", @name = "situacaoSaude" })
-											<label class="custom-control-label" for="input-situacao-saudavel">Saudável</label>
+											<label class="custom-control-label" for="input-situacao-saudavel">Recuperado</label>
 										</div>
 										<div class="custom-control custom-radio custom-control-inline">
 											@Html.RadioButtonFor(model => model.SituacaoSaude, "I", new { @class = "custom-control-input", @id = "input-situacao-isolamento", @name = "situacaoSaude" })

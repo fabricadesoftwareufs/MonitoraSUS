@@ -68,7 +68,7 @@
 													<option>Todas as Opçoes</option>
 													<option>Positivo</option>
 													<option>Indeterminado</option>
-													<option>Imunizado</option>
+													<option>Curado</option>
 												</select>
 											</div>
 										</div>
@@ -117,10 +117,10 @@
 											</tr>
 											<tr class="text-blue">
 												<td>
-													Imunizados
+													Curados
 												</td>
 												<td>
-													@Model.Imunizados
+													@Model.Curados
 												</td>
 											</tr>
 
@@ -189,11 +189,11 @@
 				<div class="col-md-12 text-right">
 					@using (Html.BeginForm("Export", "Exame", FormMethod.Post))
 					{
-						@for (int i = 0; i < Model.Pacientes.Count; i++)
+						@for (int i = 0; i < Model.Exames.Count; i++)
 						{
 							<div class="form-group" hidden>
 								<div class="col-md-10">
-									@Html.EditorFor(model => Model.Pacientes[i].IdExame , new { htmlAttribu5tes = new { @class = "form-control" } })
+									@Html.EditorFor(model => Model.Exames[i].IdExame , new { htmlAttribu5tes = new { @class = "form-control" } })
 								</div>
 							</div>
 						}
@@ -224,15 +224,15 @@
 										Último <br> Monitoramento
 									</th>
 									<th scope="col" class="sort w20" data-sort="nome">
-										Gestor
+										Responsável <br> Monitoramento
 									</th>
 									<th class="w10">
 									</th>
 								</tr>
 							</thead>
 							<tbody>
-								@foreach (var item in Model.Pacientes)
-								{
+								@foreach (var item in Model.Exames)
+						{
 									<tr>
 										<td>
 											<a href="#">@Html.DisplayFor(modelItem => item.Cpf)</a>

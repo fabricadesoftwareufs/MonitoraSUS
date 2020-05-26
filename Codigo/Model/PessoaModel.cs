@@ -69,7 +69,7 @@ namespace Model
 				if (SituacaoSaude.Equals(SITUACAO_OBITO))
 					return "Óbito";
 				else
-					return "Saudável";
+					return "Recuperado";
 			}
 		}
 		public bool TemFoneCelularValido

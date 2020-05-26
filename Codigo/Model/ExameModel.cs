@@ -7,7 +7,7 @@ namespace Model
     {
         public const string RESULTADO_POSITIVO = "Positivo";
         public const string RESULTADO_NEGATIVO = "Negativo";
-        public const string RESULTADO_IMUNIZADO = "Imunizado";
+        public const string RESULTADO_CURADO = "Curado";
         public const string RESULTADO_INDETERMINADO = "Indeterminado";
 
         public const string NOTIFICADO_SIM = "S";
@@ -63,7 +63,7 @@ namespace Model
                 else if (IgM.Equals("N") && Pcr.Equals("N") && IgG.Equals("N"))
                     return RESULTADO_NEGATIVO;
                 else if ((IgM.Equals("N") && IgG.Equals("S")) || (Pcr.Equals("N") && IgG.Equals("S")))
-                    return RESULTADO_IMUNIZADO;
+                    return RESULTADO_CURADO;
                 else
                     return RESULTADO_INDETERMINADO;
             }
@@ -77,7 +77,7 @@ namespace Model
                     return "P";
                 else if (Resultado.Equals(RESULTADO_NEGATIVO))
                     return "N";
-                else if (Resultado.Equals(RESULTADO_IMUNIZADO))
+                else if (Resultado.Equals(RESULTADO_CURADO))
                     return "C";
                 else
                     return "I";
