@@ -298,7 +298,7 @@ namespace MonitoraSUS.Controllers
             }
             if (autenticadoTrabalhaMunicipio != null || ehAdmin)
             {
-                if (ehAdmin)
+				if (ehAdmin)
                     solicitantes = solicitantes.Concat(_pessoaTrabalhaMunicipioService.GetAllGestores()).ToList();
                 else
                 {
@@ -307,6 +307,12 @@ namespace MonitoraSUS.Controllers
                     else if (!ehListarGestores)
                         solicitantes = _pessoaTrabalhaMunicipioService.GetAllNotificadoresMunicipio(autenticadoTrabalhaMunicipio.IdMunicipio);
                 }
+				foreach(SolicitanteAprovacaoViewModel solicitante in solicitantes) {
+					if (solicitante.Estado.All(char.IsDigit))
+					{
+						solicitante.Estado = _estadoService.GetById(Convert.ToInt32(solicitante.Estado)).Uf;
+					}
+				}
             }
             if (TempData["responseOp"] != null)
                 ViewBag.responseOp = TempData["responseOp"];
@@ -319,10 +325,12 @@ namespace MonitoraSUS.Controllers
                 empresas = _empresaExameService.ListAll();
             else if (autenticadoTrabalhaEstado != null && autenticadoTrabalhaEstado.IdEmpresaExame != EmpresaExameModel.EMPRESA_ESTADO_MUNICIPIO)
                 empresas = new List<EmpresaExameModel>() { _empresaExameService.GetById(autenticadoTrabalhaEstado.IdEmpresaExame) };
-            else
-                empresas = _empresaExameService.ListByUF(_estadoService.GetById(autenticadoTrabalhaEstado.IdEstado).Uf);
+            else if (autenticadoTrabalhaEstado != null && autenticadoTrabalhaEstado.IdEmpresaExame == EmpresaExameModel.EMPRESA_ESTADO_MUNICIPIO)
+				empresas = _empresaExameService.ListByUF(_estadoService.GetById(autenticadoTrabalhaEstado.IdEstado).Uf);
+			else if (autenticadoTrabalhaMunicipio != null)
+				empresas = _empresaExameService.ListByUF(_estadoService.GetById(Convert.ToInt32(_municipioService.GetById(autenticadoTrabalhaMunicipio.IdMunicipio).Uf)).Uf);
 
-            if (empresas != null)
+			if (empresas != null)
                 tupleModel = new Tuple<List<SolicitanteAprovacaoViewModel>, List<EmpresaExameModel>>(solicitantes, empresas);
             else
                 tupleModel = new Tuple<List<SolicitanteAprovacaoViewModel>, List<EmpresaExameModel>>(solicitantes, null);
