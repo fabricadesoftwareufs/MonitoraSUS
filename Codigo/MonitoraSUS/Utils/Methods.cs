@@ -45,7 +45,7 @@ namespace MonitoraSUS.Utils
                 case 0:
                     return "<html><body>" +
                         "Foi solicitado a recuperação de sua senha para acesso ao MonitoraSUS.<br>" +
-						"Você possui 24 horas para fazer a alteração da sua senha de acesso.<br><a href='" +
+						"Você possui 24 horas para fazer a alteração da sua senha de acesso.<br>" +
                         link + senhaModel.Token + "'>Clique aqui mudar a senha</a>" +
                         RodapeEmail();
 
@@ -53,7 +53,7 @@ namespace MonitoraSUS.Utils
                 case 1:
                     return "<html><body>" +
                         "Parabéns! Seu cadastro foi aprovado para acesso ao MonitoraSUS.<br>" +
-						"Você possui 24 horas para criar sua senha de acesso ao sistema.<br><a href='" +
+						"Você possui 24 horas para criar sua senha de acesso ao sistema.<br>" +
                         link + senhaModel.Token + "'>Clique aqui para criar sua senha.</a>" +
                         RodapeEmail();
 
@@ -61,7 +61,7 @@ namespace MonitoraSUS.Utils
                     return "<html><body>" +
                         "Parabéns! Seu cadastro foi ativado para acesso ao MonitoraSUS. <br>" +
                         "Acesse o sistema " + site + "'>aqui</a>." +
-                        "<br>Caso não lembre da sua senha de acesso, você possui 24 horas para criar uma nova senha.<br><a href='" +
+                        "<br>Caso não lembre da sua senha de acesso, você possui 24 horas para criar uma nova senha.<br>" +
                         link + senhaModel.Token + "'>Clique aqui para criar uma nova senha.</a>" +
                         RodapeEmail();
 				case 4:
@@ -72,7 +72,7 @@ namespace MonitoraSUS.Utils
 						"Seu cadastro foi aprovado com perfil de ADMINISTRADOR do Município ou Estado solicitado.<br/>" +
 						"Acesse o sistema através da url www.monitorasus.ufs.br e consulte o manual do sistema." +
 						"Entraremos em contato para agendarmos uma apresentação das funcionalidades." +
-						"Você possui 24 horas para criar sua senha de acesso ao sistema.<br><a href='" + 
+						"Você possui 24 horas para criar sua senha de acesso ao sistema.<br>" + 
 						link + senhaModel.Token + "'>Clique aqui para criar sua senha.</a>" +
 						RodapeEmail();
 
