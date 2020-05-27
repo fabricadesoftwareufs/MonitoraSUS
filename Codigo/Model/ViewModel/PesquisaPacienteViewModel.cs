@@ -17,11 +17,13 @@ namespace Model.ViewModel
 			UTI = 0;
 			Obito = 0;
 			Saudavel = 0;
-        }
+			Estabilizacao = 0;
+		}
 
         public List<MonitoraPacienteViewModel> Exames { get; set; }
 		public int Isolamento { get; set; }
 		public int Hospitalizado { get; set; }
+		public int Estabilizacao { get; set; }
 		public int UTI { get; set; }
 		public int Obito { get; set; }
 		public int Saudavel { get; set; }

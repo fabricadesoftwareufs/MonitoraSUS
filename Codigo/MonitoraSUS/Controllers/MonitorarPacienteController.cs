@@ -320,9 +320,11 @@ namespace MonitoraSUS.Controllers
 				switch (item.SituacaoSaude)
 				{
 					case PessoaModel.SITUACAO_ISOLAMENTO: pacientesTotalizados.Isolamento++; break;
-					case PessoaModel.SITUACAO_HOSPITALIZADO: pacientesTotalizados.Hospitalizado++; break;
+					case PessoaModel.SITUACAO_HOSPITALIZADO_INTERNAMENTO: pacientesTotalizados.Hospitalizado++; break;
 					case PessoaModel.SITUACAO_UTI: pacientesTotalizados.UTI++; break;
 					case PessoaModel.SITUACAO_SAUDAVEL: pacientesTotalizados.Saudavel++; break;
+					case PessoaModel.SITUACAO_ESTABILIZACAO: pacientesTotalizados.Estabilizacao++; break;
+					case PessoaModel.SITUACAO_OBITO: pacientesTotalizados.Obito++; break;
 				}
 			}
 			return pacientesTotalizados;
@@ -335,7 +337,7 @@ namespace MonitoraSUS.Controllers
 				case "P":
 					return "Positivo";
 				case "C":
-					return "Curado";
+					return "Recuperado";
 				case "I":
 					return "Indeterminado";
 

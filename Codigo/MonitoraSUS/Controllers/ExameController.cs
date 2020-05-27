@@ -296,54 +296,31 @@ namespace MonitoraSUS.Controllers
 		{
 
 			var exame = _exameContext.GetById(id);
-			var situacao = _situacaoPessoaContext.GetById(exame.IdPaciente, exame.IdVirusBacteria);
-
-			/* 
-             * Removendo situação do paciente 
-             */
-			try
-			{
-				if (situacao != null)
-					_situacaoPessoaContext.Delete(situacao.Idpessoa, situacao.IdVirusBacteria);
-			}
-			catch
-			{
-				TempData["mensagemErro"] = "Não foi possível excluir esse exame, tente novamente." +
-										   " Se o erro persistir, entre em contato com a Fábrica de Software da UFS pelo email fabricadesoftware@ufs.br";
-
-				return RedirectToAction(nameof(Index));
-			}
-
-			/* 
-             * Removendo exame do paciente 
-             */
+			
 			try
 			{
 				_exameContext.Delete(id);
 
-				var situacoes = _exameContext.GetByIdPaciente(exame.IdPaciente);
+				var situacoes = _situacaoPessoaContext.GetByIdPaciente(exame.IdPaciente);
+				var exames = _exameContext.GetByIdPaciente(exame.IdPaciente);
 				var pessoaTrabalhaEstado = _pessoaTrabalhaEstadoContext.GetByIdPessoa(exame.IdPaciente);
 				var pessoaTrabalhaMunicipio = _pessoaTrabalhaMunicipioContext.GetByIdPessoa(exame.IdPaciente);
-
-				if (situacoes.Count == 0 && pessoaTrabalhaEstado == null && pessoaTrabalhaMunicipio == null)
+				var examesPaciente = _exameContext.GetByIdPaciente(exame.IdPaciente);
+				var examesNotificados = _exameContext.GetByIdAgente(exame.IdPaciente);
+				if (situacoes.Count == 1 && pessoaTrabalhaEstado == null && pessoaTrabalhaMunicipio == null &&
+					examesPaciente.Count == 0 && examesNotificados.Count == 0)
+				{
+					var situacao = situacoes.First();
+					_situacaoPessoaContext.Delete(situacao.Idpessoa, situacao.IdVirusBacteria);
 					_pessoaContext.Delete(exame.IdPaciente);
+				}
 			}
 			catch
 			{
-				/*
-                 * Se o exame não puder ser removido, adicionar 
-                 * novamente a ultima situacao do paciente pra 
-                 * manter a consistência do banco de dados
-                 */
-				try { _situacaoPessoaContext.Insert(situacao); }
-				catch { }
-
-				TempData["mensagemErro"] = " Não foi possível excluir esse exame, tente novamente." +
+				TempData["mensagemErro"] = "Houve problemas na exclusão do exame. Tente novamente em alguns minutos." +
 										   " Se o erro persistir, entre em contato com a Fábrica de Software da UFS pelo email fabricadesoftware@ufs.br";
-
 				return RedirectToAction(nameof(Index));
 			}
-
 
 			TempData["mensagemSucesso"] = "O Exame foi removido com sucesso!";
 			return RedirectToAction(nameof(Index));

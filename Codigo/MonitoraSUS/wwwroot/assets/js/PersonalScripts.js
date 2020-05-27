@@ -167,7 +167,7 @@ function PreencheForm() {
 
 function PreencheFormCEP() {
     if (input.value.length === 9 && input.value.toString().match(/\d{5}-\d{3}/))
-        BuscaViaCep(input.value);
+			BuscaViaCep(input.value);
     else
         removeReadOnly();
 }

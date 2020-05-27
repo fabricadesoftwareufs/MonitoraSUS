@@ -353,9 +353,12 @@ namespace MonitoraSUS.Controllers
                 exames = _exameService.GetByIdAgente(idPessoa);
             if (exames.Count() == 0)
             {
-                int idUsuario = _usuarioService.GetByIdPessoa(idPessoa).IdUsuario;
-                _recuperarSenhaService.DeleteByUser(idUsuario);
-                _usuarioService.Delete(idUsuario);
+                var usuario = _usuarioService.GetByIdPessoa(idPessoa);
+				if (usuario != null)
+				{
+					_recuperarSenhaService.DeleteByUser(usuario.IdUsuario);
+					_usuarioService.Delete(usuario.IdUsuario);
+				}
                 _pessoaService.Delete(idPessoa);
             }
             else

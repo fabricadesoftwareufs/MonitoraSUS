@@ -7,10 +7,10 @@ namespace Model
     {
 		public const string SITUACAO_SAUDAVEL = "S";
 		public const string SITUACAO_ISOLAMENTO = "I";
-		public const string SITUACAO_HOSPITALIZADO = "H";
+		public const string SITUACAO_HOSPITALIZADO_INTERNAMENTO = "H";
+		public const string SITUACAO_ESTABILIZACAO = "E";
 		public const string SITUACAO_UTI = "U";
 		public const string SITUACAO_OBITO = "O";
-
 		public PessoaModel()
 		{
 			SituacaoSaude = SITUACAO_SAUDAVEL;
@@ -62,8 +62,10 @@ namespace Model
 			{
 				if (SituacaoSaude.Equals(SITUACAO_ISOLAMENTO))
 					return "Isolamento";
-				if (SituacaoSaude.Equals(SITUACAO_HOSPITALIZADO))
-					return "Hospitalizado";
+				if (SituacaoSaude.Equals(SITUACAO_HOSPITALIZADO_INTERNAMENTO))
+					return "Internamento Clínico";
+				if (SituacaoSaude.Equals(SITUACAO_ESTABILIZACAO))
+					return "Estabilização";
 				if (SituacaoSaude.Equals(SITUACAO_UTI))
 					return "UTI";
 				if (SituacaoSaude.Equals(SITUACAO_OBITO))

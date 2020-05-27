@@ -317,7 +317,11 @@
 										</div>
 										<div class="custom-control custom-radio custom-control-inline">
 											@Html.RadioButtonFor(model => model.SituacaoSaude, "H", new { @class = "custom-control-input", @id = "input-situacao-hospitalizado", @name = "situacaoSaude" })
-											<label class="custom-control-label" for="input-situacao-hospitalizado">Hospitalizado</label>
+											<label class="custom-control-label" for="input-situacao-hospitalizado">Internamento Clínico</label>
+										</div>
+										<div class="custom-control custom-radio custom-control-inline">
+											@Html.RadioButtonFor(model => model.SituacaoSaude, "E", new { @class = "custom-control-input", @id = "input-situacao-estabilizacao", @name = "situacaoSaude" })
+											<label class="custom-control-label" for="input-situacao-estabilizacao">Estabilização</label>
 										</div>
 										<div class="custom-control custom-radio custom-control-inline">
 											@Html.RadioButtonFor(model => model.SituacaoSaude, "U", new { @class = "custom-control-input", @id = "input-situacao-uti", @name = "situacaoSaude" })
