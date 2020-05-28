@@ -347,6 +347,7 @@ namespace Service
 			entity.DoencaRenal = Convert.ToByte(model.DoencaRenal);
 			entity.Epilepsia = Convert.ToByte(model.Epilepsia);
 			entity.OutrasComorbidades = model.OutrasComorbidades;
+			entity.SituacaoSaude = model.SituacaoSaude;
 			return entity;
 		}
 		private Pessoa ModelToEntity(PessoaModel model, Pessoa entity)
@@ -390,6 +391,7 @@ namespace Service
 			entity.DorOuvido = Convert.ToByte(model.DorOuvido);
 			entity.Febre = Convert.ToByte(model.Febre);
 			entity.DataObito = model.DataObito;
+
 			return entity;
         }
     }

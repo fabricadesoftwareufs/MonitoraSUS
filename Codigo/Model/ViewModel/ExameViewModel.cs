@@ -23,6 +23,7 @@ namespace Model
 			ResponsavelRealizacaoExame = "";
 			EhProfissionalSaude = false;
             IdNotificacao = "";
+			MetodoExame = "C";
             StatusNotificacao = ExameModel.NOTIFICADO_NAO;
         }
 

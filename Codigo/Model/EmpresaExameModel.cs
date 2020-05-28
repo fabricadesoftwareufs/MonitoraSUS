@@ -64,5 +64,11 @@ namespace Model
         [Required]
         [Display(Name = "Número de Leitos de UTI Disponível")]
         public int NumeroLeitosUtidisponivel { get; set; }
-    }
+		[Required]
+		[Display(Name = "É Instituição Pública?")]
+		public bool EhPublico { get; set; }
+		[Required]
+		[Display(Name = "Faz monitoramento de Pacientes?")]
+		public bool FazMonitoramento { get; set; }
+	}
 }

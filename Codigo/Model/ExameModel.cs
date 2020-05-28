@@ -21,7 +21,9 @@ namespace Model
 		public const string METODO_CROMATOGRAFIA = "C";
 		public const string METODO_FLUORESCENCIA = "F";
 
-
+		public const string METODO_PCR_DESCRICAO = "RT-PCR";
+		public const string METODO_CROMATOGRAFIA_DESCRICAO = "I.Cromatografia";
+		public const string METODO_FLUORESCENCIA_DESCRICAO = "Fluorescência";
 		public int IdExame { get; set; }
         [Display(Name = "Virus")]
         public int IdVirusBacteria { get; set; }
@@ -43,11 +45,11 @@ namespace Model
 			get
 			{
 				if (MetodoExame.Equals(METODO_PCR))
-					return "RT-PCR";
+					return METODO_PCR_DESCRICAO;
 				else if (MetodoExame.Equals(METODO_CROMATOGRAFIA))
-					return "I.Cromatografia";
+					return METODO_CROMATOGRAFIA_DESCRICAO;
 				else
-					return "Fluorescência";
+					return METODO_FLUORESCENCIA_DESCRICAO;
 			}
 		}
 		public string IgG { get; set; }

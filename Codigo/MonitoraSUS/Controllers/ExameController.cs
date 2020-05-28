@@ -416,7 +416,7 @@ namespace MonitoraSUS.Controllers
 				return View(new ExameViewModel());
 
 			}
-			catch (Exception)
+			catch (Exception e)
 			{
 				TempData["mensagemErro"] = "Houve um problema ao atualizar as informações, tente novamente." +
 				  " Se o erro persistir, entre em contato com a Fábrica de Software da UFS pelo email fabricadesoftware@ufs.br";
