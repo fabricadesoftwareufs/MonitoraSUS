@@ -14,9 +14,14 @@ namespace Model.ViewModel
         public int TotalPositivos { get; set; }
         [Display(Name = "Negativos")]
         public int TotalNegativos { get; set; }
-        [Display(Name = "Curados")]
-        public int TotalCurados { get; set; }
-        [Display(Name = "Indeterminados")]
+        [Display(Name = "Recuperados")]
+        public int TotalRecuperados { get; set; }
+		[Display(Name = "Aguardando")]
+		public int TotalAguardando { get; set; }
+		[Display(Name = "IgG/IgM")]
+		public int TotalIgGIgM { get; set; }
+
+		[Display(Name = "Indeterminados")]
         public int TotalIndeterminados { get; set; }
     }
 }

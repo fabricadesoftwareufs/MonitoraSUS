@@ -26,7 +26,9 @@
     bool doenRespiatoria = Model.IdPaciente.DoencaRespiratoria;
     bool obeso = Model.IdPaciente.Obeso;
     bool imunodeprimido = Model.IdPaciente.Imunodeprimido;
-	String situacaoSaude = Model.IdPaciente.SituacaoSaude;
+	bool doencaRenal = Model.IdPaciente.DoencaRenal;
+	bool epilepsia = Model.IdPaciente.Epilepsia;
+    String situacaoSaude = Model.IdPaciente.SituacaoSaude;
     string dataExame = Model.DataExame != DateTime.MinValue ? Model.DataExame.ToString("yyyy-MM-dd") : DateTime.Now.ToString("yyyy-MM-dd");
     string DataInicioSintomas = Model.DataInicioSintomas != DateTime.MinValue ? Model.DataInicioSintomas.ToString("yyyy-MM-dd") : DateTime.Now.ToString("yyyy-MM-dd");
     var estadoid = Model.IdEstado;
@@ -39,7 +41,6 @@
     var outrasComorbidades = Model.IdPaciente.OutrasComorbidades;
     var ehProfissional = Model.EhProfissionalSaude;
     var codigoColeta = Model.CodigoColeta;
-
 }
 
 <!-- Page Content -->
@@ -245,43 +246,63 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-lg-3">
-                                    <div class="form-group">
-                                        <div class="custom-control custom-checkbox checkbox">
-                                            <label>
-                                                <input asp-for="IdPaciente.Imunodeprimido" checked="@imunodeprimido" class="custom-control-input" id="customCheck5" />
-                                                <label class="custom-control-label" for="customCheck5">Imunodeprimido</label>
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-3">
-                                    <div class="form-group">
-                                        <div class="custom-control custom-checkbox checkbox">
-                                            <label>
-                                                <input asp-for="IdPaciente.Cancer" checked="@cancer" class="custom-control-input" id="customCheck6" />
-                                                <label class="custom-control-label" for="customCheck6">Câncer</label>
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-3">
-                                    <div class="form-group">
-                                        <div class="custom-control custom-checkbox checkbox">
-                                            <label>
-                                                <input asp-for="IdPaciente.DoencaRespiratoria" checked="@doenRespiatoria" class="custom-control-input" id="customCheck7" />
-                                                <label class="custom-control-label" for="customCheck7">Doença Respiratória</label>
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-3">
-                                    <div class="form-group">
-                                        <input type="search" id="input-outrasComorbidades" class="form-control" style="margin-top: 1px;" asp-for="IdPaciente.OutrasComorbidades" placeholder="Outras comorbidades" value="@outrasComorbidades">
-                                    </div>
-                                </div>
-                            </div>
+							<div class="row">
+								<div class="col-lg-3">
+									<div class="form-group">
+										<div class="custom-control custom-checkbox checkbox">
+											<label>
+												<input asp-for="IdPaciente.Imunodeprimido" checked="@imunodeprimido" class="custom-control-input" id="customCheck5" />
+												<label class="custom-control-label" for="customCheck5">Imunodeprimido</label>
+											</label>
+										</div>
+									</div>
+								</div>
+								<div class="col-lg-3">
+									<div class="form-group">
+										<div class="custom-control custom-checkbox checkbox">
+											<label>
+												<input asp-for="IdPaciente.Cancer" checked="@cancer" class="custom-control-input" id="customCheck6" />
+												<label class="custom-control-label" for="customCheck6">Câncer</label>
+											</label>
+										</div>
+									</div>
+								</div>
+								<div class="col-lg-3">
+									<div class="form-group">
+										<div class="custom-control custom-checkbox checkbox">
+											<label>
+												<input asp-for="IdPaciente.DoencaRespiratoria" checked="@doenRespiatoria" class="custom-control-input" id="customCheck7" />
+												<label class="custom-control-label" for="customCheck7">Doença Respiratória</label>
+											</label>
+										</div>
+									</div>
+								</div>
+								<div class="col-lg-3">
+									<div class="form-group">
+										<div class="custom-control custom-checkbox checkbox">
+											<label>
+												<input asp-for="IdPaciente.DoencaRenal" checked="@doencaRenal" class="custom-control-input" id="customCheck7" />
+												<label class="custom-control-label" for="customCheck8">Doença Renal</label>
+											</label>
+										</div>
+									</div>
+								</div>
+								<div class="col-lg-3">
+									<div class="form-group">
+										<div class="custom-control custom-checkbox checkbox">
+											<label>
+												<input asp-for="IdPaciente.Epilepsia" checked="@epilepsia" class="custom-control-input" id="customCheck7" />
+												<label class="custom-control-label" for="customCheck9">Epilepsia</label>
+											</label>
+										</div>
+									</div>
+								</div>
+								<div class="col-lg-3">
+									<div class="form-group">
+										<input type="search" id="input-outrasComorbidades" class="form-control" style="margin-top: 1px;" asp-for="IdPaciente.OutrasComorbidades" placeholder="Outras comorbidades" value="@outrasComorbidades">
+									</div>
+								</div>
+							</div>
                         </div>
                         <hr class="my-4" />
                         <h6 class="heading-small text-muted mb-4">RESULTADO</h6>

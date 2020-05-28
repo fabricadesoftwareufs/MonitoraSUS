@@ -30,7 +30,6 @@ namespace Service
 
                     Idpessoa = situacao.Idpessoa,
                     IdVirusBacteria = situacao.IdVirusBacteria,
-                    UltimaSituacaoSaude = situacao.UltimaSituacaoSaude,
                     DataUltimoMonitoramento = situacao.DataUltimoMonitoramento,
                     IdGestor = situacao.IdGestor,
                     Descricao = situacao.Descricao,
@@ -44,7 +43,6 @@ namespace Service
 
                     Idpessoa = situacao.Idpessoa,
                     IdVirusBacteria = situacao.IdVirusBacteria,
-                    UltimaSituacaoSaude = situacao.UltimaSituacaoSaude,
                     DataUltimoMonitoramento = situacao.DataUltimoMonitoramento,
                     IdGestor = situacao.IdGestor,
                     Descricao = situacao.Descricao,
@@ -64,7 +62,6 @@ namespace Service
 
             s.IdVirusBacteria = situacaoModel.IdVirusBacteria;
             s.Idpessoa = situacaoModel.Idpessoa;
-            s.UltimaSituacaoSaude = situacaoModel.UltimaSituacaoSaude;
             s.DataUltimoMonitoramento = situacaoModel.DataUltimoMonitoramento;
             s.IdGestor = situacaoModel.IdGestor;
             s.Descricao = situacaoModel.Descricao;
@@ -86,7 +83,6 @@ namespace Service
 
               Idpessoa = situacao.Idpessoa,
               IdVirusBacteria = situacao.IdVirusBacteria,
-              UltimaSituacaoSaude = situacao.UltimaSituacaoSaude,
               DataUltimoMonitoramento = situacao.DataUltimoMonitoramento,
               IdGestor = situacao.IdGestor,
               Descricao = situacao.Descricao,

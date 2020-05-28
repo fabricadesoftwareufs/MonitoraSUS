@@ -16,7 +16,7 @@
                         <div class="col">
                             <h5 class="card-title  text-muted mb-0">MonitoraSUS</h5>
                             <h5 class="h3 mb-0">Monitorar Paciente</h5>
-                            <h4>Monitoramento Referente ao Exame @Model.VirusBacteria.Nome/@Model.UltimaSituacao</h4>
+                            <h4>Monitoramento Referente ao Exame @Model.VirusBacteria.Nome/@Model.UltimoResultado</h4>
                         </div>
                         <div class="col text-right">
                             <a class="btn btn-default" asp-controller="MonitorarPaciente" asp-action="Index"> <i class="fas fa-arrow-left"></i> Voltar</a><br />
@@ -229,6 +229,26 @@
 											<label>
 												<input asp-for="DoencaRespiratoria" class="custom-control-input" id="customCheck7" />
 												<label class="custom-control-label" for="customCheck7">Doença Respiratória</label>
+											</label>
+										</div>
+									</div>
+								</div>
+								<div class="col-lg-3">
+									<div class="form-group">
+										<div class="custom-control custom-checkbox checkbox">
+											<label>
+												<input asp-for="DoencaRenal" class="custom-control-input" id="customCheck7" />
+												<label class="custom-control-label" for="customCheck8">Doença Renal</label>
+											</label>
+										</div>
+									</div>
+								</div>
+								<div class="col-lg-3">
+									<div class="form-group">
+										<div class="custom-control custom-checkbox checkbox">
+											<label>
+												<input asp-for="Epilepsia" class="custom-control-input" id="customCheck7" />
+												<label class="custom-control-label" for="customCheck9">Epilepsia</label>
 											</label>
 										</div>
 									</div>

@@ -41,9 +41,14 @@ namespace Model.ViewModel
         public bool Imunodeprimido { get; set; }
         public bool Cancer { get; set; }
         public bool DoencaRespiratoria { get; set; }
-        public string OutrasComorbidades { get; set; }
+		[Display(Name = "Doença Renal")]
+		public bool DoencaRenal { get; set; }
+		public bool Epilepsia { get; set; }
+		public string OutrasComorbidades { get; set; }
 		public string SituacaoSaude { get; set; }
-
+		[Display(Name = "Data Óbito")]
+		[DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
+		public DateTime ?DataObito { get; set; }
 		public string SituacaoSaudeDescricao
 		{
 			get
@@ -64,8 +69,25 @@ namespace Model.ViewModel
         public VirusBacteriaModel VirusBacteria { get; set; }
         public List<ExameViewModel> ExamesPaciente { get; set; }
         public PessoaModel Gestor { get; set; }
-        public string UltimaSituacao { get; set; }
+        public string UltimoResultado { get; set; }
         public DateTime? DataUltimoMonitoramento { get; set; }
         public string Descricao { get; set; }
-    }
+		public bool Febre { get; set; }
+		public bool Tosse { get; set; }
+		public bool Coriza { get; set; }
+		[Display(Name = "Dificuldade Respiratória")]
+		public bool DificuldadeRespiratoria { get; set; }
+		[Display(Name = "Dor na Garganta")]
+		public bool DorGarganta { get; set; }
+		[Display(Name = "Diarréia")]
+		public bool Diarreia { get; set; }
+		[Display(Name = "Dor no Ouvido")]
+		public bool DorOuvido { get; set; }
+		[Display(Name = "Náusea")]
+		public bool Nausea { get; set; }
+		[Display(Name = "Dor Abdominal")]
+		public bool DorAbdominal { get; set; }
+		[Display(Name = "Perda Olfato/Paladar")]
+		public bool PerdaOlfatoPaladar { get; set; }
+	}
 }

@@ -40,10 +40,14 @@ namespace Model
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime DataInicioSintomas { get; set; }
-        public string IgG { get; set; }
+		public bool AguardandoResultado { get; set; }
+		[Display(Name = "Método")]
+		public string MetodoExame { get; set; }
+		public string IgG { get; set; }
         public string IgM { get; set; }
         public string Pcr { get; set; }
-        public int IdEstado { get; set; }
+		public string IgGIgM { get; set; }
+		public int IdEstado { get; set; }
         public int? MunicipioId { get; set; }
         public int? IdEmpresaSaude { get; set; }
         public int PesquisarCpf { get; set; }
@@ -60,16 +64,35 @@ namespace Model
         {
             get
             {
-                return new ExameModel() { IgM = this.IgM, IgG = this.IgG, Pcr = this.Pcr }.Resultado;
+                return new ExameModel() { IgM = this.IgM, IgG = this.IgG, Pcr = this.Pcr, IgGIgM = this.IgGIgM, AguardandoResultado = this.AguardandoResultado }.Resultado;
             }
         }
         public string ResultadoStatus
         {
             get
             {
-                return new ExameModel() { IgM = this.IgM, IgG = this.IgG, Pcr = this.Pcr }.ResultadoStatus;
+                return new ExameModel() { IgM = this.IgM, IgG = this.IgG, Pcr = this.Pcr, IgGIgM = this.IgGIgM, AguardandoResultado = this.AguardandoResultado }.ResultadoStatus;
             }
         }
+		[Display(Name = "Relatou Sintomas")]
+		public bool RelatouSintomas { get; set; }
+		public bool Febre { get; set; }
+		public bool Tosse { get; set; }
+		public bool Coriza { get; set; }
+		[Display(Name = "Dificuldade Respiratória")]
+		public bool DificuldadeRespiratoria { get; set; }
+		[Display(Name = "Dor na Garganta")]
+		public bool DorGarganta { get; set; }
+		[Display(Name = "Diarréia")]
+		public bool Diarreia { get; set; }
+		[Display(Name = "Dor no Ouvido")]
+		public bool DorOuvido { get; set; }
+		[Display(Name = "Náusea")]
+		public bool Nausea { get; set; }
+		[Display(Name = "Dor Abdominal")]
+		public bool DorAbdominal { get; set; }
+		[Display(Name = "Perda Olfato/Paladar")]
+		public bool PerdaOlfatoPaladar { get; set; }
 
-    }
+	}
 }
