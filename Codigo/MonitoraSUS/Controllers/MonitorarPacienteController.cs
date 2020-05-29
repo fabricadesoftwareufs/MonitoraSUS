@@ -25,6 +25,7 @@ namespace MonitoraSUS.Controllers
 		private readonly IMunicipioService _municicpioContext;
 		private readonly IEstadoService _estadoContext;
 		private readonly IEmpresaExameService _empresaExameContext;
+		private readonly IInternacaoService _internacaoContext;
 		private readonly IConfiguration _configuration;
 
 
@@ -37,6 +38,7 @@ namespace MonitoraSUS.Controllers
 							   IPessoaTrabalhaMunicipioService pessoaTrabalhaMunicipioContext,
 							   IMunicipioService municicpioContext,
 							   IEstadoService estadoContext,
+							   IInternacaoService internacaoContext,
 							   IEmpresaExameService empresaExameContext)
 		{
 			_virusBacteriaContext = virusBacteriaContext;
@@ -47,6 +49,7 @@ namespace MonitoraSUS.Controllers
 			_exameContext = exameContext;
 			_municicpioContext = municicpioContext;
 			_estadoContext = estadoContext;
+			_internacaoContext = internacaoContext;
 			_configuration = configuration;
 			_empresaExameContext = empresaExameContext;
 		}
@@ -79,6 +82,8 @@ namespace MonitoraSUS.Controllers
 		public IActionResult Edit(int idPaciente, int IdVirusBacteria)
 		{
 			ViewBag.googleKey = _configuration["GOOGLE_KEY"];
+			ViewBag.Empresas = _empresaExameContext.GetAll();
+
 			return View(GetPacienteViewModel(idPaciente, IdVirusBacteria));
 		}
 
@@ -87,6 +92,8 @@ namespace MonitoraSUS.Controllers
 		public IActionResult Edit(MonitoraPacienteViewModel paciente)
 		{
 			ViewBag.googleKey = _configuration["GOOGLE_KEY"];
+			ViewBag.Empresas = _empresaExameContext.GetAll();
+
 			/*
              * Fazendo validações no cpf
              */
@@ -197,8 +204,12 @@ namespace MonitoraSUS.Controllers
 		{
 			var situacao = _situacaoPessoaContext.GetById(idPaciente, IdVirusBacteria);
 			var pessoa = _pessoaContext.GetById(idPaciente);
+			
+			var internacoes  = _internacaoContext.GetByIdPaciente(pessoa.Idpessoa);
+			for (int i = 0; i < internacoes.Count;i++)
+				internacoes[i].NomeEmpresa = _empresaExameContext.GetById(internacoes[i].IdEmpresa).Nome;
 
-			var monitora =  new MonitoraPacienteViewModel
+			var monitora = new MonitoraPacienteViewModel
 			{
 				Idpessoa = pessoa.Idpessoa,
 				Nome = pessoa.Nome,
@@ -231,6 +242,7 @@ namespace MonitoraSUS.Controllers
 				SituacaoSaude = pessoa.SituacaoSaude,
 				VirusBacteria = _virusBacteriaContext.GetById(situacao.IdVirusBacteria),
 				ExamesPaciente = GetExamesPaciente(pessoa.Idpessoa),
+				Internacoes = internacoes,
 				Coriza = pessoa.Coriza,
 				DataObito = pessoa.DataObito,
 				Diarreia = pessoa.Diarreia,

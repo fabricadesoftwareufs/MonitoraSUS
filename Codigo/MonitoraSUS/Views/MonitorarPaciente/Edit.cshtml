@@ -5,7 +5,6 @@
     var googleKey = ViewBag.googleKey;
 }
 
-
 <!-- Page Content -->
 <div class="container-fluid mt--6">
     <div class="row">
@@ -25,479 +24,680 @@
                 </div>
 
                 <div class="card-body">
-					<form asp-action="Edit" name="form-exame" id="form-exame" autocomplete="off">
-						<h6 class="heading-small text-muted mb-4">Dados Pessoais</h6>
-						<h6 class="heading-small text-muted pl-lg-4">Digite um CPF para carregar as informações do paciente ou cadastre-o agora mesmo</h6>
-						<div class="pl-lg-4">
-							<div class="row">
-								<div class="col-md-2" hidden>
-									<div class="form-group">
-										<input asp-for="Idpessoa" required id="input-id-pessoa" class="form-control" />
-									</div>
-								</div>
-								<div class="col-md-2" hidden>
-									<div class="form-group">
-										<!--virus ou bacteria do monitoramento atual-->
-										<input asp-for="VirusBacteria.IdVirusBacteria" required id="input-id-virus" class="form-control" />
-									</div>
-								</div>
-								<div class="col-md-2">
-									<div class="form-group">
-										<label class="form-control-label" for="input-cpf">CPF ou RG</label>
-										<input asp-for="Cpf" id="input-cpf" placeholder="000.000.000-00" type="text" class="form-control" />
-										@if (TempData["resultadoPesquisa"] != null)
-										{
-											<h6 class="heading-small text-danger">@TempData["resultadoPesquisa"]</h6>
-										}
-									</div>
-								</div>
-								<div class="col-md-6">
-									<div class="form-group">
-										<label class="form-control-label" for="input-nome">Paciente</label>
-										<input asp-for="Nome" required id="input-nome" placeholder="Nome Completo" class="form-control" />
-									</div>
-								</div>
-								<div class="col-md-2">
-									<div class="form-group">
-										<label for="input-data-nascimento" class="form-control-label">Data de Nascimento</label>
-										<input asp-for="DataNascimento" type="text" id="input-data-nascimento" placeholder="dd-mm-aaaa" class="form-control" required value="@Model.DataNascimento.ToString("dd/MM/yyyy")" />
-									</div>
-								</div>
-								<div class="col-md-2">
-									<div class="form-group">
-										<label class="form-control-label" for="sexo">Sexo</label><br>
-										<div class="custom-control custom-radio custom-control-inline">
-											@Html.RadioButtonFor(model => model.Sexo, "M", new { @class = "custom-control-input", @id = "input-sexo-masc", @name = "sexo" })
-											<label class="custom-control-label" for="input-sexo-masc">Masculino</label>
-										</div>
-										<div class="custom-control custom-radio custom-control-inline">
-											@Html.RadioButtonFor(model => model.Sexo, "F", new { @class = "custom-control-input", @id = "input-sexo-fem", @name = "sexo" })
-											<label class="custom-control-label" for="input-sexo-fem">Feminino</label>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-						<hr class="my-4" />
-						<h6 class="heading-small text-muted mb-4">Informações de Contato</h6>
-						<div class="pl-lg-4">
-							<div class="row">
-								<div class="col-lg-2">
-									<div class="form-group">
-										<label class="form-control-label" for="postal_code">CEP (Não sabe? </label> <a href="http://www.buscacep.correios.com.br/sistemas/buscacep/" target="_blank">Busque aqui</a>)
-										<input asp-for="Cep" oninput="PreencheFormCEP()" id="postal_code" class="form-control" required placeholder="CEP" />
-										<span id="spanInvalidCep" hidden class="text-danger text-center" style="padding: 10px">Cep Invalido!!</span>
-									</div>
-								</div>
-								<div class="col-lg-5">
-									<div class="form-group">
-										<label class="form-control-label" for="route">Logradouro</label>
-										<input asp-for="Rua" type="search" oninput="PreencheForm()" required placeholder="Pesquise pelo CEP, Rua, Bairro, Número" autocomplete="off" id="route" class="form-control" />
-									</div>
-								</div>
-								<div class="col-lg-1">
-									<div class="form-group">
-										<label class="form-control-label" for="street_number">Número</label>
-										<input asp-for="Numero" id="street_number" class="form-control" placeholder="" />
-									</div>
-								</div>
-								<div class="col-lg-4">
-									<div class="form-group">
-										<label class="form-control-label" for="sublocality_level_1">Bairro</label>
-										<input asp-for="Bairro" id="sublocality_level_1" required class="form-control" placeholder="Bairro" />
-									</div>
-								</div>
-								<div class="col-lg-4">
-									<div class="form-group">
-										<label class="form-control-label" for="administrative_area_level_2">Cidade</label>
-										<input asp-for="Cidade" readonly id="administrative_area_level_2" required class="form-control" placeholder="Cidade" />
-									</div>
-								</div>
-								<div class="col-lg-4">
-									<div class="form-group">
-										<label class="form-control-label" for="administrative_area_level_1">Estado</label>
-										<input asp-for="Estado" readonly id="administrative_area_level_1" class="form-control" placeholder="Estado" />
-									</div>
-								</div>
-								<div class="col-lg-4">
-									<div class="form-group">
-										<label class="form-control-label" for="input-complemento">Complemento</label>
-										<input asp-for="Complemento" id="input-complemento" class="form-control" placeholder="Complemento" />
-									</div>
-								</div>
-								<div class="col-lg-4" hidden>
-									<div class="form-group">
-										<label class="form-control-label" for="input-latitude">Latitude</label>
-										<input asp-for="Latitude" id="latitude" class="form-control" placeholder="" />
-									</div>
-								</div>
-								<div class="col-lg-4" hidden>
-									<div class="form-group">
-										<label class="form-control-label" for="input-longitude">Longitude</label>
-										<input asp-for="Longitude" id="longitude" class="form-control" placeholder="" />
-									</div>
-								</div>
-								<div class="col-lg-4">
-									<div class="form-group">
-										<label class="form-control-label" for="input-celular">Celular</label>
-										<input asp-for="FoneCelular" id="input-celular" required class="form-control" placeholder=" (99) 99999 9999" />
-									</div>
-								</div>
-								<div class="col-lg-4">
-									<div class="form-group">
-										<label class="form-control-label" for="input-telefone">Telefone</label>
-										<input asp-for="FoneFixo" id="input-telefone" class="form-control" placeholder=" (99) 9999 9999" />
-									</div>
-								</div>
-								<div class="col-lg-4">
-									<div class="form-group">
-										<label class="form-control-label" for="input-email">E-mail</label>
-										<input asp-for="Email" id="input-email" class="form-control" placeholder="email@example.com" />
-									</div>
-								</div>
-							</div>
-						</div>
-						<hr class="my-4" />
-						<h6 class="heading-small text-muted mb-4">Comorbidades</h6>
-						<div class="pl-lg-4">
-							<div class="row">
-								<div class="col-lg-3">
-									<div class="form-group">
-										<div class="custom-control custom-checkbox checkbox">
-											<label>
-												<input asp-for="Cardiopatia" class="custom-control-input" id="customCheck1" />
-												<label class="custom-control-label" for="customCheck1">Cardiopatia</label>
-											</label>
-										</div>
-									</div>
-								</div>
-								<div class="col-lg-3">
-									<div class="form-group">
-										<div class="custom-control custom-checkbox checkbox">
-											<label>
-												<input asp-for="Diabetes" class="custom-control-input" id="customCheck2" />
-												<label class="custom-control-label" for="customCheck2">Diabetes</label>
-											</label>
-										</div>
-									</div>
-								</div>
-								<div class="col-lg-3">
-									<div class="form-group">
-										<div class="custom-control custom-checkbox checkbox">
-											<label>
-												<input asp-for="Obeso" class="custom-control-input" id="customCheck3" />
-												<label class="custom-control-label" for="customCheck3">Obesidade</label>
-											</label>
-										</div>
-									</div>
-								</div>
-								<div class="col-lg-3">
-									<div class="form-group">
-										<div class="custom-control custom-checkbox checkbox">
-											<label>
-												<input asp-for="Hipertenso" class="custom-control-input" id="customCheck4" />
-												<label class="custom-control-label" for="customCheck4">Hipertenso</label>
-											</label>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-lg-3">
-									<div class="form-group">
-										<div class="custom-control custom-checkbox checkbox">
-											<label>
-												<input asp-for="Imunodeprimido" class="custom-control-input" id="customCheck5" />
-												<label class="custom-control-label" for="customCheck5">Imunodeprimido</label>
-											</label>
-										</div>
-									</div>
-								</div>
-								<div class="col-lg-3">
-									<div class="form-group">
-										<div class="custom-control custom-checkbox checkbox">
-											<label>
-												<input asp-for="Cancer" class="custom-control-input" id="customCheck6" />
-												<label class="custom-control-label" for="customCheck6">Câncer</label>
-											</label>
-										</div>
-									</div>
-								</div>
-								<div class="col-lg-3">
-									<div class="form-group">
-										<div class="custom-control custom-checkbox checkbox">
-											<label>
-												<input asp-for="DoencaRespiratoria" class="custom-control-input" id="customCheck7" />
-												<label class="custom-control-label" for="customCheck7">Doença Respiratória</label>
-											</label>
-										</div>
-									</div>
-								</div>
-								<div class="col-lg-3">
-									<div class="form-group">
-										<div class="custom-control custom-checkbox checkbox">
-											<label>
-												<input asp-for="DoencaRenal" class="custom-control-input" id="customCheck7" />
-												<label class="custom-control-label" for="customCheck8">Doença Renal</label>
-											</label>
-										</div>
-									</div>
-								</div>
-								<div class="col-lg-3">
-									<div class="form-group">
-										<div class="custom-control custom-checkbox checkbox">
-											<label>
-												<input asp-for="Epilepsia" class="custom-control-input" id="customCheck7" />
-												<label class="custom-control-label" for="customCheck9">Epilepsia</label>
-											</label>
-										</div>
-									</div>
-								</div>
-								<div class="col-lg-3">
-									<div class="form-group">
-										<input type="search" id="input-outrasComorbidades" class="form-control" style="margin-top: 1px;" asp-for="OutrasComorbidades" placeholder="Outras comorbidades">
-									</div>
-								</div>
-							</div>
-						</div>
-						<hr class="my-4" />
-						<h6 class="heading-small text-muted mb-4">Sintomas</h6>
-						<div class="pl-lg-4">
-							<div class="row">
-								<div class="col-lg-3">
-									<div class="form-group">
-										<div class="custom-control custom-checkbox checkbox">
-											<label>
-												<input asp-for="Febre" checked="@Model.Febre" class="custom-control-input" id="customCheck12" />
-												<label class="custom-control-label" for="customCheck12">Febre</label>
-											</label>
-										</div>
-									</div>
-								</div>
-								<div class="col-lg-3">
-									<div class="form-group">
-										<div class="custom-control custom-checkbox checkbox">
-											<label>
-												<input asp-for="Tosse" checked="@Model.Tosse" class="custom-control-input" id="customCheck13" />
-												<label class="custom-control-label" for="customCheck13">Tosse</label>
-											</label>
-										</div>
-									</div>
-								</div>
-								<div class="col-lg-3">
-									<div class="form-group">
-										<div class="custom-control custom-checkbox checkbox">
-											<label>
-												<input asp-for="Coriza" checked="@Model.Coriza" class="custom-control-input" id="customCheck14" />
-												<label class="custom-control-label" for="customCheck14">Coriza</label>
-											</label>
-										</div>
-									</div>
-								</div>
-								<div class="col-lg-3">
-									<div class="form-group">
-										<div class="custom-control custom-checkbox checkbox">
-											<label>
-												<input asp-for="DificuldadeRespiratoria" checked="@Model.DificuldadeRespiratoria" class="custom-control-input" id="customCheck15" />
-												<label class="custom-control-label" for="customCheck15">Dificuldade Respiratória</label>
-											</label>
-										</div>
-									</div>
-								</div>
-								<div class="col-lg-3">
-									<div class="form-group">
-										<div class="custom-control custom-checkbox checkbox">
-											<label>
-												<input asp-for="PerdaOlfatoPaladar" checked="@Model.PerdaOlfatoPaladar" class="custom-control-input" id="customCheck16" />
-												<label class="custom-control-label" for="customCheck16">Perda Olfato/Paladar</label>
-											</label>
-										</div>
-									</div>
-								</div>
-								<div class="col-lg-3">
-									<div class="form-group">
-										<div class="custom-control custom-checkbox checkbox">
-											<label>
-												<input asp-for="DorGarganta" checked="@Model.DorGarganta" class="custom-control-input" id="customCheck17" />
-												<label class="custom-control-label" for="customCheck17">Dor de Garganta</label>
-											</label>
-										</div>
-									</div>
-								</div>
-								<div class="col-lg-3">
-									<div class="form-group">
-										<div class="custom-control custom-checkbox checkbox">
-											<label>
-												<input asp-for="DorOuvido" checked="@Model.DorOuvido" class="custom-control-input" id="customCheck18" />
-												<label class="custom-control-label" for="customCheck18">Dor no Ouvido</label>
-											</label>
-										</div>
-									</div>
-								</div>
-								<div class="col-lg-3">
-									<div class="form-group">
-										<div class="custom-control custom-checkbox checkbox">
-											<label>
-												<input asp-for="DorAbdominal" checked="@Model.DorAbdominal" class="custom-control-input" id="customCheck19" />
-												<label class="custom-control-label" for="customCheck19">Dor Abdominal</label>
-											</label>
-										</div>
-									</div>
-								</div>
-								<div class="col-lg-3">
-									<div class="form-group">
-										<div class="custom-control custom-checkbox checkbox">
-											<label>
-												<input asp-for="Diarreia" checked="@Model.Diarreia" class="custom-control-input" id="customCheck20" />
-												<label class="custom-control-label" for="customCheck20">Diarréia</label>
-											</label>
-										</div>
-									</div>
-								</div>
-								<div class="col-lg-3">
-									<div class="form-group">
-										<div class="custom-control custom-checkbox checkbox">
-											<label>
-												<input asp-for="Nausea" checked="@Model.Nausea" class="custom-control-input" id="customCheck21" />
-												<label class="custom-control-label" for="customCheck21">Náusea</label>
-											</label>
-										</div>
-									</div>
-								</div>
+                    <form asp-action="Edit" name="form-exame" id="form-exame" autocomplete="off">
+                        <h6 class="heading-small text-muted mb-4">Dados Pessoais</h6>
+                        <h6 class="heading-small text-muted pl-lg-4">Digite um CPF para carregar as informações do paciente ou cadastre-o agora mesmo</h6>
+                        <div class="pl-lg-4">
+                            <div class="row">
+                                <div class="col-md-2" hidden>
+                                    <div class="form-group">
+                                        <input asp-for="Idpessoa" required id="input-id-pessoa" class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="col-md-2" hidden>
+                                    <div class="form-group">
+                                        <!--virus ou bacteria do monitoramento atual-->
+                                        <input asp-for="VirusBacteria.IdVirusBacteria" required id="input-id-virus" class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="input-cpf">CPF ou RG</label>
+                                        <input asp-for="Cpf" id="input-cpf" placeholder="000.000.000-00" type="text" class="form-control" />
+                                        @if (TempData["resultadoPesquisa"] != null)
+                                        {
+                                            <h6 class="heading-small text-danger">@TempData["resultadoPesquisa"]</h6>
+                                        }
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="input-nome">Paciente</label>
+                                        <input asp-for="Nome" required id="input-nome" placeholder="Nome Completo" class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label for="input-data-nascimento" class="form-control-label">Data de Nascimento</label>
+                                        <input asp-for="DataNascimento" type="text" id="input-data-nascimento" placeholder="dd-mm-aaaa" class="form-control" required value="@Model.DataNascimento.ToString("dd/MM/yyyy")" />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="sexo">Sexo</label><br>
+                                        <div class="custom-control custom-radio custom-control-inline">
+                                            @Html.RadioButtonFor(model => model.Sexo, "M", new { @class = "custom-control-input", @id = "input-sexo-masc", @name = "sexo" })
+                                            <label class="custom-control-label" for="input-sexo-masc">Masculino</label>
+                                        </div>
+                                        <div class="custom-control custom-radio custom-control-inline">
+                                            @Html.RadioButtonFor(model => model.Sexo, "F", new { @class = "custom-control-input", @id = "input-sexo-fem", @name = "sexo" })
+                                            <label class="custom-control-label" for="input-sexo-fem">Feminino</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr class="my-4" />
+                        <h6 class="heading-small text-muted mb-4">Informações de Contato</h6>
+                        <div class="pl-lg-4">
+                            <div class="row">
+                                <div class="col-lg-2">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="postal_code">CEP (Não sabe? </label> <a href="http://www.buscacep.correios.com.br/sistemas/buscacep/" target="_blank">Busque aqui</a>)
+                                        <input asp-for="Cep" oninput="PreencheFormCEP()" id="postal_code" class="form-control" required placeholder="CEP" />
+                                        <span id="spanInvalidCep" hidden class="text-danger text-center" style="padding: 10px">Cep Invalido!!</span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-5">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="route">Logradouro</label>
+                                        <input asp-for="Rua" type="search" oninput="PreencheForm()" required placeholder="Pesquise pelo CEP, Rua, Bairro, Número" autocomplete="off" id="route" class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="col-lg-1">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="street_number">Número</label>
+                                        <input asp-for="Numero" id="street_number" class="form-control" placeholder="" />
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="sublocality_level_1">Bairro</label>
+                                        <input asp-for="Bairro" id="sublocality_level_1" required class="form-control" placeholder="Bairro" />
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="administrative_area_level_2">Cidade</label>
+                                        <input asp-for="Cidade" readonly id="administrative_area_level_2" required class="form-control" placeholder="Cidade" />
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="administrative_area_level_1">Estado</label>
+                                        <input asp-for="Estado" readonly id="administrative_area_level_1" class="form-control" placeholder="Estado" />
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="input-complemento">Complemento</label>
+                                        <input asp-for="Complemento" id="input-complemento" class="form-control" placeholder="Complemento" />
+                                    </div>
+                                </div>
+                                <div class="col-lg-4" hidden>
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="input-latitude">Latitude</label>
+                                        <input asp-for="Latitude" id="latitude" class="form-control" placeholder="" />
+                                    </div>
+                                </div>
+                                <div class="col-lg-4" hidden>
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="input-longitude">Longitude</label>
+                                        <input asp-for="Longitude" id="longitude" class="form-control" placeholder="" />
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="input-celular">Celular</label>
+                                        <input asp-for="FoneCelular" id="input-celular" required class="form-control" placeholder=" (99) 99999 9999" />
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="input-telefone">Telefone</label>
+                                        <input asp-for="FoneFixo" id="input-telefone" class="form-control" placeholder=" (99) 9999 9999" />
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="input-email">E-mail</label>
+                                        <input asp-for="Email" id="input-email" class="form-control" placeholder="email@example.com" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr class="my-4" />
+                        <h6 class="heading-small text-muted mb-4">Comorbidades</h6>
+                        <div class="pl-lg-4">
+                            <div class="row">
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <div class="custom-control custom-checkbox checkbox">
+                                            <label>
+                                                <input asp-for="Cardiopatia" class="custom-control-input" id="customCheck1" />
+                                                <label class="custom-control-label" for="customCheck1">Cardiopatia</label>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <div class="custom-control custom-checkbox checkbox">
+                                            <label>
+                                                <input asp-for="Diabetes" class="custom-control-input" id="customCheck2" />
+                                                <label class="custom-control-label" for="customCheck2">Diabetes</label>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <div class="custom-control custom-checkbox checkbox">
+                                            <label>
+                                                <input asp-for="Obeso" class="custom-control-input" id="customCheck3" />
+                                                <label class="custom-control-label" for="customCheck3">Obesidade</label>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <div class="custom-control custom-checkbox checkbox">
+                                            <label>
+                                                <input asp-for="Hipertenso" class="custom-control-input" id="customCheck4" />
+                                                <label class="custom-control-label" for="customCheck4">Hipertenso</label>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <div class="custom-control custom-checkbox checkbox">
+                                            <label>
+                                                <input asp-for="Imunodeprimido" class="custom-control-input" id="customCheck5" />
+                                                <label class="custom-control-label" for="customCheck5">Imunodeprimido</label>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <div class="custom-control custom-checkbox checkbox">
+                                            <label>
+                                                <input asp-for="Cancer" class="custom-control-input" id="customCheck6" />
+                                                <label class="custom-control-label" for="customCheck6">Câncer</label>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <div class="custom-control custom-checkbox checkbox">
+                                            <label>
+                                                <input asp-for="DoencaRespiratoria" class="custom-control-input" id="customCheck7" />
+                                                <label class="custom-control-label" for="customCheck7">Doença Respiratória</label>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <div class="custom-control custom-checkbox checkbox">
+                                            <label>
+                                                <input asp-for="DoencaRenal" class="custom-control-input" id="customCheck7" />
+                                                <label class="custom-control-label" for="customCheck8">Doença Renal</label>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <div class="custom-control custom-checkbox checkbox">
+                                            <label>
+                                                <input asp-for="Epilepsia" class="custom-control-input" id="customCheck7" />
+                                                <label class="custom-control-label" for="customCheck9">Epilepsia</label>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <input type="search" id="input-outrasComorbidades" class="form-control" style="margin-top: 1px;" asp-for="OutrasComorbidades" placeholder="Outras comorbidades">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr class="my-4" />
+                        <h6 class="heading-small text-muted mb-4">Sintomas</h6>
+                        <div class="pl-lg-4">
+                            <div class="row">
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <div class="custom-control custom-checkbox checkbox">
+                                            <label>
+                                                <input asp-for="Febre" checked="@Model.Febre" class="custom-control-input" id="customCheck12" />
+                                                <label class="custom-control-label" for="customCheck12">Febre</label>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <div class="custom-control custom-checkbox checkbox">
+                                            <label>
+                                                <input asp-for="Tosse" checked="@Model.Tosse" class="custom-control-input" id="customCheck13" />
+                                                <label class="custom-control-label" for="customCheck13">Tosse</label>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <div class="custom-control custom-checkbox checkbox">
+                                            <label>
+                                                <input asp-for="Coriza" checked="@Model.Coriza" class="custom-control-input" id="customCheck14" />
+                                                <label class="custom-control-label" for="customCheck14">Coriza</label>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <div class="custom-control custom-checkbox checkbox">
+                                            <label>
+                                                <input asp-for="DificuldadeRespiratoria" checked="@Model.DificuldadeRespiratoria" class="custom-control-input" id="customCheck15" />
+                                                <label class="custom-control-label" for="customCheck15">Dificuldade Respiratória</label>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <div class="custom-control custom-checkbox checkbox">
+                                            <label>
+                                                <input asp-for="PerdaOlfatoPaladar" checked="@Model.PerdaOlfatoPaladar" class="custom-control-input" id="customCheck16" />
+                                                <label class="custom-control-label" for="customCheck16">Perda Olfato/Paladar</label>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <div class="custom-control custom-checkbox checkbox">
+                                            <label>
+                                                <input asp-for="DorGarganta" checked="@Model.DorGarganta" class="custom-control-input" id="customCheck17" />
+                                                <label class="custom-control-label" for="customCheck17">Dor de Garganta</label>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <div class="custom-control custom-checkbox checkbox">
+                                            <label>
+                                                <input asp-for="DorOuvido" checked="@Model.DorOuvido" class="custom-control-input" id="customCheck18" />
+                                                <label class="custom-control-label" for="customCheck18">Dor no Ouvido</label>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <div class="custom-control custom-checkbox checkbox">
+                                            <label>
+                                                <input asp-for="DorAbdominal" checked="@Model.DorAbdominal" class="custom-control-input" id="customCheck19" />
+                                                <label class="custom-control-label" for="customCheck19">Dor Abdominal</label>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <div class="custom-control custom-checkbox checkbox">
+                                            <label>
+                                                <input asp-for="Diarreia" checked="@Model.Diarreia" class="custom-control-input" id="customCheck20" />
+                                                <label class="custom-control-label" for="customCheck20">Diarréia</label>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <div class="custom-control custom-checkbox checkbox">
+                                            <label>
+                                                <input asp-for="Nausea" checked="@Model.Nausea" class="custom-control-input" id="customCheck21" />
+                                                <label class="custom-control-label" for="customCheck21">Náusea</label>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
 
-							</div>
-						</div>
-						<hr class="my-4" />
-						<h6 class="heading-small text-muted mb-4">Exames Realizados pelo Paciente</h6>
-						<div class="pl-lg-2">
-							<div class="row">
-								<div class="col-lg-12">
-									<div class="card-body">
-										<div class="table-responsive">
-											<table class="table align-items-center table-flush">
-												<thead class="thead-light">
-													<tr>
-														<th scope="col" class="sort" data-sort="cpf">
-															Cpf/Rg
-														</th>
-														<th scope="col" class="sort" data-sort="nome-paciente">
-															Paciente
-														</th>
-														<th scope="col" class="sort" data-sort="cidade">
-															Responsável pela Realização Exame
-														</th>
-														<th scope="col" class="sort" data-sort="data-exame">
-															Data do Exame
-														</th>
-														<th scope="col" class="sort" data-sort="virus">
-															Vírus/Bacteria
-														</th>
-														<th scope="col" class="sort" data-sort="resultado">
-															Resultado
-														</th>
-													</tr>
-												</thead>
-												<tbody>
-													@foreach (var item in Model.ExamesPaciente)
-													{
-														<tr>
-															<td>
-																<a href="#">@Html.DisplayFor(modelItem => item.IdPaciente.Cpf)</a>
-															</td>
-															<td>
-																@Html.DisplayFor(modelItem => item.IdPaciente.Nome)
-															</td>
-															<td>
-																@Html.DisplayFor(modelItem => item.ResponsavelRealizacaoExame)
-															</td>
-															<td>
-																@Html.DisplayFor(modelItem => item.DataExame)
-															</td>
-															<td>
-																@Html.DisplayFor(modelItem => item.IdVirusBacteria.Nome)
-															</td>
-															<td>
-																@Html.DisplayFor(modelItem => item.Resultado)
-															</td>
-														</tr>
-													}
-												</tbody>
-											</table>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-						<hr class="my-4" />
-						<h6 class="heading-small text-muted mb-4">Saúde do Paciente</h6>
-						<div class="pl-lg-4">
-							<div class="row">
-								<div class="col-lg-12">
-									<div class="form-group">
-										<div class="custom-control custom-radio custom-control-inline">
-											@Html.RadioButtonFor(model => model.SituacaoSaude, "S", new { @class = "custom-control-input", @id = "input-situacao-saudavel", @name = "situacaoSaude" })
-											<label class="custom-control-label" for="input-situacao-saudavel">Recuperado</label>
-										</div>
-										<div class="custom-control custom-radio custom-control-inline">
-											@Html.RadioButtonFor(model => model.SituacaoSaude, "I", new { @class = "custom-control-input", @id = "input-situacao-isolamento", @name = "situacaoSaude" })
-											<label class="custom-control-label" for="input-situacao-isolamento">Isolamento Social</label>
-										</div>
-										<div class="custom-control custom-radio custom-control-inline">
-											@Html.RadioButtonFor(model => model.SituacaoSaude, "H", new { @class = "custom-control-input", @id = "input-situacao-hospitalizado", @name = "situacaoSaude" })
-											<label class="custom-control-label" for="input-situacao-hospitalizado">Internamento Clínico</label>
-										</div>
-										<div class="custom-control custom-radio custom-control-inline">
-											@Html.RadioButtonFor(model => model.SituacaoSaude, "E", new { @class = "custom-control-input", @id = "input-situacao-estabilizacao", @name = "situacaoSaude" })
-											<label class="custom-control-label" for="input-situacao-estabilizacao">Estabilização</label>
-										</div>
-										<div class="custom-control custom-radio custom-control-inline">
-											@Html.RadioButtonFor(model => model.SituacaoSaude, "U", new { @class = "custom-control-input", @id = "input-situacao-uti", @name = "situacaoSaude" })
-											<label class="custom-control-label" for="input-situacao-uti">UTI</label>
-										</div>
-										<div class="custom-control custom-radio custom-control-inline">
-											@Html.RadioButtonFor(model => model.SituacaoSaude, "O", new { @class = "custom-control-input", @id = "input-situacao-obito", @name = "situacaoSaude" })
-											<label class="custom-control-label" for="input-situacao-obito">Óbito</label>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
+                            </div>
+                        </div>
+                        <hr class="my-4" />
+                        <h6 class="heading-small text-muted mb-4">Exames Realizados pelo Paciente</h6>
+                        <div class="pl-lg-2">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <table class="table align-items-center table-flush">
+                                                <thead class="thead-light">
+                                                    <tr>
+                                                        <th scope="col" class="sort" data-sort="cpf">
+                                                            Cpf/Rg
+                                                        </th>
+                                                        <th scope="col" class="sort" data-sort="nome-paciente">
+                                                            Paciente
+                                                        </th>
+                                                        <th scope="col" class="sort" data-sort="cidade">
+                                                            Responsável pela Realização Exame
+                                                        </th>
+                                                        <th scope="col" class="sort" data-sort="data-exame">
+                                                            Data do Exame
+                                                        </th>
+                                                        <th scope="col" class="sort" data-sort="virus">
+                                                            Vírus/Bacteria
+                                                        </th>
+                                                        <th scope="col" class="sort" data-sort="resultado">
+                                                            Resultado
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach (var item in Model.ExamesPaciente)
+                                                    {
+                                                        <tr>
+                                                            <td>
+                                                                <a href="#">@Html.DisplayFor(modelItem => item.IdPaciente.Cpf)</a>
+                                                            </td>
+                                                            <td>
+                                                                @Html.DisplayFor(modelItem => item.IdPaciente.Nome)
+                                                            </td>
+                                                            <td>
+                                                                @Html.DisplayFor(modelItem => item.ResponsavelRealizacaoExame)
+                                                            </td>
+                                                            <td>
+                                                                @Html.DisplayFor(modelItem => item.DataExame)
+                                                            </td>
+                                                            <td>
+                                                                @Html.DisplayFor(modelItem => item.IdVirusBacteria.Nome)
+                                                            </td>
+                                                            <td>
+                                                                @Html.DisplayFor(modelItem => item.Resultado)
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr class="my-4" />
+                        <h6 class="heading-small text-muted mb-4">Saúde do Paciente</h6>
+                        <div class="pl-lg-4">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <div class="custom-control custom-radio custom-control-inline">
+                                            @Html.RadioButtonFor(model => model.SituacaoSaude, "S", new { @class = "custom-control-input", @id = "input-situacao-saudavel", @name = "situacaoSaude" })
+                                            <label class="custom-control-label" for="input-situacao-saudavel">Recuperado</label>
+                                        </div>
+                                        <div class="custom-control custom-radio custom-control-inline">
+                                            @Html.RadioButtonFor(model => model.SituacaoSaude, "I", new { @class = "custom-control-input", @id = "input-situacao-isolamento", @name = "situacaoSaude" })
+                                            <label class="custom-control-label" for="input-situacao-isolamento">Isolamento Social</label>
+                                        </div>
+                                        <div class="custom-control custom-radio custom-control-inline">
+                                            @Html.RadioButtonFor(model => model.SituacaoSaude, "H", new { @class = "custom-control-input", @id = "input-situacao-hospitalizado", @name = "situacaoSaude" })
+                                            <label class="custom-control-label" for="input-situacao-hospitalizado">Internamento Clínico</label>
+                                        </div>
+                                        <div class="custom-control custom-radio custom-control-inline">
+                                            @Html.RadioButtonFor(model => model.SituacaoSaude, "E", new { @class = "custom-control-input", @id = "input-situacao-estabilizacao", @name = "situacaoSaude" })
+                                            <label class="custom-control-label" for="input-situacao-estabilizacao">Estabilização</label>
+                                        </div>
+                                        <div class="custom-control custom-radio custom-control-inline">
+                                            @Html.RadioButtonFor(model => model.SituacaoSaude, "U", new { @class = "custom-control-input", @id = "input-situacao-uti", @name = "situacaoSaude", @onclick = "mostraModalCadastrarInternacao()" })
+                                            <label class="custom-control-label" for="input-situacao-uti">UTI</label>
+                                        </div>
+                                        <div class="custom-control custom-radio custom-control-inline">
+                                            @Html.RadioButtonFor(model => model.SituacaoSaude, "O", new { @class = "custom-control-input", @id = "input-situacao-obito", @name = "situacaoSaude" })
+                                            <label class="custom-control-label" for="input-situacao-obito">Óbito</label>
+                                        </div>
+                                    </div>
+                                </div>
 
-						<hr class="my-4" />
-						<h6 class="heading-small text-muted mb-4">Informações adicionais</h6>
-						<div class="pl-lg-4">
-							<div class="row">
-								<div class="col-lg-12">
-									<div class="form-group">
-										<label class="form-control-label" for="input-descricao">Observações (até 5000 caracteres)</label>
-										<textarea type="text" id="input-descricao" class="form-control" asp-for="Descricao" rows="10" placeholder="Descricao"></textarea>
-										<span hidden id="span-descricao" class="text-danger">Você excedeu o limite de caracteres, por favor, exclua algumas palavras.</span>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="modal fade bs-example-modal-sm" id="modal-confirmar" tabindex="-1" role="dialog" aria-hidden="true">
-							<div class="modal-dialog modal-sm">
-								<div class="modal-content">
-									<div style="padding: 10pt;text-align: center">
-										<div class="col text-center form-group" id="acoes-model-form">
-											<h3 id="h3-confirmacao"> Confirmar Monitoramento Paciente? </h3>
+                                <table class="table align-items-center table-flush">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th scope="col" class="sort" data-sort="cidade">
+                                                Empresa
+                                            </th>
+                                            <th scope="col" class="sort" data-sort="cidade">
+                                                Inicio
+                                            </th>
+                                            <th scope="col" class="sort" data-sort="data-exame">
+                                                Fim
+                                            </th>
+                                            <th scope="col" class="sort" data-sort="virus">
+                                                Uso O2
+                                            </th>
+                                            <th scope="col" class="sort" data-sort="resultado">
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model.Internacoes)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.NomeEmpresa)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.DataInicio)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.DataFim)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.UsoO2Descricao)
+                                                </td>
+                                                <td>
 
-											<div class="form-group">
-												<button data-dismiss="modal" class="btn btn-danger text-white">Não</button>
-												<button id="btn-submit" type="submit" value="Sim" class="btn btn-success text-white">Sim</button>
-											</div>
-										</div>
+                                                    <a data-toggle="modal" data-target="#modal-editar-internacao-@item.IdInternacao" class="tn btn-info btn-sm btn-custom"><i class="fa fa-edit text-center"></i>Editar</a>
+                                                    <a data-toggle="modal" data-target="#modal-remover-@item.IdInternacao" class="btn btn-danger btn-sm btn-custom text-white"><i class="fa fa-trash "></i>Remover</a>
 
-										<div class="col text-center" id="ok-model-form">
-											<h3 id="texto-erro"> </h3>
-											<button data-dismiss="modal" class="btn btn-success text-white">Ok</button>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</form>
+                                                    <div class="modal fade bs-example-modal-sm" id="modal-remover-@item.IdInternacao" tabindex="-1" role="dialog" aria-hidden="true">
+                                                        <div class="modal-dialog modal-sm">
+                                                            <div class="modal-content text-center" style="padding: 10pt">
+                                                                <h4> Confirmar Remoção de Internacao  ? </h4>
+
+                                                                <h5>Paciente</h5><p>@Model.Nome</p>
+                                                                <h5>Inicio Internacao</h5> <p>@item.DataInicio</p>
+                                                                <h5>Término da Internacao</h5> <p>@item.DataFim</p>
+                                                                <h5>Uso O2</h5> <p>@item.UsoO2Descricao</p>
+
+                                                                @using (Html.BeginForm("Delete", "Internacao", new { idInternacao = item.IdInternacao, idPaciente = item.IdPessoa, idVirusBacteria = Model.VirusBacteria.IdVirusBacteria }, FormMethod.Post))
+                                                                {
+                                                                    <a class="btn btn-danger text-white" data-dismiss="modal">Cancelar</a> <br/>
+                                                                    <button type="submit" value="Remover" class="btn btn-success">Confimar</button>
+                                                                }
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="modal fade" id="modal-editar-internacao-@item.IdInternacao" style="display: none;" tabindex="-1" role="dialog" aria-hidden="true">
+                                                        <div class="modal-dialog">
+                                                            <div class="modal-content">
+                                                                <hr class="my-4" />
+                                                                @using (Html.BeginForm("Edit", "Internacao", FormMethod.Post))
+                                                                {
+                                                                    <div class="modal-body">
+                                                                        <div class="col-lg-16">
+                                                                            <h6 class="heading-small text-muted mb-4">Sobre o Paciente</h6>
+                                                                            <div class="row">
+                                                                                <div class="col-md-12">
+                                                                                    <div class="form-group">
+                                                                                        <h4>Paciente</h4>
+                                                                                        <input name="IdInternacao" class="custom-control-input" value="@item.IdInternacao" hidden />
+                                                                                        <input name="IdPessoa" class="custom-control-input" value="@Model.Idpessoa" hidden />
+                                                                                        <span> @Model.Cpf  | @Model.Nome </span>
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                <div class="col-md-8">
+                                                                                    <div class="form-group">
+                                                                                        <h4>Empresa</h4>
+                                                                                        <select name="IdEmpresa" value="@item.IdEmpresa" class="select2_single form-control" tabindex="-1">
+                                                                                            @foreach (var empresa in ViewBag.Empresas)
+                                                                                            {
+                                                                                                if (empresa.Id == item.IdEmpresa)
+                                                                                                {
+                                                                                                    <option value="@empresa.Id" selected>@empresa.Cnpj | @empresa.Nome </option>
+                                                                                                }
+                                                                                                else
+                                                                                                {
+                                                                                                    <option value="@empresa.Id">@empresa.Cnpj | @empresa.Nome </option>
+                                                                                                }
+                                                                                            }
+                                                                                        </select>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <hr class="my-4" />
+                                                                            <h6 class="heading-small text-muted mb-4">Periodo de Internacao</h6>
+                                                                            <div class="row">
+                                                                                <div class="col-md-6">
+                                                                                    <div class="form-group">
+                                                                                        <h4>Inicio da Internacao</h4>
+                                                                                        <input name="DataInicio" type="date" value="@item.DataInicio.ToString("dd/MM/yyyy")" id="input-data-inicio" placeholder="dd-mm-aaaa" class="form-control" required />
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                <div class="col-md-6">
+                                                                                    <div class="form-group">
+                                                                                        <h4>Término da internação</h4>
+                                                                                        @if (item.DataFim.HasValue)
+                                                                                        {
+                                                                                            var data = item.DataFim.Value.ToString("dd/MM/yyyy");
+                                                                                            <input name="DataFim" type="date" value="@data" id="input-data-inicio" placeholder="dd-mm-aaaa" class="form-control" />
+
+                                                                                        }
+                                                                                        else
+                                                                                        {
+                                                                                            <input name="DataFim" type="date"  id="input-data-inicio" placeholder="dd-mm-aaaa" class="form-control" />
+
+                                                                                        }
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+
+                                                                            <hr class="my-4" />
+                                                                            <h6 class="heading-small text-muted mb-4">Tipo de Oxigenacao</h6>
+                                                                            <div class="row">
+                                                                                <div class="col-md-8">
+                                                                                    <div class="form-group">
+                                                                                        <div class="form-group">
+                                                                                            <h4>Uso de O2</h4>
+                                                                                            <select name="UsoO2" value="@item.UsoO2" class="select2_single form-control" tabindex="-1">
+                                                                                                @if (@item.UsoO2 == "V")
+                                                                                                {
+                                                                                                    <option selected value="V">Vetilação Mecânica</option>
+                                                                                                    <option value="C">Cateter </option>
+                                                                                                    <option value="M">Máscara Venturi/Hudson </option>
+                                                                                                    <option value="A">Ar Ambiente</option>
+                                                                                                }
+                                                                                                else if (@item.UsoO2 == "C")
+                                                                                                {
+                                                                                                    <option value="V">Vetilação Mecânica</option>
+                                                                                                    <option selected value="C">Cateter </option>
+                                                                                                    <option value="M">Máscara Venturi/Hudson </option>
+                                                                                                    <option value="A">Ar Ambiente</option>
+                                                                                                }
+                                                                                                else if (@item.UsoO2 == "M")
+                                                                                                {
+                                                                                                    <option value="V">Vetilação Mecânica</option>
+                                                                                                    <option value="C">Cateter </option>
+                                                                                                    <option selected value="M">Máscara Venturi/Hudson </option>
+                                                                                                    <option value="A">Ar Ambiente</option>
+                                                                                                }
+                                                                                                else
+                                                                                                {
+
+                                                                                                    <option value="V">Vetilação Mecânica</option>
+                                                                                                    <option value="C">Cateter </option>
+                                                                                                    <option value="M">Máscara Venturi/Hudson </option>
+                                                                                                    <option selected value="A">Ar Ambiente</option>
+                                                                                                }
+
+                                                                                            </select>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <input name="IdVirusBacteria" id="virus-bacteria" value="@Model.VirusBacteria.IdVirusBacteria" class="form-control" hidden />
+
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <div style="text-align: center;">
+                                                                            <button type="button" class="btn btn-dark" data-dismiss="modal"><i class="fa fa-close"></i> Fechar</button>
+                                                                            <button type="submit" id="btn-create" class="btn btn-success"><i class="fa fa-save"></i> Cadastrar</button>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="modal fade" id="modal-default" style="display: none;" tabindex="-1" role="dialog" aria-hidden="true">
+                                                                        <div class="modal-dialog">
+                                                                            <div class="modal-content">
+                                                                                <div class="modal-header">
+                                                                                    <button type="button" class="close" data-dismiss="modal">
+                                                                                        <span aria-hidden="true">×</span>
+                                                                                    </button>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                }
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+
+                        <hr class="my-4" />
+                        <h6 class="heading-small text-muted mb-4">Informações adicionais</h6>
+                        <div class="pl-lg-4">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="input-descricao">Observações (até 5000 caracteres)</label>
+                                        <textarea type="text" id="input-descricao" class="form-control" asp-for="Descricao" rows="10" placeholder="Descricao"></textarea>
+                                        <span hidden id="span-descricao" class="text-danger">Você excedeu o limite de caracteres, por favor, exclua algumas palavras.</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal fade bs-example-modal-sm" id="modal-confirmar" tabindex="-1" role="dialog" aria-hidden="true">
+                            <div class="modal-dialog modal-sm">
+                                <div class="modal-content">
+                                    <div style="padding: 10pt;text-align: center">
+                                        <div class="col text-center form-group" id="acoes-model-form">
+                                            <h3 id="h3-confirmacao"> Confirmar Monitoramento Paciente? </h3>
+
+                                            <div class="form-group">
+                                                <button data-dismiss="modal" class="btn btn-danger text-white">Não</button>
+                                                <button id="btn-submit" type="submit" value="Sim" class="btn btn-success text-white">Sim</button>
+                                            </div>
+                                        </div>
+
+                                        <div class="col text-center" id="ok-model-form">
+                                            <h3 id="texto-erro"> </h3>
+                                            <button data-dismiss="modal" class="btn btn-success text-white">Ok</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
                     <hr class="my-4" />
                     <div class="row align-items-center">
                         <!--div class="col text-left">
@@ -512,6 +712,99 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="modal-cadastrar-internacao" style="display: none;" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <hr class="my-4" />
+            <form asp-action="Create" asp-controller="Internacao">
+                <div class="modal-body">
+                    <div class="col-lg-16">
+                        <h6 class="heading-small text-muted mb-4">Sobre o Paciente</h6>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <h4>Paciente</h4>
+                                    <input name="IdPessoa" class="custom-control-input" value="@Model.Idpessoa" hidden />
+                                    <span> @Model.Cpf  | @Model.Nome </span>
+                                </div>
+                            </div>
+
+                            <div class="col-md-8">
+                                <div class="form-group">
+                                    <h4>Empresa</h4>
+                                    <select name="IdEmpresa" class="select2_single form-control" tabindex="-1">
+                                        @foreach (var empresa in ViewBag.Empresas)
+                                        {
+                                            <option value="@empresa.Id">@empresa.Cnpj | @empresa.Nome </option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <hr class="my-4" />
+                        <h6 class="heading-small text-muted mb-4">Periodo de Internacao</h6>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <h4>Inicio da Internacao</h4>
+                                    <input name="DataInicio" type="date" id="input-data-inicio" placeholder="dd-mm-aaaa" class="form-control" required />
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <h4>Término da internação</h4>
+                                    <input name="DataFim" type="date" id="input-data-inicio" placeholder="dd-mm-aaaa" class="form-control" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr class="my-4" />
+                        <h6 class="heading-small text-muted mb-4">Tipo de Oxigenacao</h6>
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="form-group">
+                                    <div class="form-group">
+                                        <h4>Uso de O2</h4>
+                                        <select name="UsoO2" class="select2_single form-control" tabindex="-1">
+                                            <option value="V">Vetilação Mecânica</option>
+                                            <option value="C">Cateter </option>
+                                            <option value="M">Máscara Venturi/Hudson </option>
+                                            <option value="A">Ar Ambiente</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <input name="IdVirusBacteria" id="virus-bacteria" value="@Model.VirusBacteria.IdVirusBacteria" class="form-control" hidden />
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div style="text-align: center;">
+                        <button type="button" class="btn btn-dark" data-dismiss="modal"><i class="fa fa-close"></i> Fechar</button>
+                        <button type="submit" id="btn-create" class="btn btn-success"><i class="fa fa-save"></i> Cadastrar</button>
+                    </div>
+                </div>
+
+                <div class="modal fade" id="modal-default" style="display: none;" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
 
 
 @if (TempData["mensagemSucesso"] != null)
@@ -547,13 +840,11 @@ else if (TempData["mensagemErro"] != null)
             $('#ok-model-form').hide();
             $('#acoes-model-form').hide();
 
-            if (mensagem.length > 0)
-            {
+            if (mensagem.length > 0) {
                 $('#texto-erro').text(mensagem);
                 $('#ok-model-form').show();
             }
-            else
-            {
+            else {
                 $('#acoes-model-form').show();
             }
 
@@ -580,8 +871,20 @@ else if (TempData["mensagemErro"] != null)
             else if ($('#input-celular').val().length != 17)
                 mensagem = "Preencha o campo CELULAR corretamente!";
 
-                return mensagem;
+            return mensagem;
         }
+
+        function mostraModalCadastrarInternacao() {
+
+            var situacao = $("input[name='SituacaoSaude']:checked").val();
+
+            if (situacao == "U") {
+
+                $('#modal-cadastrar-internacao').modal('show');
+            }
+
+        }
+
     </script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
     <script src="~/assets/js/sweet-alert.js"></script>

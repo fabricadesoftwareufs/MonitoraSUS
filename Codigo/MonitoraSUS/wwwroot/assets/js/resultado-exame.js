@@ -2,6 +2,9 @@
 $(document).ready(function () {
     if (document.querySelector('#mensagem-retorno'))
         document.getElementById("mensagem-retorno").click();
+
+    ocultaViewTipoExame();
+    ocultaViewSintomas()
 });
 
 // detectando submit via tecla enter
@@ -16,7 +19,6 @@ $(window).keydown(function (event) {
 //quando o usuario der submit no exame
 $('#btn-submit').on('click', function () {
 
-    // evitando submit equivocado com a tecla enter
     if ($("#input-cpf").val().length > 0) {
         $("#input-cpf").unmask();
     }
@@ -118,4 +120,43 @@ function resultadoExame() {
     }
 
     return resultado;
+}
+
+function ocultaViewTipoExame() {
+    var metodo = $("input[name='MetodoExame']:checked").val();
+
+    switch (metodo) {
+
+        case 'P':
+            document.getElementById("div-igm").hidden = true;
+            document.getElementById("div-igg").hidden = true;
+            document.getElementById("div-iggigm").hidden = true;
+            document.getElementById("div-pcr").hidden = false;
+            break;
+        case 'F':
+            document.getElementById("div-igm").hidden = false;
+            document.getElementById("div-igg").hidden = false;
+            document.getElementById("div-pcr").hidden = true;
+            document.getElementById("div-iggigm").hidden = true;
+            break;
+        case 'C':
+            document.getElementById("div-igm").hidden = false;
+            document.getElementById("div-igg").hidden = false;
+            document.getElementById("div-iggigm").hidden = false;
+            document.getElementById("div-pcr").hidden = true;
+            break;
+    }
+}
+
+
+function ocultaViewSintomas() {
+    var relatouSintomas = $("input[name='RelatouSintomas']:checked").val();
+
+    if (relatouSintomas == 'True') {
+        document.getElementById('container-sintomas').hidden = false;
+        // document.getElementById('contaner-inicio-sintomas').hidden = false;
+    } else if (relatouSintomas == 'False') {
+        document.getElementById('container-sintomas').hidden = true;
+        //document.getElementById('contaner-inicio-sintomas').hidden = true;
+    }
 }
