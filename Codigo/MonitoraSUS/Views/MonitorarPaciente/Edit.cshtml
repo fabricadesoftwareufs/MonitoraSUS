@@ -450,7 +450,7 @@
                                             <label class="custom-control-label" for="input-situacao-estabilizacao">Estabilização</label>
                                         </div>
                                         <div class="custom-control custom-radio custom-control-inline">
-                                            @Html.RadioButtonFor(model => model.SituacaoSaude, "U", new { @class = "custom-control-input", @id = "input-situacao-uti", @name = "situacaoSaude", @onclick = "mostraModalCadastrarInternacao()" })
+                                            @Html.RadioButtonFor(model => model.SituacaoSaude, "U", new { @class = "custom-control-input", @id = "input-situacao-uti", @name = "situacaoSaude" })
                                             <label class="custom-control-label" for="input-situacao-uti">UTI</label>
                                         </div>
                                         <div class="custom-control custom-radio custom-control-inline">
@@ -459,6 +459,23 @@
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+
+                        <hr class="my-4" />
+
+                        <div class="row align-items-center">
+
+                            <div class="col">
+                                <h6 class="heading-small text-muted mb-4">Histórico de Internações</h6>
+                                <h6 class="heading-small text-muted mb-4"></h6>
+                            </div>
+                            <div class="col text-right">
+                                <a data-toggle="modal" data-target="#modal-cadastrar-internacao" class="btn btn-success text-white">Novo Internamento</a>
+                            </div>
+                        </div>
+                        <div class="pl-lg-4">
+                            <div class="row">
 
                                 <table class="table align-items-center table-flush">
                                     <thead class="thead-light">
@@ -487,18 +504,25 @@
                                                     @Html.DisplayFor(modelItem => item.NomeEmpresa)
                                                 </td>
                                                 <td>
-                                                    @Html.DisplayFor(modelItem => item.DataInicio)
+                                                    <div>@item.DataInicio.ToString("dd/MM/yyyy")</div>
                                                 </td>
                                                 <td>
-                                                    @Html.DisplayFor(modelItem => item.DataFim)
+                                                    @if (item.DataFim.HasValue)
+                                                    {
+                                                        <div>@item.DataFim.Value.ToString("dd/MM/yyyy")</div>
+                                                    }
+                                                    else
+                                                    {
+                                                        <div>-</div>
+                                                    }
                                                 </td>
                                                 <td>
                                                     @Html.DisplayFor(modelItem => item.UsoO2Descricao)
                                                 </td>
                                                 <td>
 
-                                                    <a data-toggle="modal" data-target="#modal-editar-internacao-@item.IdInternacao" class="tn btn-info btn-sm btn-custom"><i class="fa fa-edit text-center"></i>Editar</a>
-                                                    <a data-toggle="modal" data-target="#modal-remover-@item.IdInternacao" class="btn btn-danger btn-sm btn-custom text-white"><i class="fa fa-trash "></i>Remover</a>
+                                                    <a data-toggle="modal" data-target="#modal-editar-internacao-@item.IdInternacao" class="tn btn-info btn-sm btn-custom text-white"><i class="fa fa-edit"></i>Editar</a>
+                                                    <a data-toggle="modal" data-target="#modal-remover-@item.IdInternacao" class="btn btn-danger btn-sm btn-custom text-white"><i class="fa fa-trash"></i>Remover</a>
 
                                                     <div class="modal fade bs-example-modal-sm" id="modal-remover-@item.IdInternacao" tabindex="-1" role="dialog" aria-hidden="true">
                                                         <div class="modal-dialog modal-sm">
@@ -506,13 +530,13 @@
                                                                 <h4> Confirmar Remoção de Internacao  ? </h4>
 
                                                                 <h5>Paciente</h5><p>@Model.Nome</p>
-                                                                <h5>Inicio Internacao</h5> <p>@item.DataInicio</p>
-                                                                <h5>Término da Internacao</h5> <p>@item.DataFim</p>
-                                                                <h5>Uso O2</h5> <p>@item.UsoO2Descricao</p>
+                                                                <h4>Inicio Internacao</h4> <p>@item.DataInicio</p>
+                                                                <h4>Término da Internacao</h4> <p>@item.DataFim</p>
+                                                                <h4>Uso O2</h4> <p>@item.UsoO2Descricao</p>
 
                                                                 @using (Html.BeginForm("Delete", "Internacao", new { idInternacao = item.IdInternacao, idPaciente = item.IdPessoa, idVirusBacteria = Model.VirusBacteria.IdVirusBacteria }, FormMethod.Post))
                                                                 {
-                                                                    <a class="btn btn-danger text-white" data-dismiss="modal">Cancelar</a> <br/>
+                                                                    <a class="btn btn-danger text-white" data-dismiss="modal">Cancelar</a> <br />
                                                                     <button type="submit" value="Remover" class="btn btn-success">Confimar</button>
                                                                 }
                                                             </div>
@@ -522,7 +546,6 @@
                                                     <div class="modal fade" id="modal-editar-internacao-@item.IdInternacao" style="display: none;" tabindex="-1" role="dialog" aria-hidden="true">
                                                         <div class="modal-dialog">
                                                             <div class="modal-content">
-                                                                <hr class="my-4" />
                                                                 @using (Html.BeginForm("Edit", "Internacao", FormMethod.Post))
                                                                 {
                                                                     <div class="modal-body">
@@ -538,9 +561,9 @@
                                                                                     </div>
                                                                                 </div>
 
-                                                                                <div class="col-md-8">
+                                                                                <div class="col-md-12">
                                                                                     <div class="form-group">
-                                                                                        <h4>Empresa</h4>
+                                                                                        <h4>Empresa Onde Está Internado</h4>
                                                                                         <select name="IdEmpresa" value="@item.IdEmpresa" class="select2_single form-control" tabindex="-1">
                                                                                             @foreach (var empresa in ViewBag.Empresas)
                                                                                             {
@@ -557,13 +580,12 @@
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
-                                                                            <hr class="my-4" />
                                                                             <h6 class="heading-small text-muted mb-4">Periodo de Internacao</h6>
                                                                             <div class="row">
                                                                                 <div class="col-md-6">
                                                                                     <div class="form-group">
                                                                                         <h4>Inicio da Internacao</h4>
-                                                                                        <input name="DataInicio" type="date" value="@item'.DataInicio.ToString("dd/MM/yyyy")" id="input-data-inicio" placeholder="dd-mm-aaaa" class="form-control" required />
+                                                                                        <input name="DataInicio" type="date" value="@item.DataInicio.ToString("yyyy-MM-dd")" id="input-data-inicio" placeholder="dd-mm-aaaa" class="form-control" required />
                                                                                     </div>
                                                                                 </div>
 
@@ -572,20 +594,18 @@
                                                                                         <h4>Término da internação</h4>
                                                                                         @if (item.DataFim.HasValue)
                                                                                         {
-                                                                                            var data = item.DataFim.Value.ToString("dd/MM/yyyy");
+                                                                                            var data = item.DataFim.Value.ToString("yyyy-MM-dd");
                                                                                             <input name="DataFim" type="date" value="@data" id="input-data-inicio" placeholder="dd-mm-aaaa" class="form-control" />
 
                                                                                         }
                                                                                         else
                                                                                         {
-                                                                                            <input name="DataFim" type="date"  id="input-data-inicio" placeholder="dd-mm-aaaa" class="form-control" />
+                                                                                            <input name="DataFim" type="date" id="input-data-inicio" placeholder="dd-mm-aaaa" class="form-control" />
 
                                                                                         }
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
-
-                                                                            <hr class="my-4" />
                                                                             <h6 class="heading-small text-muted mb-4">Tipo de Oxigenacao</h6>
                                                                             <div class="row">
                                                                                 <div class="col-md-8">
@@ -660,7 +680,9 @@
                                     </tbody>
                                 </table>
 
+
                             </div>
+
                         </div>
 
                         <hr class="my-4" />
@@ -716,7 +738,6 @@
 <div class="modal fade" id="modal-cadastrar-internacao" style="display: none;" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <hr class="my-4" />
             <form asp-action="Create" asp-controller="Internacao">
                 <div class="modal-body">
                     <div class="col-lg-16">
@@ -730,7 +751,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-8">
+                            <div class="col-md-12">
                                 <div class="form-group">
                                     <h4>Empresa</h4>
                                     <select name="IdEmpresa" class="select2_single form-control" tabindex="-1">
@@ -742,7 +763,6 @@
                                 </div>
                             </div>
                         </div>
-                        <hr class="my-4" />
                         <h6 class="heading-small text-muted mb-4">Periodo de Internacao</h6>
                         <div class="row">
                             <div class="col-md-6">
@@ -759,8 +779,6 @@
                                 </div>
                             </div>
                         </div>
-
-                        <hr class="my-4" />
                         <h6 class="heading-small text-muted mb-4">Tipo de Oxigenacao</h6>
                         <div class="row">
                             <div class="col-md-8">
@@ -810,6 +828,10 @@
 @if (TempData["mensagemSucesso"] != null)
 {
     <div id="mensagem-retorno" onclick="swtAlertRedirectIndex('success','Parabéns!', '@TempData["mensagemSucesso"]','/MonitorarPaciente/Index')"></div>
+}
+else if (TempData["mensagemSucessoInternacao"] != null)
+{
+    <div id="mensagem-retorno" onclick="swtAlert('success','Parabéns!', '@TempData["mensagemSucessoInternacao"]')"></div>
 }
 else if (TempData["mensagemErro"] != null)
 {
@@ -874,7 +896,7 @@ else if (TempData["mensagemErro"] != null)
             return mensagem;
         }
 
-        function mostraModalCadastrarInternacao() {
+        /*function mostraModalCadastrarInternacao() {
 
             var situacao = $("input[name='SituacaoSaude']:checked").val();
 
@@ -883,7 +905,7 @@ else if (TempData["mensagemErro"] != null)
                 $('#modal-cadastrar-internacao').modal('show');
             }
 
-        }
+        }*/
 
     </script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>

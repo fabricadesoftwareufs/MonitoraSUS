@@ -39,7 +39,7 @@ namespace MonitoraSUS.Controllers
                 return RedirectToAction("Edit", "MonitorarPaciente", new { idPaciente, idVirusBacteria });
             }
 
-            TempData["mensagemSucesso"] = "Internacao cadastrada com sucesso!";
+            TempData["mensagemSucessoInternacao"] = "Internacao cadastrada com sucesso!";
             return RedirectToAction("Edit", "MonitorarPaciente", new { idPaciente, idVirusBacteria });
         }
 
@@ -59,7 +59,7 @@ namespace MonitoraSUS.Controllers
                 return RedirectToAction("Edit", "MonitorarPaciente", new { idPaciente, idVirusBacteria });
             }
 
-            TempData["mensagemSucesso"] = "Internacao atualizada com sucesso!";
+            TempData["mensagemSucessoInternacao"] = "Internacao atualizada com sucesso!";
             return RedirectToAction("Edit", "MonitorarPaciente", new { idPaciente, idVirusBacteria });
         }
 
@@ -80,7 +80,7 @@ namespace MonitoraSUS.Controllers
                 return RedirectToAction("Edit", "MonitorarPaciente", new { idPaciente, idVirusBacteria });
             }
 
-            TempData["mensagemSucesso"] = "Internacao removida com sucesso!";
+            TempData["mensagemSucessoInternacao"] = "Internacao removida com sucesso!";
             return RedirectToAction("Edit", "MonitorarPaciente", new { idPaciente, idVirusBacteria });
         }
     }
