@@ -9,7 +9,7 @@ namespace Model.ViewModel
         public PesquisaPacienteViewModel() 
         {
             Exames = new List<MonitoraPacienteViewModel>();
-            Positivos = 0;
+			Positivos = 0;
 			Recuperados = 0;
 			Aguardando = 0;
 			IgGIgM = 0;

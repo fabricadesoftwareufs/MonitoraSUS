@@ -16,7 +16,7 @@ namespace Model
 		public int IdEmpresa { get; set; }
 		public string NomeEmpresa { get; set; }
 		public DateTime DataInicio { get; set; }
-		public DateTime DataFim { get; set; }
+		public DateTime? DataFim { get; set; }
 		public string UsoO2 { get; set; }
 		public string UsoO2Descricao {
 			get {

@@ -10,6 +10,7 @@ namespace Model
             IgM = "N";
             IgG = "N";
             Pcr = "N";
+            IgGIgM = "N";
             IdAgenteSaude = new PessoaModel();
             IdVirusBacteria = new VirusBacteriaModel();
             IdPaciente = new PessoaModel();

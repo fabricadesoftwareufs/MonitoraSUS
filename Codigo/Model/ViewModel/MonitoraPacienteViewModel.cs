@@ -11,7 +11,9 @@ namespace Model.ViewModel
         public MonitoraPacienteViewModel() 
         {
             ExamesPaciente = new List<ExameViewModel>();
-        }
+			Internacoes = new List<InternacaoModel>();
+
+		}
 		[Display(Name = "Data do Exame")]
 		[DataType(DataType.Date)]
 		[DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
@@ -68,7 +70,9 @@ namespace Model.ViewModel
 
         public VirusBacteriaModel VirusBacteria { get; set; }
         public List<ExameViewModel> ExamesPaciente { get; set; }
-        public PessoaModel Gestor { get; set; }
+		public List<InternacaoModel> Internacoes { get; set; }
+
+		public PessoaModel Gestor { get; set; }
         public string UltimoResultado { get; set; }
         public DateTime? DataUltimoMonitoramento { get; set; }
         public string Descricao { get; set; }

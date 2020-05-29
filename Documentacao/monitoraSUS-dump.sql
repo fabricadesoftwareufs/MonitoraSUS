@@ -202,7 +202,7 @@ DROP TABLE IF EXISTS `internacao`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
  SET character_set_client = utf8mb4 ;
 CREATE TABLE `internacao` (
-  `idInternacao` int(11) NOT NULL,
+  `idInternacao` int(11) NOT NULL AUTO_INCREMENT,
   `idpessoa` int(11) NOT NULL,
   `idEmpresa` int(11) NOT NULL,
   `dataInicio` datetime NOT NULL,
