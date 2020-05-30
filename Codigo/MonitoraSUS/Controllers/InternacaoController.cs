@@ -66,7 +66,7 @@ namespace MonitoraSUS.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Delete(int idInternacao, int idPaciente, int idVirusBacteria, IFormCollection collection)
+        public IActionResult Delete(int idInternacao, int idPaciente, int idVirusBacteria)
         {
 
             try
