@@ -438,27 +438,14 @@
 							<div class="row" name="cad-exame">
 								<div class="col-lg-3">
 									<div class="form-group">
-										<label class="form-control-label" for="metodo-exame">Situação Resultado</label><br>
-										<div class="custom-control custom-radio custom-control-inline">
-											@Html.RadioButtonFor(model => model.AguardandoResultado, true, new { @class = "custom-control-input", @id = "input-resultado-aguardando" })
-											<label class="custom-control-label" for="input-resultado-aguardando">Aguardando</label>
-										</div>
-										<div class="custom-control custom-radio custom-control-inline">
-											@Html.RadioButtonFor(model => model.AguardandoResultado, false, new { @class = "custom-control-input", @id = "input-resultado-disponivel" })
-											<label class="custom-control-label" for="input-resultado-disponivel">Disponível</label>
-										</div>
-									</div>
-								</div>
-								<div class="col-lg-3">
-									<div class="form-group">
 										<label class="form-control-label" for="metodo-exame">Método</label><br>
-										<div class="custom-control custom-radio custom-control-inline">
-											@Html.RadioButtonFor(model => model.MetodoExame, "C", new { @class = "custom-control-input", @id = "input-metodo-cromo", @onclick = "ocultaViewTipoExame()" })
-											<label class="custom-control-label" for="input-metodo-cromo">Cromatografia</label>
-										</div>
 										<div class="custom-control custom-radio custom-control-inline">
 											@Html.RadioButtonFor(model => model.MetodoExame, "F", new { @class = "custom-control-input", @id = "input-metodo-fluo", @onclick = "ocultaViewTipoExame()" })
 											<label class="custom-control-label" for="input-metodo-fluo">Fluorêscencia</label>
+										</div>
+										<div class="custom-control custom-radio custom-control-inline">
+											@Html.RadioButtonFor(model => model.MetodoExame, "C", new { @class = "custom-control-input", @id = "input-metodo-cromo", @onclick = "ocultaViewTipoExame()" })
+											<label class="custom-control-label" for="input-metodo-cromo">Cromatografia</label>
 										</div>
 										<div class="custom-control custom-radio custom-control-inline">
 											@Html.RadioButtonFor(model => model.MetodoExame, "P", new { @class = "custom-control-input", @id = "input-metodo-rtpcr", @onclick = "ocultaViewTipoExame()" })
@@ -477,6 +464,19 @@
 									<div class="form-group">
 										<label for="input-data-exame" class="form-control-label">Data do Exame</label>
 										<input asp-for="DataExame" class="form-control" required value="@dataExame" id="input-data-exame">
+									</div>
+								</div>
+								<div class="col-lg-3">
+									<div class="form-group">
+										<label class="form-control-label" for="metodo-exame">Situação Resultado</label><br>
+										<div class="custom-control custom-radio custom-control-inline">
+											@Html.RadioButtonFor(model => model.AguardandoResultado, false, new { @class = "custom-control-input", @id = "input-resultado-disponivel" })
+											<label class="custom-control-label" for="input-resultado-disponivel">Disponível</label>
+										</div>
+										<div class="custom-control custom-radio custom-control-inline">
+											@Html.RadioButtonFor(model => model.AguardandoResultado, true, new { @class = "custom-control-input", @id = "input-resultado-aguardando" })
+											<label class="custom-control-label" for="input-resultado-aguardando">Aguardando</label>
+										</div>
 									</div>
 								</div>
 								<div class="col-lg-3" id="div-igg">

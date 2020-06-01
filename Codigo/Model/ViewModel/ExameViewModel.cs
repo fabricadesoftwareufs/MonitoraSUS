@@ -23,8 +23,9 @@ namespace Model
             CodigoColeta = "";
 			ResponsavelRealizacaoExame = "";
 			EhProfissionalSaude = false;
+			AguardandoResultado = false;
             IdNotificacao = "";
-			MetodoExame = "C";
+			MetodoExame = "F";
             StatusNotificacao = ExameModel.NOTIFICADO_NAO;
         }
 

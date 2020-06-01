@@ -414,8 +414,13 @@ namespace Service
 						 e.IdPacienteNavigation.Estado.ToUpper().Equals(siglaEstado.ToUpper()) &&
 						 e.IdVirusBacteria == idVirusBacteria &&
 						 e.DataExame >= dataInicio && e.DataExame <= dataFim &&
-						 (e.AguardandoResultado == 1 ||
-						  (e.AguardandoResultado == 0 && (!e.IgM.Equals("N") || !e.Pcr.Equals("N") || !e.IgMigG.Equals("N"))))).OrderByDescending(e => e.DataExame)
+						 (e.IdPacienteNavigation.SituacaoSaude.Equals(PessoaModel.SITUACAO_ESTABILIZACAO) ||
+						 e.IdPacienteNavigation.SituacaoSaude.Equals(PessoaModel.SITUACAO_HOSPITALIZADO_INTERNAMENTO) ||
+						 e.IdPacienteNavigation.SituacaoSaude.Equals(PessoaModel.SITUACAO_UTI) ||
+						 e.IdPacienteNavigation.SituacaoSaude.Equals(PessoaModel.SITUACAO_OBITO) ||
+						  e.AguardandoResultado == 1 ||
+						  (e.AguardandoResultado == 0 && (!e.IgM.Equals("N") || !e.Pcr.Equals("N") || !e.IgMigG.Equals("N")))))
+				 .OrderByDescending(e => e.DataExame)
 				 .Select(exame => new MonitoraPacienteViewModel
 				 {
 					 Bairro = exame.IdPacienteNavigation.Bairro,
@@ -445,7 +450,8 @@ namespace Service
 					 Sexo = exame.IdPacienteNavigation.Sexo,
 					 SituacaoSaude = exame.IdPacienteNavigation.SituacaoSaude,
 					 DataExame = exame.DataExame,
-					 IdExame = exame.IdExame
+					 IdExame = exame.IdExame,
+					 UltimoResultado = new ExameModel { AguardandoResultado = Convert.ToBoolean(exame.AguardandoResultado), IgG = exame.IgG, IgM = exame.IgM, IgGIgM = exame.IgMigG, Pcr=exame.Pcr, MetodoExame = exame.MetodoExame }.Resultado
 				 }).ToList();
 			List<MonitoraPacienteViewModel> listaMonitoramentoNaoNegativos = BuscarNaoNegativos(idVirusBacteria, monitoraPacientes);
 			return listaMonitoramentoNaoNegativos;
@@ -491,7 +497,11 @@ namespace Service
 				 .Where(e => e.IdPacienteNavigation.Estado.ToUpper().Equals(siglaEstado.ToUpper()) &&
 						 e.IdVirusBacteria == idVirusBacteria &&
 						 e.DataExame >= dataInicio && e.DataExame <= dataFim &&
-						 (e.AguardandoResultado == 1 ||
+						 (e.IdPacienteNavigation.SituacaoSaude.Equals(PessoaModel.SITUACAO_ESTABILIZACAO) ||
+						 e.IdPacienteNavigation.SituacaoSaude.Equals(PessoaModel.SITUACAO_HOSPITALIZADO_INTERNAMENTO) ||
+						 e.IdPacienteNavigation.SituacaoSaude.Equals(PessoaModel.SITUACAO_UTI) ||
+						 e.IdPacienteNavigation.SituacaoSaude.Equals(PessoaModel.SITUACAO_OBITO) ||
+						  e.AguardandoResultado == 1 ||
 						  (e.AguardandoResultado == 0 && (!e.IgM.Equals("N") || !e.Pcr.Equals("N") || !e.IgMigG.Equals("N"))))).OrderByDescending(e => e.DataExame)
 				 .Select(exame => new MonitoraPacienteViewModel
 				 {
@@ -522,7 +532,8 @@ namespace Service
 					 Sexo = exame.IdPacienteNavigation.Sexo,
 					 SituacaoSaude = exame.IdPacienteNavigation.SituacaoSaude,
 					 DataExame = exame.DataExame,
-					 IdExame = exame.IdExame
+					 IdExame = exame.IdExame,
+					 UltimoResultado = new ExameModel { AguardandoResultado = Convert.ToBoolean(exame.AguardandoResultado), IgG = exame.IgG, IgM = exame.IgM, IgGIgM = exame.IgMigG, Pcr = exame.Pcr, MetodoExame = exame.MetodoExame }.Resultado
 				 }).ToList();
 			List<MonitoraPacienteViewModel> listaMonitoramentoNaoNegativos = BuscarNaoNegativos(idVirusBacteria, monitoraPacientes);
 			return listaMonitoramentoNaoNegativos;

@@ -84,7 +84,7 @@ namespace Model
             {
 				if (AguardandoResultado)
 					return RESULTADO_AGUARDANDO;
-				else if (IgGIgM.Equals("S"))
+				else if (IgGIgM.Equals("S") && MetodoExame.Equals(METODO_CROMATOGRAFIA))
 					return RESULTADO_IGMIGG;
 				else if (IgM.Equals("S") || Pcr.Equals("S"))
 					return RESULTADO_POSITIVO;

@@ -526,20 +526,20 @@
 
                                                     <div class="modal fade bs-example-modal-sm" id="modal-remover-@item.IdInternacao" tabindex="-1" role="dialog" aria-hidden="true">
                                                         <div class="modal-dialog modal-sm">
-                                                            <div class="modal-content text-center" style="padding: 10pt">
-                                                                <h4> Confirmar Remoção de Internacao  ? </h4>
+															<div class="modal-content text-center" style="padding: 10pt">
+																<h4> Confirmar Remoção de Internacao  ? </h4>
 
-                                                                <h5>Paciente</h5><p>@Model.Nome</p>
-                                                                <h4>Inicio Internacao</h4> <p>@item.DataInicio</p>
-                                                                <h4>Término da Internacao</h4> <p>@item.DataFim</p>
-                                                                <h4>Uso O2</h4> <p>@item.UsoO2Descricao</p>
+																<h5>Paciente</h5><p>@Model.Nome</p>
+																<h4>Inicio Internacao</h4> <p>@item.DataInicio</p>
+																<h4>Término da Internacao</h4> <p>@item.DataFim</p>
+																<h4>Uso O2</h4> <p>@item.UsoO2Descricao</p>
 
-                                                                @using (Html.BeginForm("Delete", "Internacao", new { idInternacao = item.IdInternacao, idPaciente = item.IdPessoa, idVirusBacteria = Model.VirusBacteria.IdVirusBacteria }, FormMethod.Post))
-                                                                {
-                                                                    <a class="btn btn-danger text-white" data-dismiss="modal">Cancelar</a> <br />
-                                                                    <button type="submit" value="Remover" class="btn btn-success">Confimar</button>
-                                                                }
-                                                            </div>
+																@using (Html.BeginForm("Delete", "Internacao", new { idInternacao = item.IdInternacao, idPaciente = item.IdPessoa, idVirusBacteria = Model.VirusBacteria.IdVirusBacteria }, FormMethod.Post))
+																{
+																	<a class="btn btn-danger text-white" data-dismiss="modal">Não</a> <br />
+																	<button type="submit" value="Sim" class="btn btn-success">Sim</button>
+																}
+															</div>
                                                         </div>
                                                     </div>
 
@@ -655,7 +655,7 @@
                                                                     <div class="modal-footer">
                                                                         <div style="text-align: center;">
                                                                             <button type="button" class="btn btn-dark" data-dismiss="modal"><i class="fa fa-close"></i> Fechar</button>
-                                                                            <button type="submit" id="btn-create" class="btn btn-success"><i class="fa fa-save"></i> Cadastrar</button>
+                                                                            <button type="submit" id="btn-create" class="btn btn-success"><i class="fa fa-save"></i> Salvar</button>
                                                                         </div>
                                                                     </div>
 
@@ -796,7 +796,6 @@
                             </div>
                         </div>
                         <input name="IdVirusBacteria" id="virus-bacteria" value="@Model.VirusBacteria.IdVirusBacteria" class="form-control" hidden />
-
                     </div>
                 </div>
                 <div class="modal-footer">
