@@ -24,7 +24,7 @@
                 </div>
 
                 <div class="card-body">
-                    <form asp-action="Edit" name="form-exame" id="form-exame" autocomplete="off">
+                    <form asp-action="Edit" asp-controller="MonitorarPaciente" method="post" name="form-exame" id="form-exame" autocomplete="off">
                         <h6 class="heading-small text-muted mb-4">Dados Pessoais</h6>
                         <h6 class="heading-small text-muted pl-lg-4">Digite um CPF para carregar as informações do paciente ou cadastre-o agora mesmo</h6>
                         <div class="pl-lg-4">
@@ -474,9 +474,9 @@
                                 <a data-toggle="modal" data-target="#modal-cadastrar-internacao" class="btn btn-success text-white">Novo Internamento</a>
                             </div>
                         </div>
+
                         <div class="pl-lg-4">
                             <div class="row">
-
                                 <table class="table align-items-center table-flush">
                                     <thead class="thead-light">
                                         <tr>
@@ -492,197 +492,46 @@
                                             <th scope="col" class="sort" data-sort="virus">
                                                 Uso O2
                                             </th>
-                                            <th scope="col" class="sort" data-sort="resultado">
-                                            </th>
+                                            <th scope="col" class="sort" data-sort="resultado"></th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach (var item in Model.Internacoes)
                                         {
                                             <tr>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.NomeEmpresa)
+                                                <td hidden>
+                                                    <div id="empresa-id-@item.IdInternacao">@Html.DisplayFor(modelItem => item.IdEmpresa)</div>
+                                                    <div id="data-inicio-reverso-@item.IdInternacao">@item.DataInicio.ToString("yyyy-MM-dd")</div>
+                                                    <div id="uso-o2-id-@item.IdInternacao" >@Html.DisplayFor(modelItem => item.UsoO2)</div>
                                                 </td>
                                                 <td>
-                                                    <div>@item.DataInicio.ToString("dd/MM/yyyy")</div>
+                                                    <div >@Html.DisplayFor(modelItem => item.NomeEmpresa)</div>
+                                                <td>
+                                                    <div id="data-inicio-@item.IdInternacao">@item.DataInicio.ToString("dd/MM/yyyy")</div>
                                                 </td>
                                                 <td>
                                                     @if (item.DataFim.HasValue)
                                                     {
-                                                        <div>@item.DataFim.Value.ToString("dd/MM/yyyy")</div>
+                                                        <div id="data-fim-reverso-@item.IdInternacao" hidden>@item.DataFim.Value.ToString("yyyy-MM-dd")</div>
+                                                        <div id="data-fim-@item.IdInternacao">@item.DataFim.Value.ToString("dd/MM/yyyy")</div>
                                                     }
                                                     else
                                                     {
-                                                        <div>-</div>
+                                                        <div id="data-fim-@item.IdInternacao">-</div>
                                                     }
                                                 </td>
                                                 <td>
-                                                    @Html.DisplayFor(modelItem => item.UsoO2Descricao)
+                                                    <div id="uso-o2-@item.IdInternacao">@Html.DisplayFor(modelItem => item.UsoO2Descricao)</div>
                                                 </td>
                                                 <td>
-
-                                                    <a data-toggle="modal" data-target="#modal-editar-internacao-@item.IdInternacao" class="tn btn-info btn-sm btn-custom text-white"><i class="fa fa-edit"></i>Editar</a>
-                                                    <a data-toggle="modal" data-target="#modal-remover-@item.IdInternacao" class="btn btn-danger btn-sm btn-custom text-white"><i class="fa fa-trash"></i>Remover</a>
-
-                                                    <div class="modal fade bs-example-modal-sm" id="modal-remover-@item.IdInternacao" tabindex="-1" role="dialog" aria-hidden="true">
-                                                        <div class="modal-dialog modal-sm">
-															<div class="modal-content text-center" style="padding: 10pt">
-																<h4> Confirmar Remoção de Internacao  ? </h4>
-
-																<h5>Paciente</h5><p>@Model.Nome</p>
-																<h4>Inicio Internacao</h4> <p>@item.DataInicio</p>
-																<h4>Término da Internacao</h4> <p>@item.DataFim</p>
-																<h4>Uso O2</h4> <p>@item.UsoO2Descricao</p>
-
-																@using (Html.BeginForm("Delete", "Internacao", new { idInternacao = item.IdInternacao, idPaciente = item.IdPessoa, idVirusBacteria = Model.VirusBacteria.IdVirusBacteria }, FormMethod.Post))
-																{
-																	<a class="btn btn-danger text-white" data-dismiss="modal">Não</a> <br />
-																	<button type="submit" value="Sim" class="btn btn-success">Sim</button>
-																}
-															</div>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="modal fade" id="modal-editar-internacao-@item.IdInternacao" style="display: none;" tabindex="-1" role="dialog" aria-hidden="true">
-                                                        <div class="modal-dialog">
-                                                            <div class="modal-content">
-                                                                @using (Html.BeginForm("Edit", "Internacao", FormMethod.Post))
-                                                                {
-                                                                    <div class="modal-body">
-                                                                        <div class="col-lg-16">
-                                                                            <h6 class="heading-small text-muted mb-4">Sobre o Paciente</h6>
-                                                                            <div class="row">
-                                                                                <div class="col-md-12">
-                                                                                    <div class="form-group">
-                                                                                        <h4>Paciente</h4>
-                                                                                        <input name="IdInternacao" class="custom-control-input" value="@item.IdInternacao" hidden />
-                                                                                        <input name="IdPessoa" class="custom-control-input" value="@Model.Idpessoa" hidden />
-                                                                                        <span> @Model.Cpf  | @Model.Nome </span>
-                                                                                    </div>
-                                                                                </div>
-
-                                                                                <div class="col-md-12">
-                                                                                    <div class="form-group">
-                                                                                        <h4>Empresa Onde Está Internado</h4>
-                                                                                        <select name="IdEmpresa" value="@item.IdEmpresa" class="select2_single form-control" tabindex="-1">
-                                                                                            @foreach (var empresa in ViewBag.Empresas)
-                                                                                            {
-                                                                                                if (empresa.Id == item.IdEmpresa)
-                                                                                                {
-                                                                                                    <option value="@empresa.Id" selected>@empresa.Cnpj | @empresa.Nome </option>
-                                                                                                }
-                                                                                                else
-                                                                                                {
-                                                                                                    <option value="@empresa.Id">@empresa.Cnpj | @empresa.Nome </option>
-                                                                                                }
-                                                                                            }
-                                                                                        </select>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                            <h6 class="heading-small text-muted mb-4">Periodo de Internacao</h6>
-                                                                            <div class="row">
-                                                                                <div class="col-md-6">
-                                                                                    <div class="form-group">
-                                                                                        <h4>Inicio da Internacao</h4>
-                                                                                        <input name="DataInicio" type="date" value="@item.DataInicio.ToString("yyyy-MM-dd")" id="input-data-inicio" placeholder="dd-mm-aaaa" class="form-control" required />
-                                                                                    </div>
-                                                                                </div>
-
-                                                                                <div class="col-md-6">
-                                                                                    <div class="form-group">
-                                                                                        <h4>Término da internação</h4>
-                                                                                        @if (item.DataFim.HasValue)
-                                                                                        {
-                                                                                            var data = item.DataFim.Value.ToString("yyyy-MM-dd");
-                                                                                            <input name="DataFim" type="date" value="@data" id="input-data-inicio" placeholder="dd-mm-aaaa" class="form-control" />
-
-                                                                                        }
-                                                                                        else
-                                                                                        {
-                                                                                            <input name="DataFim" type="date" id="input-data-inicio" placeholder="dd-mm-aaaa" class="form-control" />
-
-                                                                                        }
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                            <h6 class="heading-small text-muted mb-4">Tipo de Oxigenacao</h6>
-                                                                            <div class="row">
-                                                                                <div class="col-md-8">
-                                                                                    <div class="form-group">
-                                                                                        <div class="form-group">
-                                                                                            <h4>Uso de O2</h4>
-                                                                                            <select name="UsoO2" value="@item.UsoO2" class="select2_single form-control" tabindex="-1">
-                                                                                                @if (@item.UsoO2 == "V")
-                                                                                                {
-                                                                                                    <option selected value="V">Vetilação Mecânica</option>
-                                                                                                    <option value="C">Cateter </option>
-                                                                                                    <option value="M">Máscara Venturi/Hudson </option>
-                                                                                                    <option value="A">Ar Ambiente</option>
-                                                                                                }
-                                                                                                else if (@item.UsoO2 == "C")
-                                                                                                {
-                                                                                                    <option value="V">Vetilação Mecânica</option>
-                                                                                                    <option selected value="C">Cateter </option>
-                                                                                                    <option value="M">Máscara Venturi/Hudson </option>
-                                                                                                    <option value="A">Ar Ambiente</option>
-                                                                                                }
-                                                                                                else if (@item.UsoO2 == "M")
-                                                                                                {
-                                                                                                    <option value="V">Vetilação Mecânica</option>
-                                                                                                    <option value="C">Cateter </option>
-                                                                                                    <option selected value="M">Máscara Venturi/Hudson </option>
-                                                                                                    <option value="A">Ar Ambiente</option>
-                                                                                                }
-                                                                                                else
-                                                                                                {
-
-                                                                                                    <option value="V">Vetilação Mecânica</option>
-                                                                                                    <option value="C">Cateter </option>
-                                                                                                    <option value="M">Máscara Venturi/Hudson </option>
-                                                                                                    <option selected value="A">Ar Ambiente</option>
-                                                                                                }
-
-                                                                                            </select>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                            <input name="IdVirusBacteria" id="virus-bacteria" value="@Model.VirusBacteria.IdVirusBacteria" class="form-control" hidden />
-
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="modal-footer">
-                                                                        <div style="text-align: center;">
-                                                                            <button type="button" class="btn btn-dark" data-dismiss="modal"><i class="fa fa-close"></i> Fechar</button>
-                                                                            <button type="submit" id="btn-create" class="btn btn-success"><i class="fa fa-save"></i> Salvar</button>
-                                                                        </div>
-                                                                    </div>
-
-                                                                    <div class="modal fade" id="modal-default" style="display: none;" tabindex="-1" role="dialog" aria-hidden="true">
-                                                                        <div class="modal-dialog">
-                                                                            <div class="modal-content">
-                                                                                <div class="modal-header">
-                                                                                    <button type="button" class="close" data-dismiss="modal">
-                                                                                        <span aria-hidden="true">×</span>
-                                                                                    </button>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                }
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                                    <a onclick="mostraModalEditar(@item.IdInternacao)" class="btn btn-info btn-sm btn-custom text-white"><i class="fa fa-edit"></i>Editar</a>
+                                                    <a onclick="mostraModelDeletar(@item.IdInternacao)" class="btn btn-danger btn-sm btn-custom text-white"><i class="fa fa-trash"></i>Remover</a>
                                                 </td>
                                             </tr>
                                         }
                                     </tbody>
                                 </table>
-
-
                             </div>
-
                         </div>
 
                         <hr class="my-4" />
@@ -706,7 +555,7 @@
                                             <h3 id="h3-confirmacao"> Confirmar Monitoramento Paciente? </h3>
 
                                             <div class="form-group">
-                                                <button data-dismiss="modal" class="btn btn-danger text-white">Não</button>
+                                                <a data-dismiss="modal" class="btn btn-danger text-white">Não</a>
                                                 <button id="btn-submit" type="submit" value="Sim" class="btn btn-success text-white">Sim</button>
                                             </div>
                                         </div>
@@ -726,7 +575,7 @@
                             <button value="Cancelar" asp-action="Index" asp-controller="MonitorarPaciente" class="btn btn-danger">Cancelar</button>
                         </!--div--->
                         <div class="col text-right">
-                            <button id="btn-monitorar-paciente" onclick='validacao()' class="btn btn-success">Monitorar</button>
+                            <a id="btn-monitorar-paciente" onclick='validacao()' class="btn btn-success text-white">Monitorar</a>
                         </div>
                     </div>
                 </div>
@@ -822,6 +671,116 @@
 </div>
 
 
+<div class="modal fade bs-example-modal-sm" id="modal-remover" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content text-center" style="padding: 10pt">
+            <h4> Confirmar Remoção de Internacao  ? </h4>
+
+            <h4>Paciente</h4><p>@Model.Nome</p>
+            <h4>Inicio Internacao</h4> <p id="texto-data-inicio"></p>
+            <h4>Término da Internacao</h4> <p id="texto-data-fim"></p>
+            <h4>Uso O2</h4> <p id="texto-uso-o2"></p>
+
+
+            <form asp-controller="Internacao" asp-action="Delete">
+                <input name="idInternacao" id="input-id-internacao-delete" hidden />
+                <input name="idPaciente" id="input-id-paciente-delete" value="@Model.Idpessoa" hidden />
+                <input name="idVirusBacteria" id="input-id-virus-bacteria-delete" value="@Model.VirusBacteria.IdVirusBacteria" hidden />
+                <a class="btn btn-danger text-white" data-dismiss="modal">Não</a>
+                <button type="submit" value="Sim" class="btn btn-success">Sim</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-editar-internacao" style="display: none;" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form asp-controller="Internacao" asp-action="Edit">
+                <div class="modal-body">
+                    <div class="col-lg-16">
+                        <h6 class="heading-small text-muted mb-4">Sobre o Paciente</h6>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <h4>Paciente</h4>
+                                    <input name="IdInternacao" class="custom-control-input" id="input-id-internacao-edit" hidden />
+                                    <input name="IdPessoa" class="custom-control-input" id="input-id-pessoa-edit" value="@Model.Idpessoa" hidden />
+                                    <span> @Model.Cpf  | @Model.Nome </span>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <h4>Empresa Onde Está Internado</h4>
+                                    <select name="IdEmpresa" id="input-empresa-edit" class="select2_single form-control" tabindex="-1">
+                                        @foreach (var empresa in ViewBag.Empresas)
+                                        {
+                                            <option value="@empresa.Id">@empresa.Cnpj | @empresa.Nome </option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <h6 class="heading-small text-muted mb-4">Periodo de Internacao</h6>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <h4>Inicio da Internacao</h4>
+                                    <input name="DataInicio" type="date" id="input-data-inicio-edit" placeholder="dd-mm-aaaa" class="form-control" required />
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <h4>Término da internação</h4>
+                                    <input name="DataFim" type="date" id="input-data-fim-edit" placeholder="dd-mm-aaaa" class="form-control" />
+                                </div>
+                            </div>
+                        </div>
+                        <h6 class="heading-small text-muted mb-4">Tipo de Oxigenacao</h6>
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="form-group">
+                                    <div class="form-group">
+                                        <h4>Uso de O2</h4>
+                                        <select name="UsoO2" id="input-uso-o2-edit" class="select2_single form-control" tabindex="-1">
+                                            <option value="V">Vetilação Mecânica</option>
+                                            <option value="C">Cateter </option>
+                                            <option value="M">Máscara Venturi/Hudson </option>
+                                            <option value="A">Ar Ambiente</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <input name="IdVirusBacteria" id="virus-bacteria" value="@Model.VirusBacteria.IdVirusBacteria" class="form-control" hidden />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div style="text-align: center;">
+                        <button type="button" class="btn btn-dark" data-dismiss="modal"><i class="fa fa-close"></i> Fechar</button>
+                        <button type="submit" id="btn-create" class="btn btn-success"><i class="fa fa-save"></i> Salvar</button>
+                    </div>
+                </div>
+
+                <div class="modal fade" id="modal-default" style="display: none;" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
 
 
 @if (TempData["mensagemSucesso"] != null)
@@ -895,16 +854,29 @@ else if (TempData["mensagemErro"] != null)
             return mensagem;
         }
 
-        /*function mostraModalCadastrarInternacao() {
+        function mostraModalEditar(id) {
+            var dataFim = "";
+            if (document.querySelector('#data-fim-reverso-' + id))
+                dataFim = document.getElementById('data-fim-reverso-' + id).innerText;
 
-            var situacao = $("input[name='SituacaoSaude']:checked").val();
+            document.getElementById("input-id-internacao-edit").value = id;
+            document.getElementById("input-data-inicio-edit").value = document.getElementById('data-inicio-reverso-' + id).innerText;
+            document.getElementById("input-data-fim-edit").value = dataFim;
+            document.getElementById("input-empresa-edit").value = document.getElementById('empresa-id-' + id).innerText;
+            document.getElementById("input-uso-o2-edit").value = document.getElementById('uso-o2-id-' + id).innerText;
 
-            if (situacao == "U") {
+            $('#modal-editar-internacao').modal('show');
+        }
 
-                $('#modal-cadastrar-internacao').modal('show');
-            }
+        function mostraModelDeletar(id) {
+            document.getElementById("texto-data-inicio").innerText = document.getElementById('data-inicio-' + id).innerText;
+            document.getElementById("texto-data-fim").innerText = document.getElementById('data-fim-' + id).innerText;
+            document.getElementById("texto-uso-o2").innerText = document.getElementById('uso-o2-' + id).innerText;
 
-        }*/
+            document.getElementById("input-id-internacao-delete").value = id;
+
+            $('#modal-remover').modal('show');
+        }
 
     </script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>

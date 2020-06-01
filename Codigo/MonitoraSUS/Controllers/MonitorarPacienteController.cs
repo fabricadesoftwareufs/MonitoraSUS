@@ -103,7 +103,7 @@ namespace MonitoraSUS.Controllers
 				if (!Methods.ValidarCpf(paciente.Cpf))
 				{
 					TempData["resultadoPesquisa"] = "Esse esse cpf não é válido!";
-					return View(paciente);
+					return View(GetPacienteViewModel(paciente.Idpessoa, paciente.VirusBacteria.IdVirusBacteria));
 				}
 			}
 			var usuarioDuplicado = _pessoaContext.GetByCpf(paciente.Cpf);
@@ -112,7 +112,7 @@ namespace MonitoraSUS.Controllers
 				if (!(usuarioDuplicado.Idpessoa == paciente.Idpessoa))
 				{
 					TempData["resultadoPesquisa"] = "Já existe outro paciente com esse CPF/RG, tente novamente!";
-					return View(paciente);
+					return View(GetPacienteViewModel(paciente.Idpessoa, paciente.VirusBacteria.IdVirusBacteria));
 				}
 			}
 
@@ -123,21 +123,21 @@ namespace MonitoraSUS.Controllers
 			catch (Exception e)
 			{
 				TempData["mensagemErro"] = "Houve um problema ao atualizar informações do paciente, por favor, tente novamente!";
-				return View(paciente);
+				return View(GetPacienteViewModel(paciente.Idpessoa, paciente.VirusBacteria.IdVirusBacteria));
 			}
 
 			try
 			{
-				UpdatePaciente(paciente);
+				UpdatePaciente(GetPacienteViewModel(paciente.Idpessoa, paciente.VirusBacteria.IdVirusBacteria));
 			}
 			catch
 			{
 				TempData["mensagemErro"] = "Houve um problema ao atualizar informações do paciente, por favor, tente novamente!";
-				return View(paciente);
+				return View(GetPacienteViewModel(paciente.Idpessoa, paciente.VirusBacteria.IdVirusBacteria));
 			}
 
 			TempData["mensagemSucesso"] = "Monitoramento realizado com sucesso!";
-			return View(paciente);
+			return View(GetPacienteViewModel(paciente.Idpessoa, paciente.VirusBacteria.IdVirusBacteria));
 		}
 
 
@@ -206,8 +206,12 @@ namespace MonitoraSUS.Controllers
 			var pessoa = _pessoaContext.GetById(idPaciente);
 			
 			var internacoes  = _internacaoContext.GetByIdPaciente(pessoa.Idpessoa);
-			for (int i = 0; i < internacoes.Count;i++)
-				internacoes[i].NomeEmpresa = _empresaExameContext.GetById(internacoes[i].IdEmpresa).Nome;
+			for (int i = 0; i < internacoes.Count; i++)
+			{
+				var empresa = _empresaExameContext.GetById(internacoes[i].IdEmpresa);
+				internacoes[i].NomeEmpresa = empresa.Nome;
+				internacoes[i].IdEmpresa = empresa.Id;
+			}
 
 			var monitora = new MonitoraPacienteViewModel
 			{
