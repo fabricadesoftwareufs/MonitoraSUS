@@ -128,7 +128,7 @@ namespace MonitoraSUS.Controllers
 
 			try
 			{
-				UpdatePaciente(GetPacienteViewModel(paciente.Idpessoa, paciente.VirusBacteria.IdVirusBacteria));
+				UpdatePaciente(paciente);
 			}
 			catch
 			{
