@@ -18,7 +18,7 @@ ALTER TABLE `monitorasus`.`pessoa`
 ADD COLUMN `situacaoSaude` ENUM('S', 'I', 'H', 'U', 'O') NOT NULL DEFAULT 'S' AFTER `outrasComorbidades`;
 
 ALTER TABLE `monitorasus`.`situacaopessoavirusbacteria` 
-ADD COLUMN `dataUltimoMonitoramento` DATE NULL DEFAULT CURDATE() AFTER `ultimaSituacaoSaude`,
+ADD COLUMN `dataUltimoMonitoramento` DATE NULL DEFAULT NULL AFTER `ultimaSituacaoSaude`,
 ADD COLUMN `descricao` VARCHAR(5000) NULL DEFAULT NULL AFTER `dataUltimoMonitoramento`,
 ADD COLUMN `idGestor` INT(11) NULL DEFAULT NULL AFTER `descricao`,
 ADD INDEX `fk_situacaopessoavirusbacteria_empresaexame1_idx` (`idGestor` ASC);
