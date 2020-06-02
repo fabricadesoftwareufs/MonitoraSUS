@@ -50,7 +50,7 @@ function mensagemResultado() {
 
     var cpf = document.getElementById('input-cpf').value;
     var nome = document.getElementById('input-nome').value;
-    var idVirus = document.getElementById('input-virus-bacteria').value;
+	var idVirus = document.getElementById('input-virus-bacteria').value;
     var virus = document.getElementById('input-virus-bacteria')[idVirus - 1].text;
 
     var mensagem = verificaCampoVazio();
@@ -105,18 +105,26 @@ function verificaCampoVazio() {
 
 // Calcula o resultado do exame
 function resultadoExame() {
+	var metodoExame = $("input[name='MetodoExame']:checked").val();
     var igg = $("input[name='IgG']:checked").val();
     var igm = $("input[name='IgM']:checked").val();
-    var pcr = $("input[name='Pcr']:checked").val();
-    var resultado = "Indetermiando";
-    if (pcr === "S" || igm === "S") {
+	var iggigm = $("input[name='IgGIgM']:checked").val();
+	var pcr = $("input[name='Pcr']:checked").val();
+	var aguardando = $("input[name='AguardandoResultado']:checked").val();
+
+	var resultado = "Indeterminado";
+	if (aguardando === "True") {
+		resultado = "Aguardando Resultado"
+	} else if (metodoExame === "C" && iggigm === "S") {
+		resultado = "IgG/IgM Positivo";
+	} else if (pcr === "S" || igm === "S") {
         resultado = "Positivo";
-    } else if (pcr === "I" || igm === "I") {
-        resultado = "Indeterminado";
     } else if (igg === "S") {
-        resultado = "Curado";
-    } else if (pcr === "N" || igm === "N") {
-        resultado = "Negativo";
+        resultado = "Recuperado";
+	} else if (pcr === "N" && igm === "N" && iggigm === "N") {
+		resultado = "Negativo";
+	} else if (pcr === "I" || igm === "I" || iggigm === "I") {
+		resultado = "Indeterminado";
     }
 
     return resultado;

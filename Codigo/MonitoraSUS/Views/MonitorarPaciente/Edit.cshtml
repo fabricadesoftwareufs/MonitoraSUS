@@ -375,50 +375,56 @@
                                         <div class="table-responsive">
                                             <table class="table align-items-center table-flush">
                                                 <thead class="thead-light">
-                                                    <tr>
-                                                        <th scope="col" class="sort" data-sort="cpf">
-                                                            Cpf/Rg
-                                                        </th>
-                                                        <th scope="col" class="sort" data-sort="nome-paciente">
-                                                            Paciente
-                                                        </th>
-                                                        <th scope="col" class="sort" data-sort="cidade">
-                                                            Responsável pela Realização Exame
-                                                        </th>
-                                                        <th scope="col" class="sort" data-sort="data-exame">
-                                                            Data do Exame
-                                                        </th>
-                                                        <th scope="col" class="sort" data-sort="virus">
-                                                            Vírus/Bacteria
-                                                        </th>
-                                                        <th scope="col" class="sort" data-sort="resultado">
-                                                            Resultado
-                                                        </th>
-                                                    </tr>
+													<tr>
+														<th scope="col" class="sort" data-sort="cpf">
+															Cpf/Rg
+														</th>
+														<th scope="col" class="sort" data-sort="nome-paciente">
+															Paciente
+														</th>
+														<th scope="col" class="sort" data-sort="cidade">
+															Responsável pela Realização Exame
+														</th>
+														<th scope="col" class="sort" data-sort="data-exame">
+															Data do Exame
+														</th>
+														<th scope="col" class="sort" data-sort="virus">
+															Vírus/Bacteria
+														</th>
+														<th scope="col" class="sort" data-sort="virus">
+															Método
+														</th>
+														<th scope="col" class="sort" data-sort="resultado">
+															Resultado
+														</th>
+													</tr>
                                                 </thead>
                                                 <tbody>
                                                     @foreach (var item in Model.ExamesPaciente)
                                                     {
-                                                        <tr>
-                                                            <td>
-                                                                <a href="#">@Html.DisplayFor(modelItem => item.IdPaciente.Cpf)</a>
-                                                            </td>
-                                                            <td>
-                                                                @Html.DisplayFor(modelItem => item.IdPaciente.Nome)
-                                                            </td>
-                                                            <td>
-                                                                @Html.DisplayFor(modelItem => item.ResponsavelRealizacaoExame)
-                                                            </td>
-                                                            <td>
-                                                                @Html.DisplayFor(modelItem => item.DataExame)
-                                                            </td>
-                                                            <td>
-                                                                @Html.DisplayFor(modelItem => item.IdVirusBacteria.Nome)
-                                                            </td>
-                                                            <td>
-                                                                @Html.DisplayFor(modelItem => item.Resultado)
-                                                            </td>
-                                                        </tr>
+													<tr>
+														<td>
+															<a href="#">@Html.DisplayFor(modelItem => item.IdPaciente.Cpf)</a>
+														</td>
+														<td>
+															@Html.DisplayFor(modelItem => item.IdPaciente.Nome)
+														</td>
+														<td>
+															@Html.DisplayFor(modelItem => item.ResponsavelRealizacaoExame)
+														</td>
+														<td>
+															@Html.DisplayFor(modelItem => item.DataExame)
+														</td>
+														<td>
+															@Html.DisplayFor(modelItem => item.IdVirusBacteria.Nome)
+														</td>
+														<td>
+															@Html.DisplayFor(modelItem => item.MetodoExameDescricao)
+														</td>
+														<td>
+															@Html.DisplayFor(modelItem => item.Resultado)
+														</td>
+													</tr>
                                                     }
                                                 </tbody>
                                             </table>

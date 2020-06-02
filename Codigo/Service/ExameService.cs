@@ -280,6 +280,10 @@ namespace Service
 					mensagem += configuracaoNotificar.MensagemCurado;
 				else if (exame.Resultado.Equals(ExameModel.RESULTADO_INDETERMINADO))
 					mensagem += configuracaoNotificar.MensagemIndeterminado;
+				else if (exame.Resultado.Equals(ExameModel.RESULTADO_AGUARDANDO))
+					return exame;
+				else if (exame.Resultado.Equals(ExameModel.RESULTADO_IGMIGG))
+					return exame;
 
 				var cliente = new HttpClient();
 				string url = "https://api.smsdev.com.br/send?key=" + configuracaoNotificar.Token + "&type=9&";
@@ -537,21 +541,6 @@ namespace Service
 				 }).ToList();
 			List<MonitoraPacienteViewModel> listaMonitoramentoNaoNegativos = BuscarNaoNegativos(idVirusBacteria, monitoraPacientes);
 			return listaMonitoramentoNaoNegativos;
-		}
-
-		private string UltimaSituacaoExameDescricao(string situacao)
-		{
-			switch (situacao)
-			{
-				case "P":
-					return "Positivo";
-				case "C":
-					return "Curado";
-				case "I":
-					return "Indeterminado";
-
-				default: return "Indeterminado";
-			}
 		}
 
 		public List<ExameModel> CheckDuplicateExamToday(int idPaciente, int idVirusBacteria, DateTime dateExame)
@@ -875,7 +864,9 @@ namespace Service
 
 		public List<ExameModel> GetByIdEstado(int idEstado)
 		=> _context.Exame
-			   .Where(exameModel => exameModel.IdEstado == idEstado)
+			   .Where(exameModel => (exameModel.IdEstado == idEstado) 
+			   && exameModel.IdEmpresaSaude.Equals(EmpresaExameModel.EMPRESA_ESTADO_MUNICIPIO)
+			   && (exameModel.IdMunicipio == null))
 			   .Select(exame => new ExameModel
 			   {
 				   IdVirusBacteria = exame.IdVirusBacteria,

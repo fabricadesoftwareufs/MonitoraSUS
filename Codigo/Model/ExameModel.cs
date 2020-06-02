@@ -9,7 +9,7 @@ namespace Model
         public const string RESULTADO_NEGATIVO = "Negativo";
         public const string RESULTADO_RECUPERADO = "Recuperado";
         public const string RESULTADO_INDETERMINADO = "Indeterminado";
-		public const string RESULTADO_IGMIGG = "Positivo IgM/IgG";
+		public const string RESULTADO_IGMIGG = "IgG/IgM Positivo";
 		public const string RESULTADO_AGUARDANDO = "Aguardando";
 
 		public const string NOTIFICADO_SIM = "S";
@@ -84,7 +84,7 @@ namespace Model
             {
 				if (AguardandoResultado)
 					return RESULTADO_AGUARDANDO;
-				else if (IgGIgM.Equals("S") && MetodoExame.Equals(METODO_CROMATOGRAFIA))
+				else if (IgGIgM.Equals("S"))
 					return RESULTADO_IGMIGG;
 				else if (IgM.Equals("S") || Pcr.Equals("S"))
 					return RESULTADO_POSITIVO;

@@ -46,6 +46,12 @@ namespace Model
 		public bool AguardandoResultado { get; set; }
 		[Display(Name = "Método")]
 		public string MetodoExame { get; set; }
+		public string MetodoExameDescricao {
+			get
+			{
+				return new ExameModel() { MetodoExame = this.MetodoExame }.MetodoExameDescricao;
+			}
+		}
 		public string IgG { get; set; }
         public string IgM { get; set; }
         public string Pcr { get; set; }
@@ -67,14 +73,14 @@ namespace Model
         {
             get
             {
-                return new ExameModel() { IgM = this.IgM, IgG = this.IgG, Pcr = this.Pcr, IgGIgM = this.IgGIgM, AguardandoResultado = this.AguardandoResultado }.Resultado;
+                return new ExameModel() { IgM = this.IgM, IgG = this.IgG, Pcr = this.Pcr, IgGIgM = this.IgGIgM, AguardandoResultado = this.AguardandoResultado, MetodoExame = this.MetodoExame }.Resultado;
             }
         }
         public string ResultadoStatus
         {
             get
             {
-                return new ExameModel() { IgM = this.IgM, IgG = this.IgG, Pcr = this.Pcr, IgGIgM = this.IgGIgM, AguardandoResultado = this.AguardandoResultado }.ResultadoStatus;
+                return new ExameModel() { IgM = this.IgM, IgG = this.IgG, Pcr = this.Pcr, IgGIgM = this.IgGIgM, AguardandoResultado = this.AguardandoResultado, MetodoExame = this.MetodoExame }.ResultadoStatus;
             }
         }
 		[Display(Name = "Relatou Sintomas")]
