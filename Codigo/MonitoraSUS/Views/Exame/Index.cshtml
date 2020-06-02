@@ -77,9 +77,10 @@
 												<select asp-for="Resultado" class="form-control" id="input-resultado">
 													<option>Todas as Opçoes</option>
 													<option>Positivo</option>
+													<option>IgG/IgM Positivo</option>
 													<option>Negativo</option>
 													<option>Indeterminado</option>
-													<option>Curado</option>
+													<option>Recuperado</option>
 												</select>
 											</div>
 										</div>
@@ -110,7 +111,6 @@
 											</tr>
 										</thead>
 										<tbody>
-
 											<tr class="text-danger">
 												<td>
 													Positivos
@@ -119,7 +119,14 @@
 													@Model.Positivos
 												</td>
 											</tr>
-
+											<tr class="text-danger">
+												<td>
+													IgG/IgM Positivos
+												</td>
+												<td>
+													@Model.IgMIgGs
+												</td>
+											</tr>
 											<tr class="text-success">
 												<td>
 													Negativos
@@ -128,7 +135,6 @@
 													@Model.Negativos
 												</td>
 											</tr>
-
 											<tr class="text-warning">
 												<td>
 													Indeterminados
@@ -139,13 +145,12 @@
 											</tr>
 											<tr class="text-blue">
 												<td>
-													Curados
+													Recuperados
 												</td>
 												<td>
-													@Model.Curados
+													@Model.Recuperados
 												</td>
 											</tr>
-
 										</tbody>
 									</table>
 								</div>
@@ -287,9 +292,6 @@ else if (TempData["mensagemErro"] != null)
 {
 	<div id="mensagem-retorno" onclick="swtAlert('error','Falha!', '@TempData["mensagemErro"]')"></div>
 }
-
-
-
 
 
 @section Scripts {

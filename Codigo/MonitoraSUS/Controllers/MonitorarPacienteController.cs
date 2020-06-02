@@ -25,6 +25,7 @@ namespace MonitoraSUS.Controllers
 		private readonly IMunicipioService _municicpioContext;
 		private readonly IEstadoService _estadoContext;
 		private readonly IEmpresaExameService _empresaExameContext;
+		private readonly IInternacaoService _internacaoContext;
 		private readonly IConfiguration _configuration;
 
 
@@ -37,6 +38,7 @@ namespace MonitoraSUS.Controllers
 							   IPessoaTrabalhaMunicipioService pessoaTrabalhaMunicipioContext,
 							   IMunicipioService municicpioContext,
 							   IEstadoService estadoContext,
+							   IInternacaoService internacaoContext,
 							   IEmpresaExameService empresaExameContext)
 		{
 			_virusBacteriaContext = virusBacteriaContext;
@@ -47,6 +49,7 @@ namespace MonitoraSUS.Controllers
 			_exameContext = exameContext;
 			_municicpioContext = municicpioContext;
 			_estadoContext = estadoContext;
+			_internacaoContext = internacaoContext;
 			_configuration = configuration;
 			_empresaExameContext = empresaExameContext;
 		}
@@ -79,6 +82,8 @@ namespace MonitoraSUS.Controllers
 		public IActionResult Edit(int idPaciente, int IdVirusBacteria)
 		{
 			ViewBag.googleKey = _configuration["GOOGLE_KEY"];
+			ViewBag.Empresas = _empresaExameContext.GetAll();
+
 			return View(GetPacienteViewModel(idPaciente, IdVirusBacteria));
 		}
 
@@ -87,6 +92,8 @@ namespace MonitoraSUS.Controllers
 		public IActionResult Edit(MonitoraPacienteViewModel paciente)
 		{
 			ViewBag.googleKey = _configuration["GOOGLE_KEY"];
+			ViewBag.Empresas = _empresaExameContext.GetAll();
+
 			/*
              * Fazendo validações no cpf
              */
@@ -96,7 +103,7 @@ namespace MonitoraSUS.Controllers
 				if (!Methods.ValidarCpf(paciente.Cpf))
 				{
 					TempData["resultadoPesquisa"] = "Esse esse cpf não é válido!";
-					return View(paciente);
+					return View(GetPacienteViewModel(paciente.Idpessoa, paciente.VirusBacteria.IdVirusBacteria));
 				}
 			}
 			var usuarioDuplicado = _pessoaContext.GetByCpf(paciente.Cpf);
@@ -105,7 +112,7 @@ namespace MonitoraSUS.Controllers
 				if (!(usuarioDuplicado.Idpessoa == paciente.Idpessoa))
 				{
 					TempData["resultadoPesquisa"] = "Já existe outro paciente com esse CPF/RG, tente novamente!";
-					return View(paciente);
+					return View(GetPacienteViewModel(paciente.Idpessoa, paciente.VirusBacteria.IdVirusBacteria));
 				}
 			}
 
@@ -116,7 +123,7 @@ namespace MonitoraSUS.Controllers
 			catch (Exception e)
 			{
 				TempData["mensagemErro"] = "Houve um problema ao atualizar informações do paciente, por favor, tente novamente!";
-				return View(paciente);
+				return View(GetPacienteViewModel(paciente.Idpessoa, paciente.VirusBacteria.IdVirusBacteria));
 			}
 
 			try
@@ -126,11 +133,11 @@ namespace MonitoraSUS.Controllers
 			catch
 			{
 				TempData["mensagemErro"] = "Houve um problema ao atualizar informações do paciente, por favor, tente novamente!";
-				return View(paciente);
+				return View(GetPacienteViewModel(paciente.Idpessoa, paciente.VirusBacteria.IdVirusBacteria));
 			}
 
 			TempData["mensagemSucesso"] = "Monitoramento realizado com sucesso!";
-			return View(paciente);
+			return View(GetPacienteViewModel(paciente.Idpessoa, paciente.VirusBacteria.IdVirusBacteria));
 		}
 
 
@@ -142,8 +149,6 @@ namespace MonitoraSUS.Controllers
 			situacaoModel.IdGestor = usuario.UsuarioModel.IdPessoa;
 			situacaoModel.DataUltimoMonitoramento = DateTime.Now;
 			situacaoModel.Descricao = paciente.Descricao;
-
-
 			return _situacaoPessoaContext.Update(situacaoModel);
 		}
 
@@ -175,19 +180,40 @@ namespace MonitoraSUS.Controllers
 				Cardiopatia = paciente.Cardiopatia,
 				Obeso = paciente.Obeso,
 				DoencaRespiratoria = paciente.DoencaRespiratoria,
+				DoencaRenal = paciente.DoencaRenal,
+				Epilepsia = paciente.Epilepsia,
 				OutrasComorbidades = paciente.OutrasComorbidades,
-				SituacaoSaude = paciente.SituacaoSaude
+				SituacaoSaude = paciente.SituacaoSaude,
+				Coriza = paciente.Coriza,
+				DataObito = paciente.DataObito,
+				Diarreia = paciente.Diarreia,
+				DificuldadeRespiratoria = paciente.DificuldadeRespiratoria,
+				DorGarganta = paciente.DorGarganta,
+				DorOuvido = paciente.DorOuvido,
+				Febre = paciente.Febre,
+				Nausea = paciente.Nausea,
+				PerdaOlfatoPaladar = paciente.PerdaOlfatoPaladar,
+				Tosse = paciente.Tosse,
+				DorAbdominal = paciente.DorAbdominal
 			};
 
-			return _pessoaContext.Update(pacienteModel) != null ? true : false;
+			return _pessoaContext.Update(pacienteModel, true) != null ? true : false;
 		}
 
 		public MonitoraPacienteViewModel GetPacienteViewModel(int idPaciente, int IdVirusBacteria)
 		{
 			var situacao = _situacaoPessoaContext.GetById(idPaciente, IdVirusBacteria);
 			var pessoa = _pessoaContext.GetById(idPaciente);
+			
+			var internacoes  = _internacaoContext.GetByIdPaciente(pessoa.Idpessoa);
+			for (int i = 0; i < internacoes.Count; i++)
+			{
+				var empresa = _empresaExameContext.GetById(internacoes[i].IdEmpresa);
+				internacoes[i].NomeEmpresa = empresa.Nome;
+				internacoes[i].IdEmpresa = empresa.Id;
+			}
 
-			return new MonitoraPacienteViewModel
+			var monitora = new MonitoraPacienteViewModel
 			{
 				Idpessoa = pessoa.Idpessoa,
 				Nome = pessoa.Nome,
@@ -213,13 +239,28 @@ namespace MonitoraSUS.Controllers
 				Cardiopatia = pessoa.Cardiopatia,
 				Obeso = pessoa.Obeso,
 				DoencaRespiratoria = pessoa.DoencaRespiratoria,
+				DoencaRenal = pessoa.DoencaRenal,
+				Epilepsia = pessoa.Epilepsia,
 				OutrasComorbidades = pessoa.OutrasComorbidades,
 				Descricao = situacao.Descricao,
 				SituacaoSaude = pessoa.SituacaoSaude,
 				VirusBacteria = _virusBacteriaContext.GetById(situacao.IdVirusBacteria),
 				ExamesPaciente = GetExamesPaciente(pessoa.Idpessoa),
-				UltimaSituacao = GetUltimaSituacaoSaude(_situacaoPessoaContext.GetById(idPaciente, IdVirusBacteria).UltimaSituacaoSaude)
+				Internacoes = internacoes,
+				Coriza = pessoa.Coriza,
+				DataObito = pessoa.DataObito,
+				Diarreia = pessoa.Diarreia,
+				DificuldadeRespiratoria = pessoa.DificuldadeRespiratoria,
+				DorGarganta = pessoa.DorGarganta,
+				DorOuvido = pessoa.DorOuvido,
+				Febre = pessoa.Febre,
+				Nausea = pessoa.Nausea,
+				PerdaOlfatoPaladar = pessoa.PerdaOlfatoPaladar,
+				Tosse = pessoa.Tosse,
+				DorAbdominal = pessoa.DorAbdominal		
 			};
+			monitora.UltimoResultado = GetUltimoResultadoExame(monitora.ExamesPaciente);
+			return monitora;
 		}
 
 
@@ -265,7 +306,7 @@ namespace MonitoraSUS.Controllers
 					pesquisa.Exames = pesquisa.Exames.Where(paciente => paciente.Cpf.ToUpper().Contains(pesquisa.Pesquisa.ToUpper())).ToList();
 
 			if (!pesquisa.Resultado.Equals("") && !pesquisa.Resultado.Equals("Todas as Opçoes"))
-				pesquisa.Exames = pesquisa.Exames.Where(paciente => paciente.UltimaSituacao.ToUpper().Equals(pesquisa.Resultado.ToUpper())).ToList();
+				pesquisa.Exames = pesquisa.Exames.Where(paciente => paciente.UltimoResultado.ToUpper().Equals(pesquisa.Resultado.ToUpper())).ToList();
 
 			pesquisa.Exames = pesquisa.Exames.OrderByDescending(ex => ex.DataExame).ToList();
 			return PreencheTotalizadores(pesquisa);
@@ -286,6 +327,10 @@ namespace MonitoraSUS.Controllers
 				ex.IgG = exame.IgG;
 				ex.IgM = exame.IgM;
 				ex.Pcr = exame.Pcr;
+				ex.IgGIgM = exame.IgGIgM;
+				ex.MetodoExame = exame.MetodoExame;
+				ex.RelatouSintomas = exame.RelatouSintomas;
+				ex.AguardandoResultado = exame.AguardandoResultado;
 				ex.IdEstado = exame.IdEstado;
 				ex.MunicipioId = exame.IdMunicipio;
 				ex.DataInicioSintomas = exame.DataInicioSintomas;
@@ -311,11 +356,13 @@ namespace MonitoraSUS.Controllers
 
 			foreach (var item in pacientesTotalizados.Exames)
 			{
-				switch (item.UltimaSituacao)
+				switch (item.UltimoResultado)
 				{
 					case ExameModel.RESULTADO_POSITIVO: pacientesTotalizados.Positivos++; break;
 					case ExameModel.RESULTADO_INDETERMINADO: pacientesTotalizados.Indeterminados++; break;
-					case ExameModel.RESULTADO_CURADO: pacientesTotalizados.Curados++; break;
+					case ExameModel.RESULTADO_RECUPERADO: pacientesTotalizados.Recuperados++; break;
+					case ExameModel.RESULTADO_AGUARDANDO: pacientesTotalizados.Aguardando++; break;
+					case ExameModel.RESULTADO_IGMIGG: pacientesTotalizados.IgGIgM++; break;
 				}
 				switch (item.SituacaoSaude)
 				{
@@ -330,19 +377,10 @@ namespace MonitoraSUS.Controllers
 			return pacientesTotalizados;
 		}
 
-		public string GetUltimaSituacaoSaude(string situacao)
+		public string GetUltimoResultadoExame(List<ExameViewModel> listaExames)
 		{
-			switch (situacao)
-			{
-				case "P":
-					return "Positivo";
-				case "C":
-					return "Recuperado";
-				case "I":
-					return "Indeterminado";
-
-				default: return "Indeterminado";
-			}
+			ExameViewModel exame = listaExames.OrderByDescending(e => e.DataExame).FirstOrDefault();
+			return exame.Resultado;
 		}
 	}
 }

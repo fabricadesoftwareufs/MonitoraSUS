@@ -2,6 +2,9 @@
 $(document).ready(function () {
     if (document.querySelector('#mensagem-retorno'))
         document.getElementById("mensagem-retorno").click();
+
+    ocultaViewTipoExame();
+    ocultaViewSintomas()
 });
 
 // detectando submit via tecla enter
@@ -16,7 +19,6 @@ $(window).keydown(function (event) {
 //quando o usuario der submit no exame
 $('#btn-submit').on('click', function () {
 
-    // evitando submit equivocado com a tecla enter
     if ($("#input-cpf").val().length > 0) {
         $("#input-cpf").unmask();
     }
@@ -48,7 +50,7 @@ function mensagemResultado() {
 
     var cpf = document.getElementById('input-cpf').value;
     var nome = document.getElementById('input-nome').value;
-    var idVirus = document.getElementById('input-virus-bacteria').value;
+	var idVirus = document.getElementById('input-virus-bacteria').value;
     var virus = document.getElementById('input-virus-bacteria')[idVirus - 1].text;
 
     var mensagem = verificaCampoVazio();
@@ -103,19 +105,66 @@ function verificaCampoVazio() {
 
 // Calcula o resultado do exame
 function resultadoExame() {
+	var metodoExame = $("input[name='MetodoExame']:checked").val();
     var igg = $("input[name='IgG']:checked").val();
     var igm = $("input[name='IgM']:checked").val();
-    var pcr = $("input[name='Pcr']:checked").val();
-    var resultado = "Indetermiando";
-    if (pcr === "S" || igm === "S") {
+	var iggigm = $("input[name='IgGIgM']:checked").val();
+	var pcr = $("input[name='Pcr']:checked").val();
+	var aguardando = $("input[name='AguardandoResultado']:checked").val();
+
+	var resultado = "Indeterminado";
+	if (aguardando === "True") {
+		resultado = "Aguardando Resultado"
+	} else if (metodoExame === "C" && iggigm === "S") {
+		resultado = "IgG/IgM Positivo";
+	} else if (pcr === "S" || igm === "S") {
         resultado = "Positivo";
-    } else if (pcr === "I" || igm === "I") {
-        resultado = "Indeterminado";
     } else if (igg === "S") {
-        resultado = "Curado";
-    } else if (pcr === "N" || igm === "N") {
-        resultado = "Negativo";
+        resultado = "Recuperado";
+	} else if (pcr === "N" && igm === "N" && iggigm === "N") {
+		resultado = "Negativo";
+	} else if (pcr === "I" || igm === "I" || iggigm === "I") {
+		resultado = "Indeterminado";
     }
 
     return resultado;
+}
+
+function ocultaViewTipoExame() {
+    var metodo = $("input[name='MetodoExame']:checked").val();
+
+    switch (metodo) {
+
+        case 'P':
+            document.getElementById("div-igm").hidden = true;
+            document.getElementById("div-igg").hidden = true;
+            document.getElementById("div-iggigm").hidden = true;
+            document.getElementById("div-pcr").hidden = false;
+            break;
+        case 'F':
+            document.getElementById("div-igm").hidden = false;
+            document.getElementById("div-igg").hidden = false;
+            document.getElementById("div-pcr").hidden = true;
+            document.getElementById("div-iggigm").hidden = true;
+            break;
+        case 'C':
+            document.getElementById("div-igm").hidden = false;
+            document.getElementById("div-igg").hidden = false;
+            document.getElementById("div-iggigm").hidden = false;
+            document.getElementById("div-pcr").hidden = true;
+            break;
+    }
+}
+
+
+function ocultaViewSintomas() {
+    var relatouSintomas = $("input[name='RelatouSintomas']:checked").val();
+
+    if (relatouSintomas == 'True') {
+        document.getElementById('container-sintomas').hidden = false;
+        // document.getElementById('contaner-inicio-sintomas').hidden = false;
+    } else if (relatouSintomas == 'False') {
+        document.getElementById('container-sintomas').hidden = true;
+        //document.getElementById('contaner-inicio-sintomas').hidden = true;
+    }
 }

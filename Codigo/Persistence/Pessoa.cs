@@ -9,6 +9,7 @@ namespace Persistence
         {
             ExameIdAgenteSaudeNavigation = new HashSet<Exame>();
             ExameIdPacienteNavigation = new HashSet<Exame>();
+            Internacao = new HashSet<Internacao>();
             Pessoatrabalhaestado = new HashSet<Pessoatrabalhaestado>();
             Pessoatrabalhamunicipio = new HashSet<Pessoatrabalhamunicipio>();
             SituacaopessoavirusbacteriaIdGestorNavigation = new HashSet<Situacaopessoavirusbacteria>();
@@ -40,11 +41,25 @@ namespace Persistence
         public byte Imunodeprimido { get; set; }
         public byte Cancer { get; set; }
         public byte DoencaRespiratoria { get; set; }
+        public byte DoencaRenal { get; set; }
+        public byte Epilepsia { get; set; }
         public string OutrasComorbidades { get; set; }
         public string SituacaoSaude { get; set; }
+        public byte Febre { get; set; }
+        public byte Tosse { get; set; }
+        public byte Coriza { get; set; }
+        public byte DificuldadeRespiratoria { get; set; }
+        public byte DorGarganta { get; set; }
+        public byte Diarreia { get; set; }
+        public byte DorOuvido { get; set; }
+        public byte Nausea { get; set; }
+        public byte DorAbdominal { get; set; }
+        public byte PerdaOlfatoPaladar { get; set; }
+        public DateTime? DataObito { get; set; }
 
         public ICollection<Exame> ExameIdAgenteSaudeNavigation { get; set; }
         public ICollection<Exame> ExameIdPacienteNavigation { get; set; }
+        public ICollection<Internacao> Internacao { get; set; }
         public ICollection<Pessoatrabalhaestado> Pessoatrabalhaestado { get; set; }
         public ICollection<Pessoatrabalhamunicipio> Pessoatrabalhamunicipio { get; set; }
         public ICollection<Situacaopessoavirusbacteria> SituacaopessoavirusbacteriaIdGestorNavigation { get; set; }

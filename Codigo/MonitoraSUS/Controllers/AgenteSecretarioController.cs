@@ -615,7 +615,10 @@ namespace MonitoraSUS.Controllers
             var imunoDepri = collection["Imunodeprimido"];
             var cancer = collection["Cancer"];
             var doencaResp = collection["DoencaRespiratoria"];
-            var outrasComorbidades = collection["OutrasComorbidades"];
+			var doencaRenal = collection["DoencaRenal"];
+			var epilepsia = collection["Epilepsia"];
+			var outrasComorbidades = collection["OutrasComorbidades"];
+			
 
             var pessoa = _pessoaService.GetByCpf(cpf);
             // Se pessoa existe retorna 0 para indicar que a pessoa já tem cadastro
@@ -648,7 +651,9 @@ namespace MonitoraSUS.Controllers
                 DoencaRespiratoria = doencaResp.Contains("true") ? true : false,
                 Imunodeprimido = imunoDepri.Contains("true") ? true : false,
                 Obeso = obeso.Contains("true") ? true : false,
-                OutrasComorbidades = outrasComorbidades
+				DoencaRenal = doencaRenal.Contains("true") ? true : false,
+				Epilepsia = epilepsia.Contains("true") ? true : false,
+				OutrasComorbidades = outrasComorbidades
             });
 
             return pessoa.Idpessoa;

@@ -223,17 +223,20 @@ namespace MonitoraSUS.Controllers
 			}
 			TotalTestesGestaoPopulacao totais = new TotalTestesGestaoPopulacao();
 			totais.Gestao = totaisRealizado;
-			totais.TotalGestaoCurados = totaisRealizado.Sum(t => t.TotalCurados);
+			totais.TotalGestaoRecuperados = totaisRealizado.Sum(t => t.TotalRecuperados);
 			totais.TotalGestaoIndeterminados = totaisRealizado.Sum(t => t.TotalIndeterminados);
 			totais.TotalGestaoNegativos = totaisRealizado.Sum(t => t.TotalNegativos);
 			totais.TotalGestaoPositivos = totaisRealizado.Sum(t => t.TotalPositivos);
+			totais.TotalGestaoAguardando = totaisRealizado.Sum(t => t.TotalAguardando);
+			totais.TotalGestaoIgGIgM = totaisRealizado.Sum(t => t.TotalIgGIgM);
 
 			totais.Populacao = totaisPopulacao;
-			totais.TotalPopulacaoCurados = totaisPopulacao.Sum(t => t.TotalCurados);
+			totais.TotalPopulacaoRecuperados= totaisPopulacao.Sum(t => t.TotalRecuperados);
 			totais.TotalPopulacaoIndeterminados = totaisPopulacao.Sum(t => t.TotalIndeterminados);
 			totais.TotalPopulacaoNegativos = totaisPopulacao.Sum(t => t.TotalNegativos);
 			totais.TotalPopulacaoPositivos = totaisPopulacao.Sum(t => t.TotalPositivos);
-
+			totais.TotalPopulacaoAguardando = totaisPopulacao.Sum(t => t.TotalAguardando);
+			totais.TotalPopulacaoIgGIGM = totaisPopulacao.Sum(t => t.TotalIgGIgM);
 			return View(totais);
 		}
 
@@ -274,17 +277,7 @@ namespace MonitoraSUS.Controllers
 			return File(Encoding.UTF8.GetBytes(builder.ToString()), "text/csv", "exames.csv");
 		}
 
-		public string RetornaIniciais(string nome)
-		{
-			string[] s = nome.Split(' ');
-			var inicias = "";
-			for (int i = 0; i < s.Length; i++)
-				inicias += s[i][0];
-
-			return inicias.ToUpper();
-		}
-
-
+		
 		public IActionResult Details(int id)
 		{
 			return View(GetExameViewModelById(id));
@@ -416,14 +409,14 @@ namespace MonitoraSUS.Controllers
 				/*
                  * Atualizando as informações do paciente
                  */
-				_pessoaContext.Update(CreatePessoaModelByExame(exame));
+				_pessoaContext.Update(CreatePessoaModelByExame(exame), false);
 
 				TempData["mensagemSucesso"] = "Edição realizada com SUCESSO!";
 
 				return View(new ExameViewModel());
 
 			}
-			catch (Exception)
+			catch (Exception e)
 			{
 				TempData["mensagemErro"] = "Houve um problema ao atualizar as informações, tente novamente." +
 				  " Se o erro persistir, entre em contato com a Fábrica de Software da UFS pelo email fabricadesoftware@ufs.br";
@@ -515,7 +508,7 @@ namespace MonitoraSUS.Controllers
 					{
 						if (pessoaBusca.SituacaoSaude.Equals(PessoaModel.SITUACAO_SAUDAVEL) && exame.Resultado.Equals(ExameModel.RESULTADO_POSITIVO))
 							pessoa.SituacaoSaude = PessoaModel.SITUACAO_ISOLAMENTO;
-						pessoa = _pessoaContext.Update(pessoa);
+						pessoa = _pessoaContext.Update(pessoa, false);
 					}
 				}
 				catch
@@ -597,6 +590,8 @@ namespace MonitoraSUS.Controllers
 			exame.IgG = viewModel.IgG;
 			exame.IgM = viewModel.IgM;
 			exame.Pcr = viewModel.Pcr;
+			exame.IgGIgM = viewModel.IgGIgM;
+			exame.MetodoExame = viewModel.MetodoExame;
 			exame.IdEstado = viewModel.IdEstado;
 			exame.IdMunicipio = viewModel.MunicipioId;
 			exame.DataInicioSintomas = viewModel.DataInicioSintomas;
@@ -607,7 +602,18 @@ namespace MonitoraSUS.Controllers
 			exame.StatusNotificacao = viewModel.StatusNotificacao;
 			exame.CodigoColeta = viewModel.CodigoColeta == null ? "" : viewModel.CodigoColeta;
 			exame.IdNotificacao = viewModel.IdNotificacao;
-
+			exame.AguardandoResultado = viewModel.AguardandoResultado;
+			exame.Coriza = viewModel.Coriza;
+			exame.Diarreia = viewModel.Diarreia;
+			exame.DificuldadeRespiratoria = viewModel.DificuldadeRespiratoria;
+			exame.DorAbdominal = viewModel.DorAbdominal;
+			exame.DorGarganta = viewModel.DorGarganta;
+			exame.DorOuvido = viewModel.DorOuvido;
+			exame.Febre = viewModel.Febre;
+			exame.Nausea = viewModel.Nausea;
+			exame.PerdaOlfatoPaladar = viewModel.PerdaOlfatoPaladar;
+			exame.RelatouSintomas = viewModel.RelatouSintomas;
+			exame.Tosse = viewModel.Tosse;
 			/*
              *  pegando informações do agente de saúde logado no sistema 
              */
@@ -649,6 +655,8 @@ namespace MonitoraSUS.Controllers
 			ex.IgG = exame.IgG;
 			ex.IgM = exame.IgM;
 			ex.Pcr = exame.Pcr;
+			ex.IgGIgM = exame.IgGIgM;
+			ex.MetodoExame = exame.MetodoExame;
 			ex.IdEstado = exame.IdEstado;
 			ex.MunicipioId = exame.IdMunicipio;
 			ex.DataInicioSintomas = exame.DataInicioSintomas;
@@ -658,7 +666,18 @@ namespace MonitoraSUS.Controllers
 			ex.CodigoColeta = exame.CodigoColeta;
 			ex.StatusNotificacao = exame.StatusNotificacao;
 			ex.IdNotificacao = exame.IdNotificacao;
-
+			ex.AguardandoResultado = exame.AguardandoResultado;
+			ex.Coriza = exame.Coriza;
+			ex.Diarreia = exame.Diarreia;
+			ex.DificuldadeRespiratoria = exame.DificuldadeRespiratoria;
+			ex.DorAbdominal = exame.DorAbdominal;
+			ex.DorGarganta = exame.DorGarganta;
+			ex.DorOuvido = exame.DorOuvido;
+			ex.Febre = exame.Febre;
+			ex.Nausea = exame.Nausea;
+			ex.PerdaOlfatoPaladar = exame.PerdaOlfatoPaladar;
+			ex.RelatouSintomas = exame.RelatouSintomas;
+			ex.Tosse = exame.Tosse;
 			return ex;
 		}
 
@@ -729,6 +748,8 @@ namespace MonitoraSUS.Controllers
 				ex.IgG = exame.IgG;
 				ex.IgM = exame.IgM;
 				ex.Pcr = exame.Pcr;
+				ex.IgGIgM = exame.IgGIgM;
+				ex.MetodoExame = exame.MetodoExame;
 				ex.IdEstado = exame.IdEstado;
 				ex.MunicipioId = exame.IdMunicipio;
 				ex.DataInicioSintomas = exame.DataInicioSintomas;
@@ -740,6 +761,18 @@ namespace MonitoraSUS.Controllers
 				ex.CodigoColeta = exame.CodigoColeta;
 				ex.StatusNotificacao = exame.StatusNotificacao;
 				ex.IdNotificacao = exame.IdNotificacao;
+				ex.AguardandoResultado = exame.AguardandoResultado;
+				ex.Coriza = exame.Coriza;
+				ex.Diarreia = exame.Diarreia;
+				ex.DificuldadeRespiratoria = exame.DificuldadeRespiratoria;
+				ex.DorAbdominal = exame.DorAbdominal;
+				ex.DorGarganta = exame.DorGarganta;
+				ex.DorOuvido = exame.DorOuvido;
+				ex.Febre = exame.Febre;
+				ex.Nausea = exame.Nausea;
+				ex.PerdaOlfatoPaladar = exame.PerdaOlfatoPaladar;
+				ex.RelatouSintomas = exame.RelatouSintomas;
+				ex.Tosse = exame.Tosse;
 
 				pesquisaExame.Exames.Add(ex);
 			}
@@ -785,7 +818,6 @@ namespace MonitoraSUS.Controllers
 			exame.IdPaciente.FoneCelular = Methods.RemoveSpecialsCaracts(exame.IdPaciente.FoneCelular);
 			exame.IdPaciente.Sexo = exame.IdPaciente.Sexo.Equals("M") ? "Masculino" : "Feminino";
 
-
 			if (exame.IdPaciente.FoneFixo != null)
 				exame.IdPaciente.FoneFixo = Methods.RemoveSpecialsCaracts(exame.IdPaciente.FoneFixo);
 
@@ -803,7 +835,7 @@ namespace MonitoraSUS.Controllers
 				if (exame.IdPaciente.SituacaoSaude.Equals(PessoaModel.SITUACAO_SAUDAVEL) && exame.Resultado.Equals(ExameModel.RESULTADO_POSITIVO))
 				{
 					exame.IdPaciente.SituacaoSaude = PessoaModel.SITUACAO_ISOLAMENTO;
-					_pessoaContext.Update(exame.IdPaciente);
+					_pessoaContext.Update(exame.IdPaciente, false);
 				}
 			}
 
@@ -820,11 +852,11 @@ namespace MonitoraSUS.Controllers
 					case ExameModel.RESULTADO_POSITIVO: examesTotalizados.Positivos++; break;
 					case ExameModel.RESULTADO_NEGATIVO: examesTotalizados.Negativos++; break;
 					case ExameModel.RESULTADO_INDETERMINADO: examesTotalizados.Indeterminados++; break;
-					case ExameModel.RESULTADO_CURADO: examesTotalizados.Curados++; break;
+					case ExameModel.RESULTADO_RECUPERADO: examesTotalizados.Recuperados++; break;
+					case ExameModel.RESULTADO_AGUARDANDO: examesTotalizados.Aguardando++; break;
+					case ExameModel.RESULTADO_IGMIGG: examesTotalizados.IgMIgGs++; break;
 				}
 			}
-
-
 			return examesTotalizados;
 		}
 	}

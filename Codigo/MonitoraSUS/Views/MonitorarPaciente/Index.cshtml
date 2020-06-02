@@ -69,6 +69,7 @@
 													<option>Positivo</option>
 													<option>Indeterminado</option>
 													<option>Recuperado</option>
+													<option>IgG/IgM Positivo</option>
 												</select>
 											</div>
 										</div>
@@ -120,7 +121,15 @@
 													Recuperados
 												</td>
 												<td>
-													@Model.Curados
+													@Model.Recuperados
+												</td>
+											</tr>
+											<tr class="text-blue">
+												<td>
+													IgG/IgM Positivos
+												</td>
+												<td>
+													@Model.IgGIgM
 												</td>
 											</tr>
 
@@ -252,7 +261,7 @@
 											@Html.DisplayFor(modelItem => item.DataExame)
 										</th>
 										<td class="text-center">
-											@Html.DisplayFor(modelItem => item.UltimaSituacao)
+											@Html.DisplayFor(modelItem => item.UltimoResultado)
 										</td>
 										<td class="text-center">
 											@Html.DisplayFor(modelItem => item.SituacaoSaudeDescricao)

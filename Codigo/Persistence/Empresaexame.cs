@@ -9,6 +9,7 @@ namespace Persistence
         {
             Configuracaonotificar = new HashSet<Configuracaonotificar>();
             Exame = new HashSet<Exame>();
+            Internacao = new HashSet<Internacao>();
             Pessoatrabalhaestado = new HashSet<Pessoatrabalhaestado>();
         }
 
@@ -27,6 +28,8 @@ namespace Persistence
         public string FoneCelular { get; set; }
         public string FoneFixo { get; set; }
         public string Email { get; set; }
+        public byte EhPublico { get; set; }
+        public byte FazMonitoramento { get; set; }
         public byte EmiteLaudoExame { get; set; }
         public byte PossuiLeitosInternacao { get; set; }
         public int NumeroLeitos { get; set; }
@@ -36,6 +39,7 @@ namespace Persistence
 
         public ICollection<Configuracaonotificar> Configuracaonotificar { get; set; }
         public ICollection<Exame> Exame { get; set; }
+        public ICollection<Internacao> Internacao { get; set; }
         public ICollection<Pessoatrabalhaestado> Pessoatrabalhaestado { get; set; }
     }
 }

@@ -45,39 +45,53 @@
 										Negativos
 									</th>
 									<th scope="col" class="sort" data-sort="positivo">
-										Curados
+										Recuperados
 									</th>
 									<th scope="col" class="sort" data-sort="positivo">
 										Indeterminados
 									</th>
+									<th scope="col" class="sort" data-sort="positivo">
+										IgG/IgM Positivos
+									</th>
+									<th scope="col" class="sort" data-sort="positivo">
+										Aguardando
+									</th>
+
 								</tr>
 							</thead>
 							<tbody class="list">
 								@foreach (var item in Model.Gestao)
 								{
-									<tr>
-										<td>
-											@Html.DisplayFor(modelItem => item.Estado)
-										</td>
-										<td>
-											@Html.DisplayFor(modelItem => item.Municipio)
-										</td>
-										<td>
-											@Html.DisplayFor(modelItem => item.Bairro)
-										</td>
-										<td>
-											@Html.DisplayFor(modelItem => item.TotalPositivos)
-										</td>
-										<td>
-											@Html.DisplayFor(modelItem => item.TotalNegativos)
-										</td>
-										<td>
-											@Html.DisplayFor(modelItem => item.TotalCurados)
-										</td>
-										<td>
-											@Html.DisplayFor(modelItem => item.TotalIndeterminados)
-										</td>
-									</tr>
+								<tr>
+									<td>
+										@Html.DisplayFor(modelItem => item.Estado)
+									</td>
+									<td>
+										@Html.DisplayFor(modelItem => item.Municipio)
+									</td>
+									<td>
+										@Html.DisplayFor(modelItem => item.Bairro)
+									</td>
+									<td>
+										@Html.DisplayFor(modelItem => item.TotalPositivos)
+									</td>
+									<td>
+										@Html.DisplayFor(modelItem => item.TotalNegativos)
+									</td>
+									<td>
+										@Html.DisplayFor(modelItem => item.TotalRecuperados)
+									</td>
+									<td>
+										@Html.DisplayFor(modelItem => item.TotalIndeterminados)
+									</td>
+									<td>
+										@Html.DisplayFor(modelItem => item.TotalIgGIgM)
+									</td>
+									<td>
+										@Html.DisplayFor(modelItem => item.TotalAguardando)
+									</td>
+
+								</tr>
 								}
 							</tbody>
 							<thead class="thead-light">
@@ -96,10 +110,16 @@
 										@Model.TotalGestaoNegativos
 									</td>
 									<td>
-										@Model.TotalGestaoCurados
+										@Model.TotalGestaoRecuperados
 									</td>
 									<td>
 										@Model.TotalGestaoIndeterminados
+									</td>
+									<td>
+										@Model.TotalGestaoIgGIgM
+									</td>
+									<td>
+										@Model.TotalGestaoAguardando
 									</td>
 								</tr>
 							</thead>
@@ -131,39 +151,51 @@
 										Negativos
 									</th>
 									<th scope="col" class="sort" data-sort="positivo">
-										Curados
+										Recuperados
 									</th>
 									<th scope="col" class="sort" data-sort="positivo">
 										Indeterminados
+									</th>
+									<th scope="col" class="sort" data-sort="positivo">
+										IgG/IgM Positivos
+									</th>
+									<th scope="col" class="sort" data-sort="positivo">
+										Aguardando
 									</th>
 								</tr>
 							</thead>
 							<tbody class="list">
 								@foreach (var item in Model.Populacao)
 								{
-									<tr>
-										<td>
-											@Html.DisplayFor(modelItem => item.Estado)
-										</td>
-										<td>
-											@Html.DisplayFor(modelItem => item.Municipio)
-										</td>
-										<td>
-											@Html.DisplayFor(modelItem => item.Bairro)
-										</td>
-										<td>
-											@Html.DisplayFor(modelItem => item.TotalPositivos)
-										</td>
-										<td>
-											@Html.DisplayFor(modelItem => item.TotalNegativos)
-										</td>
-										<td>
-											@Html.DisplayFor(modelItem => item.TotalCurados)
-										</td>
-										<td>
-											@Html.DisplayFor(modelItem => item.TotalIndeterminados)
-										</td>
-									</tr>
+								<tr>
+									<td>
+										@Html.DisplayFor(modelItem => item.Estado)
+									</td>
+									<td>
+										@Html.DisplayFor(modelItem => item.Municipio)
+									</td>
+									<td>
+										@Html.DisplayFor(modelItem => item.Bairro)
+									</td>
+									<td>
+										@Html.DisplayFor(modelItem => item.TotalPositivos)
+									</td>
+									<td>
+										@Html.DisplayFor(modelItem => item.TotalNegativos)
+									</td>
+									<td>
+										@Html.DisplayFor(modelItem => item.TotalRecuperados)
+									</td>
+									<td>
+										@Html.DisplayFor(modelItem => item.TotalIndeterminados)
+									</td>
+									<td>
+										@Html.DisplayFor(modelItem => item.TotalIgGIgM)
+									</td>
+									<td>
+										@Html.DisplayFor(modelItem => item.TotalAguardando)
+									</td>
+								</tr>
 								}
 							</tbody>
 							<thead class="thead-light">
@@ -182,10 +214,16 @@
 										@Model.TotalPopulacaoNegativos
 									</td>
 									<td>
-										@Model.TotalPopulacaoCurados
+										@Model.TotalPopulacaoRecuperados
 									</td>
 									<td>
 										@Model.TotalPopulacaoIndeterminados
+									</td>
+									<td>
+										@Model.TotalPopulacaoIgGIGM
+									</td>
+									<td>
+										@Model.TotalPopulacaoAguardando
 									</td>
 								</tr>
 							</thead>

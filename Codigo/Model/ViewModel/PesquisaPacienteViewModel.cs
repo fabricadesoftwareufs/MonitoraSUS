@@ -9,9 +9,11 @@ namespace Model.ViewModel
         public PesquisaPacienteViewModel() 
         {
             Exames = new List<MonitoraPacienteViewModel>();
-            Positivos = 0;
-            Curados = 0;
-            Indeterminados = 0;
+			Positivos = 0;
+			Recuperados = 0;
+			Aguardando = 0;
+			IgGIgM = 0;
+			Indeterminados = 0;
 			Isolamento = 0;
 			Hospitalizado = 0;
 			UTI = 0;
@@ -28,9 +30,11 @@ namespace Model.ViewModel
 		public int Obito { get; set; }
 		public int Saudavel { get; set; }
 		public int Positivos { get; set; }
-        public int Curados { get; set; }
+        public int Recuperados { get; set; }
         public int Indeterminados { get; set; }
-        public string Pesquisa { get; set; }
+		public int Aguardando { get; set; }
+		public int IgGIgM { get; set; }
+		public string Pesquisa { get; set; }
         public DateTime DataInicial { get; set; }
         public DateTime DataFinal { get; set; }
         public int VirusBacteria { get; set; }
