@@ -17,7 +17,7 @@ namespace Service.Interface
         List<ExameModel> GetByIdEmpresa(int idEempresa);
         List<ExameModel> GetByIdPaciente(int idPaciente);
         List<ExameModel> GetByIdMunicipio(int idMunicipio);
-        List<ExameModel> CheckDuplicateExamToday(int idPaciente, int idVirusBacteria, DateTime dateExame);
+        List<ExameModel> CheckDuplicateExamToday(int idPaciente, int idVirusBacteria, DateTime dateExame, string metodoExame);
 		List<MonitoraPacienteViewModel> GetByEstadoResidenciaPaciente(string siglaEstado,
 			int idVirusBacteria, DateTime dataInicio, DateTime dataFim);
 		List<MonitoraPacienteViewModel> GetByCidadeResidenciaPaciente(string cidade, string siglaEstado,

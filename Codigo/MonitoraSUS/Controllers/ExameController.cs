@@ -374,7 +374,7 @@ namespace MonitoraSUS.Controllers
                  * Verificando duplicidade de exames no mesmo dia
                  * na hora de atulizar um registro
                  */
-				var check = _exameContext.CheckDuplicateExamToday(exame.IdPaciente.Idpessoa, exame.IdVirusBacteria.IdVirusBacteria, exame.DataExame);
+				var check = _exameContext.CheckDuplicateExamToday(exame.IdPaciente.Idpessoa, exame.IdVirusBacteria.IdVirusBacteria, exame.DataExame, exame.MetodoExame);
 				if (check.Count > 0)
 				{
 					var status = false;
@@ -486,10 +486,10 @@ namespace MonitoraSUS.Controllers
 			else
 			{
 				var pessoa = CreatePessoaModelByExame(exame);
-				if (_exameContext.CheckDuplicateExamToday(pessoa.Idpessoa, exame.IdVirusBacteria.IdVirusBacteria, exame.DataExame).Count > 0)
+				if (_exameContext.CheckDuplicateExamToday(pessoa.Idpessoa, exame.IdVirusBacteria.IdVirusBacteria, exame.DataExame, exame.MetodoExame).Count > 0)
 				{
 					TempData["mensagemErro"] = "Notificação DUPLICADA! Já existe um exame registrado desse paciente para esse Vírus/Bactéria na " +
-												"data informada. Por favor, verifique se os dados da notificação estão corretos.";
+												"data informada e método aplicado. Por favor, verifique se os dados da notificação estão corretos.";
 					return View(exame);
 				}
 

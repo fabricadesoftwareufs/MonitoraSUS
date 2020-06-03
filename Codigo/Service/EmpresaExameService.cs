@@ -128,7 +128,7 @@ namespace Service
 				FazMonitoramento = Convert.ToBoolean(empresa.FazMonitoramento)
             }).FirstOrDefault();
 
-        public EmpresaExameModel GetByCnpj(string cnpj)
+        public List<EmpresaExameModel> GetByCnpj(string cnpj)
          => _context.Empresaexame
             .Where(empresaExame => empresaExame.Cnpj.Equals(cnpj))
             .Select(empresa => new EmpresaExameModel
@@ -156,7 +156,7 @@ namespace Service
                 PossuiLeitosInternacao = Convert.ToBoolean(empresa.PossuiLeitosInternacao),
 				EhPublico = Convert.ToBoolean(empresa.EhPublico),
 				FazMonitoramento = Convert.ToBoolean(empresa.FazMonitoramento)
-			}).FirstOrDefault();
+			}).ToList();
 
         public List<EmpresaExameModel> GetByUF(string uf)
              => _context.Empresaexame

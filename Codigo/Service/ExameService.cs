@@ -543,10 +543,11 @@ namespace Service
 			return listaMonitoramentoNaoNegativos;
 		}
 
-		public List<ExameModel> CheckDuplicateExamToday(int idPaciente, int idVirusBacteria, DateTime dateExame)
+		public List<ExameModel> CheckDuplicateExamToday(int idPaciente, int idVirusBacteria, DateTime dateExame, string metodoExame)
 		{
 			var exames = _context.Exame.Where(exameModel => exameModel.IdVirusBacteria == idVirusBacteria &&
-						 exameModel.IdPaciente == idPaciente && dateExame.ToString("dd/MM/yyyy").Equals(exameModel.DataExame.ToString("dd/MM/yyyy")))
+						 exameModel.IdPaciente == idPaciente && exameModel.MetodoExame.Equals(metodoExame) &&
+						 dateExame.ToString("dd/MM/yyyy").Equals(exameModel.DataExame.ToString("dd/MM/yyyy")))
 						 .Select(exame => new ExameModel
 						 {
 							 IdExame = exame.IdExame,

@@ -329,7 +329,7 @@ namespace MonitoraSUS.Controllers
 				empresas = _empresaExameService.ListByUF(_estadoService.GetById(autenticadoTrabalhaEstado.IdEstado).Uf);
 			else if (autenticadoTrabalhaMunicipio != null)
 				empresas = _empresaExameService.ListByUF(_estadoService.GetById(Convert.ToInt32(_municipioService.GetById(autenticadoTrabalhaMunicipio.IdMunicipio).Uf)).Uf);
-
+			solicitantes = solicitantes.OrderBy(s => s.Nome).ToList();
 			if (empresas != null)
                 tupleModel = new Tuple<List<SolicitanteAprovacaoViewModel>, List<EmpresaExameModel>>(solicitantes, empresas);
             else

@@ -112,7 +112,8 @@ namespace MonitoraSUS.Controllers
                 }
 
                 empresa = RemoveCaracteresEspeciais(empresa);
-                if (_empresaContext.GetByCnpj(empresa.Cnpj) == null)
+                if (_empresaContext.GetByCnpj(empresa.Cnpj) == null ||
+					(empresa.Cnpj.Equals(13031547000104) && _empresaContext.GetByCnpj(empresa.Cnpj).Count <=2 ))
                 {
                     try
                     {
@@ -161,7 +162,7 @@ namespace MonitoraSUS.Controllers
             if (Methods.ValidarCnpj(empresa.Cnpj))
             {
                 empresa = RemoveCaracteresEspeciais(empresa);
-                if (_empresaContext.GetByCnpj(empresa.Cnpj).Id == empresa.Id)
+                if (_empresaContext.GetById(empresa.Id) != null)
                 {
 
                     if (VerificaQtdLeitos(empresa) == 1)

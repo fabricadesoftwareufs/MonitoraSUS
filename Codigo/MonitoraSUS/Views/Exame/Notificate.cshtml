@@ -28,10 +28,9 @@
 
                         <div class="col">
                             <h5 class="card-title text-muted mb-0">MonitoraSUS</h5>
-                            <h5 class="h3 mb-0">Resultados</h5>
+                            <h5 class="h3 mb-0">Enviar SMS com Resultado do Exame para Pacientes</h5>
                         </div>
                         <div class="col text-right">
-                            <!--a class="btn btn-success" asp-action="Create">Novo Exame</!--a-->
                             <a class="btn btn-default" asp-controller="Home" asp-action="Index"> <i class="fas fa-arrow-left"></i> Voltar</a><br />
                         </div>
                     </div>
@@ -83,13 +82,14 @@
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label class="form-control-label" for="input-atuacao-estado">Resultado</label>
-                                                <select asp-for="Resultado" class="form-control" id="input-resultado">
-                                                    <option>Todas as Opçoes</option>
-                                                    <option>Positivo</option>
-                                                    <option>Negativo</option>
-                                                    <option>Indeterminado</option>
-                                                    <option>Curado</option>
-                                                </select>
+												<select asp-for="Resultado" class="form-control" id="input-resultado">
+													<option>Todas as Opçoes</option>
+													<option>Positivo</option>
+													<option>Negativo</option>
+													<option>Indeterminado</option>
+													<option>Recuperado</option>
+													<option>IgG/IgM Positivo</option>
+												</select>
                                             </div>
                                         </div>
                                     </div>
@@ -119,44 +119,48 @@
                                                 </th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-
-                                            <tr class="text-danger">
-                                                <td>
-                                                    Positivos
-                                                </td>
-                                                <td>
-                                                    @Model.Positivos
-                                                </td>
-                                            </tr>
-
-                                            <tr class="text-success">
-                                                <td>
-                                                    Negativos
-                                                </td>
-                                                <td>
-                                                    @Model.Negativos
-                                                </td>
-                                            </tr>
-
-                                            <tr class="text-warning">
-                                                <td>
-                                                    Indeterminados
-                                                </td>
-                                                <td>
-                                                    @Model.Indeterminados
-                                                </td>
-                                            </tr>
-                                            <tr class="text-blue">
-                                                <td>
-                                                    Curados
-                                                </td>
-                                                <td>
-                                                    @Model.Recuperados
-                                                </td>
-                                            </tr>
-
-                                        </tbody>
+										<tbody>
+											<tr class="text-danger">
+												<td>
+													Positivos
+												</td>
+												<td>
+													@Model.Positivos
+												</td>
+											</tr>
+											<tr class="text-danger">
+												<td>
+													IgG/IgM Positivos
+												</td>
+												<td>
+													@Model.IgMIgGs
+												</td>
+											</tr>
+											<tr class="text-warning">
+												<td>
+													Indeterminados
+												</td>
+												<td>
+													@Model.Indeterminados
+												</td>
+											</tr>
+											<tr class="text-blue">
+												<td>
+													Recuperados
+												</td>
+												<td>
+													@Model.Recuperados
+												</td>
+											</tr>
+											<tr class="text-success">
+												<td>
+													Negativos
+												</td>
+												<td>
+													@Model.Negativos
+												</td>
+											</tr>
+										</tbody>
                                     </table>
                                 </div>
                             </div>
@@ -209,13 +213,13 @@
                                     <th scope="col" class="sort w5" data-sort="codigo-coleta">
                                         Id <br>Coleta
                                     </th>
-                                    <th scope="col" class="sor w7" data-sort="cpf">
+                                    <th scope="col" class="sor w5" data-sort="cpf">
                                         Cpf/Rg
                                     </th>
-                                    <th scope="col" class="sort w25" data-sort="nome-paciente">
+                                    <th scope="col" class="sort w15" data-sort="nome-paciente">
                                         Paciente
                                     </th>
-                                    <th scope="col" class="sort w10" data-sort="cidade">
+                                    <th scope="col" class="sort w7" data-sort="cidade">
                                         Cidade
                                     </th>
                                     <th scope="col" class="sort w3" data-sort="estado">
@@ -224,7 +228,7 @@
                                     <th scope="col" class="sort w5" data-sort="data-exame">
                                         Data Exame
                                     </th>
-                                    <th scope="col" class="sort w12" data-sort="virus">
+                                    <th scope="col" class="sort w7" data-sort="virus">
                                         Vírus
                                     </th>
                                     <th scope="col" class="sort w7" data-sort="resultado">
@@ -233,7 +237,7 @@
                                     <th scope="col" class="sort w5" data-sort="foi-notificado">
                                         Notificado
                                     </th>
-                                    <th scope="col" class="sort w10" data-sort="acoes">
+                                    <th scope="col" class="sort w3" data-sort="acoes">
                                         Ações
                                     </th>
                                 </tr>

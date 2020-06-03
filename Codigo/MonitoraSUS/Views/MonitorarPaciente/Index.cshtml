@@ -70,6 +70,7 @@
 													<option>Indeterminado</option>
 													<option>Recuperado</option>
 													<option>IgG/IgM Positivo</option>
+													<option>Aguardando</option>
 												</select>
 											</div>
 										</div>
@@ -92,7 +93,7 @@
 										<thead class="thead-light">
 											<tr>
 												<th scope="col" class="sort" data-sort="resultado">
-													Resultado Exames
+													PACIENTES
 												</th>
 												<th scope="col" class="sort" data-sort="total">
 													Total
@@ -106,6 +107,14 @@
 												</td>
 												<td>
 													@Model.Positivos
+												</td>
+											</tr>
+											<tr class="text-danger">
+												<td>
+													IgG/IgM Positivos
+												</td>
+												<td>
+													@Model.IgGIgM
 												</td>
 											</tr>
 											<tr class="text-warning">
@@ -124,15 +133,14 @@
 													@Model.Recuperados
 												</td>
 											</tr>
-											<tr class="text-blue">
+											<tr class="text-success">
 												<td>
-													IgG/IgM Positivos
+													Aguardando Resultado
 												</td>
 												<td>
-													@Model.IgGIgM
+													@Model.Aguardando
 												</td>
 											</tr>
-
 										</tbody>
 									</table>
 									<table class="table align-items-center table-flush">
