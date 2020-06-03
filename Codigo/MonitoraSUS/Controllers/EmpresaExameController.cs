@@ -10,7 +10,7 @@ using System.Security.Claims;
 
 namespace MonitoraSUS.Controllers
 {
-    [Authorize(Roles = "SECRETARIO, GESTOR, ADM")]
+    [Authorize(Roles = "SECRETARIO, ADM")]
     public class EmpresaExameController : Controller
     {
         private readonly IConfiguration _configuration;
@@ -52,7 +52,7 @@ namespace MonitoraSUS.Controllers
             var usuario = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
             var pessoa = _pessoaContext.GetById(usuario.UsuarioModel.IdPessoa);
             var empresas = new List<EmpresaExameModel>();
-            if (usuario.RoleUsuario.Equals("SECRETARIO") || usuario.RoleUsuario.Equals("GESTOR"))
+            if (usuario.RoleUsuario.Equals("SECRETARIO") || usuario.RoleUsuario.Equals("ADM"))
             {
 
                 var trabalhaEstado = _trabalhaEstadoContext.GetByIdPessoa(pessoa.Idpessoa);
