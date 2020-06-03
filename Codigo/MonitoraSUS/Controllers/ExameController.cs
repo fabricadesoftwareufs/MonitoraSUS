@@ -498,15 +498,15 @@ namespace MonitoraSUS.Controllers
 					var pessoaBusca = _pessoaContext.GetByCpf(pessoa.Cpf);
 					if (pessoaBusca == null)
 					{
-						if (exame.Resultado.Equals(ExameModel.RESULTADO_POSITIVO))
-						{
+						if (exame.Resultado.Equals(ExameModel.RESULTADO_POSITIVO) && exame.AguardandoResultado == false)
 							pessoa.SituacaoSaude = PessoaModel.SITUACAO_ISOLAMENTO;
-							pessoa = _pessoaContext.Insert(pessoa);
-						}
+						pessoa = _pessoaContext.Insert(pessoa);
 					}
 					else
 					{
-						if (pessoaBusca.SituacaoSaude.Equals(PessoaModel.SITUACAO_SAUDAVEL) && exame.Resultado.Equals(ExameModel.RESULTADO_POSITIVO))
+						if (pessoaBusca.SituacaoSaude.Equals(PessoaModel.SITUACAO_SAUDAVEL) 
+							&& exame.Resultado.Equals(ExameModel.RESULTADO_POSITIVO)
+							&& exame.AguardandoResultado == false)
 							pessoa.SituacaoSaude = PessoaModel.SITUACAO_ISOLAMENTO;
 						pessoa = _pessoaContext.Update(pessoa, false);
 					}
@@ -529,7 +529,7 @@ namespace MonitoraSUS.Controllers
 					else
 						_situacaoPessoaContext.Update(CreateSituacaoPessoaModelByExame(exame, situacaoPessoa));
 				}
-				catch
+				catch (Exception e)
 				{
 					TempData["mensagemErro"] = "Cadastro não pode ser concluido pois houve um problema ao inserir/atualizar o resultado do exame, tente novamente" +
 												" Se o erro persistir, entre em contato com a Fábrica de Software da UFS pelo email fabricadesoftware@ufs.br";
