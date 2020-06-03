@@ -82,14 +82,14 @@
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label class="form-control-label" for="input-atuacao-estado">Resultado</label>
-												<select asp-for="Resultado" class="form-control" id="input-resultado">
-													<option>Todas as Opçoes</option>
-													<option>Positivo</option>
-													<option>Negativo</option>
-													<option>Indeterminado</option>
-													<option>Recuperado</option>
-													<option>IgG/IgM Positivo</option>
-												</select>
+                                                <select asp-for="Resultado" class="form-control" id="input-resultado">
+                                                    <option>Todas as Opçoes</option>
+                                                    <option>Positivo</option>
+                                                    <option>Negativo</option>
+                                                    <option>Indeterminado</option>
+                                                    <option>Recuperado</option>
+                                                    <option>IgG/IgM Positivo</option>
+                                                </select>
                                             </div>
                                         </div>
                                     </div>
@@ -119,48 +119,48 @@
                                                 </th>
                                             </tr>
                                         </thead>
-										<tbody>
-											<tr class="text-danger">
-												<td>
-													Positivos
-												</td>
-												<td>
-													@Model.Positivos
-												</td>
-											</tr>
-											<tr class="text-danger">
-												<td>
-													IgG/IgM Positivos
-												</td>
-												<td>
-													@Model.IgMIgGs
-												</td>
-											</tr>
-											<tr class="text-warning">
-												<td>
-													Indeterminados
-												</td>
-												<td>
-													@Model.Indeterminados
-												</td>
-											</tr>
-											<tr class="text-blue">
-												<td>
-													Recuperados
-												</td>
-												<td>
-													@Model.Recuperados
-												</td>
-											</tr>
-											<tr class="text-success">
-												<td>
-													Negativos
-												</td>
-												<td>
-													@Model.Negativos
-												</td>
-											</tr>
-										</tbody>
+                                        <tbody>
+                                            <tr class="text-danger">
+                                                <td>
+                                                    Positivos
+                                                </td>
+                                                <td>
+                                                    @Model.Positivos
+                                                </td>
+                                            </tr>
+                                            <tr class="text-danger">
+                                                <td>
+                                                    IgG/IgM Positivos
+                                                </td>
+                                                <td>
+                                                    @Model.IgMIgGs
+                                                </td>
+                                            </tr>
+                                            <tr class="text-warning">
+                                                <td>
+                                                    Indeterminados
+                                                </td>
+                                                <td>
+                                                    @Model.Indeterminados
+                                                </td>
+                                            </tr>
+                                            <tr class="text-blue">
+                                                <td>
+                                                    Recuperados
+                                                </td>
+                                                <td>
+                                                    @Model.Recuperados
+                                                </td>
+                                            </tr>
+                                            <tr class="text-success">
+                                                <td>
+                                                    Negativos
+                                                </td>
+                                                <td>
+                                                    @Model.Negativos
+                                                </td>
+                                            </tr>
+                                        </tbody>
                                     </table>
                                 </div>
                             </div>
@@ -201,6 +201,60 @@
                                 </div>
                             </div>
                         }
+
+                        <div hidden>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="input-cpf">CPF/RG ou NOME</label>
+                                        <input asp-for="Pesquisa" type="text" name="pesquisa" class="form-control" placeholder="000.000.000-00" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="input-cpf">Cidade</label>
+                                        <input asp-for="Cidade" type="text" name="cidade" class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="data-inicial"> Data Inicial</label>
+                                        <input asp-for="DataInicial" type="date" id="data-inicial" name="DataInicial" class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="data-final"> Data Final</label>
+                                        <input asp-for="DataFinal" type="date" id="data-final" name="DataFinal" class="form-control" />
+                                    </div>
+                                    <div class="form-group" hidden>
+                                        <label class="form-control-label" for="data-final"> Data Final</label>
+                                        <input asp-for="RealizouPesquisa" type="checkbox" checked="checked" id="realizou-pesquisa" class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="input-atuacao-estado">Resultado</label>
+                                        <select asp-for="Resultado" class="form-control" id="input-resultado">
+                                            <option>Todas as Opçoes</option>
+                                            <option>Positivo</option>
+                                            <option>Negativo</option>
+                                            <option>Indeterminado</option>
+                                            <option>Recuperado</option>
+                                            <option>IgG/IgM Positivo</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
                         <button type="submit" class="btn btn-info btn-xs"><i class="fa fa-envelope"></i> Atualizar SMS </button>
                     }
@@ -284,27 +338,81 @@
                                         <td>
                                             @Html.DisplayFor(modelItem => item.Resultado)
                                         </td>
-										<td>
-											@if (item.StatusNotificacao.ToUpper() == "S")
-											{
-												@:Sim
-											}
-											else if (item.StatusNotificacao.ToUpper() == "N")
-											{
-												@:Não
-											}
-											else if (item.StatusNotificacao.ToUpper() == "E")
-											{
-												@:Enviada
-											}
-											else if (item.StatusNotificacao.ToUpper() == "P")
-											{
-												@:Erro
-											}
-										</td>
+                                        <td>
+                                            @if (item.StatusNotificacao.ToUpper() == "S")
+                                            {
+                                                @:Sim
+                                            }
+                                            else if (item.StatusNotificacao.ToUpper() == "N")
+                                            {
+                                                @:Não
+                                            }
+                                            else if (item.StatusNotificacao.ToUpper() == "E")
+                                            {
+                                                @:Enviada
+                                            }
+                                            else if (item.StatusNotificacao.ToUpper() == "P")
+                                            {
+                                                @:Erro
+                                            }
+                                        </td>
                                         <td>
                                             @using (Html.BeginForm("EnviarSMS", "Exame", new { id = item.IdExame }, FormMethod.Post))
                                             {
+                                                <div hidden>
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label class="form-control-label" for="input-cpf">CPF/RG ou NOME</label>
+                                                                <input asp-for="Pesquisa" type="text" name="pesquisa" class="form-control" placeholder="000.000.000-00" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label class="form-control-label" for="input-cpf">Cidade</label>
+                                                                <input asp-for="Cidade" type="text" name="cidade" class="form-control" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row">
+                                                        <div class="col-md-3">
+                                                            <div class="form-group">
+                                                                <label class="form-control-label" for="data-inicial"> Data Inicial</label>
+                                                                <input asp-for="DataInicial" type="date" id="data-inicial" name="DataInicial" class="form-control" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <div class="form-group">
+                                                                <label class="form-control-label" for="data-final"> Data Final</label>
+                                                                <input asp-for="DataFinal" type="date" id="data-final" name="DataFinal" class="form-control" />
+                                                            </div>
+                                                            <div class="form-group" hidden>
+                                                                <label class="form-control-label" for="data-final"> Data Final</label>
+                                                                <input asp-for="RealizouPesquisa" type="checkbox" checked="checked" id="realizou-pesquisa" class="form-control" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row">
+                                                        <div class="col-lg-6">
+                                                            <div class="form-group">
+                                                                <label class="form-control-label" for="input-atuacao-estado">Resultado</label>
+                                                                <select asp-for="Resultado" class="form-control" id="input-resultado">
+                                                                    <option>Todas as Opçoes</option>
+                                                                    <option>Positivo</option>
+                                                                    <option>Negativo</option>
+                                                                    <option>Indeterminado</option>
+                                                                    <option>Recuperado</option>
+                                                                    <option>IgG/IgM Positivo</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
                                                 <button type="submit" class="btn btn-info btn-sm"><i class="fa fa-envelope"></i> SMS</button>
                                             }
                                         </td>
@@ -342,14 +450,14 @@ else if (TempData["mensagemErro"] != null)
                 //$('.btn-info').prop("disabled", false);
             }
         });
-        //$('.btn-info').on('click', function () {
-        //     $(this).prop("disabled", true);
-        //     Swal.fire({
-           //        title: 'Por favor, aguarde o envio...'
-          //    });
-		//	Swal.showLoading();
+                    //$('.btn-info').on('click', function () {
+                    //     $(this).prop("disabled", true);
+                    //     Swal.fire({
+                       //        title: 'Por favor, aguarde o envio...'
+                      //    });
+                    //	Swal.showLoading();
 //        });
-	</script>
+    </script>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
     <script src="~/assets/js/sweet-alert.js"></script>

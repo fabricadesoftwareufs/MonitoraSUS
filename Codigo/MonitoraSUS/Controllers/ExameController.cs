@@ -64,7 +64,7 @@ namespace MonitoraSUS.Controllers
 		[Authorize(Roles = "GESTOR, SECRETARIO")]
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> EnviarSMS(int id, IFormCollection collection)
+		public async Task<IActionResult> EnviarSMS(int id, PesquisaExameViewModel pesquisaExame, IFormCollection collection)
 		{
 			var exame = _exameContext.GetById(id);
 			var usuario = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
@@ -128,13 +128,14 @@ namespace MonitoraSUS.Controllers
 					}
 				}
 			}
-			return RedirectToAction(nameof(Notificate));
+
+			return RedirectToAction("Notificate", "Exame", pesquisaExame);
 		}
 
 		[Authorize(Roles = "GESTOR, SECRETARIO")]
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> ConsultarSMSEnviados(List<ExameViewModel> exames)
+		public async Task<IActionResult> ConsultarSMSEnviados(List<ExameViewModel> exames, PesquisaExameViewModel pesquisaExame)
 		{
 			var usuario = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
 			var trabalhaMunicipio = _pessoaTrabalhaMunicipioContext.GetByIdPessoa(usuario.UsuarioModel.IdPessoa);
@@ -183,7 +184,7 @@ namespace MonitoraSUS.Controllers
 
 				TempData["mensagemSucesso"] = "Consultas aos SMS enviadas com sucesso! " + mensagem;
 			}
-			return RedirectToAction(nameof(Notificate));
+			return RedirectToAction("Notificate", "Exame", pesquisaExame);
 		}
 
 		[Authorize(Roles = "GESTOR, SECRETARIO")]
@@ -285,9 +286,8 @@ namespace MonitoraSUS.Controllers
 
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public IActionResult Delete(int id, IFormCollection collection)
+		public IActionResult Delete(int id, PesquisaExameViewModel pesquisaExame, IFormCollection collection)
 		{
-
 			var exame = _exameContext.GetById(id);
 			
 			try
@@ -312,11 +312,11 @@ namespace MonitoraSUS.Controllers
 			{
 				TempData["mensagemErro"] = "Houve problemas na exclusão do exame. Tente novamente em alguns minutos." +
 										   " Se o erro persistir, entre em contato com a Fábrica de Software da UFS pelo email fabricadesoftware@ufs.br";
-				return RedirectToAction(nameof(Index));
+				return RedirectToAction("Index", "Exame", pesquisaExame);
 			}
 
 			TempData["mensagemSucesso"] = "O Exame foi removido com sucesso!";
-			return RedirectToAction(nameof(Index));
+			return RedirectToAction("Index", "Exame", pesquisaExame);
 		}
 
 		public IActionResult Edit(int id)
