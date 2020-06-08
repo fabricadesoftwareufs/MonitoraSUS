@@ -112,7 +112,7 @@ namespace MonitoraSUS.Controllers
                 }
 
                 empresa = RemoveCaracteresEspeciais(empresa);
-                if (_empresaContext.GetByCnpj(empresa.Cnpj) == null ||
+                if (_empresaContext.GetByCnpj(empresa.Cnpj).Count == 0 ||
 					(empresa.Cnpj.Equals("13031547000104") && _empresaContext.GetByCnpj(empresa.Cnpj).Count <=2 ))
                 {
                     try

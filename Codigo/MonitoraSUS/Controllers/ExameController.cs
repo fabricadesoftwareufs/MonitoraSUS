@@ -498,14 +498,15 @@ namespace MonitoraSUS.Controllers
 					var pessoaBusca = _pessoaContext.GetByCpf(pessoa.Cpf);
 					if (pessoaBusca == null)
 					{
-						if (exame.Resultado.Equals(ExameModel.RESULTADO_POSITIVO) && exame.AguardandoResultado == false)
+						if (exame.AguardandoResultado == true || exame.Resultado.Equals(ExameModel.RESULTADO_POSITIVO) ||
+							exame.Resultado.Equals(ExameModel.RESULTADO_IGMIGG))
 							pessoa.SituacaoSaude = PessoaModel.SITUACAO_ISOLAMENTO;
 						pessoa = _pessoaContext.Insert(pessoa);
 					}
 					else
 					{
 						if (pessoaBusca.SituacaoSaude.Equals(PessoaModel.SITUACAO_SAUDAVEL) 
-							&& exame.Resultado.Equals(ExameModel.RESULTADO_POSITIVO)
+							&& (exame.Resultado.Equals(ExameModel.RESULTADO_POSITIVO) || exame.Resultado.Equals(ExameModel.RESULTADO_IGMIGG))
 							&& exame.AguardandoResultado == false)
 							pessoa.SituacaoSaude = PessoaModel.SITUACAO_ISOLAMENTO;
 						pessoa = _pessoaContext.Update(pessoa, false);
@@ -831,12 +832,20 @@ namespace MonitoraSUS.Controllers
 			else
 			{
 				exame.IdPaciente.Idpessoa = user.Idpessoa;
-
-				if (exame.IdPaciente.SituacaoSaude.Equals(PessoaModel.SITUACAO_SAUDAVEL) && exame.Resultado.Equals(ExameModel.RESULTADO_POSITIVO))
-				{
+				if ((exame.IdPaciente.SituacaoSaude.Equals(PessoaModel.SITUACAO_SAUDAVEL) & !exame.IdPaciente.SituacaoSaude.Equals(PessoaModel.SITUACAO_SAUDAVEL) && exame.AguardandoResultado == false) 
+					|| (exame.IdPaciente.SituacaoSaude.Equals(PessoaModel.SITUACAO_SAUDAVEL) && exame.AguardandoResultado == true))
+				{ 
 					exame.IdPaciente.SituacaoSaude = PessoaModel.SITUACAO_ISOLAMENTO;
-					_pessoaContext.Update(exame.IdPaciente, false);
+				} else if (exame.Resultado.Equals(ExameModel.RESULTADO_NEGATIVO) || exame.Resultado.Equals(ExameModel.RESULTADO_RECUPERADO)
+					|| exame.Resultado.Equals(ExameModel.RESULTADO_INDETERMINADO) )
+				{
+					DateTime dataMinima = DateTime.Now.AddDays(exame.IdVirusBacteria.DiasRecuperacao * (-1));
+					var exames = _exameContext.GetByIdPaciente(user.Idpessoa).Where(e => e.DataExame >= dataMinima).ToList();
+					if (exames.Count() <= 1 && exame.IdPaciente.SituacaoSaude.Equals(PessoaModel.SITUACAO_ISOLAMENTO)) {
+						exame.IdPaciente.SituacaoSaude = PessoaModel.SITUACAO_SAUDAVEL;
+					}
 				}
+
 			}
 
 			return exame.IdPaciente;

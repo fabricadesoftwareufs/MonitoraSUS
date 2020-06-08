@@ -2,7 +2,9 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Model;
+using Service;
 using Service.Interface;
+using System;
 
 namespace MonitoraSUS.Controllers
 {
@@ -25,8 +27,13 @@ namespace MonitoraSUS.Controllers
             try
             {
                 _internacaoContext.Insert(internacao);
-            }
-            catch
+				TempData["mensagemSucessoInternacao"] = "Internacao cadastrada com sucesso!";
+			}
+			catch (ServiceException e)
+			{
+				TempData["mensagemErro"] = e.Message;
+			}
+			catch (Exception)
             {
                 TempData["mensagemErro"] = "Houve problemas na insercao da internacao. Tente novamente em alguns minutos." +
                                             " Se o erro persistir, entre em contato com a Fábrica de Software da UFS pelo email fabricadesoftware@ufs.br";
@@ -34,8 +41,6 @@ namespace MonitoraSUS.Controllers
                 
                 return RedirectToAction("Edit", "MonitorarPaciente", new { idPaciente, idVirusBacteria });
             }
-
-            TempData["mensagemSucessoInternacao"] = "Internacao cadastrada com sucesso!";
             return RedirectToAction("Edit", "MonitorarPaciente", new { idPaciente, idVirusBacteria });
         }
 
@@ -47,7 +52,8 @@ namespace MonitoraSUS.Controllers
             try
             {
                 _internacaoContext.update(internacao);
-            }
+				TempData["mensagemSucessoInternacao"] = "Internacao atualizada com sucesso!";
+			}
             catch
             {
                 TempData["mensagemErro"] = "Houve problemas ao atualizar a internacao. Tente novamente em alguns minutos." +
@@ -55,7 +61,6 @@ namespace MonitoraSUS.Controllers
                 return RedirectToAction("Edit", "MonitorarPaciente", new { idPaciente, idVirusBacteria });
             }
 
-            TempData["mensagemSucessoInternacao"] = "Internacao atualizada com sucesso!";
             return RedirectToAction("Edit", "MonitorarPaciente", new { idPaciente, idVirusBacteria });
         }
 
@@ -68,15 +73,14 @@ namespace MonitoraSUS.Controllers
             try
             {
                 _internacaoContext.Delete(idInternacao);
-            }
+				TempData["mensagemSucessoInternacao"] = "Internacao removida com sucesso!";
+			}
             catch
             {
                 TempData["mensagemErro"] = "Houve problemas na insercao da internacao. Tente novamente em alguns minutos." +
                                             " Se o erro persistir, entre em contato com a Fábrica de Software da UFS pelo email fabricadesoftware@ufs.br";
                 return RedirectToAction("Edit", "MonitorarPaciente", new { idPaciente, idVirusBacteria });
             }
-
-            TempData["mensagemSucessoInternacao"] = "Internacao removida com sucesso!";
             return RedirectToAction("Edit", "MonitorarPaciente", new { idPaciente, idVirusBacteria });
         }
     }

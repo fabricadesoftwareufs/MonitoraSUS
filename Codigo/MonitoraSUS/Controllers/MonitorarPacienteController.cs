@@ -82,7 +82,7 @@ namespace MonitoraSUS.Controllers
 		public IActionResult Edit(int idPaciente, int IdVirusBacteria)
 		{
 			ViewBag.googleKey = _configuration["GOOGLE_KEY"];
-			ViewBag.Empresas = _empresaExameContext.GetAll();
+			ViewBag.Empresas = _empresaExameContext.GetHospitais();
 
 			return View(GetPacienteViewModel(idPaciente, IdVirusBacteria));
 		}
