@@ -37,8 +37,6 @@ namespace MonitoraSUS.Controllers
             {
                 TempData["mensagemErro"] = "Houve problemas na insercao da internacao. Tente novamente em alguns minutos." +
                                             " Se o erro persistir, entre em contato com a Fábrica de Software da UFS pelo email fabricadesoftware@ufs.br";
-
-                
                 return RedirectToAction("Edit", "MonitorarPaciente", new { idPaciente, idVirusBacteria });
             }
             return RedirectToAction("Edit", "MonitorarPaciente", new { idPaciente, idVirusBacteria });

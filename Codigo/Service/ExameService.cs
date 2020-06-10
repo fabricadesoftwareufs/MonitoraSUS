@@ -409,6 +409,54 @@ namespace Service
 					Tosse = Convert.ToBoolean(exame.Tosse)
 				}).ToList();
 
+		public List<MonitoraPacienteViewModel> GetByHospital(int idEmpresa, int idVirusBacteria, DateTime dataInicio, DateTime dataFim)
+		{
+			var monitoraPacientes = _context.Exame
+						 .Where(e => e.IdEmpresaSaude == idEmpresa &&
+								 e.IdVirusBacteria == idVirusBacteria &&
+								 e.DataExame >= dataInicio && e.DataExame <= dataFim &&
+								 (e.IdPacienteNavigation.SituacaoSaude.Equals(PessoaModel.SITUACAO_ESTABILIZACAO) ||
+								 e.IdPacienteNavigation.SituacaoSaude.Equals(PessoaModel.SITUACAO_HOSPITALIZADO_INTERNAMENTO) ||
+								 e.IdPacienteNavigation.SituacaoSaude.Equals(PessoaModel.SITUACAO_UTI) ||
+								 e.IdPacienteNavigation.SituacaoSaude.Equals(PessoaModel.SITUACAO_OBITO) ||
+								  e.AguardandoResultado == 1 ||
+								  (e.AguardandoResultado == 0 && (!e.IgM.Equals("N") || !e.Pcr.Equals("N") || !e.IgMigG.Equals("N")))))
+						 .OrderByDescending(e => e.DataExame)
+						 .Select(exame => new MonitoraPacienteViewModel
+						 {
+							 Bairro = exame.IdPacienteNavigation.Bairro,
+							 Cancer = Convert.ToBoolean(exame.IdPacienteNavigation.Cancer),
+							 Cardiopatia = Convert.ToBoolean(exame.IdPacienteNavigation.Cardiopatia),
+							 Cep = exame.IdPacienteNavigation.Cep,
+							 Cidade = exame.IdPacienteNavigation.Cidade,
+							 Complemento = exame.IdPacienteNavigation.Complemento,
+							 Cpf = exame.IdPacienteNavigation.Cpf,
+							 DataNascimento = exame.IdPacienteNavigation.DataNascimento,
+							 Diabetes = Convert.ToBoolean(exame.IdPacienteNavigation.Diabetes),
+							 DoencaRespiratoria = Convert.ToBoolean(exame.IdPacienteNavigation.DoencaRespiratoria),
+							 Email = exame.IdPacienteNavigation.Email,
+							 Estado = exame.IdPacienteNavigation.Estado,
+							 FoneCelular = exame.IdPacienteNavigation.FoneCelular,
+							 FoneFixo = exame.IdPacienteNavigation.FoneFixo,
+							 Hipertenso = Convert.ToBoolean(exame.IdPacienteNavigation.Hipertenso),
+							 Idpessoa = exame.IdPacienteNavigation.Idpessoa,
+							 Imunodeprimido = Convert.ToBoolean(exame.IdPacienteNavigation.Imunodeprimido),
+							 Latitude = exame.IdPacienteNavigation.Latitude,
+							 Longitude = exame.IdPacienteNavigation.Longitude,
+							 Nome = exame.IdPacienteNavigation.Nome,
+							 Numero = exame.IdPacienteNavigation.Numero,
+							 Obeso = Convert.ToBoolean(exame.IdPacienteNavigation.Obeso),
+							 OutrasComorbidades = exame.IdPacienteNavigation.OutrasComorbidades,
+							 Rua = exame.IdPacienteNavigation.Rua,
+							 Sexo = exame.IdPacienteNavigation.Sexo,
+							 SituacaoSaude = exame.IdPacienteNavigation.SituacaoSaude,
+							 DataExame = exame.DataExame,
+							 IdExame = exame.IdExame,
+							 UltimoResultado = new ExameModel { AguardandoResultado = Convert.ToBoolean(exame.AguardandoResultado), IgG = exame.IgG, IgM = exame.IgM, IgGIgM = exame.IgMigG, Pcr = exame.Pcr, MetodoExame = exame.MetodoExame }.Resultado
+						 }).ToList();
+			List<MonitoraPacienteViewModel> listaMonitoramentoNaoNegativos = BuscarNaoNegativos(idVirusBacteria, monitoraPacientes);
+			return listaMonitoramentoNaoNegativos;
+		}
 
 		public List<MonitoraPacienteViewModel> GetByCidadeResidenciaPaciente(string cidade, string siglaEstado,
 			int idVirusBacteria, DateTime dataInicio, DateTime dataFim)

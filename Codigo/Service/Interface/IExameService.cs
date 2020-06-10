@@ -22,6 +22,7 @@ namespace Service.Interface
 			int idVirusBacteria, DateTime dataInicio, DateTime dataFim);
 		List<MonitoraPacienteViewModel> GetByCidadeResidenciaPaciente(string cidade, string siglaEstado,
 			int idVirusBacteria, DateTime dataInicio, DateTime dataFim);
+		List<MonitoraPacienteViewModel> GetByHospital(int idEmpresa, int idVirusBacteria, DateTime dataInicio, DateTime dataFim);
 
 		List<TotalEstadoMunicipioBairro> GetTotaisRealizadosByEmpresa(int idEempresa);
         List<TotalEstadoMunicipioBairro> GetTotaisRealizadosByEstado(int idEstado);

@@ -282,8 +282,16 @@ namespace MonitoraSUS.Controllers
 				{
 					if (pessoaTrabalhaEstado.IdEmpresaExame != EmpresaExameModel.EMPRESA_ESTADO_MUNICIPIO)
 					{
-						TempData["mensagemAviso"] = "Essa Funcionalidade Não está Disponível Para Organizações Privadas!";
-						return new PesquisaPacienteViewModel();
+						var empresa = _empresaExameContext.GetById(pessoaTrabalhaEstado.IdEmpresaExame);
+						if (empresa.FazMonitoramento)
+						{
+							pesquisa.Exames = _exameContext.GetByHospital(pessoaTrabalhaEstado.IdEmpresaExame, pesquisa.VirusBacteria, pesquisa.DataInicial, pesquisa.DataFinal).ToList();
+						}
+						else
+						{
+							TempData["mensagemAviso"] = "Essa Funcionalidade Não está Disponível Para Organizações Privadas!";
+							return new PesquisaPacienteViewModel();
+						}
 					}
 					else
 					{
