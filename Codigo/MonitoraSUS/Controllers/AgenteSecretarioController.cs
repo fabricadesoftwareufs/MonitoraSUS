@@ -471,10 +471,13 @@ namespace MonitoraSUS.Controllers
             UsuarioModel usuarioModel = _usuarioService.GetByIdPessoa(idPessoa);
 
             int tipoUsuario = ativarPerfil.Equals("Agente") ? UsuarioModel.PERFIL_AGENTE : UsuarioModel.PERFIL_GESTOR;
-            if (ehAdmin)
+            if (ehAdmin && idEmpresa == EmpresaExameModel.EMPRESA_ESTADO_MUNICIPIO)
                 tipoUsuario = UsuarioModel.PERFIL_SECRETARIO;
+			else if (ehAdmin && idEmpresa != EmpresaExameModel.EMPRESA_ESTADO_MUNICIPIO)
+				tipoUsuario = UsuarioModel.PERFIL_GESTOR;
 
-            string resposta = "";
+
+			string resposta = "";
             if (usuarioModel == null)
             {
                 var pessoa = _pessoaService.GetById(idPessoa);
