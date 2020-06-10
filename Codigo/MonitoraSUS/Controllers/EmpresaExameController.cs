@@ -96,10 +96,10 @@ namespace MonitoraSUS.Controllers
         public IActionResult Create(EmpresaExameModel empresa)
         {
             ViewBag.googleKey = _configuration["GOOGLE_KEY"];
-            if (Methods.ValidarCnpj(empresa.Cnpj))
-            {
 
-                if (VerificaQtdLeitos(empresa) == 1)
+			if (Methods.ValidarCnpj(empresa.Cnpj))
+            {
+				if (VerificaQtdLeitos(empresa) == 1)
                 {
                     TempData["MensagemErro"] = "A quantidade de leitos disponíveis não pode ser menor do que " +
                                                "a quantidade total de leitos!";
@@ -112,8 +112,7 @@ namespace MonitoraSUS.Controllers
                 }
 
                 empresa = RemoveCaracteresEspeciais(empresa);
-                if (_empresaContext.GetByCnpj(empresa.Cnpj).Count == 0 ||
-					(empresa.Cnpj.Equals("13031547000104") && _empresaContext.GetByCnpj(empresa.Cnpj).Count <=2 ))
+                if (_empresaContext.GetByCnpj(empresa.Cnpj).Count == 0)
                 {
                     try
                     {
