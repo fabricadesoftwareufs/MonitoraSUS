@@ -345,7 +345,7 @@ namespace MonitoraSUS.Controllers
 				ex.DataExame = exame.DataExame;
 				ex.IdEstado = exame.IdEstado;
 				ex.IdEmpresaSaude = exame.IdEmpresaSaude;
-				ex.EhProfissionalSaude = exame.EhProfissionalSaude;
+				ex.IdAreaAtuacao = exame.IdAreaAtuacao;
 				ex.CodigoColeta = exame.CodigoColeta;
 				ex.StatusNotificacao = exame.StatusNotificacao;
 				ex.IdNotificacao = exame.IdNotificacao;

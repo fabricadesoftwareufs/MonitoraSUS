@@ -28,7 +28,8 @@ namespace Model
         [Required]
         [Display(Name = "Sexo")]
         public string Sexo { get; set; }
-        public string Cep { get; set; }
+		public int IdProfissao { get; set; }
+		public string Cep { get; set; }
         public string Rua { get; set; }
         public string Bairro { get; set; }
         [Required]
@@ -111,5 +112,9 @@ namespace Model
 		public bool DorAbdominal { get; set; }
 		[Display(Name = "Perda Olfato/Paladar")]
 		public bool PerdaOlfatoPaladar { get; set; }
+		public string OutrosSintomas { get; set; }
+		public int IdAreaAtuacao { get; set; }
+		public string Profissao { get; set;  }
+		public string Cns { get; set; }
 	}
 }

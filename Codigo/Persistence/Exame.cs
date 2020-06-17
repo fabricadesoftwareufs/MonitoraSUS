@@ -19,7 +19,6 @@ namespace Persistence
         public int? IdMunicipio { get; set; }
         public int? IdEmpresaSaude { get; set; }
         public DateTimeOffset DataNotificacao { get; set; }
-        public byte EhProfissionalSaude { get; set; }
         public string CodigoColeta { get; set; }
         public string StatusNotificacao { get; set; }
         public string IdNotificacao { get; set; }
@@ -36,8 +35,13 @@ namespace Persistence
         public byte Nausea { get; set; }
         public byte DorAbdominal { get; set; }
         public byte PerdaOlfatoPaladar { get; set; }
+        public int IdAreaAtuacao { get; set; }
+        public string OutroSintomas { get; set; }
+        public string Cns { get; set; }
+        public string Profissao { get; set; }
 
         public Pessoa IdAgenteSaudeNavigation { get; set; }
+        public Areaatuacao IdAreaAtuacaoNavigation { get; set; }
         public Empresaexame IdEmpresaSaudeNavigation { get; set; }
         public Estado IdEstadoNavigation { get; set; }
         public Municipio IdMunicipioNavigation { get; set; }

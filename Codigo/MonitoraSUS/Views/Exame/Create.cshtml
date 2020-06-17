@@ -33,7 +33,7 @@
 	string DataInicioSintomas = Model.DataInicioSintomas != DateTime.MinValue ? Model.DataInicioSintomas.ToString("yyyy-MM-dd") : DateTime.Now.ToString("yyyy-MM-dd");
 	var googleKey = ViewBag.googleKey;
 	var outrasComorbidades = Model.IdPaciente.OutrasComorbidades;
-	var ehProfissional = Model.EhProfissionalSaude;
+	var ehProfissional = Model.IdAreaAtuacao;
 	var codigoColeta = Model.CodigoColeta;
 }
 
@@ -105,8 +105,8 @@
 									<div class="form-group">
 										<div class="custom-control custom-checkbox checkbox">
 											<label>
-												<input asp-for="EhProfissionalSaude" checked="@ehProfissional" class="custom-control-input" id="customCheck30" />
-												<label class="custom-control-label" for="customCheck30">Profissional de Saude?</label>
+												<input asp-for="IdAreaAtuacao" checked="@ehProfissional" class="custom-control-input" id="customCheck30" />
+												<label class="custom-control-label" for="customCheck30">Área de Atuação?</label>
 											</label>
 										</div>
 									</div>

@@ -70,5 +70,7 @@ namespace Model
 		[Required]
 		[Display(Name = "Faz monitoramento de Pacientes?")]
 		public bool FazMonitoramento { get; set; }
+		[Display(Name = "CNES")]
+		public string Cnes { get; set; }
 	}
 }

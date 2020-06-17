@@ -36,6 +36,7 @@ namespace Persistence
         public int NumeroLeitosUti { get; set; }
         public int NumeroLeitosDisponivel { get; set; }
         public int NumeroLeitosUtidisponivel { get; set; }
+        public string Cnes { get; set; }
 
         public ICollection<Configuracaonotificar> Configuracaonotificar { get; set; }
         public ICollection<Exame> Exame { get; set; }

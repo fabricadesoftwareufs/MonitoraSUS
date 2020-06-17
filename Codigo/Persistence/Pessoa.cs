@@ -55,8 +55,13 @@ namespace Persistence
         public byte Nausea { get; set; }
         public byte DorAbdominal { get; set; }
         public byte PerdaOlfatoPaladar { get; set; }
+        public string OutrosSintomas { get; set; }
+        public string Cns { get; set; }
         public DateTime? DataObito { get; set; }
+        public int IdAreaAtuacao { get; set; }
+        public string Profissao { get; set; }
 
+        public Areaatuacao IdAreaAtuacaoNavigation { get; set; }
         public ICollection<Exame> ExameIdAgenteSaudeNavigation { get; set; }
         public ICollection<Exame> ExameIdPacienteNavigation { get; set; }
         public ICollection<Internacao> Internacao { get; set; }

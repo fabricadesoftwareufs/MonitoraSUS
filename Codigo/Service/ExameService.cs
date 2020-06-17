@@ -58,7 +58,6 @@ namespace Service
 					IdEstado = exame.IdEstado,
 					IdMunicipio = exame.IdMunicipio,
 					IdEmpresaSaude = exame.IdEmpresaSaude,
-					EhProfissionalSaude = Convert.ToBoolean(exame.EhProfissionalSaude),
 					CodigoColeta = exame.CodigoColeta,
 					StatusNotificacao = exame.StatusNotificacao,
 					IdNotificacao = exame.IdNotificacao,
@@ -73,7 +72,11 @@ namespace Service
 					Febre = Convert.ToBoolean(exame.Febre),
 					Nausea = Convert.ToBoolean(exame.Nausea),
 					PerdaOlfatoPaladar = Convert.ToBoolean(exame.PerdaOlfatoPaladar),
-					Tosse = Convert.ToBoolean(exame.Tosse)
+					Tosse = Convert.ToBoolean(exame.Tosse),
+					IdAreaAtuacao = exame.IdAreaAtuacao,
+					Cns = exame.Cns,
+					OutrosSintomas = exame.OutroSintomas,
+					Profissao = exame.Profissao
 				}).ToList();
 
 		public List<ExameModel> GetAll()
@@ -94,7 +97,6 @@ namespace Service
 					IdEstado = exame.IdEstado,
 					IdMunicipio = exame.IdMunicipio,
 					IdEmpresaSaude = exame.IdEmpresaSaude,
-					EhProfissionalSaude = Convert.ToBoolean(exame.EhProfissionalSaude),
 					CodigoColeta = exame.CodigoColeta,
 					StatusNotificacao = exame.StatusNotificacao,
 					IdNotificacao = exame.IdNotificacao,
@@ -109,7 +111,11 @@ namespace Service
 					Febre = Convert.ToBoolean(exame.Febre),
 					Nausea = Convert.ToBoolean(exame.Nausea),
 					PerdaOlfatoPaladar = Convert.ToBoolean(exame.PerdaOlfatoPaladar),
-					Tosse = Convert.ToBoolean(exame.Tosse)
+					Tosse = Convert.ToBoolean(exame.Tosse),
+					IdAreaAtuacao = exame.IdAreaAtuacao,
+					Cns = exame.Cns,
+					OutrosSintomas = exame.OutroSintomas,
+					Profissao = exame.Profissao
 				}).ToList();
 
 
@@ -132,7 +138,6 @@ namespace Service
 					IdEstado = exame.IdEstado,
 					IdMunicipio = exame.IdMunicipio,
 					IdEmpresaSaude = exame.IdEmpresaSaude,
-					EhProfissionalSaude = Convert.ToBoolean(exame.EhProfissionalSaude),
 					CodigoColeta = exame.CodigoColeta,
 					StatusNotificacao = exame.StatusNotificacao,
 					IdNotificacao = exame.IdNotificacao,
@@ -147,7 +152,11 @@ namespace Service
 					Febre = Convert.ToBoolean(exame.Febre),
 					Nausea = Convert.ToBoolean(exame.Nausea),
 					PerdaOlfatoPaladar = Convert.ToBoolean(exame.PerdaOlfatoPaladar),
-					Tosse = Convert.ToBoolean(exame.Tosse)
+					Tosse = Convert.ToBoolean(exame.Tosse),
+					IdAreaAtuacao = exame.IdAreaAtuacao,
+					Cns = exame.Cns,
+					OutrosSintomas = exame.OutroSintomas,
+					Profissao = exame.Profissao
 				}).FirstOrDefault();
 
 		private Exame ModelToEntity(ExameModel exameModel)
@@ -168,7 +177,6 @@ namespace Service
 				DataInicioSintomas = exameModel.DataInicioSintomas,
 				DataExame = exameModel.DataExame,
 				IdEmpresaSaude = exameModel.IdEmpresaSaude,
-				EhProfissionalSaude = Convert.ToByte(exameModel.EhProfissionalSaude),
 				CodigoColeta = exameModel.CodigoColeta,
 				StatusNotificacao = exameModel.StatusNotificacao,
 				IdNotificacao = exameModel.IdNotificacao,
@@ -184,7 +192,11 @@ namespace Service
 				DorAbdominal = Convert.ToByte(exameModel.DorAbdominal),
 				DorGarganta = Convert.ToByte(exameModel.DorGarganta),
 				DorOuvido = Convert.ToByte(exameModel.DorOuvido),
-				Febre = Convert.ToByte(exameModel.Febre)
+				Febre = Convert.ToByte(exameModel.Febre),
+				IdAreaAtuacao = exameModel.IdAreaAtuacao,
+				Cns = exameModel.Cns,
+				OutroSintomas = exameModel.OutrosSintomas,
+				Profissao = exameModel.Profissao
 			};
 		}
 
@@ -207,7 +219,6 @@ namespace Service
 				  IdEstado = exame.IdEstado,
 				  IdMunicipio = exame.IdMunicipio,
 				  IdEmpresaSaude = exame.IdEmpresaSaude,
-				  EhProfissionalSaude = Convert.ToBoolean(exame.EhProfissionalSaude),
 				  CodigoColeta = exame.CodigoColeta,
 				  StatusNotificacao = exame.StatusNotificacao,
 				  IdNotificacao = exame.IdNotificacao,
@@ -222,7 +233,11 @@ namespace Service
 				  Febre = Convert.ToBoolean(exame.Febre),
 				  Nausea = Convert.ToBoolean(exame.Nausea),
 				  PerdaOlfatoPaladar = Convert.ToBoolean(exame.PerdaOlfatoPaladar),
-				  Tosse = Convert.ToBoolean(exame.Tosse)
+				  Tosse = Convert.ToBoolean(exame.Tosse),
+				  IdAreaAtuacao = exame.IdAreaAtuacao,
+				  Cns = exame.Cns,
+				  OutrosSintomas = exame.OutroSintomas,
+				  Profissao = exame.Profissao
 			  }).ToList();
 
 
@@ -354,7 +369,6 @@ namespace Service
 					IdEstado = exame.IdEstado,
 					IdMunicipio = exame.IdMunicipio,
 					IdEmpresaSaude = exame.IdEmpresaSaude,
-					EhProfissionalSaude = Convert.ToBoolean(exame.EhProfissionalSaude),
 					CodigoColeta = exame.CodigoColeta,
 					StatusNotificacao = exame.StatusNotificacao,
 					IdNotificacao = exame.IdNotificacao,
@@ -369,7 +383,11 @@ namespace Service
 					Febre = Convert.ToBoolean(exame.Febre),
 					Nausea = Convert.ToBoolean(exame.Nausea),
 					PerdaOlfatoPaladar = Convert.ToBoolean(exame.PerdaOlfatoPaladar),
-					Tosse = Convert.ToBoolean(exame.Tosse)
+					Tosse = Convert.ToBoolean(exame.Tosse),
+					IdAreaAtuacao = exame.IdAreaAtuacao,
+					Cns = exame.Cns,
+					OutrosSintomas = exame.OutroSintomas,
+					Profissao = exame.Profissao
 				}).ToList();
 
 		public List<ExameModel> GetByIdMunicipio(int idMunicicpio)
@@ -391,7 +409,6 @@ namespace Service
 					IdEstado = exame.IdEstado,
 					IdMunicipio = exame.IdMunicipio,
 					IdEmpresaSaude = exame.IdEmpresaSaude,
-					EhProfissionalSaude = Convert.ToBoolean(exame.EhProfissionalSaude),
 					CodigoColeta = exame.CodigoColeta,
 					StatusNotificacao = exame.StatusNotificacao,
 					IdNotificacao = exame.IdNotificacao,
@@ -406,7 +423,11 @@ namespace Service
 					Febre = Convert.ToBoolean(exame.Febre),
 					Nausea = Convert.ToBoolean(exame.Nausea),
 					PerdaOlfatoPaladar = Convert.ToBoolean(exame.PerdaOlfatoPaladar),
-					Tosse = Convert.ToBoolean(exame.Tosse)
+					Tosse = Convert.ToBoolean(exame.Tosse),
+					IdAreaAtuacao = exame.IdAreaAtuacao,
+					Cns = exame.Cns,
+					OutrosSintomas = exame.OutroSintomas,
+					Profissao = exame.Profissao
 				}).ToList();
 
 		public List<MonitoraPacienteViewModel> GetByHospital(int idEmpresa, int idVirusBacteria, DateTime dataInicio, DateTime dataFim)
@@ -625,7 +646,6 @@ namespace Service
 					 IdEstado = exame.IdEstado,
 					 IdMunicipio = exame.IdMunicipio,
 					 IdEmpresaSaude = exame.IdEmpresaSaude,
-					 EhProfissionalSaude = Convert.ToBoolean(exame.EhProfissionalSaude),
 					 CodigoColeta = exame.CodigoColeta,
 					 StatusNotificacao = exame.StatusNotificacao,
 					 IdNotificacao = exame.IdNotificacao,
@@ -643,7 +663,11 @@ namespace Service
 					 Tosse = Convert.ToBoolean(exame.Tosse),
 					 UF = exame.IdPacienteNavigation.Estado,
 					 Municipio = exame.IdPacienteNavigation.Cidade,
-					 Bairro = ""
+					 Bairro = "",
+					 IdAreaAtuacao = exame.IdAreaAtuacao,
+					 Cns = exame.Cns,
+					 OutrosSintomas = exame.OutroSintomas,
+					 Profissao = exame.Profissao
 				 }).ToList().GroupBy(e => new { Estado = e.UF, Municipio = e.Municipio, Resultado = e.Resultado })
 				 .Select(g => new TotalPorResultadoExame
 				 {
@@ -675,7 +699,6 @@ namespace Service
 					 IdEstado = exame.IdEstado,
 					 IdMunicipio = exame.IdMunicipio,
 					 IdEmpresaSaude = exame.IdEmpresaSaude,
-					 EhProfissionalSaude = Convert.ToBoolean(exame.EhProfissionalSaude),
 					 CodigoColeta = exame.CodigoColeta,
 					 StatusNotificacao = exame.StatusNotificacao,
 					 IdNotificacao = exame.IdNotificacao,
@@ -693,7 +716,11 @@ namespace Service
 					 Tosse = Convert.ToBoolean(exame.Tosse),
 					 UF = exame.IdPacienteNavigation.Estado,
 					 Municipio = exame.IdPacienteNavigation.Cidade,
-					 Bairro = exame.IdPacienteNavigation.Bairro.ToUpper().Trim()
+					 Bairro = exame.IdPacienteNavigation.Bairro.ToUpper().Trim(),
+					 IdAreaAtuacao = exame.IdAreaAtuacao,
+					 Cns = exame.Cns,
+					 OutrosSintomas = exame.OutroSintomas,
+					 Profissao = exame.Profissao
 				 }).ToList().GroupBy(e => new { Estado = e.UF, Municipio = e.Municipio, Bairro = e.Bairro, Resultado = e.Resultado })
 				 .Select(g => new TotalPorResultadoExame
 				 {
@@ -726,7 +753,6 @@ namespace Service
 					 IdEstado = exame.IdEstado,
 					 IdMunicipio = exame.IdMunicipio,
 					 IdEmpresaSaude = exame.IdEmpresaSaude,
-					 EhProfissionalSaude = Convert.ToBoolean(exame.EhProfissionalSaude),
 					 CodigoColeta = exame.CodigoColeta,
 					 StatusNotificacao = exame.StatusNotificacao,
 					 IdNotificacao = exame.IdNotificacao,
@@ -744,7 +770,11 @@ namespace Service
 					 Tosse = Convert.ToBoolean(exame.Tosse),
 					 UF = exame.IdPacienteNavigation.Estado,
 					 Municipio = exame.IdPacienteNavigation.Cidade,
-					 Bairro = ""
+					 Bairro = "",
+					 IdAreaAtuacao = exame.IdAreaAtuacao,
+					 Cns = exame.Cns,
+					 OutrosSintomas = exame.OutroSintomas,
+					 Profissao = exame.Profissao
 				 }).ToList().GroupBy(e => new { Estado = e.UF, Municipio = e.Municipio, Resultado = e.Resultado })
 				 .Select(g => new TotalPorResultadoExame
 				 {
@@ -776,7 +806,6 @@ namespace Service
 					 IdEstado = exame.IdEstado,
 					 IdMunicipio = exame.IdMunicipio,
 					 IdEmpresaSaude = exame.IdEmpresaSaude,
-					 EhProfissionalSaude = Convert.ToBoolean(exame.EhProfissionalSaude),
 					 CodigoColeta = exame.CodigoColeta,
 					 StatusNotificacao = exame.StatusNotificacao,
 					 IdNotificacao = exame.IdNotificacao,
@@ -795,6 +824,10 @@ namespace Service
 					 UF = exame.IdPacienteNavigation.Estado,
 					 Municipio = exame.IdPacienteNavigation.Cidade,
 					 Bairro = exame.IdPacienteNavigation.Bairro,
+					 IdAreaAtuacao = exame.IdAreaAtuacao,
+					 Cns = exame.Cns,
+					 OutrosSintomas = exame.OutroSintomas,
+					 Profissao = exame.Profissao
 				 }).ToList().GroupBy(e => new { Estado = e.UF, Municipio = e.Municipio, Bairro = e.Bairro, Resultado = e.Resultado })
 				 .Select(g => new TotalPorResultadoExame
 				 {
@@ -826,7 +859,6 @@ namespace Service
 					 IdEstado = exame.IdEstado,
 					 IdMunicipio = exame.IdMunicipio,
 					 IdEmpresaSaude = exame.IdEmpresaSaude,
-					 EhProfissionalSaude = Convert.ToBoolean(exame.EhProfissionalSaude),
 					 CodigoColeta = exame.CodigoColeta,
 					 StatusNotificacao = exame.StatusNotificacao,
 					 IdNotificacao = exame.IdNotificacao,
@@ -844,7 +876,11 @@ namespace Service
 					 Tosse = Convert.ToBoolean(exame.Tosse),
 					 UF = exame.IdPacienteNavigation.Estado,
 					 Municipio = exame.IdPacienteNavigation.Cidade,
-					 Bairro = ""
+					 Bairro = "",
+					 IdAreaAtuacao = exame.IdAreaAtuacao,
+					 Cns = exame.Cns,
+					 OutrosSintomas = exame.OutroSintomas,
+					 Profissao = exame.Profissao
 				 }).ToList().GroupBy(e => new { Estado = e.UF, Municipio = e.Municipio, Resultado = e.Resultado })
 				 .Select(g => new TotalPorResultadoExame
 				 {
@@ -932,7 +968,6 @@ namespace Service
 				   IdEstado = exame.IdEstado,
 				   IdMunicipio = exame.IdMunicipio,
 				   IdEmpresaSaude = exame.IdEmpresaSaude,
-				   EhProfissionalSaude = Convert.ToBoolean(exame.EhProfissionalSaude),
 				   CodigoColeta = exame.CodigoColeta,
 				   StatusNotificacao = exame.StatusNotificacao,
 				   IdNotificacao = exame.IdNotificacao,
@@ -947,7 +982,11 @@ namespace Service
 				   Febre = Convert.ToBoolean(exame.Febre),
 				   Nausea = Convert.ToBoolean(exame.Nausea),
 				   PerdaOlfatoPaladar = Convert.ToBoolean(exame.PerdaOlfatoPaladar),
-				   Tosse = Convert.ToBoolean(exame.Tosse)
+				   Tosse = Convert.ToBoolean(exame.Tosse),
+				   IdAreaAtuacao = exame.IdAreaAtuacao,
+				   Cns = exame.Cns,
+				   OutrosSintomas = exame.OutroSintomas,
+				   Profissao = exame.Profissao
 			   }).ToList();
 	}
 }

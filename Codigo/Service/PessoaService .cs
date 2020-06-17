@@ -130,7 +130,11 @@ namespace Service
 					Nausea = Convert.ToBoolean(pessoa.Nausea),
 					PerdaOlfatoPaladar = Convert.ToBoolean(pessoa.PerdaOlfatoPaladar),
 					Tosse = Convert.ToBoolean(pessoa.Tosse),
-					DataObito = pessoa.DataObito
+					IdAreaAtuacao = pessoa.IdAreaAtuacao,
+					OutrosSintomas = pessoa.OutrosSintomas,
+					Profissao = pessoa.Profissao,
+					DataObito = pessoa.DataObito,
+					Cns = pessoa.Cns
 				}).ToList();
 
         public PessoaModel GetById(int id)
@@ -176,7 +180,11 @@ namespace Service
 					Nausea = Convert.ToBoolean(pessoa.Nausea),
 					PerdaOlfatoPaladar = Convert.ToBoolean(pessoa.PerdaOlfatoPaladar),
 					Tosse = Convert.ToBoolean(pessoa.Tosse),
-					DataObito = pessoa.DataObito
+					IdAreaAtuacao = pessoa.IdAreaAtuacao,
+					OutrosSintomas = pessoa.OutrosSintomas,
+					Profissao = pessoa.Profissao,
+					DataObito = pessoa.DataObito,
+					Cns = pessoa.Cns
 				}).FirstOrDefault();
 
         public PessoaModel GetByCpf(string cpf)
@@ -222,7 +230,11 @@ namespace Service
 					Nausea = Convert.ToBoolean(pessoa.Nausea),
 					PerdaOlfatoPaladar = Convert.ToBoolean(pessoa.PerdaOlfatoPaladar),
 					Tosse = Convert.ToBoolean(pessoa.Tosse),
-					DataObito = pessoa.DataObito
+					IdAreaAtuacao = pessoa.IdAreaAtuacao,
+					OutrosSintomas = pessoa.OutrosSintomas,
+					Profissao = pessoa.Profissao,
+					DataObito = pessoa.DataObito,
+					Cns = pessoa.Cns
 				}).FirstOrDefault();
 
         public List<PessoaModel> GetByCidade(string cidade)
@@ -268,7 +280,11 @@ namespace Service
 					Nausea = Convert.ToBoolean(pessoa.Nausea),
 					PerdaOlfatoPaladar = Convert.ToBoolean(pessoa.PerdaOlfatoPaladar),
 					Tosse = Convert.ToBoolean(pessoa.Tosse),
-					DataObito = pessoa.DataObito
+					IdAreaAtuacao = pessoa.IdAreaAtuacao,
+					OutrosSintomas = pessoa.OutrosSintomas,
+					Profissao = pessoa.Profissao,
+					DataObito = pessoa.DataObito,
+					Cns = pessoa.Cns
 				}).ToList();
 
 		public List<PessoaModel> GetByEstado(string estado)
@@ -314,7 +330,11 @@ namespace Service
 					Nausea = Convert.ToBoolean(pessoa.Nausea),
 					PerdaOlfatoPaladar = Convert.ToBoolean(pessoa.PerdaOlfatoPaladar),
 					Tosse = Convert.ToBoolean(pessoa.Tosse),
-					DataObito = pessoa.DataObito
+					IdAreaAtuacao = pessoa.IdAreaAtuacao,
+					OutrosSintomas = pessoa.OutrosSintomas,
+					Profissao = pessoa.Profissao,
+					DataObito = pessoa.DataObito,
+					Cns = pessoa.Cns
 				}).ToList();
 
 
@@ -324,6 +344,8 @@ namespace Service
 			entity.Nome = model.Nome;
 			entity.Cpf = model.Cpf;
 			entity.Sexo = model.Sexo == "Masculino" ? "M" : "F";
+			entity.IdAreaAtuacao = model.IdAreaAtuacao;
+			entity.Profissao = model.Profissao;
 			entity.Cep = model.Cep;
 			entity.Rua = model.Rua;
 			entity.Bairro = model.Bairro;
@@ -348,6 +370,7 @@ namespace Service
 			entity.Epilepsia = Convert.ToByte(model.Epilepsia);
 			entity.OutrasComorbidades = model.OutrasComorbidades;
 			entity.SituacaoSaude = model.SituacaoSaude;
+			entity.Cns = model.Cns;
 			return entity;
 		}
 		private Pessoa ModelToEntity(PessoaModel model, Pessoa entity)
@@ -356,7 +379,9 @@ namespace Service
             entity.Nome = model.Nome;
             entity.Cpf = model.Cpf;
             entity.Sexo = model.Sexo == "Masculino" ? "M" : "F";
-            entity.Cep = model.Cep;
+			entity.IdAreaAtuacao = model.IdAreaAtuacao;
+			entity.Profissao = model.Profissao;
+			entity.Cep = model.Cep;
             entity.Rua = model.Rua;
             entity.Bairro = model.Bairro;
             entity.Cidade = model.Cidade;
@@ -390,8 +415,9 @@ namespace Service
 			entity.DorGarganta = Convert.ToByte(model.DorGarganta);
 			entity.DorOuvido = Convert.ToByte(model.DorOuvido);
 			entity.Febre = Convert.ToByte(model.Febre);
+			entity.OutrosSintomas = model.OutrosSintomas;
 			entity.DataObito = model.DataObito;
-
+			entity.Cns = model.Cns;
 			return entity;
         }
     }

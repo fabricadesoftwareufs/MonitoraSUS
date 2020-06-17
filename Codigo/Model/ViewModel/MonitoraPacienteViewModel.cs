@@ -93,5 +93,10 @@ namespace Model.ViewModel
 		public bool DorAbdominal { get; set; }
 		[Display(Name = "Perda Olfato/Paladar")]
 		public bool PerdaOlfatoPaladar { get; set; }
+
+		public string OutrosSintomas { get; set; }
+		public string Cns { get; set; }
+		public string Profissao { get; set; }
+		public int IdAreaAtuacao { get; set; }
 	}
 }

@@ -22,7 +22,7 @@ namespace Model
             PesquisarCpf = 0;
             CodigoColeta = "";
 			ResponsavelRealizacaoExame = "";
-			EhProfissionalSaude = false;
+			IdAreaAtuacao = 0;
 			AguardandoResultado = false;
             IdNotificacao = "";
 			MetodoExame = "F";
@@ -60,7 +60,7 @@ namespace Model
         public int? MunicipioId { get; set; }
         public int? IdEmpresaSaude { get; set; }
         public int PesquisarCpf { get; set; }
-        public bool EhProfissionalSaude { get; set; }
+        public int IdAreaAtuacao { get; set; }
         public string CodigoColeta { get; set; }
         public string StatusNotificacao { get; set; }
 		//public string SituacaoSaude { get; set; }

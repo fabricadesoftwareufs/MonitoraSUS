@@ -60,7 +60,6 @@ namespace Model
         public int? IdMunicipio { get; set; }
         public int? IdEmpresaSaude { get; set; }
         public string IdNotificacao { get; set; }
-        public bool EhProfissionalSaude { get; set; }
         public string CodigoColeta { get; set; }
         public string StatusNotificacao { get; set; }
         public string StatusNotificacaoDescricao
@@ -133,6 +132,10 @@ namespace Model
 		[Display(Name = "Perda Olfato/Paladar")]
 		public bool PerdaOlfatoPaladar { get; set; }
 
+		public string OutrosSintomas { get; set; }
+		public string Cns { get; set; }
+		public string Profissao { get; set; }
+		public int IdAreaAtuacao { get; set; }
 
 
 
