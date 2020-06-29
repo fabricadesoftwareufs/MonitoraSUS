@@ -24,6 +24,7 @@
      */
 }
 
+
 <div class="container-fluid mt--6">
     <div class="row">
         <div class="col-md-12">
@@ -37,13 +38,13 @@
                     </div>
                 </div>
                 <div class="card-body ">
-                    
-                        @if (User.IsInRole("USUARIO"))
-                        {
 
-                        }
-                        else if (User.IsInRole("AGENTE"))
-                        {
+                    @if (User.IsInRole("USUARIO"))
+                    {
+
+                    }
+                    else if (User.IsInRole("AGENTE"))
+                    {
                         <h6 class="heading-small text-muted mb-4">Paciente</h6>
                         <div class="row">
                             <div class="col-xl-2 col-md-4">
@@ -59,9 +60,9 @@
                                 </a>
                             </div>
                         </div>
-                        }
-                        else if (User.IsInRole("GESTOR"))
-                        {   
+                    }
+                    else if (User.IsInRole("GESTOR"))
+                    {
                         <h6 class="heading-small text-muted mb-4">Paciente</h6>
                         <div class="row">
                             <div class="col-md-3">
@@ -83,34 +84,104 @@
                                 </a>
                             </div>
                             <div class="col-md-3">
-                                <a asp-controller="MonitorarPaciente" asp-action="Index"  class="btn btn-block card-button-home">
-                                    <i class="fas fa-users-cog fa-2x" ></i>
+                                <a asp-controller="MonitorarPaciente" asp-action="Index" class="btn btn-block card-button-home">
+                                    <i class="fas fa-users-cog fa-2x"></i>
                                     <br>Monitorar <br>Pacientes
                                 </a>
-                            </div> 
+                            </div>
                         </div>
                         <h6 class="heading-small text-muted mb-4" style="margin-top:10px;">Administração </h6>
-						<div class="row">
-							<div class="col-md-3">
-								<a asp-controller="Exame" asp-action="TotaisExames" asp-route-ehResponsavel="0" class="btn btn-block card-button-home">
-									<i class="fas fa-chart-bar fa-2x"></i>
-									<br>Totais Exames<br> Notificados
-								</a>
-							</div>
-							<div class="col-md-3">
-								<a asp-controller="AgenteSecretario" asp-action="IndexApproveAgent" asp-route-ehResponsavel="0" class="btn btn-block card-button-home">
-									<i class="fas fa-clipboard-list fa-2x"></i>
-									<br>Autorizar Notificadores<br> de Exames
-								</a>
-							</div>
-						</div>
-                        }
-                        else if (User.IsInRole("SECRETARIO"))
-                        {
+                        <div class="row">
+                            <div class="col-md-3">
+                                <a asp-controller="Exame" asp-action="TotaisExames" asp-route-ehResponsavel="0" class="btn btn-block card-button-home">
+                                    <i class="fas fa-chart-bar fa-2x"></i>
+                                    <br>Totais Exames<br> Notificados
+                                </a>
+                            </div>
+                            <div class="col-md-3">
+                                <a asp-controller="AgenteSecretario" asp-action="IndexApproveAgent" asp-route-ehResponsavel="0" class="btn btn-block card-button-home">
+                                    <i class="fas fa-clipboard-list fa-2x"></i>
+                                    <br>Autorizar Notificadores<br> de Exames
+                                </a>
+                            </div>
+                            <div class="col-md-3">
+                                <a data-toggle="modal" data-target="#modal-importar" class="btn btn-block card-button-home text-white">
+                                    <i class="fas fa-file-import fa-2x"></i>
+                                    <br>Importar<br> Planilha GAL
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="modal fade" id="modal-importar" style="display: none;" tabindex="-1" role="dialog" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div id="container-importacao">
+                                        <div class="modal-header">
+                                            <h4 class="modal-title" id="myModalLabel">Importar Planilha GAL</h4>
+                                        </div>
+
+                                        <div style="padding: 10pt">
+                                            <p>
+                                                Gere a planilha do GAL selecionando todos os campos disponíveis
+                                                e faça o upload do arquivo .csv gerado. Caso um exame já tenha sido
+                                                importado para base de dados do MonitoraSUS, os dados serão apenas atualizados.
+                                            </p>
+
+                                            <form name="form-arquivo" enctype="multipart/form-data" method="post" asp-action="ImportAsync" asp-controller="Exame">
+
+
+                                                <h4>Selecione a Planilha do GAL: </h4>
+                                                <input name="file" type="file" accept=".csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-Excel">
+
+
+                                                <div class="modal-footer">
+                                                    <div style="text-align: center;">
+                                                        <button type="button" class="btn btn-dark" data-dismiss="modal"><i class="fa fa-window-close"></i> Fechar</button>
+                                                        <button onclick="submitArquivoGal()" id="btn-importar-arquivo" class="btn btn-success" value="Enviar"><i class="fa fa-save"></i> Enviar</button>
+                                                    </div>
+                                                </div>
+
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div id="container-espera" hidden>
+                                        <div class="loading-spinner" style="padding: 20pt;text-align: center">
+                                            <h3>Aguarde um momento enquanto processamos a planilha GAL!</h3>
+                                            <svg id="hourglass" width='64px' height='64px' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" class="uil-hourglass">
+                                                <rect x="0" y="0" width="100" height="100" fill="none" class="bk"></rect>
+                                                <g>
+                                                    <path fill="none" stroke="#007282" stroke-width="5" stroke-miterlimit="10" d="M58.4,51.7c-0.9-0.9-1.4-2-1.4-2.3s0.5-0.4,1.4-1.4 C70.8,43.8,79.8,30.5,80,15.5H70H30H20c0.2,15,9.2,28.1,21.6,32.3c0.9,0.9,1.4,1.2,1.4,1.5s-0.5,1.6-1.4,2.5 C29.2,56.1,20.2,69.5,20,85.5h10h40h10C79.8,69.5,70.8,55.9,58.4,51.7z" class="glass"></path>
+                                                    <clipPath id="uil-hourglass-clip1">
+                                                        <rect x="15" y="20" width="70" height="25" class="clip">
+                                                            <animate attributeName="height" from="25" to="0" dur="1s" repeatCount="indefinite" vlaues="25;0;0" keyTimes="0;0.5;1"></animate>
+                                                            <animate attributeName="y" from="20" to="45" dur="1s" repeatCount="indefinite" vlaues="20;45;45" keyTimes="0;0.5;1"></animate>
+                                                        </rect>
+                                                    </clipPath>
+                                                    <clipPath id="uil-hourglass-clip2">
+                                                        <rect x="15" y="55" width="70" height="25" class="clip">
+                                                            <animate attributeName="height" from="0" to="25" dur="1s" repeatCount="indefinite" vlaues="0;25;25" keyTimes="0;0.5;1"></animate>
+                                                            <animate attributeName="y" from="80" to="55" dur="1s" repeatCount="indefinite" vlaues="80;55;55" keyTimes="0;0.5;1"></animate>
+                                                        </rect>
+                                                    </clipPath>
+                                                    <path d="M29,23c3.1,11.4,11.3,19.5,21,19.5S67.9,34.4,71,23H29z" clip-path="url(#uil-hourglass-clip1)" fill="#ffab00" class="sand"></path>
+                                                    <path d="M71.6,78c-3-11.6-11.5-20-21.5-20s-18.5,8.4-21.5,20H71.6z" clip-path="url(#uil-hourglass-clip2)" fill="#ffab00" class="sand"></path>
+                                                    <animateTransform attributeName="transform" type="rotate" from="0 50 50" to="180 50 50" repeatCount="indefinite" dur="1s" values="0 50 50;0 50 50;180 50 50" keyTimes="0;0.7;1"></animateTransform>
+                                                </g>
+                                            </svg>
+
+                                            <h4>Isso pode demorar um pouco...</h4>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    else if (User.IsInRole("SECRETARIO"))
+                    {
                         <h6 class="heading-small text-muted mb-4">Paciente</h6>
                         <div class="row">
                             <div class="col-md-3">
-                                <a asp-controller="Exame" asp-action="Create" class="btn btn-block card-button-home"> 
+                                <a asp-controller="Exame" asp-action="Create" class="btn btn-block card-button-home">
                                     <i class="fas fa-file-medical fa-2x"></i>
                                     <br>Notificar <br> Exames
                                 </a>
@@ -129,73 +200,97 @@
                             </div>
                             <div class="col-md-3">
                                 <a asp-controller="MonitorarPaciente" asp-action="Index" class="btn btn-block card-button-home">
-                                    <i class="fas fa-users-cog fa-2x" ></i>
+                                    <i class="fas fa-users-cog fa-2x"></i>
                                     <br>Monitorar <br>Pacientes
                                 </a>
-                            </div> 
+                            </div>
                         </div>
                         <h6 class="heading-small text-muted mb-4" style="margin-top:10px;">Administração </h6>
-						<div class="row">
-							<div class="col-md-3">
-								<a asp-controller="Exame" asp-action="TotaisExames" asp-route-ehResponsavel="0" class="btn btn-block card-button-home">
-									<i class="fas fa-chart-bar fa-2x"></i>
-									<br>Totais Exames<br> Notificados
-								</a>
-							</div>
-							<div class="col-md-3">
-								<a asp-controller="AgenteSecretario" asp-action="IndexApproveAgent" asp-route-ehResponsavel="0" class="btn btn-block card-button-home">
-									<i class="fas fa-clipboard-list fa-2x"></i>
-									<br>Autorizar Notificadores<br> de Exames
-								</a>
-							</div>
-							<div class="col-md-3">
-								<a asp-controller="AgenteSecretario" asp-action="IndexApproveAgent" asp-route-ehResponsavel="1" class="btn btn-block card-button-home">
-									<i class="fas fa-file-medical fa-2x"></i>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <a asp-controller="Exame" asp-action="TotaisExames" asp-route-ehResponsavel="0" class="btn btn-block card-button-home">
+                                    <i class="fas fa-chart-bar fa-2x"></i>
+                                    <br>Totais Exames<br> Notificados
+                                </a>
+                            </div>
+                            <div class="col-md-3">
+                                <a asp-controller="AgenteSecretario" asp-action="IndexApproveAgent" asp-route-ehResponsavel="0" class="btn btn-block card-button-home">
+                                    <i class="fas fa-clipboard-list fa-2x"></i>
+                                    <br>Autorizar Notificadores<br> de Exames
+                                </a>
+                            </div>
+                            <div class="col-md-3">
+                                <a asp-controller="AgenteSecretario" asp-action="IndexApproveAgent" asp-route-ehResponsavel="1" class="btn btn-block card-button-home">
+                                    <i class="fas fa-file-medical fa-2x"></i>
                                     <br>Autorizar <br>Gestores
-								</a>
-							</div>
-							<div class="col-md-3">
-								<a asp-controller="EmpresaExame" asp-action="Index" class="btn btn-block card-button-home">
-									<i class="fas fa-users-cog fa-2x"></i>
-									<br>Cadastro de <br>Hospital/Laboratório
-								</a>
-							</div>
-						</div>
-                        }
-                        else if (User.IsInRole("ADM"))
-                        {   
+                                </a>
+                            </div>
+                            <div class="col-md-3">
+                                <a asp-controller="EmpresaExame" asp-action="Index" class="btn btn-block card-button-home">
+                                    <i class="fas fa-users-cog fa-2x"></i>
+                                    <br>Cadastro de <br>Hospital/Laboratório
+                                </a>
+                            </div>
+                        </div>
+                    }
+                    else if (User.IsInRole("ADM"))
+                    {
                         <h6 class="heading-small text-muted mb-4" style="margin-top:10px;">Administração </h6>
-						<div class="row">
-							<div class="col-md-3 col-6">
-								<a class="btn btn-block card-button-home" asp-controller="AgenteSecretario" asp-action="IndexApproveAgent" asp-route-ehResponsavel="1">
-									<i class="fas fa-users-cog fa-2x"></i>
+                        <div class="row">
+                            <div class="col-md-3 col-6">
+                                <a class="btn btn-block card-button-home" asp-controller="AgenteSecretario" asp-action="IndexApproveAgent" asp-route-ehResponsavel="1">
+                                    <i class="fas fa-users-cog fa-2x"></i>
                                     <br> Autorizar <br>Gestores
-								</a>
-							</div>
-							<div class="col-md-3">
-								<a asp-controller="EmpresaExame" asp-action="Index" class="btn btn-block card-button-home">
-									<i class="fas fa-users-cog fa-2x"></i>
-									<br>Cadastro de <br>Hospital/Laboratório
-								</a>
-							</div>
-						</div>
-                        }
-                    </div>
+                                </a>
+                            </div>
+                            <div class="col-md-3">
+                                <a asp-controller="EmpresaExame" asp-action="Index" class="btn btn-block card-button-home">
+                                    <i class="fas fa-users-cog fa-2x"></i>
+                                    <br>Cadastro de <br>Hospital/Laboratório
+                                </a>
+                            </div>
+                        </div>
+                    }
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<script>
 
-    function swtAlert() {
-        Swal.fire({
-            icon: "error",
-            title: "Funcionalidade Indisponível",
-            text: "Essa funcionalidade está em processo de desenvolvimento. Quer conversar conosco e enviar suas necessidades e sugestões ? Entre em contato pelo email fabricadesoftware@ufs.br",
+@if (TempData["mensagemSucesso"] != null)
+{
+    <div id="mensagem-retorno" onclick="swtAlert('success','Parabéns!', '@TempData["mensagemSucesso"]')"></div>
+}
+else if (TempData["mensagemErro"] != null)
+{
+    <div id="mensagem-retorno" onclick="swtAlert('error','Falha!', '@TempData["mensagemErro"]')"></div>
+}
+else if (TempData["planilhaInconsistente"] != null)
+{
+    <div id="mensagem-retorno" onclick="swtAlert('warning','Falha!', '@TempData["planilhaInconsistente"]')"></div>
+}
+
+
+
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+    <script src="~/assets/js/sweet-alert.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            if (document.querySelector('#mensagem-retorno'))
+                document.getElementById("mensagem-retorno").click();
         });
-    }
 
-</script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+        function submitArquivoGal() {
+            document.getElementById('container-importacao').hidden = true;
+            document.getElementById('container-espera').hidden = false;
+
+            document.forms["form-arquivo"].submit();
+        }
+    </script>
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

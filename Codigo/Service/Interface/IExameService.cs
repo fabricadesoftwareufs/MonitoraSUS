@@ -12,6 +12,7 @@ namespace Service.Interface
         bool Delete(int id);
         List<ExameModel> GetAll();
         ExameModel GetById(int id);
+        ExameModel GetByIdColeta(string codigo);
         List<ExameModel> GetByIdAgente(int id);
         List<ExameModel> GetByIdEstado(int idEstado);
         List<ExameModel> GetByIdEmpresa(int idEempresa);

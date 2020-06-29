@@ -1,4 +1,5 @@
-﻿using Model;
+﻿using Microsoft.EntityFrameworkCore;
+using Model;
 using Persistence;
 using Service.Interface;
 using System;
@@ -25,16 +26,22 @@ namespace Service
 
         public bool Insert(EmpresaExameModel empresaExameModel)
         {
-            _context.Add(ModelToEntity(empresaExameModel));
-            return _context.SaveChanges() == 1 ? true : false;
+            var entity = ModelToEntity(empresaExameModel);
+            _context.Add(entity);
+            var value = _context.SaveChanges() == 1 ? true : false;
+            _context.Entry(entity).State = EntityState.Detached;
+            return value;
         }
 
         public bool Update(EmpresaExameModel empresaExameModel)
         {
-            _context.Update(ModelToEntity(empresaExameModel));
-            return _context.SaveChanges() == 1 ? true : false;
+            var entity = ModelToEntity(empresaExameModel);
+            _context.Update(entity);
+            var value = _context.SaveChanges() == 1 ? true : false;
+            _context.Entry(entity).State = EntityState.Detached;
+            return value;
         }
-
+            
 
         private Empresaexame ModelToEntity(EmpresaExameModel empresa)
         {
@@ -282,5 +289,36 @@ namespace Service
 					FazMonitoramento = Convert.ToBoolean(empresa.FazMonitoramento),
 					Cnes = empresa.Cnes
 				}).ToList();
+
+        public EmpresaExameModel GetByCNES(string cnes)
+        => _context.Empresaexame
+            .Where(empresa => empresa.Cnes.Equals(cnes))
+                .Select(empresa => new EmpresaExameModel
+                {
+                    Id = empresa.Id,
+                    Cnpj = empresa.Cnpj,
+                    Nome = empresa.Nome,
+                    Cep = empresa.Cep,
+                    Rua = empresa.Rua,
+                    Bairro = empresa.Bairro,
+                    Cidade = empresa.Cidade,
+                    Estado = empresa.Estado,
+                    Numero = empresa.Numero,
+                    Complemento = empresa.Complemento,
+                    Latitude = empresa.Latitude,
+                    Longitude = empresa.Longitude,
+                    FoneCelular = empresa.FoneCelular,
+                    FoneFixo = empresa.FoneFixo,
+                    Email = empresa.Email,
+                    EmiteLaudoExame = Convert.ToBoolean(empresa.EmiteLaudoExame),
+                    NumeroLeitos = empresa.NumeroLeitos,
+                    NumeroLeitosDisponivel = empresa.NumeroLeitosDisponivel,
+                    NumeroLeitosUti = empresa.NumeroLeitosUti,
+                    NumeroLeitosUtidisponivel = empresa.NumeroLeitosUtidisponivel,
+                    PossuiLeitosInternacao = Convert.ToBoolean(empresa.PossuiLeitosInternacao),
+                    EhPublico = Convert.ToBoolean(empresa.EhPublico),
+                    FazMonitoramento = Convert.ToBoolean(empresa.FazMonitoramento),
+                    Cnes = empresa.Cnes
+                }).FirstOrDefault();
     }
 }
