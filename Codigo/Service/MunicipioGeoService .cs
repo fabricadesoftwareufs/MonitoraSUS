@@ -50,7 +50,7 @@ namespace Service
 
         public MunicipioGeoModel GetByName(string name)
          => _context.Municipiosgeo
-                .Where(municipioModel => Regex.Replace(municipioModel.Nome, "[^0-9a-zA-Z]+", "").ToUpper().Equals(Regex.Replace(municipioModel.Nome, "[^0-9a-zA-Z]+", "").ToUpper()))
+                .Where(municipioModel => Regex.Replace(municipioModel.Nome, "[^0-9a-zA-Z]+", "").ToUpper().Equals(Regex.Replace(name, "[^0-9a-zA-Z]+", "").ToUpper()))
                 .Select(municipio => new MunicipioGeoModel
                 {
                     CodigoIbge = municipio.CodigoIbge,

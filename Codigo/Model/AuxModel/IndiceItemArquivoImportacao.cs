@@ -6,6 +6,38 @@ namespace Model.AuxModel
 {
     public class IndiceItemArquivoImportacao
 	{
+		public static string UNIDADE_SOLICITANTE	  = "UNIDADE SOLICITANTE";
+		public static string CNES_UNIDADE_SOLCITANTE  = "CNES UNIDADE SOLICITANTE";
+		public static string MUNICIPIO_DO_SOLICITANTE = "MUNICIPIO DO SOLICITANTE";
+		public static string ESTADO_DO_SOLICITANTE	  = "ESTADO DO SOLICITANTE";
+		public static string CNS_DO_PACIENTE		  = "CNS DO PACIENTE";
+		public static string NOME_PACIENTE			  = "PACIENTE";
+		public static string SEXO_PACIENTE			  = "SEXO";
+		public static string DATA_DE_NASCIMENTO_PACIENTE = "DATA DE NASCIMENTO";
+		public static string TIPO_DOCUMENTO_1		  = "TIPO DOC. PACIENTE 1";
+		public static string TIPO_DOCUMENTO_2		  = "TIPO DOC. PACIENTE 2";
+		public static string DOCUMENTO_1			  = "DOCUMENTO PACIENTE 1";
+		public static string DOCUMENTO_2			  = "DOCUMENTO PACIENTE 2";
+		public static string ENDERECO_PACIENTE		  = "ENDEREÇO";
+		public static string BAIRRO_PACIENTE		  = "BAIRRO";
+		public static string CEP_PACIENTE			  = "CEP DE RESIDÊNCIA";
+		public static string MUNICIPIO_PACIENTE		  = "MUNICIPIO DE RESIDÊNCIA";
+		public static string ESTADO_PACIENTE		  = "ESTADO DE RESIDÊNCIA";
+		public static string CELULAR_PACIENTE		  = "TELEFONE DE CONTATO";
+		public static string TIPO_EXAME				  = "EXAME";
+		public static string METODO_EXAME			  = "METODOLOGIA";
+		public static string CODIGO_DA_AMOSTRA		  = "CÓDIGO DA AMOSTRA";
+		public static string DATA_DA_COLETA			  = "DATA DA COLETA";
+		public static string DATA_INICIO_SINTOMAS	  = "DATA INÍCIO SINTOMAS";
+		public static string OBSERVACOES_RESULTADO	  = "OBSERVAÇÕES DO RESULTADO";
+		public static string RESULTADO				  = "RESULTADO";
+		public static string RESULTADO_DETECTAVEL     = "DETECTÁVEL";
+		public static string RESULTADO_NAO_DETECTAVEL = "NÃO DETECTÁVEL";
+		public static string RESULTADO_SOLICITAR_NOVA_COLETA = "SOLICITAR NOVA COLETA";
+		public static string METODO_IGG = "IGG";
+		public static string METODO_IGM = "IGM";
+		public static string METODO_PCR = "PCR";
+		public static string METODO_IGG_IGM = "IGG/IGM";
 
 		public IndiceItemArquivoImportacao()
 		{

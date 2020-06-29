@@ -297,10 +297,11 @@ namespace MonitoraSUS.Controllers
                 var agente = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
                 var secretarioMunicipio = _pessoaTrabalhaMunicipioContext.GetByIdPessoa(agente.UsuarioModel.IdPessoa);
                 var secretarioEstado = _pessoaTrabalhaEstadoContext.GetByIdPessoa(agente.UsuarioModel.IdPessoa);
-
                 var exames = new List<ExameViewModel>();
-                MunicipioGeoModel cidadePaciente = new MunicipioGeoModel(), cidadeEmpresa = new MunicipioGeoModel();
                 var indices = new IndiceItemArquivoImportacao();
+                MunicipioGeoModel cidadePaciente = new MunicipioGeoModel(), 
+                                  cidadeEmpresa = new MunicipioGeoModel();
+                
 
                 using (var reader = new StreamReader(file.OpenReadStream()))
                 {
@@ -319,44 +320,44 @@ namespace MonitoraSUS.Controllers
                         var line = reader.ReadLine().Split(';');
 
                         cidadePaciente = _municipioGeoService.GetByName(line[53]);
-                        cidadeEmpresa = _municipioGeoService.GetByName(line[7]);
+                        cidadeEmpresa  = _municipioGeoService.GetByName(line[7]);
 
                         var exame = new ExameViewModel();
                         exame.IdPaciente = new PessoaModel
                         {
-                            Nome = line[indices.IndiceNomePaciente],
+                            Nome   = line[indices.IndiceNomePaciente],
                             Cidade = line[indices.IndiceCidadePaciente],
-                            Cpf = line[indices.IndiceTipoDocumento1Paciente].Equals("CPF") && Methods.ValidarCpf(line[indices.IndiceDocumento1Paciente]) ?
+                            Cpf    = line[indices.IndiceTipoDocumento1Paciente].Equals("CPF") && Methods.ValidarCpf(line[indices.IndiceDocumento1Paciente]) ?
                                     Methods.RemoveSpecialsCaracts(line[indices.IndiceDocumento1Paciente]) : line[indices.IndiceTipoDocumento2Paciente].Equals("CPF") && Methods.ValidarCpf(line[indices.IndiceDocumento2Paciente]) ?
                                     Methods.RemoveSpecialsCaracts(line[indices.IndiceDocumento2Paciente]) : "",
 
-                            Sexo = line[indices.IndiceSexoPaciente].Equals("FEMININO") ? "Feminino" : "Masculino",
-                            Cep = line[indices.IndiceCepPaciente].Length > 0 ? Methods.RemoveSpecialsCaracts(line[indices.IndiceCepPaciente]) : "00000000",
-                            Rua = line[indices.IndiceRuaPaciente].Length > 0 ? line[indices.IndiceRuaPaciente].Split('-')[0] : "NÃO INFORMADO",
+                            Sexo   = line[indices.IndiceSexoPaciente].Equals("FEMININO") ? "Feminino" : "Masculino",
+                            Cep    = line[indices.IndiceCepPaciente].Length > 0 ? Methods.RemoveSpecialsCaracts(line[indices.IndiceCepPaciente]) : "00000000",
+                            Rua    = line[indices.IndiceRuaPaciente].Length > 0 ? line[indices.IndiceRuaPaciente].Split('-')[0] : "NÃO INFORMADO",
                             Bairro = line[indices.IndiceBairroPaciente].Length > 0 ? line[indices.IndiceBairroPaciente] : "NAO INFORMADO",
                             Estado = line[indices.IndiceEstadoPaciente],
                             Numero = line[indices.IndiceRuaPaciente].Length > 0 && line[indices.IndiceRuaPaciente].Split('-').Length >= 2 ? line[indices.IndiceRuaPaciente].Split('-')[1].Trim() : "",
                             Complemento = line[indices.IndiceRuaPaciente].Length > 0 && line[indices.IndiceRuaPaciente].Split('-').Length == 3 ? line[indices.IndiceRuaPaciente].Split('-')[2].Trim() : "",
-                            FoneCelular = line[indices.IndiceFoneCelularPaciente],
+                            FoneCelular    = line[indices.IndiceFoneCelularPaciente],
                             DataNascimento = Convert.ToDateTime(line[indices.IndiceDataNascimentoPaciente]),
-                            IdAreaAtuacao = 0,
-                            Longitude = cidadePaciente != null ? cidadePaciente.Longitude.ToString() : "0",
-                            Latitude = cidadePaciente != null ? cidadePaciente.Latitude.ToString() : "0",
-                            Cns = line[indices.IndiceCnsPaciente],
-                            IdProfissao = 0,
-                            Profissao = "",
+                            IdAreaAtuacao  = 0,
+                            Longitude      = cidadePaciente != null ? cidadePaciente.Longitude.ToString() : "0",
+                            Latitude       = cidadePaciente != null ? cidadePaciente.Latitude.ToString() : "0",
+                            Cns            = line[indices.IndiceCnsPaciente],
+                            IdProfissao    = 0,
+                            Profissao      = "",
                             OutrasComorbidades = "",
-                            OutrosSintomas = ""
+                            OutrosSintomas     = ""
                         };
 
                         exame.IdVirusBacteria = new VirusBacteriaModel { IdVirusBacteria = Methods.GetIdVirusBacteriaItemImportacao(line[indices.IndiceTipoExame], _virusBacteriaContext.GetAll()) };
-                        exame.IdAgenteSaude = new PessoaModel { Idpessoa = agente.UsuarioModel.IdPessoa };
-                        exame.DataExame = Convert.ToDateTime(line[indices.IndiceDataExame]);
+                        exame.IdAgenteSaude   = new PessoaModel { Idpessoa = agente.UsuarioModel.IdPessoa };
+                        exame.DataExame       = Convert.ToDateTime(line[indices.IndiceDataExame]);
                         exame.DataInicioSintomas = line[indices.IndiceDataInicioSintomas].Equals("") ? Convert.ToDateTime(line[indices.IndiceDataExame]) : Convert.ToDateTime(line[indices.IndiceDataInicioSintomas]);
-                        exame.IgG = line[indices.IndiceMetodoExame].ToUpper().Contains("IGG") && !line[indices.IndiceMetodoExame].ToUpper().Contains("IGM") ? Methods.GetMetodoExame(line[indices.IndiceMetodoExame], "IGG", line[indices.IndiceResultadoExame].Length > 0 ? line[indices.IndiceResultadoExame] : line[indices.IndiceObservacaoExame]) : "N";
-                        exame.IgM = line[indices.IndiceMetodoExame].ToUpper().Contains("IGM") && !line[indices.IndiceMetodoExame].ToUpper().Contains("IGG") ? Methods.GetMetodoExame(line[indices.IndiceMetodoExame], "IGM", line[indices.IndiceResultadoExame].Length > 0 ? line[indices.IndiceResultadoExame] : line[indices.IndiceObservacaoExame]) : "N";
-                        exame.Pcr = line[indices.IndiceMetodoExame].ToUpper().Contains("PCR") ? Methods.GetMetodoExame(line[indices.IndiceMetodoExame], "PCR", line[indices.IndiceResultadoExame].Length > 0 ? line[indices.IndiceResultadoExame] : line[indices.IndiceObservacaoExame]) : "N";
-                        exame.IgGIgM = line[indices.IndiceMetodoExame].ToUpper().Contains("IGG") && line[indices.IndiceMetodoExame].ToUpper().Contains("IGM") ? Methods.GetMetodoExame(line[indices.IndiceMetodoExame], "IGG/IGM", line[indices.IndiceResultadoExame].Length > 0 ? line[indices.IndiceResultadoExame] : line[indices.IndiceObservacaoExame]) : "N";
+                        exame.IgG             = line[indices.IndiceMetodoExame].ToUpper().Contains(IndiceItemArquivoImportacao.METODO_IGG) && !line[indices.IndiceMetodoExame].ToUpper().Contains(IndiceItemArquivoImportacao.METODO_IGM) ? Methods.GetMetodoExame(line[indices.IndiceMetodoExame], IndiceItemArquivoImportacao.METODO_IGG, line[indices.IndiceResultadoExame].Length > 0 ? line[indices.IndiceResultadoExame] : line[indices.IndiceObservacaoExame]) : "N";
+                        exame.IgM             = line[indices.IndiceMetodoExame].ToUpper().Contains(IndiceItemArquivoImportacao.METODO_IGM) && !line[indices.IndiceMetodoExame].ToUpper().Contains(IndiceItemArquivoImportacao.METODO_IGG) ? Methods.GetMetodoExame(line[indices.IndiceMetodoExame], IndiceItemArquivoImportacao.METODO_IGM, line[indices.IndiceResultadoExame].Length > 0 ? line[indices.IndiceResultadoExame] : line[indices.IndiceObservacaoExame]) : "N";
+                        exame.Pcr             = line[indices.IndiceMetodoExame].ToUpper().Contains(IndiceItemArquivoImportacao.METODO_PCR) ? Methods.GetMetodoExame(line[indices.IndiceMetodoExame], IndiceItemArquivoImportacao.METODO_PCR, line[indices.IndiceResultadoExame].Length > 0 ? line[indices.IndiceResultadoExame] : line[indices.IndiceObservacaoExame]) : "N";
+                        exame.IgGIgM          = line[indices.IndiceMetodoExame].ToUpper().Contains(IndiceItemArquivoImportacao.METODO_IGG) && line[indices.IndiceMetodoExame].ToUpper().Contains(IndiceItemArquivoImportacao.METODO_IGM) ? Methods.GetMetodoExame(line[indices.IndiceMetodoExame], IndiceItemArquivoImportacao.METODO_IGG_IGM, line[indices.IndiceResultadoExame].Length > 0 ? line[indices.IndiceResultadoExame] : line[indices.IndiceObservacaoExame]) : "N";
                         if (secretarioMunicipio != null)
                             exame.MunicipioId = secretarioMunicipio.IdMunicipio;
                         else
@@ -364,16 +365,16 @@ namespace MonitoraSUS.Controllers
                         exame.IdEstado = secretarioMunicipio != null ? Convert.ToInt32(_municicpioContext.GetById(secretarioMunicipio.IdMunicipio).Uf) : secretarioEstado.IdEstado;
                         exame.EmpresaExame = new EmpresaExameModel
                         {
-                            Cnpj = "NÃO INFORMADO",
-                            Nome = line[indices.IndiceNomeEmpresa],
-                            Cnes = line[indices.IndiceCnesEmpresa],
-                            Cidade = line[indices.IndiceCidadeEmpresa],
-                            Latitude = cidadeEmpresa != null ? cidadeEmpresa.Latitude.ToString() : "0",
-                            Longitude = cidadeEmpresa != null ? cidadeEmpresa.Longitude.ToString() : "0",
-                            Estado = line[indices.IndiceEstadoEmpresa],
-                            Rua = "NÃO INFORMADO",
-                            Bairro = "NÃO INFORMADO",
-                            Cep = "00000000",
+                            Cnpj    = "NÃO INFORMADO",
+                            Nome    = line[indices.IndiceNomeEmpresa],
+                            Cnes    = line[indices.IndiceCnesEmpresa],
+                            Cidade  = line[indices.IndiceCidadeEmpresa],
+                            Latitude    = cidadeEmpresa != null ? cidadeEmpresa.Latitude.ToString() : "0",
+                            Longitude   = cidadeEmpresa != null ? cidadeEmpresa.Longitude.ToString() : "0",
+                            Estado      = line[indices.IndiceEstadoEmpresa],
+                            Rua         = "NÃO INFORMADO",
+                            Bairro      = "NÃO INFORMADO",
+                            Cep         = "00000000",
                             FoneCelular = "00000000000",
                         };
                         exame.IdAreaAtuacao = 0;
@@ -402,10 +403,9 @@ namespace MonitoraSUS.Controllers
                     else
                     {
                         item.IdPaciente.Idpessoa = pessoa.Idpessoa;
-                        item.IdPaciente.Cpf = _pessoaContext.Update(item.IdPaciente, true).Cpf;
+                        item.IdPaciente.Cpf      = pessoa.Cpf;
+                        _pessoaContext.Update(item.IdPaciente, true);
                     }
-
-
 
                     /*
                      * Adicionando empresa
@@ -434,27 +434,27 @@ namespace MonitoraSUS.Controllers
 
                     var ex = new ExameModel
                     {
-                        IdExame = exame != null ? exame.IdExame : 0,
-                        IdPaciente = item.IdPaciente.Idpessoa,
+                        IdExame         = exame != null ? exame.IdExame : 0,
+                        IdPaciente      = item.IdPaciente.Idpessoa,
                         IdVirusBacteria = item.IdVirusBacteria.IdVirusBacteria,
-                        IdAgenteSaude = item.IdAgenteSaude.Idpessoa,
-                        DataExame = item.DataExame,
+                        IdAgenteSaude   = item.IdAgenteSaude.Idpessoa,
+                        DataExame       = item.DataExame,
                         DataInicioSintomas = item.DataInicioSintomas,
-                        IgG = item.IgG,
-                        IgM = item.IgM,
-                        Pcr = item.Pcr,
-                        IgGIgM = item.IgGIgM,
-                        IdMunicipio = item.MunicipioId,
-                        IdEstado = item.IdEstado,
-                        IdEmpresaSaude = item.IdEmpresaSaude,
-                        IdAreaAtuacao = item.IdAreaAtuacao,
-                        CodigoColeta = item.CodigoColeta,
-                        Cns = item.Cns,
-                        IdNotificacao = "",
-                        OutrosSintomas = "",
-                        MetodoExame = "F",
-                        Profissao = "Não informada",
-                        StatusNotificacao = exame != null ? exame.StatusNotificacao : "N"
+                        IgG             = item.IgG,
+                        IgM             = item.IgM,
+                        Pcr             = item.Pcr,
+                        IgGIgM          = item.IgGIgM,
+                        IdMunicipio     = item.MunicipioId,
+                        IdEstado        = item.IdEstado,
+                        IdEmpresaSaude  = item.IdEmpresaSaude,
+                        IdAreaAtuacao   = item.IdAreaAtuacao,
+                        CodigoColeta    = item.CodigoColeta,
+                        Cns             = item.Cns,
+                        IdNotificacao   = "",
+                        OutrosSintomas  = "",
+                        MetodoExame     = "F",
+                        Profissao       = "Não informada",
+                        StatusNotificacao  = exame != null ? exame.StatusNotificacao : "N"
                     };
 
                     var check = _exameContext.CheckDuplicateExamToday(ex.IdPaciente, item.IdVirusBacteria.IdVirusBacteria, item.DataExame, item.MetodoExame);
