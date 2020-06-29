@@ -287,15 +287,9 @@ namespace MonitoraSUS.Controllers
             return File(Encoding.UTF8.GetBytes(builder.ToString()), "text/csv", "exames.csv");
         }
 
-
-        public IActionResult Import()
-        {
-            return View();
-        }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult ImportAsync(IFormFile file, IFormCollection collection)
+        public IActionResult Import(IFormFile file, IFormCollection collection)
         {
 
             try

@@ -3,6 +3,7 @@ using Persistence;
 using Service.Interface;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace Service
 {
@@ -49,7 +50,7 @@ namespace Service
 
         public MunicipioGeoModel GetByName(string name)
          => _context.Municipiosgeo
-                .Where(municipioModel => municipioModel.Nome.ToUpper().Equals(name.ToUpper()))
+                .Where(municipioModel => Regex.Replace(municipioModel.Nome, "[^0-9a-zA-Z]+", "").ToUpper().Equals(Regex.Replace(municipioModel.Nome, "[^0-9a-zA-Z]+", "").ToUpper()))
                 .Select(municipio => new MunicipioGeoModel
                 {
                     CodigoIbge = municipio.CodigoIbge,
