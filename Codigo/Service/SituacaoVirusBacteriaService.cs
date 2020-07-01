@@ -1,4 +1,5 @@
-﻿using Model;
+﻿using Microsoft.EntityFrameworkCore;
+using Model;
 using Persistence;
 using Service.Interface;
 using System.Collections.Generic;
@@ -52,8 +53,11 @@ namespace Service
 
         public bool Insert(SituacaoPessoaVirusBacteriaModel situacaoModel)
         {
-            _context.Add(ModelToEntity(situacaoModel));
-            return _context.SaveChanges() == 1 ? true : false;
+            var entity = ModelToEntity(situacaoModel);
+            _context.Add(entity);
+            bool value = _context.SaveChanges() == 1 ? true : false;
+            _context.Entry(entity).State = EntityState.Detached;
+            return value;
         }
 
         private Situacaopessoavirusbacteria ModelToEntity(SituacaoPessoaVirusBacteriaModel situacaoModel)
@@ -71,8 +75,11 @@ namespace Service
 
         public bool Update(SituacaoPessoaVirusBacteriaModel situacaoModel)
         {
-            _context.Update(ModelToEntity(situacaoModel));
-            return _context.SaveChanges() == 1 ? true : false;
+            var entity = ModelToEntity(situacaoModel);
+            _context.Update(entity);
+            bool value = _context.SaveChanges() == 1 ? true : false;
+            _context.Entry(entity).State = EntityState.Detached;
+            return value;
         }
 
         public List<SituacaoPessoaVirusBacteriaModel> GetByIdPaciente(int idPaciente)

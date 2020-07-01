@@ -239,7 +239,57 @@ namespace Service
 					Cns = pessoa.Cns
 				}).FirstOrDefault();
 
-        public List<PessoaModel> GetByCidade(string cidade)
+		public PessoaModel GetByCns(string cns)
+		 => _context.Pessoa
+				.Where(pessoaModel => pessoaModel.Cns.Equals(cns))
+				.Select(pessoa => new PessoaModel
+				{
+					Idpessoa = pessoa.Idpessoa,
+					Nome = pessoa.Nome,
+					Cpf = pessoa.Cpf,
+					Email = pessoa.Email,
+					FoneFixo = pessoa.FoneFixo,
+					FoneCelular = pessoa.FoneCelular,
+					DataNascimento = pessoa.DataNascimento,
+					Sexo = pessoa.Sexo,
+					Cep = pessoa.Cep,
+					Rua = pessoa.Rua,
+					Estado = pessoa.Estado,
+					Cidade = pessoa.Cidade,
+					Complemento = pessoa.Complemento,
+					Bairro = pessoa.Bairro,
+					Numero = pessoa.Numero,
+					Latitude = pessoa.Latitude,
+					Longitude = pessoa.Longitude,
+					Imunodeprimido = Convert.ToBoolean(pessoa.Imunodeprimido),
+					Cancer = Convert.ToBoolean(pessoa.Cancer),
+					Hipertenso = Convert.ToBoolean(pessoa.Hipertenso),
+					Obeso = Convert.ToBoolean(pessoa.Obeso),
+					Diabetes = Convert.ToBoolean(pessoa.Diabetes),
+					DoencaRespiratoria = Convert.ToBoolean(pessoa.DoencaRespiratoria),
+					Cardiopatia = Convert.ToBoolean(pessoa.Cardiopatia),
+					DoencaRenal = Convert.ToBoolean(pessoa.DoencaRenal),
+					Epilepsia = Convert.ToBoolean(pessoa.Epilepsia),
+					OutrasComorbidades = pessoa.OutrasComorbidades,
+					SituacaoSaude = pessoa.SituacaoSaude,
+					Coriza = Convert.ToBoolean(pessoa.Coriza),
+					Diarreia = Convert.ToBoolean(pessoa.Diarreia),
+					DificuldadeRespiratoria = Convert.ToBoolean(pessoa.DificuldadeRespiratoria),
+					DorAbdominal = Convert.ToBoolean(pessoa.DorAbdominal),
+					DorGarganta = Convert.ToBoolean(pessoa.DorGarganta),
+					DorOuvido = Convert.ToBoolean(pessoa.DorOuvido),
+					Febre = Convert.ToBoolean(pessoa.Febre),
+					Nausea = Convert.ToBoolean(pessoa.Nausea),
+					PerdaOlfatoPaladar = Convert.ToBoolean(pessoa.PerdaOlfatoPaladar),
+					Tosse = Convert.ToBoolean(pessoa.Tosse),
+					IdAreaAtuacao = pessoa.IdAreaAtuacao,
+					OutrosSintomas = pessoa.OutrosSintomas,
+					Profissao = pessoa.Profissao,
+					DataObito = pessoa.DataObito,
+					Cns = pessoa.Cns
+				}).FirstOrDefault();
+
+		public List<PessoaModel> GetByCidade(string cidade)
           => _context.Pessoa
                 .Where(p => p.Cidade.ToUpper().Equals(cidade.ToUpper()))
                 .Select(pessoa => new PessoaModel

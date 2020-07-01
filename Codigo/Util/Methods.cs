@@ -31,7 +31,7 @@ namespace MonitoraSUS.Util
             return Criptography.GenerateHashString(frase.ToString());
         }
 
-        
+
         public static string ReturnRole(int userType)
         {
             switch (userType)

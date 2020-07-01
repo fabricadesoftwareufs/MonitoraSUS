@@ -10,6 +10,7 @@ namespace Service.Interface
         bool Delete(int id);
         List<MunicipioModel> GetAll();
         List<MunicipioModel> GetByUFCode(string UFCode);
+        MunicipioModel GetByIBGECode(int code);
         MunicipioModel GetById(int id);
         MunicipioModel GetByName(string name);
     }
