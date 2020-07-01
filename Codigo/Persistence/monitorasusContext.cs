@@ -35,8 +35,6 @@ namespace Persistence
         {
             if (!optionsBuilder.IsConfigured)
             {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseMySQL("server=localhost;port=3306;user=root;password=123456;database=monitorasus");
             }
         }
 
@@ -592,32 +590,7 @@ namespace Persistence
                     .HasConstraintName("fk_pessoa_has_empresaexame_pessoa1");
             });
 
-            modelBuilder.Entity<Municipiosgeo>(entity =>
-            {
-                entity.HasKey(e => e.CodigoIbge);
-                entity.ToTable("municipiosgeo", "monitorasus");
-
-                entity.Property(e => e.CodigoIbge).HasColumnName("codigo_ibge").HasColumnType("int(11)");
-
-                entity.Property(e => e.Nome)
-                  .IsRequired()
-                  .HasColumnName("nome")
-                  .HasMaxLength(50)
-                  .IsUnicode(false)
-                  .HasDefaultValueSql("0");
-
-                entity.Property(e => e.Latitude).HasColumnName("latitude").HasColumnType("float(8)");
-                entity.Property(e => e.Latitude).HasColumnName("longitude").HasColumnType("float(8)");
-                entity.Property(e => e.CodigoUf).HasColumnName("codigo_uf").HasColumnType("int(11)");
-
-                entity.Property(e => e.Capital)
-                   .HasColumnName("capital")
-                   .HasColumnType("tinyint(4)")
-                   .HasDefaultValueSql("0");
-
-            });
-
-                modelBuilder.Entity<Municipio>(entity =>
+            modelBuilder.Entity<Municipio>(entity =>
             {
                 entity.ToTable("municipio", "monitorasus");
 
@@ -633,6 +606,36 @@ namespace Persistence
                 entity.Property(e => e.Uf)
                     .IsRequired()
                     .HasColumnType("char(2)");
+            });
+
+            modelBuilder.Entity<Municipiosgeo>(entity =>
+            {
+                entity.HasKey(e => e.CodigoIbge);
+
+                entity.ToTable("municipiosgeo", "monitorasus");
+
+                entity.Property(e => e.CodigoIbge)
+                    .HasColumnName("codigo_ibge")
+                    .HasColumnType("int(11)")
+                    .ValueGeneratedNever();
+
+                entity.Property(e => e.Capital)
+                    .HasColumnName("capital")
+                    .HasColumnType("tinyint(1)");
+
+                entity.Property(e => e.CodigoUf)
+                    .HasColumnName("codigo_uf")
+                    .HasColumnType("int(11)");
+
+                entity.Property(e => e.Latitude).HasColumnName("latitude");
+
+                entity.Property(e => e.Longitude).HasColumnName("longitude");
+
+                entity.Property(e => e.Nome)
+                    .IsRequired()
+                    .HasColumnName("nome")
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
             });
 
             modelBuilder.Entity<Pessoa>(entity =>
