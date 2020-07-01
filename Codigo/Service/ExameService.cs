@@ -1,4 +1,5 @@
-﻿using Model;
+﻿using Microsoft.EntityFrameworkCore;
+using Model;
 using Model.AuxModel;
 using Model.ViewModel;
 using Newtonsoft.Json;
@@ -22,8 +23,11 @@ namespace Service
 
 		public bool Insert(ExameModel exameModel)
 		{
-			_context.Add(ModelToEntity(exameModel));
-			return _context.SaveChanges() == 1 ? true : false;
+			var entity = ModelToEntity(exameModel);
+			_context.Add(entity);
+			var value = _context.SaveChanges() == 1 ? true : false;
+			_context.Entry(entity).State = EntityState.Detached;
+			return value;
 		}
 
 		public bool Delete(int id)
@@ -35,8 +39,11 @@ namespace Service
 
 		public bool Update(ExameModel exameModel)
 		{
-			_context.Update(ModelToEntity(exameModel));
-			return _context.SaveChanges() == 1 ? true : false;
+			var entity = ModelToEntity(exameModel);
+			_context.Update(entity);
+			var value = _context.SaveChanges() == 1 ? true : false;
+			_context.Entry(entity).State = EntityState.Detached;
+			return value;
 		}
 
 		public List<ExameModel> GetByIdAgente(int idAgente)
@@ -988,5 +995,46 @@ namespace Service
 				   OutrosSintomas = exame.OutroSintomas,
 				   Profissao = exame.Profissao
 			   }).ToList();
+
+        public ExameModel GetByIdColeta(string codigo)
+		=> _context.Exame
+				.Where(exameModel => exameModel.CodigoColeta.Equals(codigo))
+				.Select(exame => new ExameModel
+				{
+					IdVirusBacteria = exame.IdVirusBacteria,
+					IdExame = exame.IdExame,
+					IdPaciente = exame.IdPaciente,
+					IdAgenteSaude = exame.IdAgenteSaude,
+					DataExame = exame.DataExame,
+					DataInicioSintomas = exame.DataInicioSintomas,
+					IgG = exame.IgG,
+					IgM = exame.IgM,
+					Pcr = exame.Pcr,
+					IgGIgM = exame.IgMigG,
+					MetodoExame = exame.MetodoExame,
+					IdEstado = exame.IdEstado,
+					IdMunicipio = exame.IdMunicipio,
+					IdEmpresaSaude = exame.IdEmpresaSaude,
+					CodigoColeta = exame.CodigoColeta,
+					StatusNotificacao = exame.StatusNotificacao,
+					IdNotificacao = exame.IdNotificacao,
+					AguardandoResultado = Convert.ToBoolean(exame.AguardandoResultado),
+					RelatouSintomas = Convert.ToBoolean(exame.RelatouSintomas),
+					Coriza = Convert.ToBoolean(exame.Coriza),
+					Diarreia = Convert.ToBoolean(exame.Diarreia),
+					DificuldadeRespiratoria = Convert.ToBoolean(exame.DificuldadeRespiratoria),
+					DorAbdominal = Convert.ToBoolean(exame.DorAbdominal),
+					DorGarganta = Convert.ToBoolean(exame.DorGarganta),
+					DorOuvido = Convert.ToBoolean(exame.DorOuvido),
+					Febre = Convert.ToBoolean(exame.Febre),
+					Nausea = Convert.ToBoolean(exame.Nausea),
+					PerdaOlfatoPaladar = Convert.ToBoolean(exame.PerdaOlfatoPaladar),
+					Tosse = Convert.ToBoolean(exame.Tosse),
+					IdAreaAtuacao = exame.IdAreaAtuacao,
+					Cns = exame.Cns,
+					OutrosSintomas = exame.OutroSintomas,
+					Profissao = exame.Profissao
+				}).FirstOrDefault();
+
 	}
 }

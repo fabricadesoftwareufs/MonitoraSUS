@@ -88,5 +88,16 @@ namespace Service
                 Codigo = municipio.Codigo,
             };
         }
+
+        public MunicipioModel GetByIBGECode(int code)
+          => _context.Municipio
+                .Where(municipioModel => municipioModel.Codigo == code)
+                .Select(municipio => new MunicipioModel
+                {
+                    Id = municipio.Id,
+                    Nome = municipio.Nome,
+                    Uf = municipio.Uf,
+                    Codigo = municipio.Codigo
+                }).FirstOrDefault();
     }
 }

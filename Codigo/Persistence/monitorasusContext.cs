@@ -22,6 +22,7 @@ namespace Persistence
         public virtual DbSet<Exame> Exame { get; set; }
         public virtual DbSet<Internacao> Internacao { get; set; }
         public virtual DbSet<Municipio> Municipio { get; set; }
+        public virtual DbSet<Municipiosgeo> Municipiosgeo { get; set; }
         public virtual DbSet<Pessoa> Pessoa { get; set; }
         public virtual DbSet<Pessoatrabalhaestado> Pessoatrabalhaestado { get; set; }
         public virtual DbSet<Pessoatrabalhamunicipio> Pessoatrabalhamunicipio { get; set; }
@@ -602,7 +603,32 @@ namespace Persistence
                     .HasConstraintName("fk_pessoa_has_empresaexame_pessoa1");
             });
 
-            modelBuilder.Entity<Municipio>(entity =>
+            modelBuilder.Entity<Municipiosgeo>(entity =>
+            {
+                entity.HasKey(e => e.CodigoIbge);
+                entity.ToTable("municipiosgeo", "monitorasus");
+
+                entity.Property(e => e.CodigoIbge).HasColumnName("codigo_ibge").HasColumnType("int(11)");
+
+                entity.Property(e => e.Nome)
+                  .IsRequired()
+                  .HasColumnName("nome")
+                  .HasMaxLength(50)
+                  .IsUnicode(false)
+                  .HasDefaultValueSql("0");
+
+                entity.Property(e => e.Latitude).HasColumnName("latitude").HasColumnType("float(8)");
+                entity.Property(e => e.Latitude).HasColumnName("longitude").HasColumnType("float(8)");
+                entity.Property(e => e.CodigoUf).HasColumnName("codigo_uf").HasColumnType("int(11)");
+
+                entity.Property(e => e.Capital)
+                   .HasColumnName("capital")
+                   .HasColumnType("tinyint(4)")
+                   .HasDefaultValueSql("0");
+
+            });
+
+                modelBuilder.Entity<Municipio>(entity =>
             {
                 entity.ToTable("municipio", "monitorasus");
 

@@ -10,9 +10,9 @@ namespace Service.Interface
         bool Delete(int id);
         List<EmpresaExameModel> GetAll();
 		List<EmpresaExameModel> GetHospitais();
-
 		EmpresaExameModel GetById(int id);
-		List<EmpresaExameModel> GetByCnpj(string cnpj);
+        EmpresaExameModel GetByCNES(string cnes);
+        List<EmpresaExameModel> GetByCnpj(string cnpj);
         List<EmpresaExameModel> GetByUF(string uf);
         List<EmpresaExameModel> ListByUF(string uf);
         List<EmpresaExameModel> ListAll();
