@@ -1,7 +1,7 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
 
-namespace MonitoraSUS.Utils
+namespace MonitoraSUS.Util
 {
     public class Criptography
     {

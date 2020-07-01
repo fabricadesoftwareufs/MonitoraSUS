@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Model
 {
-    public class PessoaModel
+	public class PessoaModel
     {
 		public const string SITUACAO_SAUDAVEL = "S";
 		public const string SITUACAO_ISOLAMENTO = "I";
@@ -14,6 +14,7 @@ namespace Model
 		public PessoaModel()
 		{
 			SituacaoSaude = SITUACAO_SAUDAVEL;
+			Cns = "";
 		}
 
 		public int Idpessoa { get; set; }
@@ -28,7 +29,6 @@ namespace Model
         [Required]
         [Display(Name = "Sexo")]
         public string Sexo { get; set; }
-		public int IdProfissao { get; set; }
 		public string Cep { get; set; }
         public string Rua { get; set; }
         public string Bairro { get; set; }
@@ -114,7 +114,10 @@ namespace Model
 		public bool PerdaOlfatoPaladar { get; set; }
 		public string OutrosSintomas { get; set; }
 		public int IdAreaAtuacao { get; set; }
-		public string Profissao { get; set;  }
+		[Display(Name = "CNS")]
+		[StringLength(15, ErrorMessage ="Máximo de 15 números")]
 		public string Cns { get; set; }
+		[Display(Name = "Profissão")]
+		public string Profissao { get; set; }
 	}
 }

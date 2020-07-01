@@ -10,20 +10,22 @@ namespace Service.Interface
         bool Insert(ExameModel exameModel);
         bool Update(ExameModel exameModel);
         bool Delete(int id);
-        List<ExameModel> GetAll();
-        ExameModel GetById(int id);
-        List<ExameModel> GetByIdAgente(int id);
-        List<ExameModel> GetByIdEstado(int idEstado);
-        List<ExameModel> GetByIdEmpresa(int idEempresa);
-        List<ExameModel> GetByIdPaciente(int idPaciente);
-        List<ExameModel> GetByIdMunicipio(int idMunicipio);
+		ExameViewModel GetById(int id);
+		List<ExameBuscaModel> GetByIdAgente(int idAgente, int lastRecord);
+		List<ExameBuscaModel> GetByIdEstado(int idEstado, int lastRecord);
+		List<ExameBuscaModel> GetByIdEmpresa(int idEempresa, int lastRecord);
+		List<ExameBuscaModel> GetByIdMunicipio(int idMunicipio, int lastRecord);
+		List<ExameBuscaModel> GetByIdAgente(int idAgente, DateTime dataInicio, DateTime dataFim);
+        List<ExameBuscaModel> GetByIdEstado(int idEstado, DateTime dataInicio, DateTime dataFim);
+        List<ExameBuscaModel> GetByIdEmpresa(int idEempresa, DateTime dataInicio, DateTime dataFim);
+		List<ExameBuscaModel> GetByIdMunicipio(int idMunicipio, DateTime dataInicio, DateTime dataFim);
+		List<ExameBuscaModel> GetByIdPaciente(int idPaciente);
         List<ExameModel> CheckDuplicateExamToday(int idPaciente, int idVirusBacteria, DateTime dateExame, string metodoExame);
 		List<MonitoraPacienteViewModel> GetByEstadoResidenciaPaciente(string siglaEstado,
 			int idVirusBacteria, DateTime dataInicio, DateTime dataFim);
 		List<MonitoraPacienteViewModel> GetByCidadeResidenciaPaciente(string cidade, string siglaEstado,
 			int idVirusBacteria, DateTime dataInicio, DateTime dataFim);
 		List<MonitoraPacienteViewModel> GetByHospital(int idEmpresa, int idVirusBacteria, DateTime dataInicio, DateTime dataFim);
-
 		List<TotalEstadoMunicipioBairro> GetTotaisRealizadosByEmpresa(int idEempresa);
         List<TotalEstadoMunicipioBairro> GetTotaisRealizadosByEstado(int idEstado);
         List<TotalEstadoMunicipioBairro> GetTotaisRealizadosByMunicipio(int idMunicipio);

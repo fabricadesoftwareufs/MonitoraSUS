@@ -1,4 +1,5 @@
 ﻿using Model;
+using MonitoraSUS.Util;
 using Persistence;
 using Service.Interface;
 using System;
@@ -29,6 +30,7 @@ namespace Service
                 try
                 {
                     var pessoaInserida = new Pessoa();
+					
 					if (atualizaSintomas)
 						_context.Update(ModelToEntity(pessoaModel, pessoaInserida));
 					else
@@ -63,7 +65,7 @@ namespace Service
                 try
                 {
                     var pessoaInserida = new Pessoa();
-                    _context.Pessoa.Add(ModelToEntity(pessoaModel, pessoaInserida));
+					_context.Pessoa.Add(ModelToEntity(pessoaModel, pessoaInserida));
 
                     if (string.IsNullOrWhiteSpace(pessoaModel.Cpf))
                     {
@@ -338,86 +340,61 @@ namespace Service
 				}).ToList();
 
 
-		private Pessoa ModelToEntitySemSintomas(PessoaModel model, Pessoa entity)
+		private Pessoa ModelToEntitySemSintomas(PessoaModel pessoaModel, Pessoa entity)
 		{
-			entity.Idpessoa = model.Idpessoa;
-			entity.Nome = model.Nome;
-			entity.Cpf = model.Cpf;
-			entity.Sexo = model.Sexo == "Masculino" ? "M" : "F";
-			entity.IdAreaAtuacao = model.IdAreaAtuacao;
-			entity.Profissao = model.Profissao;
-			entity.Cep = model.Cep;
-			entity.Rua = model.Rua;
-			entity.Bairro = model.Bairro;
-			entity.Cidade = model.Cidade;
-			entity.Estado = model.Estado;
-			entity.Numero = model.Numero;
-			entity.Complemento = model.Complemento;
-			entity.Latitude = model.Latitude;
-			entity.Longitude = model.Longitude;
-			entity.FoneCelular = model.FoneCelular;
-			entity.FoneFixo = model.FoneFixo;
-			entity.Email = model.Email;
-			entity.DataNascimento = model.DataNascimento;
-			entity.Hipertenso = Convert.ToByte(model.Hipertenso);
-			entity.Diabetes = Convert.ToByte(model.Diabetes);
-			entity.Obeso = Convert.ToByte(model.Obeso);
-			entity.Cardiopatia = Convert.ToByte(model.Cardiopatia);
-			entity.Imunodeprimido = Convert.ToByte(model.Imunodeprimido);
-			entity.Cancer = Convert.ToByte(model.Cancer);
-			entity.DoencaRespiratoria = Convert.ToByte(model.DoencaRespiratoria);
-			entity.DoencaRenal = Convert.ToByte(model.DoencaRenal);
-			entity.Epilepsia = Convert.ToByte(model.Epilepsia);
-			entity.OutrasComorbidades = model.OutrasComorbidades;
-			entity.SituacaoSaude = model.SituacaoSaude;
-			entity.Cns = model.Cns;
+			pessoaModel.Cpf = Methods.RemoveSpecialsCaracts(pessoaModel.Cpf);
+			pessoaModel.Cep = Methods.RemoveSpecialsCaracts(pessoaModel.Cep);
+			pessoaModel.FoneFixo = pessoaModel.FoneFixo != null ? Methods.RemoveSpecialsCaracts(pessoaModel.FoneFixo) : "";
+			pessoaModel.FoneCelular = Methods.RemoveSpecialsCaracts(pessoaModel.FoneCelular);
+
+			entity.Idpessoa = pessoaModel.Idpessoa;
+			entity.Nome = pessoaModel.Nome;
+			entity.Cpf = pessoaModel.Cpf;
+			entity.Cns = pessoaModel.Cns;
+			entity.Sexo = pessoaModel.Sexo;
+			entity.IdAreaAtuacao = pessoaModel.IdAreaAtuacao;
+			entity.Profissao = pessoaModel.Profissao;
+			entity.Cep = pessoaModel.Cep;
+			entity.Rua = pessoaModel.Rua;
+			entity.Bairro = pessoaModel.Bairro;
+			entity.Cidade = pessoaModel.Cidade;
+			entity.Estado = pessoaModel.Estado;
+			entity.Numero = pessoaModel.Numero;
+			entity.Complemento = pessoaModel.Complemento;
+			entity.Latitude = pessoaModel.Latitude;
+			entity.Longitude = pessoaModel.Longitude;
+			entity.FoneCelular = pessoaModel.FoneCelular;
+			entity.FoneFixo = pessoaModel.FoneFixo;
+			entity.Email = pessoaModel.Email;
+			entity.DataNascimento = pessoaModel.DataNascimento;
+			entity.Hipertenso = Convert.ToByte(pessoaModel.Hipertenso);
+			entity.Diabetes = Convert.ToByte(pessoaModel.Diabetes);
+			entity.Obeso = Convert.ToByte(pessoaModel.Obeso);
+			entity.Cardiopatia = Convert.ToByte(pessoaModel.Cardiopatia);
+			entity.Imunodeprimido = Convert.ToByte(pessoaModel.Imunodeprimido);
+			entity.Cancer = Convert.ToByte(pessoaModel.Cancer);
+			entity.DoencaRespiratoria = Convert.ToByte(pessoaModel.DoencaRespiratoria);
+			entity.DoencaRenal = Convert.ToByte(pessoaModel.DoencaRenal);
+			entity.Epilepsia = Convert.ToByte(pessoaModel.Epilepsia);
+			entity.OutrasComorbidades = pessoaModel.OutrasComorbidades;
+			entity.SituacaoSaude = pessoaModel.SituacaoSaude;
+			entity.DataObito = pessoaModel.DataObito;
 			return entity;
 		}
-		private Pessoa ModelToEntity(PessoaModel model, Pessoa entity)
+		private Pessoa ModelToEntity(PessoaModel pessoaModel, Pessoa entity)
         {
-            entity.Idpessoa = model.Idpessoa;
-            entity.Nome = model.Nome;
-            entity.Cpf = model.Cpf;
-            entity.Sexo = model.Sexo == "Masculino" ? "M" : "F";
-			entity.IdAreaAtuacao = model.IdAreaAtuacao;
-			entity.Profissao = model.Profissao;
-			entity.Cep = model.Cep;
-            entity.Rua = model.Rua;
-            entity.Bairro = model.Bairro;
-            entity.Cidade = model.Cidade;
-            entity.Estado = model.Estado;
-            entity.Numero = model.Numero;
-            entity.Complemento = model.Complemento;
-            entity.Latitude = model.Latitude;
-            entity.Longitude = model.Longitude;
-            entity.FoneCelular = model.FoneCelular;
-            entity.FoneFixo = model.FoneFixo;
-            entity.Email = model.Email;
-            entity.DataNascimento = model.DataNascimento;
-            entity.Hipertenso = Convert.ToByte(model.Hipertenso);
-            entity.Diabetes = Convert.ToByte(model.Diabetes);
-            entity.Obeso = Convert.ToByte(model.Obeso);
-            entity.Cardiopatia = Convert.ToByte(model.Cardiopatia);
-            entity.Imunodeprimido = Convert.ToByte(model.Imunodeprimido);
-            entity.Cancer = Convert.ToByte(model.Cancer);
-            entity.DoencaRespiratoria = Convert.ToByte(model.DoencaRespiratoria);
-			entity.DoencaRenal = Convert.ToByte(model.DoencaRenal);
-			entity.Epilepsia = Convert.ToByte(model.Epilepsia);
-			entity.OutrasComorbidades = model.OutrasComorbidades;
-			entity.SituacaoSaude = model.SituacaoSaude;
-			entity.Coriza = Convert.ToByte(model.Coriza);
-			entity.Nausea = Convert.ToByte(model.Nausea);
-			entity.Tosse = Convert.ToByte(model.Tosse);
-			entity.PerdaOlfatoPaladar = Convert.ToByte(model.PerdaOlfatoPaladar);
-			entity.Diarreia = Convert.ToByte(model.Diarreia);
-			entity.DificuldadeRespiratoria = Convert.ToByte(model.DificuldadeRespiratoria);
-			entity.DorAbdominal = Convert.ToByte(model.DorAbdominal);
-			entity.DorGarganta = Convert.ToByte(model.DorGarganta);
-			entity.DorOuvido = Convert.ToByte(model.DorOuvido);
-			entity.Febre = Convert.ToByte(model.Febre);
-			entity.OutrosSintomas = model.OutrosSintomas;
-			entity.DataObito = model.DataObito;
-			entity.Cns = model.Cns;
+			entity = ModelToEntitySemSintomas(pessoaModel, entity);
+			entity.Coriza = Convert.ToByte(pessoaModel.Coriza);
+			entity.Nausea = Convert.ToByte(pessoaModel.Nausea);
+			entity.Tosse = Convert.ToByte(pessoaModel.Tosse);
+			entity.PerdaOlfatoPaladar = Convert.ToByte(pessoaModel.PerdaOlfatoPaladar);
+			entity.Diarreia = Convert.ToByte(pessoaModel.Diarreia);
+			entity.DificuldadeRespiratoria = Convert.ToByte(pessoaModel.DificuldadeRespiratoria);
+			entity.DorAbdominal = Convert.ToByte(pessoaModel.DorAbdominal);
+			entity.DorGarganta = Convert.ToByte(pessoaModel.DorGarganta);
+			entity.DorOuvido = Convert.ToByte(pessoaModel.DorOuvido);
+			entity.Febre = Convert.ToByte(pessoaModel.Febre);
+			entity.OutrosSintomas = pessoaModel.OutrosSintomas;
 			return entity;
         }
     }

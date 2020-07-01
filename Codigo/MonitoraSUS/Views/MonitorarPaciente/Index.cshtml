@@ -260,10 +260,10 @@
 						{
 									<tr>
 										<td>
-											<a href="#">@Html.DisplayFor(modelItem => item.Cpf)</a>
+											<a href="#">@Html.DisplayFor(modelItem => item.Paciente.Cpf)</a>
 										</td>
 										<td>
-											@Html.DisplayFor(modelItem => item.Nome)
+											@Html.DisplayFor(modelItem => item.Paciente.Nome)
 										</td>
 										<th>
 											@Html.DisplayFor(modelItem => item.DataExame)
@@ -272,7 +272,7 @@
 											@Html.DisplayFor(modelItem => item.UltimoResultado)
 										</td>
 										<td class="text-center">
-											@Html.DisplayFor(modelItem => item.SituacaoSaudeDescricao)
+											@Html.DisplayFor(modelItem => item.Paciente.SituacaoSaudeDescricao)
 										</td>
 										<td class="text-center">
 											@if (item.DataUltimoMonitoramento.HasValue)
@@ -288,7 +288,7 @@
 											@Html.DisplayFor(modelItem => item.Gestor.Nome)
 										</th>
 										<td>
-											<a href="@Url.Action("Edit", "MonitorarPaciente", new { idPaciente = item.Idpessoa, IdVirusBacteria = item.VirusBacteria.IdVirusBacteria })" class="btn btn-info btn-sm"><i class="fa fa-edit"></i> Monitorar </a>
+											<a href="@Url.Action("Edit", "MonitorarPaciente", new { idPaciente = item.Paciente.Idpessoa, IdVirusBacteria = item.VirusBacteria.IdVirusBacteria })" class="btn btn-info btn-sm"><i class="fa fa-edit"></i> Monitorar </a>
 										</td>
 									</tr>
 								}

@@ -1,21 +1,9 @@
 ﻿@model Model.ViewModel.PesquisaExameViewModel
 @using System.Security.Claims;
-@using Model.ViewModel;
-@using MonitoraSUS.Utils;
-
-
 
 @{
     ViewData["Title"] = "Notificar";
-
-
-    /*
-     * Recuperando o agente logado
-     * para filtrar quem ele pode remover
-     */
-
-    var agente = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
-
+    //var agente = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
 }
 
 
@@ -173,31 +161,31 @@
                         @for (int i = 0; i < Model.Exames.Count; i++)
                         {
                             <div class="form-group" hidden>
-                                @Html.LabelFor(model => model.Exames[i].IdExame, htmlAttributes: new { @class = "control-label col-md-2" })
+                                @Html.LabelFor(model => model.Exames[i].Exame.IdExame, htmlAttributes: new { @class = "control-label col-md-2" })
                                 <div class="col-md-10">
-                                    @Html.EditorFor(model => model.Exames[i].IdExame, new { htmlAttributes = new { @class = "form-control" } })
-                                    @Html.ValidationMessageFor(model => model.Exames[i].IdExame, "", new { @class = "text-danger" })
+                                    @Html.EditorFor(model => model.Exames[i].Exame.IdExame, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.Exames[i].Exame.IdExame, "", new { @class = "text-danger" })
                                 </div>
                             </div>
                             <div class="form-group" hidden>
-                                @Html.LabelFor(model => model.Exames[i].IdPaciente.Idpessoa, htmlAttributes: new { @class = "control-label col-md-2" })
+                                @Html.LabelFor(model => model.Exames[i].Exame.IdPaciente, htmlAttributes: new { @class = "control-label col-md-2" })
                                 <div class="col-md-10">
-                                    @Html.EditorFor(model => model.Exames[i].IdPaciente.Idpessoa, new { htmlAttributes = new { @class = "form-control" } })
-                                    @Html.ValidationMessageFor(model => model.Exames[i].IdPaciente.Idpessoa, "", new { @class = "text-danger" })
+                                    @Html.EditorFor(model => model.Exames[i].Exame.IdPaciente, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.Exames[i].Exame.IdPaciente, "", new { @class = "text-danger" })
                                 </div>
                             </div>
                             <div class="form-group" hidden>
-                                @Html.LabelFor(model => model.Exames[i].Resultado, htmlAttributes: new { @class = "control-label col-md-2" })
+                                @Html.LabelFor(model => model.Exames[i].Exame.Resultado, htmlAttributes: new { @class = "control-label col-md-2" })
                                 <div class="col-md-10">
-                                    @Html.EditorFor(model => model.Exames[i].Resultado, new { htmlAttributes = new { @class = "form-control" } })
-                                    @Html.ValidationMessageFor(model => model.Exames[i].Resultado, "", new { @class = "text-danger" })
+                                    @Html.EditorFor(model => model.Exames[i].Exame.Resultado, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.Exames[i].Exame.Resultado, "", new { @class = "text-danger" })
                                 </div>
                             </div>
                             <div class="form-group" hidden>
-                                @Html.LabelFor(model => model.Exames[i].StatusNotificacao, htmlAttributes: new { @class = "control-label col-md-2" })
+                                @Html.LabelFor(model => model.Exames[i].Exame.StatusNotificacao, htmlAttributes: new { @class = "control-label col-md-2" })
                                 <div class="col-md-10">
-                                    @Html.EditorFor(model => model.Exames[i].StatusNotificacao, new { htmlAttributes = new { @class = "form-control" } })
-                                    @Html.ValidationMessageFor(model => model.Exames[i].StatusNotificacao, "", new { @class = "text-danger" })
+                                    @Html.EditorFor(model => model.Exames[i].Exame.StatusNotificacao, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.Exames[i].Exame.StatusNotificacao, "", new { @class = "text-danger" })
                                 </div>
                             </div>
                         }
@@ -301,63 +289,63 @@
                                 {
                                     <tr>
                                         <td>
-                                            <div>@Html.DisplayFor(modelItem => item.CodigoColeta)</div>
+                                            <div>@Html.DisplayFor(modelItem => item.Exame.CodigoColeta)</div>
                                         </td>
                                         <td>
-                                            <a href="#">@Html.DisplayFor(modelItem => item.IdPaciente.Cpf)</a>
+                                            <a href="#">@Html.DisplayFor(modelItem => item.Cpf)</a>
                                         </td>
                                         <td>
-                                            @if (@item.IdPaciente.Nome.Length > 15)
+                                            @if (@item.NomePaciente.Length > 15)
                                             {
-                                                <div data-toggle="tooltip" title="@item.IdPaciente.Nome">@item.IdPaciente.Nome</div>
+                                                <div data-toggle="tooltip" title="@item.NomePaciente">@item.NomePaciente</div>
                                             }
                                             else
                                             {
-                                                <div>@item.IdPaciente.Nome</div>
+                                                <div>@item.NomePaciente</div>
                                             }
                                         </td>
                                         <td>
-                                            @if (item.IdPaciente.Cidade.Length > 10)
+                                            @if (item.Cidade.Length > 10)
                                             {
-                                                <div data-toggle="tooltip" title="@item.IdPaciente.Cidade">@item.IdPaciente.Cidade</div>
+                                                <div data-toggle="tooltip" title="@item.Cidade">@item.Cidade</div>
                                             }
                                             else
                                             {
-                                                <div>@item.IdPaciente.Cidade</div>
+                                                <div>@item.Cidade</div>
                                             }
                                         </td>
                                         <td>
-                                            @Html.DisplayFor(modelItem => item.IdPaciente.Estado)
+                                            @Html.DisplayFor(modelItem => item.Estado)
                                         </td>
                                         <td>
-                                            @Html.DisplayFor(modelItem => item.DataExame)
+                                            @Html.DisplayFor(modelItem => item.Exame.DataExame)
                                         </td>
                                         <td>
-                                            @Html.DisplayFor(modelItem => item.IdVirusBacteria.Nome)
+                                            @Html.DisplayFor(modelItem => item.NomeVirusBateria)
                                         </td>
                                         <td>
-                                            @Html.DisplayFor(modelItem => item.Resultado)
+                                            @Html.DisplayFor(modelItem => item.Exame.Resultado)
                                         </td>
                                         <td>
-                                            @if (item.StatusNotificacao.ToUpper() == "S")
+                                            @if (item.Exame.StatusNotificacao.ToUpper() == "S")
                                             {
                                                 @:Sim
                                             }
-                                            else if (item.StatusNotificacao.ToUpper() == "N")
+                                            else if (item.Exame.StatusNotificacao.ToUpper() == "N")
                                             {
                                                 @:Não
                                             }
-                                            else if (item.StatusNotificacao.ToUpper() == "E")
+                                            else if (item.Exame.StatusNotificacao.ToUpper() == "E")
                                             {
                                                 @:Enviada
                                             }
-                                            else if (item.StatusNotificacao.ToUpper() == "P")
+                                            else if (item.Exame.StatusNotificacao.ToUpper() == "P")
                                             {
                                                 @:Erro
                                             }
                                         </td>
                                         <td>
-                                            @using (Html.BeginForm("EnviarSMS", "Exame", new { id = item.IdExame }, FormMethod.Post))
+                                            @using (Html.BeginForm("EnviarSMS", "Exame", new { id = item.Exame.IdExame }, FormMethod.Post))
                                             {
                                                 <div hidden>
                                                     <div class="row">

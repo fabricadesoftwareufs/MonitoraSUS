@@ -8,7 +8,7 @@ namespace Model.ViewModel
 
         public PesquisaExameViewModel()
         {
-            Exames = new List<ExameViewModel>();
+            Exames = new List<ExameBuscaModel>();
             Negativos = 0;
             Positivos = 0;
 			Recuperados = 0;
@@ -17,13 +17,12 @@ namespace Model.ViewModel
 			Aguardando = 0;
 		}
 
-        public List<ExameViewModel> Exames { get; set; }
+        public List<ExameBuscaModel> Exames { get; set; }
         public int Negativos { get; set; }
         public int Positivos { get; set; }
         public int Recuperados { get; set; }
         public int Indeterminados { get; set; }
 		public int Aguardando { get; set; }
-
 		public int IgMIgGs { get; set; }
 		public string Pesquisa { get; set; }
         public DateTime DataInicial { get; set; }

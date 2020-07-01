@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Model;
 using Model.ViewModel;
-using MonitoraSUS.Utils;
+using MonitoraSUS.Util;
 using Service.Interface;
 using System;
 using System.Collections.Generic;
@@ -257,7 +257,7 @@ namespace MonitoraSUS.Controllers
         public ActionResult IndexApproveAgent(int ehResponsavel)
         {
             // usuario logado
-            UsuarioViewModel usuarioAutenticado = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
+            UsuarioViewModel usuarioAutenticado = _usuarioService.RetornLoggedUser((ClaimsIdentity)User.Identity);
             bool ehAdmin = usuarioAutenticado.RoleUsuario.Equals("ADM");
             bool ehGestor = usuarioAutenticado.RoleUsuario.Equals("GESTOR");
             bool ehSecretario = usuarioAutenticado.RoleUsuario.Equals("SECRETARIO");
@@ -349,12 +349,12 @@ namespace MonitoraSUS.Controllers
                 _pessoaTrabalhaMunicipioService.Delete(idPessoa);
 
             var exames = _exameService.GetByIdPaciente(idPessoa);
-            if (exames.Count() == 0)
-                exames = _exameService.GetByIdAgente(idPessoa);
+            
             if (exames.Count() == 0)
             {
-                var usuario = _usuarioService.GetByIdPessoa(idPessoa);
-				if (usuario != null)
+				var examesRealizados = _exameService.GetByIdAgente(idPessoa, DateTime.MinValue, DateTime.MaxValue);
+				var usuario = _usuarioService.GetByIdPessoa(idPessoa);
+				if (usuario != null && examesRealizados.Count() == 0)
 				{
 					_recuperarSenhaService.DeleteByUser(usuario.IdUsuario);
 					_usuarioService.Delete(usuario.IdUsuario);
@@ -385,7 +385,7 @@ namespace MonitoraSUS.Controllers
         public async Task<ActionResult> Activate(string ativarPerfil, string cpf, int idEmpresa)
         {
             //string responseOp = "";
-            UsuarioViewModel usuarioAutenticado = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
+            UsuarioViewModel usuarioAutenticado = _usuarioService.RetornLoggedUser((ClaimsIdentity)User.Identity);
             bool ehAdmin = usuarioAutenticado.RoleUsuario.Equals("ADM");
             bool ehGestor = usuarioAutenticado.RoleUsuario.Equals("GESTOR");
             bool ehSecretario = usuarioAutenticado.RoleUsuario.Equals("SECRETARIO");

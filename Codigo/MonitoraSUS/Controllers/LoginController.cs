@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Model;
 using Model.ViewModel;
-using MonitoraSUS.Utils;
+using MonitoraSUS.Util;
 using Service.Interface;
 using System;
 using System.Collections.Generic;
@@ -188,7 +188,7 @@ namespace MonitoraSUS.Controllers
                         {
                             try
                             {
-                                await _emailService.SendEmailAsync(user.Email, "MonitoraSUS - Acesso ao Sistema", Methods.MessageEmail(recSenha, finalidade));
+                                await _emailService.SendEmailAsync(user.Email, "MonitoraSUS - Acesso ao Sistema", _usuarioService.MessageEmail(recSenha, finalidade));
                                 return (true, true, true);
                             }
                             catch (Exception ex)

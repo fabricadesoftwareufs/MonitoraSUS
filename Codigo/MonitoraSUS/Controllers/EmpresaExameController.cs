@@ -3,8 +3,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Model;
-using MonitoraSUS.Utils;
+using MonitoraSUS.Util;
 using Service.Interface;
+using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 
@@ -21,16 +22,17 @@ namespace MonitoraSUS.Controllers
         private readonly IPessoaTrabalhaMunicipioService _trabalhaMunicipioContext;
         private readonly IEstadoService _estadoContext;
         private readonly IMunicipioService _municipioContext;
+		private readonly IUsuarioService _usuarioContext;
 
-
-        public EmpresaExameController(IConfiguration configuration,
+		public EmpresaExameController(IConfiguration configuration,
                                       IEmpresaExameService empresaContext,
                                       IExameService exameContext,
                                       IPessoaService pessoaContext,
                                       IPessoaTrabalhaEstadoService trabalhaEstadoContext,
                                       IPessoaTrabalhaMunicipioService trabalhaMunicipioContext,
                                       IEstadoService estadoContext,
-                                      IMunicipioService municipioContext)
+                                      IMunicipioService municipioContext,
+									  IUsuarioService usuarioContext)
         {
             _configuration = configuration;
             _empresaContext = empresaContext;
@@ -40,6 +42,7 @@ namespace MonitoraSUS.Controllers
             _trabalhaMunicipioContext = trabalhaMunicipioContext;
             _estadoContext = estadoContext;
             _municipioContext = municipioContext;
+			_usuarioContext = usuarioContext;
         }
 
         public IActionResult Index()
@@ -49,7 +52,7 @@ namespace MonitoraSUS.Controllers
 
         public List<EmpresaExameModel> GetAllEmpresas()
         {
-            var usuario = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
+            var usuario = _usuarioContext.RetornLoggedUser((ClaimsIdentity)User.Identity);
             var pessoa = _pessoaContext.GetById(usuario.UsuarioModel.IdPessoa);
             var empresas = new List<EmpresaExameModel>();
             if (usuario.RoleUsuario.Equals("SECRETARIO") || usuario.RoleUsuario.Equals("ADM"))
@@ -207,7 +210,7 @@ namespace MonitoraSUS.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Delete(int id, IFormCollection collection)
         {
-            var exames = _exameContext.GetByIdEmpresa(id);
+            var exames = _exameContext.GetByIdEmpresa(id, DateTime.MinValue, DateTime.MaxValue);
             var pessoaEstado = _trabalhaEstadoContext.GetByIdEmpresa(id);
 
             try

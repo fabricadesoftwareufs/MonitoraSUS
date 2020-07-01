@@ -1,5 +1,7 @@
 ﻿using Model;
+using Model.ViewModel;
 using System.Collections.Generic;
+using System.Security.Claims;
 
 namespace Service.Interface
 {
@@ -13,5 +15,7 @@ namespace Service.Interface
         UsuarioModel GetByLogin(string cpf, string senha);
         UsuarioModel GetByIdPessoa(int idPessoa);
         UsuarioModel GetByCpf(string cpf);
-    }
+		UsuarioViewModel RetornLoggedUser(ClaimsIdentity claimsIdentity);
+		string MessageEmail(RecuperarSenhaModel senhaModel, int finalidadeEmail);
+	}
 }

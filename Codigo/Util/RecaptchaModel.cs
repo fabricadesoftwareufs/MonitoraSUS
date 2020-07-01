@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Model.AuxModel
+namespace MonitoraSUS.Util
 {
     public class RecaptchaModel
     {

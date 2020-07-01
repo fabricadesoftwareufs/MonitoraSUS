@@ -34,6 +34,8 @@ namespace Persistence
         {
             if (!optionsBuilder.IsConfigured)
             {
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
+                optionsBuilder.UseMySQL("server=localhost;port=3306;user=root;password=123456;database=monitorasus");
             }
         }
 
@@ -356,12 +358,6 @@ namespace Persistence
                     .HasColumnType("tinyint(4)")
                     .HasDefaultValueSql("0");
 
-                entity.Property(e => e.Cns)
-                    .IsRequired()
-                    .HasColumnName("cns")
-                    .HasMaxLength(15)
-                    .IsUnicode(false);
-
                 entity.Property(e => e.CodigoColeta)
                     .IsRequired()
                     .HasColumnName("codigoColeta")
@@ -417,7 +413,8 @@ namespace Persistence
 
                 entity.Property(e => e.IdAreaAtuacao)
                     .HasColumnName("idAreaAtuacao")
-                    .HasColumnType("int(11)");
+                    .HasColumnType("int(11)")
+                    .HasDefaultValueSql("0");
 
                 entity.Property(e => e.IdEmpresaSaude)
                     .HasColumnName("idEmpresaSaude")
@@ -475,7 +472,6 @@ namespace Persistence
                     .HasDefaultValueSql("0");
 
                 entity.Property(e => e.OutroSintomas)
-                    .IsRequired()
                     .HasColumnName("outroSintomas")
                     .HasMaxLength(100)
                     .IsUnicode(false);
@@ -490,13 +486,6 @@ namespace Persistence
                     .HasColumnName("perdaOlfatoPaladar")
                     .HasColumnType("tinyint(4)")
                     .HasDefaultValueSql("0");
-
-                entity.Property(e => e.Profissao)
-                    .IsRequired()
-                    .HasColumnName("profissao")
-                    .HasMaxLength(50)
-                    .IsUnicode(false)
-                    .HasDefaultValueSql("Não Informada");
 
                 entity.Property(e => e.RelatouSintomas)
                     .HasColumnName("relatouSintomas")
@@ -666,7 +655,6 @@ namespace Persistence
                     .IsUnicode(false);
 
                 entity.Property(e => e.Cns)
-                    .IsRequired()
                     .HasColumnName("cns")
                     .HasMaxLength(15)
                     .IsUnicode(false);
@@ -820,7 +808,6 @@ namespace Persistence
                     .IsUnicode(false);
 
                 entity.Property(e => e.OutrosSintomas)
-                    .IsRequired()
                     .HasColumnName("outrosSintomas")
                     .HasMaxLength(100)
                     .IsUnicode(false);
