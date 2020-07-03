@@ -22,6 +22,7 @@ namespace Persistence
         public virtual DbSet<Exame> Exame { get; set; }
         public virtual DbSet<Internacao> Internacao { get; set; }
         public virtual DbSet<Municipio> Municipio { get; set; }
+        public virtual DbSet<Municipiosgeo> Municipiosgeo { get; set; }
         public virtual DbSet<Pessoa> Pessoa { get; set; }
         public virtual DbSet<Pessoatrabalhaestado> Pessoatrabalhaestado { get; set; }
         public virtual DbSet<Pessoatrabalhamunicipio> Pessoatrabalhamunicipio { get; set; }
@@ -356,12 +357,6 @@ namespace Persistence
                     .HasColumnType("tinyint(4)")
                     .HasDefaultValueSql("0");
 
-                entity.Property(e => e.Cns)
-                    .IsRequired()
-                    .HasColumnName("cns")
-                    .HasMaxLength(15)
-                    .IsUnicode(false);
-
                 entity.Property(e => e.CodigoColeta)
                     .IsRequired()
                     .HasColumnName("codigoColeta")
@@ -417,7 +412,8 @@ namespace Persistence
 
                 entity.Property(e => e.IdAreaAtuacao)
                     .HasColumnName("idAreaAtuacao")
-                    .HasColumnType("int(11)");
+                    .HasColumnType("int(11)")
+                    .HasDefaultValueSql("0");
 
                 entity.Property(e => e.IdEmpresaSaude)
                     .HasColumnName("idEmpresaSaude")
@@ -475,7 +471,6 @@ namespace Persistence
                     .HasDefaultValueSql("0");
 
                 entity.Property(e => e.OutroSintomas)
-                    .IsRequired()
                     .HasColumnName("outroSintomas")
                     .HasMaxLength(100)
                     .IsUnicode(false);
@@ -490,13 +485,6 @@ namespace Persistence
                     .HasColumnName("perdaOlfatoPaladar")
                     .HasColumnType("tinyint(4)")
                     .HasDefaultValueSql("0");
-
-                entity.Property(e => e.Profissao)
-                    .IsRequired()
-                    .HasColumnName("profissao")
-                    .HasMaxLength(50)
-                    .IsUnicode(false)
-                    .HasDefaultValueSql("Não Informada");
 
                 entity.Property(e => e.RelatouSintomas)
                     .HasColumnName("relatouSintomas")
@@ -620,6 +608,36 @@ namespace Persistence
                     .HasColumnType("char(2)");
             });
 
+            modelBuilder.Entity<Municipiosgeo>(entity =>
+            {
+                entity.HasKey(e => e.CodigoIbge);
+
+                entity.ToTable("municipiosgeo", "monitorasus");
+
+                entity.Property(e => e.CodigoIbge)
+                    .HasColumnName("codigo_ibge")
+                    .HasColumnType("int(11)")
+                    .ValueGeneratedNever();
+
+                entity.Property(e => e.Capital)
+                    .HasColumnName("capital")
+                    .HasColumnType("tinyint(1)");
+
+                entity.Property(e => e.CodigoUf)
+                    .HasColumnName("codigo_uf")
+                    .HasColumnType("int(11)");
+
+                entity.Property(e => e.Latitude).HasColumnName("latitude");
+
+                entity.Property(e => e.Longitude).HasColumnName("longitude");
+
+                entity.Property(e => e.Nome)
+                    .IsRequired()
+                    .HasColumnName("nome")
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+            });
+
             modelBuilder.Entity<Pessoa>(entity =>
             {
                 entity.HasKey(e => e.Idpessoa);
@@ -666,7 +684,6 @@ namespace Persistence
                     .IsUnicode(false);
 
                 entity.Property(e => e.Cns)
-                    .IsRequired()
                     .HasColumnName("cns")
                     .HasMaxLength(15)
                     .IsUnicode(false);
@@ -820,7 +837,6 @@ namespace Persistence
                     .IsUnicode(false);
 
                 entity.Property(e => e.OutrosSintomas)
-                    .IsRequired()
                     .HasColumnName("outrosSintomas")
                     .HasMaxLength(100)
                     .IsUnicode(false);

@@ -62,8 +62,10 @@ namespace MonitoraSUS
             services.AddScoped<IEmailService, EmailService>();
             services.AddScoped<IEmpresaExameService, EmpresaExameService>();
             services.AddScoped<IInternacaoService, InternacaoService>();
+			services.AddScoped<IAreaAtuacaoService, AreaAtuacaoService>();
+            services.AddScoped<IMunicipioGeoService, MunicipioGeoService>();
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddMvc().AddJsonOptions(options =>
             {
                 options.SerializerSettings.Culture = new System.Globalization.CultureInfo("pt-BR");

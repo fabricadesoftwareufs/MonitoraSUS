@@ -54,7 +54,7 @@ namespace Controller.Test
             // Act
             var resultado = controller.Create(novaEmpresa) as ViewResult;
 
-           Assert.Equal("Organização Cadastrada com sucesso!", resultado.TempData["MensagemSucesso"]);
+            Assert.Equal("Organização Cadastrada com sucesso!", resultado.TempData["MensagemSucesso"]);
             mockEmpresaExame.Verify();
         }
 

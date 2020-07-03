@@ -13,17 +13,16 @@ ALTER TABLE `monitorasus`.`empresaexame`
 ADD COLUMN `cnes` VARCHAR(20) NOT NULL DEFAULT '' AFTER `numeroLeitosUTIDisponivel`;
 
 ALTER TABLE `monitorasus`.`exame` 
-ADD COLUMN `outroSintomas` VARCHAR(100) NOT NULL DEFAULT '' AFTER `idAreaAtuacao`,
-ADD COLUMN `cns` VARCHAR(15) NOT NULL DEFAULT '' AFTER `outroSintomas`,
-ADD COLUMN `profissao` VARCHAR(50) NOT NULL DEFAULT 'Não Informada' AFTER `cns`,
+ADD COLUMN `outroSintomas` VARCHAR(100) AFTER `idAreaAtuacao`,
+ADD COLUMN `profissao` VARCHAR(50) NOT NULL DEFAULT 'Não Informada' AFTER `outroSintomas`,
 DROP INDEX `fk_exame_municipio1_idx` ,
 ADD INDEX `fk_exame_municipio1_idx` (`idMunicipio` ASC),
 ADD INDEX `fk_exame_AreaAtuacao1_idx` (`idAreaAtuacao` ASC);
 ;
 
 ALTER TABLE `monitorasus`.`pessoa` 
-ADD COLUMN `outrosSintomas` VARCHAR(100) NOT NULL DEFAULT '' AFTER `perdaOlfatoPaladar`,
-ADD COLUMN `cns` VARCHAR(15) NOT NULL DEFAULT '' AFTER `outrosSintomas`,
+ADD COLUMN `outrosSintomas` VARCHAR(100) AFTER `perdaOlfatoPaladar`,
+ADD COLUMN `cns` VARCHAR(15) AFTER `outrosSintomas`,
 ADD COLUMN `idAreaAtuacao` INT(11) NOT NULL AFTER `dataObito`,
 ADD COLUMN `profissao` VARCHAR(50) NOT NULL DEFAULT 'Não Informada' AFTER `idAreaAtuacao`,
 ADD INDEX `fk_pessoa_AreaAtuacao1_idx` (`idAreaAtuacao` ASC);

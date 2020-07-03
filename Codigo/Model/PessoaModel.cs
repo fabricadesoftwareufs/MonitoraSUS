@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Model
 {
-    public class PessoaModel
+	public class PessoaModel
     {
 		public const string SITUACAO_SAUDAVEL = "S";
 		public const string SITUACAO_ISOLAMENTO = "I";
@@ -14,37 +14,51 @@ namespace Model
 		public PessoaModel()
 		{
 			SituacaoSaude = SITUACAO_SAUDAVEL;
+			Cns = "";
 		}
 
 		public int Idpessoa { get; set; }
-        [Required]
         [Display(Name = "CPF")]
-        [StringLength(11)]
-        public string Cpf { get; set; }
-        [Required]
+		[Util.CPF]
+		public string Cpf { get; set; }
+        [Required(ErrorMessage = "Campo obrigatório")]
         [Display(Name = "Nome")]
-        [StringLength(100)]
+        [StringLength(60, ErrorMessage = "Máximo são 60 caracteres")]
         public string Nome { get; set; }
         [Required]
         [Display(Name = "Sexo")]
         public string Sexo { get; set; }
-		public int IdProfissao { get; set; }
+		[Required(ErrorMessage = "Campo obrigatório")]
+		[StringLength(8, ErrorMessage = "Máximo são 08 caracteres")]
 		public string Cep { get; set; }
-        public string Rua { get; set; }
-        public string Bairro { get; set; }
-        [Required]
-        public string Cidade { get; set; }
-        [Required]
-        public string Estado { get; set; }
-        public string Numero { get; set; }
-        public string Complemento { get; set; }
+		[Required(ErrorMessage = "Campo obrigatório")]
+		[StringLength(60, ErrorMessage = "Máximo são 60 caracteres")]
+		public string Rua { get; set; }
+		[Required(ErrorMessage = "Campo obrigatório")]
+		[StringLength(60, ErrorMessage = "Máximo são 60 caracteres")]
+		public string Bairro { get; set; }
+		[Required(ErrorMessage = "Campo obrigatório")]
+		[StringLength(100, ErrorMessage = "Máximo são 100 caracteres")]
+		public string Cidade { get; set; }
+		[Required(ErrorMessage = "Campo obrigatório")]
+		[StringLength(50, ErrorMessage = "Máximo são 50 caracteres")]
+		public string Estado { get; set; }
+		[StringLength(100, ErrorMessage = "Máximo são 20 caracteres")]
+		public string Numero { get; set; }
+		[StringLength(100, ErrorMessage = "Máximo são 100 caracteres")]
+		public string Complemento { get; set; }
         public string Latitude { get; set; }
         public string Longitude { get; set; }
-        public string FoneCelular { get; set; }
-        public string FoneFixo { get; set; }
-        public string Email { get; set; }
-        [Required]
-        [DataType(DataType.Date)]
+		[Required(ErrorMessage = "Campo obrigatório")]
+		[StringLength(15, ErrorMessage = "Máximo são 15 caracteres")]
+		[Util.TelefoneCelular]
+		public string FoneCelular { get; set; }
+		[StringLength(15, ErrorMessage = "Máximo são 15 caracteres")]
+		public string FoneFixo { get; set; }
+		[StringLength(60, ErrorMessage = "Máximo são 60 caracteres")]
+		public string Email { get; set; }
+		[Required(ErrorMessage = "Campo obrigatório")]
+		[DataType(DataType.Date)]
         [Display(Name = "Data de Nascimento")]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime DataNascimento { get; set; }
@@ -54,10 +68,13 @@ namespace Model
         public bool Cardiopatia { get; set; }
         public bool Imunodeprimido { get; set; }
         public bool Cancer { get; set; }
-        public bool DoencaRespiratoria { get; set; }
+		[Display(Name = "Doença Respiratória")]
+		public bool DoencaRespiratoria { get; set; }
 		[Display(Name = "Doença Renal")]
 		public bool DoencaRenal { get; set; }
 		public bool Epilepsia{ get; set; }
+		[StringLength(100, ErrorMessage = "Máximo são 100 caracteres")]
+		[Display(Name = "Outras Comorbidades")]
 		public string OutrasComorbidades { get; set; }
 		public string SituacaoSaude { get; set; }
 		[Display(Name = "Data Óbito")]
@@ -82,19 +99,6 @@ namespace Model
 					return "Recuperado";
 			}
 		}
-		public bool TemFoneCelularValido
-        {
-            get
-            {
-                if (FoneCelular == null)
-                    return false;
-                if (FoneCelular.Length != 11)
-                    return false;
-                if (FoneCelular.StartsWith("0"))
-                    return false;
-                return true;
-            }
-        }
 		public bool Febre { get; set; }
 		public bool Tosse { get; set; }
 		public bool Coriza { get; set; }
@@ -112,9 +116,14 @@ namespace Model
 		public bool DorAbdominal { get; set; }
 		[Display(Name = "Perda Olfato/Paladar")]
 		public bool PerdaOlfatoPaladar { get; set; }
+		[StringLength(100, ErrorMessage = "Máximo de 100 caracteres")]
 		public string OutrosSintomas { get; set; }
 		public int IdAreaAtuacao { get; set; }
-		public string Profissao { get; set;  }
+		[Display(Name = "CNS")]
+		[StringLength(15, ErrorMessage ="Máximo de 15 números")]
 		public string Cns { get; set; }
+		[StringLength(50, ErrorMessage = "Máximo de 50 caracteres")]
+		[Display(Name = "Profissão")]
+		public string Profissao { get; set; }
 	}
 }

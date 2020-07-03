@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Model.AuxModel
+namespace Util
 {
     public class RecaptchaModel
     {

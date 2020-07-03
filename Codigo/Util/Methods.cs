@@ -1,6 +1,3 @@
-using Model;
-using Model.AuxModel;
-using Model.ViewModel;
 using Newtonsoft.Json;
 using System;
 using System.Linq;
@@ -10,7 +7,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks; 
 
-namespace MonitoraSUS.Utils
+namespace Util
 {
     public class Methods
     {
@@ -34,61 +31,6 @@ namespace MonitoraSUS.Utils
             return Criptography.GenerateHashString(frase.ToString());
         }
 
-        public static string MessageEmail(RecuperarSenhaModel senhaModel, int finalidadeEmail)
-        {
-            var uri = new Uri("https://www.monitorasus.ufs.br/");
-            var site = "<a href='" + uri.Scheme + "://" + uri.Host + ":" + uri.Port;
-            var link = site + "/Login/RecuperarSenha/";
-
-            switch (finalidadeEmail)
-            {
-                case 0:
-                    return "<html><body>" +
-                        "Foi solicitado a recuperação de sua senha para acesso ao MonitoraSUS.<br>" +
-						"Você possui 24 horas para fazer a alteração da sua senha de acesso.<br>" +
-                        link + senhaModel.Token + "'>Clique aqui mudar a senha</a>" +
-                        RodapeEmail();
-
-
-                case 1:
-                    return "<html><body>" +
-                        "Parabéns! Seu cadastro foi aprovado para acesso ao MonitoraSUS.<br>" +
-						"Você possui 24 horas para criar sua senha de acesso ao sistema.<br>" +
-                        link + senhaModel.Token + "'>Clique aqui para criar sua senha.</a>" +
-                        RodapeEmail();
-
-                case 2:
-                    return "<html><body>" +
-                        "Parabéns! Seu cadastro foi ativado para acesso ao MonitoraSUS. <br>" +
-                        "Acesse o sistema " + site + "'>aqui</a>." +
-                        "<br>Caso não lembre da sua senha de acesso, você possui 24 horas para criar uma nova senha.<br>" +
-                        link + senhaModel.Token + "'>Clique aqui para criar uma nova senha.</a>" +
-                        RodapeEmail();
-				case 4:
-					return "<html><body>" +
-						"Obrigado por solicitar o cadastro no MonitoraSUS! <br/>" +
-						"O sistema permite gerenciar os testes virais realizados pela gestão e fazer o monitoramento dos pacientes <br/>" +
-						"residentes no município que foram positivados e notificados pelo MonitoraSUS. <br/>" +
-						"Seu cadastro foi aprovado com perfil de ADMINISTRADOR do Município ou Estado solicitado.<br/>" +
-						"Acesse o sistema através da url www.monitorasus.ufs.br e consulte o manual do sistema." +
-						"Entraremos em contato para agendarmos uma apresentação das funcionalidades." +
-						"Você possui 24 horas para criar sua senha de acesso ao sistema.<br>" + 
-						link + senhaModel.Token + "'>Clique aqui para criar sua senha.</a>" +
-						RodapeEmail();
-
-				default: return null;
-            }
-        }
-
-        private static string RodapeEmail()
-        {
-            return "<br>" +
-                    "Qualquer dúvida ou sugestão entre em contato com o nosso time." +
-                        "<br><br>" +
-                        "<br>Equipe MonitoraSUS" +
-                        "<br>KNUTH-Fábrica de Software da Universidade Federal de Sergipe" +
-                        "<br>fabricadesoftware@ufs.br";
-        }
 
         public static string ReturnRole(int userType)
         {
@@ -116,32 +58,6 @@ namespace MonitoraSUS.Utils
             }
         }
 
-        /// <summary>
-        /// Recebe o Usuario da sessão em questão e retorna os dados do mesmo em um objeto usuario.
-        /// </summary>
-        /// <param name="user"></param>
-        /// <returns></returns>
-        public static UsuarioViewModel RetornLoggedUser(ClaimsIdentity claimsIdentity)
-        {
-            var usuario = new UsuarioModel
-            {
-                IdUsuario = int.Parse(claimsIdentity.Claims.Where(s => s.Type == ClaimTypes.SerialNumber).Select(s => s.Value).FirstOrDefault()),
-                Cpf = claimsIdentity.Claims.Where(s => s.Type == ClaimTypes.UserData).Select(s => s.Value).FirstOrDefault(),
-                Email = claimsIdentity.Claims.Where(s => s.Type == ClaimTypes.Email).Select(s => s.Value).FirstOrDefault(),
-                IdPessoa = Convert.ToInt32(claimsIdentity.Claims.Where(s => s.Type == ClaimTypes.NameIdentifier).Select(s => s.Value).FirstOrDefault()),
-
-            };
-
-
-
-            var usuarioViewModel = new UsuarioViewModel
-            {
-                UsuarioModel = usuario,
-                RoleUsuario = claimsIdentity.Claims.Where(s => s.Type == ClaimTypes.Role).Select(s => s.Value).FirstOrDefault()
-            };
-
-            return usuarioViewModel;
-        }
 
         /// <summary>
         /// retrnar cpf com padrao de caracteres - mask
@@ -154,12 +70,26 @@ namespace MonitoraSUS.Utils
             return cpf;
         }
 
-        public static bool ValidarCpf(string cpf)
+		/// <summary>
+		/// Remove caracteres não numéricos
+		/// </summary>
+		/// <param name="text"></param>
+		/// <returns></returns>
+		public static string RemoveNaoNumericos(string text)
+		{
+			System.Text.RegularExpressions.Regex reg = new System.Text.RegularExpressions.Regex(@"[^0-9]");
+			string ret = reg.Replace(text, string.Empty);
+			return ret;
+		}
+
+		public static bool ValidarCpf(string cpf)
         {
+			cpf = RemoveNaoNumericos(cpf);
+
             if (string.IsNullOrEmpty(cpf))
                 return false;
 
-            var multiplicador1 = new int[9] { 10, 9, 8, 7, 6, 5, 4, 3, 2 };
+			var multiplicador1 = new int[9] { 10, 9, 8, 7, 6, 5, 4, 3, 2 };
             var multiplicador2 = new int[10] { 11, 10, 9, 8, 7, 6, 5, 4, 3, 2 };
             string tempCpf;
             string digito;
@@ -276,44 +206,5 @@ namespace MonitoraSUS.Utils
                 throw e.InnerException;
             }
         }
-
-        /**public static string GetResultadoExame(ExameViewModel exame)
-        {
-
-            string resultado = "I";
-
-            if (exame.Pcr.Equals("S") || exame.IgM.Equals("S"))
-            {
-                resultado = "P";
-            }
-            else if (exame.Pcr.Equals("I") || exame.IgM.Equals("I"))
-            {
-                resultado = "I";
-            }
-            else if (exame.IgG.Equals("S"))
-            {
-                resultado = "C";
-            }
-            else if (exame.Pcr.Equals("N") || exame.IgM.Equals("N"))
-            {
-                resultado = "N";
-            }
-
-            return resultado;
-        }*/
-
-
-        /**public static string GetStatusExame(string status)
-        {
-            switch (status)
-            {
-                case "I": return "INDETERMINADO";
-                case "N": return "NEGATIVO";
-                case "C": return "CURADO";
-                case "P": return "POSITIVO";
-
-                default: return "IDETERMINADO";
-            }
-        }*/
     }
 }

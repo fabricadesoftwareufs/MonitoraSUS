@@ -29,13 +29,14 @@ namespace Model
         public int IdVirusBacteria { get; set; }
         [Display(Name = "Paciente")]
         public int IdPaciente { get; set; }
-        public int IdAgenteSaude { get; set; }
-        [DataType(DataType.Date)]
+		public int IdAreaAtuacao { get; set; }
+		public int IdAgenteSaude { get; set; }
+		[DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
-        public DateTime DataExame { get; set; }
-        [DataType(DataType.Date)]
+		public DateTime DataExame { get; set; }
+		[DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
-        public DateTime DataInicioSintomas { get; set; }
+		public DateTime DataInicioSintomas { get; set; }
 		[Display(Name = "Aguardando Resultado")]
 		public bool AguardandoResultado { get; set; }
 		[Display(Name = "Método")]
@@ -131,16 +132,6 @@ namespace Model
 		public bool DorAbdominal { get; set; }
 		[Display(Name = "Perda Olfato/Paladar")]
 		public bool PerdaOlfatoPaladar { get; set; }
-
 		public string OutrosSintomas { get; set; }
-		public string Cns { get; set; }
-		public string Profissao { get; set; }
-		public int IdAreaAtuacao { get; set; }
-
-
-
-
-
-
 	}
 }

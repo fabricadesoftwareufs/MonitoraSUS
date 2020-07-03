@@ -1,12 +1,9 @@
 ﻿@model Model.ViewModel.PesquisaExameViewModel
 @using System.Security.Claims;
-@using Model.ViewModel;
-@using MonitoraSUS.Utils;
-
 
 @{
     ViewData["Title"] = "Index";
-    var agente = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
+    //var agente = _usuarioContext.RetornLoggedUser((ClaimsIdentity)User.Identity);
 }
 
 
@@ -29,7 +26,7 @@
                 </div>
 
                 <div class="card-body">
-                    <h4 class="card-title text-muted mb-0">Filtre Exames por Data e CPF/RG</h4>
+                    <h4 class="card-title text-muted mb-0">Adicione Filtros para pesquisa</h4>
                     <div class="pl-lg-0">
                         <div class="row">
                             <div class="col">
@@ -73,7 +70,7 @@
                                     <div class="row">
                                         <div class="col-lg-6">
                                             <div class="form-group">
-                                                <label class="form-control-label" for="input-atuacao-estado">EXAMES</label>
+                                                <label class="form-control-label" for="input-atuacao-estado">Resultados Exame</label>
                                                 <select asp-for="Resultado" class="form-control" id="input-resultado">
                                                     <option>Todas as Opçoes</option>
                                                     <option>Positivo</option>
@@ -174,7 +171,7 @@
                         {
                             <div class="form-group" hidden>
                                 <div class="col-md-10">
-                                    @Html.EditorFor(model => Model.Exames[i].IdExame, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.EditorFor(model => Model.Exames[i].Exame.IdExame, new { htmlAttributes = new { @class = "form-control" } })
                                 </div>
                             </div>
                         }
@@ -220,59 +217,59 @@
                                 {
                                     <tr>
                                         <td>
-                                            <div>@Html.DisplayFor(modelItem => item.CodigoColeta)</div>
+                                            <div>@Html.DisplayFor(modelItem => item.Exame.CodigoColeta)</div>
                                         </td>
                                         <td>
-                                            <a href="#">@Html.DisplayFor(modelItem => item.IdPaciente.Cpf)</a>
+                                            <a href="#">@Html.DisplayFor(modelItem => item.Cpf)</a>
                                         </td>
                                         <td>
-                                            @if (@item.IdPaciente.Nome.Length > 15)
+                                            @if (@item.NomePaciente.Length > 15)
                                             {
-                                                <div>@item.IdPaciente.Nome</div>
+                                                <div>@item.NomePaciente</div>
                                             }
                                             else
                                             {
-                                                <div>@item.IdPaciente.Nome</div>
+                                                <div>@item.NomePaciente</div>
                                             }
                                         </td>
                                         <td>
-                                            @if (@item.IdPaciente.Cidade.Length > 10)
+                                            @if (@item.Cidade.Length > 10)
                                             {
-                                                <div>@item.IdPaciente.Cidade</div>
+                                                <div>@item.Cidade</div>
                                             }
                                             else
                                             {
-                                                <div>@item.IdPaciente.Cidade</div>
+                                                <div>@item.Cidade</div>
                                             }
                                         </td>
                                         <td>
-                                            @Html.DisplayFor(modelItem => item.IdPaciente.Estado)
+                                            @Html.DisplayFor(modelItem => item.Estado)
                                         </td>
                                         <td>
-                                            @Html.DisplayFor(modelItem => item.DataExame)
+                                            @Html.DisplayFor(modelItem => item.Exame.DataExame)
                                         </td>
                                         <td>
-                                            @Html.DisplayFor(modelItem => item.IdVirusBacteria.Nome)
+                                            @Html.DisplayFor(modelItem => item.NomeVirusBateria)
                                         </td>
                                         <td>
-                                            @Html.DisplayFor(modelItem => item.Resultado)
+                                            @Html.DisplayFor(modelItem => item.Exame.Resultado)
                                         </td>
                                         <td>
-                                            <!-- a href="@Url.Action("Details", "Exame", new { id = item.IdExame})" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> Detalhes </!a-->
-                                            <a href="@Url.Action("Edit", "Exame", new { id = item.IdExame })" class="btn btn-info btn-sm btn-custom"><i class="fa fa-edit text-center"></i>Editar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+                                            <!-- a href="@Url.Action("Details", "Exame", new { id = item.Exame.IdExame})" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> Detalhes </!a-->
+                                            <a href="@Url.Action("Edit", "Exame", new { id = item.Exame.IdExame })" class="btn btn-info btn-sm btn-custom"><i class="fa fa-edit text-center"></i>Editar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
 
-                                            <a data-toggle="modal" data-target="#modal-confirmar-@item.IdExame" class="btn btn-danger btn-sm btn-custom text-white"><i class="fa fa-trash "></i>Remover</a>
-                                            <div class="modal fade bs-example-modal-sm" id="modal-confirmar-@item.IdExame" tabindex="-1" role="dialog" aria-hidden="true">
+                                            <a data-toggle="modal" data-target="#modal-confirmar-@item.Exame.IdExame" class="btn btn-danger btn-sm btn-custom text-white"><i class="fa fa-trash "></i>Remover</a>
+                                            <div class="modal fade bs-example-modal-sm" id="modal-confirmar-@item.Exame.IdExame" tabindex="-1" role="dialog" aria-hidden="true">
                                                 <div class="modal-dialog modal-sm">
                                                     <div class="modal-content text-center" style="padding: 10pt">
                                                         <h3> Confirmar Remoção do Exame ? </h3>
 
-                                                        <h4>CPF/RG</h4><p>@item.IdPaciente.Cpf</p>
-                                                        <h4>Paciente</h4> <p>@item.IdPaciente.Nome </p>
-                                                        <h4>Virus/Bacteria</h4> <p>@item.IdVirusBacteria.Nome</p>
-                                                        <h4>Resultado</h4> <p>@item.Resultado </p>
+                                                        <h4>CPF/RG</h4><p>@item.Cpf</p>
+                                                        <h4>Paciente</h4> <p>@item.NomePaciente </p>
+                                                        <h4>Virus/Bacteria</h4> <p>@item.NomeVirusBateria</p>
+                                                        <h4>Resultado</h4> <p>@item.Exame.Resultado </p>
 
-                                                        @using (Html.BeginForm("Delete", "Exame", new { id = item.IdExame }, FormMethod.Post))
+                                                        @using (Html.BeginForm("Delete", "Exame", new { id = item.Exame.IdExame }, FormMethod.Post))
                                                         {
                                                             <div hidden>
                                                                 <div class="row">

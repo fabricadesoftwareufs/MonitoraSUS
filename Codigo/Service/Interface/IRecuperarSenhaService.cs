@@ -22,5 +22,6 @@ namespace Service.Interface
         /// <param name="idUser">Id do usuario a ser checado.</param>
         /// <returns>True caso o usuario possua 1 token (valido) aberto, false caso não.</returns>
         bool UserNotHasToken(int idUser);
-    }
+
+	}
 }

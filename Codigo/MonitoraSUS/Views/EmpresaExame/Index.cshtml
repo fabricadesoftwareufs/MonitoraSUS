@@ -1,141 +1,136 @@
 ﻿@model IEnumerable<Model.EmpresaExameModel>
 @using System.Security.Claims;
-@using MonitoraSUS.Utils;
 
 @{
-    ViewData["Title"] = "Index";
-    var usuario = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
+	ViewData["Title"] = "Index";
+	//var usuario = Methods.RetornLoggedUser((ClaimsIdentity)User.Identity);
 }
 
 <div class="container-fluid mt--6">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card card-content">
-                <div class="card-header bg-transparent">
-                    <div class="row align-items-center">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="card card-content">
+				<div class="card-header bg-transparent">
+					<div class="row align-items-center">
 
-                        <div class="col">
-                            <h5 class="card-title text-muted mb-0">MonitoraSUS</h5>
-                            <h5 class="h3 mb-0">Cadasto de Hospitais/Laboratórios</h5>
-                        </div>
-                        <div class="col text-right">
-                            <a class="btn btn-success" asp-controller="EmpresaExame" asp-action="Create">Novo</a>
-                            <a class="btn btn-default" asp-controller="Home" asp-action="Index"> <i class="fas fa-arrow-left"></i> Voltar</a><br />
-                        </div>
+						<div class="col">
+							<h5 class="card-title text-muted mb-0">MonitoraSUS</h5>
+							<h5 class="h3 mb-0">Cadasto de Hospitais/Laboratórios</h5>
+						</div>
+						<div class="col text-right">
+							<a class="btn btn-success" asp-controller="EmpresaExame" asp-action="Create">Novo</a>
+							<a class="btn btn-default" asp-controller="Home" asp-action="Index"> <i class="fas fa-arrow-left"></i> Voltar</a><br />
+						</div>
 
-                    </div>
-                    <hr />
-                    <div class="card-body ">
-                        <div class="table-responsive">
-                            <table class="table align-items-center table-flush">
-                                <thead class="thead-light">
-                                    <tr>
-                                        <th scope="col" class="sort" data-sort="cnpj">
-                                            @Html.DisplayNameFor(model => model.Cnpj)
-                                        </th>
-                                        <th scope="col" class="sort" data-sort="nome">
-                                            @Html.DisplayNameFor(model => model.Nome)
-                                        </th>
-                                        <th scope="col" class="sort" data-sort="celular">
-                                            @Html.DisplayNameFor(model => model.FoneCelular)
-                                        </th>
-                                        <th scope="col" class="sort" data-sort="email">
-                                            @Html.DisplayNameFor(model => model.Email)
-                                        </th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody class="list">
-                                    @foreach (var item in Model)
-                                    {
-                                        <tr>
-                                            <td>
-                                                <a href="#">@Html.DisplayFor(modelItem => item.Cnpj)</a>
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.Nome)
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.FoneCelular)
-                                            </td>
-                                            <td>
-                                                @if (item.Email == null)
-                                                {
-                                                    <div> - </div>
-                                                }
-                                                else
-                                                {
-                                                    @Html.DisplayFor(modelItem => item.Email)
-                                                }
-                                            </td>
-                                            <td>
-                                                <a href="@Url.Action("Details", "EmpresaExame", new { id = item.Id})" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> Detalhes </a>
-                                                <a href="@Url.Action("Edit", "EmpresaExame", new { id = item.Id })" class="btn btn-info btn-xs"><i class="fa fa-edit"></i> Editar </a>
-                                                @if (usuario.RoleUsuario.Equals("GESTOR") || usuario.RoleUsuario.Equals("SECRETARIO"))
-                                                {
-                                                    <a data-toggle="modal" data-target="#modal-confirmar-@item.Id" class="btn btn-danger btn-xs text-white"><i class="fa fa-trash "></i> Remover </a>
-                                                    <div class="modal fade bs-example-modal-sm" id="modal-confirmar-@item.Id" tabindex="-1" role="dialog" aria-hidden="true">
-                                                        <div class="modal-dialog modal-sm">
-                                                            <div class="modal-content text-center" style="padding: 10pt">
-                                                                <h4> Confirmar Remoção da organização ? </h4>
+					</div>
+					<hr />
+					<div class="card-body ">
+						<div class="table-responsive">
+							<table class="table align-items-center table-flush">
+								<thead class="thead-light">
+									<tr>
+										<th scope="col" class="sort" data-sort="cnpj">
+											@Html.DisplayNameFor(model => model.Cnpj)
+										</th>
+										<th scope="col" class="sort" data-sort="nome">
+											@Html.DisplayNameFor(model => model.Nome)
+										</th>
+										<th scope="col" class="sort" data-sort="celular">
+											@Html.DisplayNameFor(model => model.FoneCelular)
+										</th>
+										<th scope="col" class="sort" data-sort="email">
+											@Html.DisplayNameFor(model => model.Email)
+										</th>
+										<th></th>
+									</tr>
+								</thead>
+								<tbody class="list">
+									@foreach (var item in Model)
+									{
+										<tr>
+											<td>
+												<a href="#">@Html.DisplayFor(modelItem => item.Cnpj)</a>
+											</td>
+											<td>
+												@Html.DisplayFor(modelItem => item.Nome)
+											</td>
+											<td>
+												@Html.DisplayFor(modelItem => item.FoneCelular)
+											</td>
+											<td>
+												@if (item.Email == null)
+												{
+													<div> - </div>
+												}
+												else
+												{
+													@Html.DisplayFor(modelItem => item.Email)
+												}
+											</td>
+											<td>
+												<a href="@Url.Action("Details", "EmpresaExame", new { id = item.Id})" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> Detalhes </a>
+												<a href="@Url.Action("Edit", "EmpresaExame", new { id = item.Id })" class="btn btn-info btn-xs"><i class="fa fa-edit"></i> Editar </a>
+												<a data-toggle="modal" data-target="#modal-confirmar-@item.Id" class="btn btn-danger btn-xs text-white"><i class="fa fa-trash "></i> Remover </a>
+												<div class="modal fade bs-example-modal-sm" id="modal-confirmar-@item.Id" tabindex="-1" role="dialog" aria-hidden="true">
+													<div class="modal-dialog modal-sm">
+														<div class="modal-content text-center" style="padding: 10pt">
+															<h4> Confirmar Remoção da organização ? </h4>
 
-                                                                <p class="text-left">
-                                                                    <h4>CNPJ</h4> @item.Cnpj <br />
-                                                                    <h4>Laboratório</h4> @item.Nome <br />
-                                                                </p>
+															<p class="text-left">
+																<h4>CNPJ</h4> @item.Cnpj <br />
+																<h4>Laboratório</h4> @item.Nome <br />
+															</p>
 
-                                                                @using (Html.BeginForm("Delete", "EmpresaExame", new { id = item.Id }, FormMethod.Post))
-                                                                {
-                                                                    <a class="btn btn-danger text-white" data-dismiss="modal">Cancelar</a>
-                                                                    <button type="submit" value="Remover" class="btn btn-success btn-xs">Confimar</button>
-                                                                }
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                }
-                                            </td>
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+															@using (Html.BeginForm("Delete", "EmpresaExame", new { id = item.Id }, FormMethod.Post))
+															{
+																<a class="btn btn-danger text-white" data-dismiss="modal">Cancelar</a>
+																<button type="submit" value="Remover" class="btn btn-success btn-xs">Confimar</button>
+															}
+														</div>
+													</div>
+												</div>
+											</td>
+										</tr>
+									}
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 
 
 @if (TempData["mensagemErro"] != null || TempData["mensagemSucesso"] != null)
 {
-    <div class="modal fade bs-example-modal-sm" id="modal-mensagem-retorno" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-sm">
-            <div class="modal-content" style="padding: 10pt">
-                <div class="text-center">
-                    <br />
-                    @if (TempData["mensagemErro"] != null)
-                    {
-                        <p>@TempData["mensagemErro"]</p>
-                    }
-                    else
-                    {
-                        <p>@TempData["mensagemSucesso"]</p>
-                    }
+	<div class="modal fade bs-example-modal-sm" id="modal-mensagem-retorno" tabindex="-1" role="dialog" aria-hidden="true">
+		<div class="modal-dialog modal-sm">
+			<div class="modal-content" style="padding: 10pt">
+				<div class="text-center">
+					<br />
+					@if (TempData["mensagemErro"] != null)
+					{
+						<p>@TempData["mensagemErro"]</p>
+					}
+					else
+					{
+						<p>@TempData["mensagemSucesso"]</p>
+					}
 
-                    <button data-dismiss="modal" class="btn btn-success">Ok</button>
-                </div>
-            </div>
-        </div>
-    </div>
+					<button data-dismiss="modal" class="btn btn-success">Ok</button>
+				</div>
+			</div>
+		</div>
+	</div>
 }
 
 <script>
 
-    window.onload = function () {}
-        if (document.querySelector('#modal-mensagem-retorno')) {
-            $('#modal-mensagem-retorno').modal('show');
-        }
-    };
-
+	window.onload = function () { }
+	if (document.querySelector('#modal-mensagem-retorno')) {
+		$('#modal-mensagem-retorno').modal('show');
+	}
+	};
 </script>
