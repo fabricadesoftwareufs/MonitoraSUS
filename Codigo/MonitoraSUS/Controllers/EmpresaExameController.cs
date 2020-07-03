@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Model;
-using MonitoraSUS.Util;
+using Util;
 using Service.Interface;
 using System;
 using System.Collections.Generic;

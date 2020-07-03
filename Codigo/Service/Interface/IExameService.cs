@@ -1,4 +1,5 @@
-﻿using Model;
+﻿using Microsoft.AspNetCore.Http;
+using Model;
 using Model.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -7,8 +8,8 @@ namespace Service.Interface
 {
     public interface IExameService
     {
-        bool Insert(ExameModel exameModel);
-        bool Update(ExameModel exameModel);
+        bool Insert(ExameViewModel exameModel);
+        bool Update(ExameViewModel exameModel);
         bool Delete(int id);
 		ExameViewModel GetById(int id);
 		List<ExameBuscaModel> GetByIdAgente(int idAgente, int lastRecord);
@@ -20,7 +21,9 @@ namespace Service.Interface
         List<ExameBuscaModel> GetByIdEmpresa(int idEempresa, DateTime dataInicio, DateTime dataFim);
 		List<ExameBuscaModel> GetByIdMunicipio(int idMunicipio, DateTime dataInicio, DateTime dataFim);
 		List<ExameBuscaModel> GetByIdPaciente(int idPaciente);
-        List<ExameModel> CheckDuplicateExamToday(int idPaciente, int idVirusBacteria, DateTime dateExame, string metodoExame);
+        List<ExameModel> GetExamesRelizadosData(int idPaciente, int idVirusBacteria, DateTime dateExame, string metodoExame);
+		ExameModel GetByIdColeta(string codigoColeta);
+
 		List<MonitoraPacienteViewModel> GetByEstadoResidenciaPaciente(string siglaEstado,
 			int idVirusBacteria, DateTime dataInicio, DateTime dataFim);
 		List<MonitoraPacienteViewModel> GetByCidadeResidenciaPaciente(string cidade, string siglaEstado,
@@ -35,5 +38,6 @@ namespace Service.Interface
         ConfiguracaoNotificarModel BuscarConfiguracaoNotificar(int IdMunicipio);
         System.Threading.Tasks.Task<ExameModel> EnviarSMSResultadoExameAsync(ConfiguracaoNotificarModel configuracaoNotificar, ExameModel exame, PessoaModel pessoa);
         System.Threading.Tasks.Task<ExameModel> ConsultarSMSExameAsync(ConfiguracaoNotificarModel configuracaoNotificar, ExameModel exame);
-    }
+		void Import(IFormFile file, UsuarioViewModel agente);
+	}
 }

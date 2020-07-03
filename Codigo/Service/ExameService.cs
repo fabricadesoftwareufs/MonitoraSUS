@@ -1,6 +1,7 @@
 ﻿using Model;
 using Model.AuxModel;
 using Model.ViewModel;
+using Util;
 using Newtonsoft.Json;
 using Persistence;
 using Service.Interface;
@@ -8,6 +9,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Data.Common;
+using Microsoft.AspNetCore.Http;
+using System.IO;
 
 namespace Service
 {
@@ -20,10 +24,40 @@ namespace Service
 			_context = context;
 		}
 
-		public bool Insert(ExameModel exameModel)
+		public bool Insert(ExameViewModel exameModel)
 		{
-			_context.Add(ModelToEntity(exameModel));
-			return _context.SaveChanges() == 1 ? true : false;
+			using ( var transaction = _context.Database.BeginTransaction())
+			{
+				try
+				{
+					IPessoaService _pessoaService = new PessoaService(_context);
+					ISituacaoVirusBacteriaService _situacaoPessoaService = new SituacaoVirusBacteriaService(_context);
+					CreatePessoaModelByExame(exameModel, _pessoaService);
+					if (GetExamesRelizadosData(exameModel.Paciente.Idpessoa, exameModel.Exame.IdVirusBacteria, exameModel.Exame.DataExame, exameModel.Exame.MetodoExame).Count > 0)
+						throw new ServiceException("Notificação DUPLICADA! Já existe um exame registrado desse paciente para esse Vírus/Bactéria na " +
+													"data informada e método aplicado. Por favor, verifique se os dados da notificação estão corretos.");
+					if (exameModel.Paciente.Idpessoa == 0)
+						exameModel.Paciente = _pessoaService.Insert(exameModel.Paciente);
+					else
+						exameModel.Paciente = _pessoaService.Update(exameModel.Paciente, false);
+
+					// inserindo o resultado do exame (situacao da pessoa)                  
+					var situacaoPessoa = _situacaoPessoaService.GetById(exameModel.Paciente.Idpessoa, exameModel.Exame.IdVirusBacteria);
+					if (situacaoPessoa == null)
+						_situacaoPessoaService.Insert(CreateSituacaoPessoaModelByExame(exameModel, situacaoPessoa, _pessoaService));
+					else
+						_situacaoPessoaService.Update(CreateSituacaoPessoaModelByExame(exameModel, situacaoPessoa, _pessoaService));
+					_context.Add(ModelToEntity(exameModel));
+					_context.SaveChanges();
+					transaction.Commit();
+					return true;
+				}
+				catch (Exception e)
+				{
+					transaction.Rollback();
+					throw e;
+				}
+			}
 		}
 
 		public bool Delete(int id)
@@ -33,22 +67,96 @@ namespace Service
 			return _context.SaveChanges() == 1 ? true : false;
 		}
 
-		public bool Update(ExameModel exameModel)
+		public bool Update(ExameViewModel exameModel)
 		{
-			_context.Update(ModelToEntity(exameModel));
-			return _context.SaveChanges() == 1 ? true : false;
+			using (var transaction = _context.Database.BeginTransaction())
+			{
+				try
+				{
+					IPessoaService _pessoaService = new PessoaService(_context);
+					ISituacaoVirusBacteriaService _situacaoPessoaService = new SituacaoVirusBacteriaService(_context);
+					exameModel.Exame.IdAgenteSaude = exameModel.Usuario.IdPessoa;
+					var usuarioDuplicado = _pessoaService.GetByCpf(exameModel.Paciente.Cpf);
+					if (usuarioDuplicado != null)
+					{
+						if (!(usuarioDuplicado.Idpessoa == exameModel.Paciente.Idpessoa))
+							throw new ServiceException("Já existe um paciente com esse CPF/RG, tente novamente!");
+					}
+
+					var examesRealizados = GetExamesRelizadosData(exameModel.Paciente.Idpessoa, exameModel.Exame.IdVirusBacteria, exameModel.Exame.DataExame, exameModel.Exame.MetodoExame);
+					if (examesRealizados.Count > 0)
+					{
+						var exame = examesRealizados.FirstOrDefault();
+						if (exame.IdExame != exameModel.Exame.IdExame)
+							throw new ServiceException("Notificação DUPLICADA! Já existe um exame registrado desse paciente para esse Vírus/Bactéria na " +
+															"data informada. Por favor, verifique se os dados da notificação estão corretos.");
+					}
+
+					var situacao = _situacaoPessoaService.GetById(exameModel.Paciente.Idpessoa, exameModel.Exame.IdVirusBacteria);
+					if (situacao == null)
+						_situacaoPessoaService.Insert(CreateSituacaoPessoaModelByExame(exameModel, situacao, _pessoaService));
+					else
+						_situacaoPessoaService.Update(CreateSituacaoPessoaModelByExame(exameModel, situacao, _pessoaService));
+
+					_pessoaService.Update(CreatePessoaModelByExame(exameModel, _pessoaService), false);
+					_context.Update(ModelToEntity(exameModel));
+					_context.SaveChanges();
+					transaction.Commit();
+					return true;
+
+				}
+				catch (Exception e)
+				{
+					transaction.Rollback();
+					throw e;
+				}
+			}
 		}
+
+		public ExameModel GetByIdColeta(string codigoColeta)
+		  => _context.Exame
+				.Where(exameModel => exameModel.CodigoColeta.Equals(codigoColeta))
+				.Select(exame => new ExameModel
+				{
+					IdAreaAtuacao = exame.IdPacienteNavigation.IdAreaAtuacao,
+					AguardandoResultado = Convert.ToBoolean(exame.AguardandoResultado),
+					CodigoColeta = exame.CodigoColeta,
+					Coriza = Convert.ToBoolean(exame.Coriza),
+					DataExame = exame.DataExame,
+					DataInicioSintomas = exame.DataInicioSintomas,
+					Diarreia = Convert.ToBoolean(exame.Diarreia),
+					DificuldadeRespiratoria = Convert.ToBoolean(exame.DificuldadeRespiratoria),
+					DorAbdominal = Convert.ToBoolean(exame.DorAbdominal),
+					DorGarganta = Convert.ToBoolean(exame.DorGarganta),
+					DorOuvido = Convert.ToBoolean(exame.DorOuvido),
+					Febre = Convert.ToBoolean(exame.Febre),
+					IdAgenteSaude = exame.IdAgenteSaude,
+					IdEmpresaSaude = exame.IdEmpresaSaude,
+					IdEstado = exame.IdEstado,
+					IdExame = exame.IdExame,
+					IdMunicipio = exame.IdMunicipio,
+					IdNotificacao = exame.IdNotificacao,
+					IdPaciente = exame.IdPaciente,
+					IdVirusBacteria = exame.IdVirusBacteria,
+					IgG = exame.IgG,
+					IgGIgM = exame.IgMigG,
+					IgM = exame.IgM,
+					MetodoExame = exame.MetodoExame,
+					Nausea = Convert.ToBoolean(exame.Nausea),
+					OutrosSintomas = exame.OutroSintomas,
+					Pcr = exame.Pcr,
+					PerdaOlfatoPaladar = Convert.ToBoolean(exame.PerdaOlfatoPaladar),
+					RelatouSintomas = Convert.ToBoolean(exame.RelatouSintomas),
+					StatusNotificacao = exame.StatusNotificacao,
+					Tosse = Convert.ToBoolean(exame.Tosse)
+				}).FirstOrDefault();
+
 
 		public ExameViewModel GetById(int id)
 		  => _context.Exame
 				.Where(exameModel => exameModel.IdExame == id)
 				.Select(exame => new ExameViewModel
 				{
-					AreaAtuacao = new AreaAtuacaoModel()
-					{
-						IdAreaAtuacao = exame.IdAreaAtuacao,
-						Descricao = exame.IdAreaAtuacaoNavigation.Descricao
-					},
 					Exame = new ExameModel()
 					{
 						IdAreaAtuacao = exame.IdPacienteNavigation.IdAreaAtuacao,
@@ -82,12 +190,6 @@ namespace Service
 						RelatouSintomas = Convert.ToBoolean(exame.RelatouSintomas),
 						StatusNotificacao = exame.StatusNotificacao,
 						Tosse = Convert.ToBoolean(exame.Tosse)
-					},
-					VirusBacteria = new VirusBacteriaModel()
-					{
-						IdVirusBacteria = exame.IdVirusBacteria,
-						DiasRecuperacao = exame.IdVirusBacteriaNavigation.DiasRecuperacao,
-						Nome = exame.IdVirusBacteriaNavigation.Nome
 					},
 					Paciente = new PessoaModel()
 					{
@@ -137,59 +239,59 @@ namespace Service
 					}
 				}).FirstOrDefault();
 
-		private Exame ModelToEntity(ExameModel exameModel)
+		private Exame ModelToEntity(ExameViewModel exameModel)
 		{
-			exameModel.CodigoColeta = (exameModel.CodigoColeta == null) ? "" : exameModel.CodigoColeta;
-			exameModel.IdNotificacao = (exameModel.IdNotificacao == null) ? "" : exameModel.IdNotificacao;
-			var secretarioMunicipio = _context.Pessoatrabalhamunicipio.Where(p => p.IdPessoa == exameModel.IdAgenteSaude).FirstOrDefault();
+			exameModel.Exame.CodigoColeta = (exameModel.Exame.CodigoColeta == null) ? "" : exameModel.Exame.CodigoColeta;
+			exameModel.Exame.IdNotificacao = (exameModel.Exame.IdNotificacao == null) ? "" : exameModel.Exame.IdNotificacao;
+			var secretarioMunicipio = _context.Pessoatrabalhamunicipio.Where(p => p.IdPessoa == exameModel.Exame.IdAgenteSaude).FirstOrDefault();
 			
 			if (secretarioMunicipio != null)
 			{
-				exameModel.IdMunicipio = secretarioMunicipio.IdMunicipio;
-				exameModel.IdEstado = Convert.ToInt32(secretarioMunicipio.IdMunicipioNavigation.Uf);
-				exameModel.IdEmpresaSaude = 1; // empresa padrão do banco 
+				exameModel.Exame.IdMunicipio = secretarioMunicipio.IdMunicipio;
+				exameModel.Exame.IdEstado = Convert.ToInt32(secretarioMunicipio.IdMunicipioNavigation.Uf);
+				exameModel.Exame.IdEmpresaSaude = 1; // empresa padrão do banco 
 			}
 			else
 			{
-				var secretarioEstado = _context.Pessoatrabalhaestado.Where(p => p.Idpessoa == exameModel.IdAgenteSaude).FirstOrDefault();
-				exameModel.IdEstado = secretarioEstado.IdEstado;
-				exameModel.IdEmpresaSaude = secretarioEstado.IdEmpresaExame;
-				exameModel.IdMunicipio = null;
+				var secretarioEstado = _context.Pessoatrabalhaestado.Where(p => p.Idpessoa == exameModel.Exame.IdAgenteSaude).FirstOrDefault();
+				exameModel.Exame.IdEstado = secretarioEstado.IdEstado;
+				exameModel.Exame.IdEmpresaSaude = secretarioEstado.IdEmpresaExame;
+				exameModel.Exame.IdMunicipio = null;
 			}
 			return new Exame
 			{
-				IdAreaAtuacao = exameModel.IdAreaAtuacao,
-				IdExame = exameModel.IdExame,
-				IdAgenteSaude = exameModel.IdAgenteSaude,
-				IdPaciente = exameModel.IdPaciente,
-				IdVirusBacteria = exameModel.IdVirusBacteria,
-				IgG = exameModel.IgG,
-				IgM = exameModel.IgM,
-				Pcr = exameModel.Pcr,
-				IgMigG = exameModel.IgGIgM,
-				MetodoExame = exameModel.MetodoExame,
-				IdEstado = exameModel.IdEstado,
-				IdMunicipio = exameModel.IdMunicipio,
-				DataInicioSintomas = exameModel.DataInicioSintomas,
-				DataExame = exameModel.DataExame,
-				IdEmpresaSaude = exameModel.IdEmpresaSaude,
-				CodigoColeta = exameModel.CodigoColeta,
-				StatusNotificacao = exameModel.StatusNotificacao,
-				IdNotificacao = exameModel.IdNotificacao,
+				IdAreaAtuacao = exameModel.Exame.IdAreaAtuacao,
+				IdExame = exameModel.Exame.IdExame,
+				IdAgenteSaude = exameModel.Usuario.IdPessoa,
+				IdPaciente = exameModel.Paciente.Idpessoa,
+				IdVirusBacteria = exameModel.Exame.IdVirusBacteria,
+				IgG = exameModel.Exame.IgG,
+				IgM = exameModel.Exame.IgM,
+				Pcr = exameModel.Exame.Pcr,
+				IgMigG = exameModel.Exame.IgGIgM,
+				MetodoExame = exameModel.Exame.MetodoExame,
+				IdEstado = exameModel.Exame.IdEstado,
+				IdMunicipio = exameModel.Exame.IdMunicipio,
+				DataInicioSintomas = exameModel.Exame.DataInicioSintomas,
+				DataExame = exameModel.Exame.DataExame,
+				IdEmpresaSaude = exameModel.Exame.IdEmpresaSaude,
+				CodigoColeta = exameModel.Exame.CodigoColeta,
+				StatusNotificacao = exameModel.Exame.StatusNotificacao,
+				IdNotificacao = exameModel.Exame.IdNotificacao,
 				DataNotificacao = DateTime.Now,
-				AguardandoResultado = Convert.ToByte(exameModel.AguardandoResultado),
-				Coriza = Convert.ToByte(exameModel.Coriza),
-				Nausea = Convert.ToByte(exameModel.Nausea),
-				Tosse = Convert.ToByte(exameModel.Tosse),
-				PerdaOlfatoPaladar = Convert.ToByte(exameModel.PerdaOlfatoPaladar),
-				RelatouSintomas = Convert.ToByte(exameModel.RelatouSintomas),
-				Diarreia = Convert.ToByte(exameModel.Diarreia),
-				DificuldadeRespiratoria = Convert.ToByte(exameModel.DificuldadeRespiratoria),
-				DorAbdominal = Convert.ToByte(exameModel.DorAbdominal),
-				DorGarganta = Convert.ToByte(exameModel.DorGarganta),
-				DorOuvido = Convert.ToByte(exameModel.DorOuvido),
-				Febre = Convert.ToByte(exameModel.Febre),
-				OutroSintomas = exameModel.OutrosSintomas,
+				AguardandoResultado = Convert.ToByte(exameModel.Exame.AguardandoResultado),
+				Coriza = Convert.ToByte(exameModel.Exame.Coriza),
+				Nausea = Convert.ToByte(exameModel.Exame.Nausea),
+				Tosse = Convert.ToByte(exameModel.Exame.Tosse),
+				PerdaOlfatoPaladar = Convert.ToByte(exameModel.Exame.PerdaOlfatoPaladar),
+				RelatouSintomas = Convert.ToByte(exameModel.Exame.RelatouSintomas),
+				Diarreia = Convert.ToByte(exameModel.Exame.Diarreia),
+				DificuldadeRespiratoria = Convert.ToByte(exameModel.Exame.DificuldadeRespiratoria),
+				DorAbdominal = Convert.ToByte(exameModel.Exame.DorAbdominal),
+				DorGarganta = Convert.ToByte(exameModel.Exame.DorGarganta),
+				DorOuvido = Convert.ToByte(exameModel.Exame.DorOuvido),
+				Febre = Convert.ToByte(exameModel.Exame.Febre),
+				OutroSintomas = exameModel.Exame.OutrosSintomas,
 			};
 		}
 
@@ -679,7 +781,10 @@ namespace Service
 				ResponseSMSModel jsonResponse = JsonConvert.DeserializeObject<ResponseSMSModel>(resultadoEnvio);
 				exame.IdNotificacao = jsonResponse.Id.ToString();
 				exame.StatusNotificacao = ExameModel.NOTIFICADO_ENVIADO;
-				Update(exame);
+
+				_context.Update(exame);
+				_context.SaveChanges();
+
 				Configuracaonotificar configura = _context.Configuracaonotificar.Where(s => s.IdConfiguracaoNotificar == configuracaoNotificar.IdConfiguracaoNotificar).FirstOrDefault();
 				if (configura != null)
 				{
@@ -707,12 +812,14 @@ namespace Service
 				if (jsonResponse.Descricao.Equals("RECEBIDA"))
 				{
 					exame.StatusNotificacao = ExameModel.NOTIFICADO_SIM;
-					Update(exame);
+					_context.Update(exame);
+					_context.SaveChanges();
 				}
 				else if (jsonResponse.Descricao.Equals("ERRO"))
 				{
 					exame.StatusNotificacao = ExameModel.NOTIFICADO_PROBLEMAS;
-					Update(exame);
+					_context.Update(exame);
+					_context.SaveChanges();
 				}
 			}
 			catch (HttpRequestException)
@@ -847,7 +954,7 @@ namespace Service
 			return listaMonitoramentoNaoNegativos;
 		}
 
-		public List<ExameModel> CheckDuplicateExamToday(int idPaciente, int idVirusBacteria, DateTime dateExame, string metodoExame)
+		public List<ExameModel> GetExamesRelizadosData(int idPaciente, int idVirusBacteria, DateTime dateExame, string metodoExame)
 		{
 			var exames = _context.Exame.Where(exameModel => exameModel.IdVirusBacteria == idVirusBacteria &&
 						 exameModel.IdPaciente == idPaciente && exameModel.MetodoExame.Equals(metodoExame) &&
@@ -856,8 +963,6 @@ namespace Service
 						 {
 							 IdExame = exame.IdExame,
 						 }).ToList();
-
-
 			return exames;
 		}
 
@@ -1170,6 +1275,382 @@ namespace Service
 				totalEMB.TotalAguardando += totalPorResultado.Total;
 			if (totalPorResultado.Resultado.Equals(ExameModel.RESULTADO_IGMIGG))
 				totalEMB.TotalIgGIgM += totalPorResultado.Total;
+		}
+
+		private IndiceItemArquivoImportacao IndexaColunasArquivoImportacao(string cabecalho)
+		{
+
+			var itens = cabecalho.Split(';');
+
+			var indices = new IndiceItemArquivoImportacao();
+			for (int i = 0; i < itens.Length; i++)
+			{
+				if (Methods.RemoveSpecialsCaracts(itens[i].Trim()).ToUpper().Equals(Methods.RemoveSpecialsCaracts(IndiceItemArquivoImportacao.UNIDADE_SOLICITANTE)))
+					indices.IndiceNomeEmpresa = i;
+				else if (Methods.RemoveSpecialsCaracts(itens[i].Trim()).ToUpper().Equals(Methods.RemoveSpecialsCaracts(IndiceItemArquivoImportacao.CNES_UNIDADE_SOLCITANTE).ToUpper()))
+					indices.IndiceCnesEmpresa = i;
+				else if (Methods.RemoveSpecialsCaracts(itens[i].Trim()).ToUpper().Equals(Methods.RemoveSpecialsCaracts(IndiceItemArquivoImportacao.MUNICIPIO_DO_SOLICITANTE).ToUpper()))
+					indices.IndiceCidadeEmpresa = i;
+				else if (Methods.RemoveSpecialsCaracts(itens[i].Trim()).ToUpper().Equals(Methods.RemoveSpecialsCaracts(IndiceItemArquivoImportacao.ESTADO_DO_SOLICITANTE).ToUpper()))
+					indices.IndiceEstadoEmpresa = i;
+				else if (Methods.RemoveSpecialsCaracts(itens[i].Trim()).ToUpper().Equals(Methods.RemoveSpecialsCaracts(IndiceItemArquivoImportacao.CNS_DO_PACIENTE).ToUpper()))
+					indices.IndiceCnsPaciente = i;
+				else if (Methods.RemoveSpecialsCaracts(itens[i].Trim()).ToUpper().Equals(Methods.RemoveSpecialsCaracts(IndiceItemArquivoImportacao.NOME_PACIENTE).ToUpper()))
+					indices.IndiceNomePaciente = i;
+				else if (Methods.RemoveSpecialsCaracts(itens[i].Trim()).ToUpper().Equals(Methods.RemoveSpecialsCaracts(IndiceItemArquivoImportacao.SEXO_PACIENTE).ToUpper()))
+					indices.IndiceSexoPaciente = i;
+				else if (Methods.RemoveSpecialsCaracts(itens[i].Trim()).ToUpper().Equals(Methods.RemoveSpecialsCaracts(IndiceItemArquivoImportacao.DATA_DE_NASCIMENTO_PACIENTE).ToUpper()))
+					indices.IndiceDataNascimentoPaciente = i;
+				else if (Methods.RemoveSpecialsCaracts(itens[i].Trim()).ToUpper().Equals(Methods.RemoveSpecialsCaracts(IndiceItemArquivoImportacao.TIPO_DOCUMENTO_1).ToUpper()))
+					indices.IndiceTipoDocumento1Paciente = i;
+				else if (Methods.RemoveSpecialsCaracts(itens[i].Trim()).ToUpper().Equals(Methods.RemoveSpecialsCaracts(IndiceItemArquivoImportacao.DOCUMENTO_1).ToUpper()))
+					indices.IndiceDocumento1Paciente = i;
+				else if (Methods.RemoveSpecialsCaracts(itens[i].Trim()).ToUpper().Equals(Methods.RemoveSpecialsCaracts(IndiceItemArquivoImportacao.TIPO_DOCUMENTO_2).ToUpper()))
+					indices.IndiceTipoDocumento2Paciente = i;
+				else if (Methods.RemoveSpecialsCaracts(itens[i].Trim()).ToUpper().Equals(Methods.RemoveSpecialsCaracts(IndiceItemArquivoImportacao.DOCUMENTO_2).ToUpper()))
+					indices.IndiceDocumento2Paciente = i;
+				else if (Methods.RemoveSpecialsCaracts(itens[i].Trim()).ToUpper().Equals(Methods.RemoveSpecialsCaracts(IndiceItemArquivoImportacao.ENDERECO_PACIENTE).ToUpper()))
+					indices.IndiceRuaPaciente = i;
+				else if (Methods.RemoveSpecialsCaracts(itens[i].Trim()).ToUpper().Equals(Methods.RemoveSpecialsCaracts(IndiceItemArquivoImportacao.BAIRRO_PACIENTE).ToUpper()))
+					indices.IndiceBairroPaciente = i;
+				else if (Methods.RemoveSpecialsCaracts(itens[i].Trim()).ToUpper().Equals(Methods.RemoveSpecialsCaracts(IndiceItemArquivoImportacao.CEP_PACIENTE).ToUpper()))
+					indices.IndiceCepPaciente = i;
+				else if (Methods.RemoveSpecialsCaracts(itens[i].Trim()).ToUpper().Equals(Methods.RemoveSpecialsCaracts(IndiceItemArquivoImportacao.MUNICIPIO_PACIENTE).ToUpper()))
+					indices.IndiceCidadePaciente = i;
+				else if (Methods.RemoveSpecialsCaracts(itens[i].Trim()).ToUpper().Equals(Methods.RemoveSpecialsCaracts(IndiceItemArquivoImportacao.ESTADO_PACIENTE).ToUpper()))
+					indices.IndiceEstadoPaciente = i;
+				else if (Methods.RemoveSpecialsCaracts(itens[i].Trim()).ToUpper().Equals(Methods.RemoveSpecialsCaracts(IndiceItemArquivoImportacao.CELULAR_PACIENTE).ToUpper()))
+					indices.IndiceFoneCelularPaciente = i;
+				else if (Methods.RemoveSpecialsCaracts(itens[i].Trim()).ToUpper().Equals(Methods.RemoveSpecialsCaracts(IndiceItemArquivoImportacao.TIPO_EXAME).ToUpper()))
+					indices.IndiceTipoExame = i;
+				else if (Methods.RemoveSpecialsCaracts(itens[i].Trim()).ToUpper().Equals(Methods.RemoveSpecialsCaracts(IndiceItemArquivoImportacao.METODO_EXAME).ToUpper()))
+					indices.IndiceMetodoExame = i;
+				else if (Methods.RemoveSpecialsCaracts(itens[i].Trim()).ToUpper().Equals(Methods.RemoveSpecialsCaracts(IndiceItemArquivoImportacao.CODIGO_DA_AMOSTRA).ToUpper()))
+					indices.IndiceCodigoColeta = i;
+				else if (Methods.RemoveSpecialsCaracts(itens[i].Trim()).ToUpper().Equals(Methods.RemoveSpecialsCaracts(IndiceItemArquivoImportacao.DATA_DA_COLETA).ToUpper()))
+					indices.IndiceDataExame = i;
+				else if (Methods.RemoveSpecialsCaracts(itens[i].Trim()).ToUpper().Equals(Methods.RemoveSpecialsCaracts(IndiceItemArquivoImportacao.DATA_INICIO_SINTOMAS).ToUpper()))
+					indices.IndiceDataInicioSintomas = i;
+				else if (Methods.RemoveSpecialsCaracts(itens[i].Trim()).ToUpper().Equals(Methods.RemoveSpecialsCaracts(IndiceItemArquivoImportacao.OBSERVACOES_RESULTADO).ToUpper()))
+					indices.IndiceObservacaoExame = i;
+				else if (Methods.RemoveSpecialsCaracts(itens[i].Trim()).ToUpper().Equals(Methods.RemoveSpecialsCaracts(IndiceItemArquivoImportacao.RESULTADO).ToUpper()))
+					indices.IndiceResultadoExame = i;
+			}
+
+			var planilhaValida = false;
+			if (indices.IndiceNomeEmpresa != -1 && indices.IndiceCnesEmpresa != -1 && indices.IndiceCidadeEmpresa != -1 && indices.IndiceEstadoEmpresa != -1 && indices.IndiceFoneCelularPaciente != -1 &&
+				indices.IndiceCnsPaciente != -1 && indices.IndiceNomePaciente != -1 && indices.IndiceDataNascimentoPaciente != -1 && indices.IndiceTipoDocumento1Paciente != -1 && indices.IndiceDocumento1Paciente != -1 &&
+				indices.IndiceTipoDocumento2Paciente != -1 && indices.IndiceDocumento2Paciente != -1 && indices.IndiceRuaPaciente != -1 && indices.IndiceBairroPaciente != -1 && indices.IndiceCepPaciente != -1 &&
+				indices.IndiceCidadePaciente != -1 && indices.IndiceEstadoPaciente != -1 && indices.IndiceTipoExame != -1 && indices.IndiceMetodoExame != -1 && indices.IndiceCodigoColeta != -1 && indices.IndiceDataExame != -1 &&
+				indices.IndiceDataInicioSintomas != -1 && indices.IndiceResultadoExame != -1 && indices.IndiceObservacaoExame != -1 && indices.IndiceSexoPaciente != -1)
+				planilhaValida = true;
+
+			return planilhaValida ? indices : null;
+		}
+
+
+		private string GetMetodoExame(string exame, string metodo, string resultado)
+		{
+			switch (metodo)
+			{
+				case "PCR":
+					if (Methods.RemoveSpecialsCaracts(resultado).ToUpper().Equals(Methods.RemoveSpecialsCaracts(IndiceItemArquivoImportacao.RESULTADO_DETECTAVEL)) && exame.ToUpper().Contains(IndiceItemArquivoImportacao.METODO_PCR))
+						return "S";
+					else if (Methods.RemoveSpecialsCaracts(resultado).ToUpper().Equals(Methods.RemoveSpecialsCaracts(IndiceItemArquivoImportacao.RESULTADO_NAO_DETECTAVEL)) && exame.ToUpper().Contains(IndiceItemArquivoImportacao.METODO_PCR))
+						return "N";
+					else if (Methods.RemoveSpecialsCaracts(resultado).ToUpper().Equals(Methods.RemoveSpecialsCaracts(IndiceItemArquivoImportacao.RESULTADO_SOLICITAR_NOVA_COLETA)) && exame.ToUpper().Contains(IndiceItemArquivoImportacao.METODO_PCR))
+						return "I";
+					else
+						return "I";
+
+				case "IGG":
+					if (Methods.RemoveSpecialsCaracts(resultado).ToUpper().Equals(Methods.RemoveSpecialsCaracts(IndiceItemArquivoImportacao.RESULTADO_DETECTAVEL)) && exame.ToUpper().Contains(IndiceItemArquivoImportacao.METODO_IGG) && !exame.ToUpper().Contains(IndiceItemArquivoImportacao.METODO_IGM))
+						return "S";
+					else if (Methods.RemoveSpecialsCaracts(resultado).ToUpper().Equals(Methods.RemoveSpecialsCaracts(IndiceItemArquivoImportacao.RESULTADO_NAO_DETECTAVEL)) && exame.ToUpper().Contains(IndiceItemArquivoImportacao.METODO_IGG) && !exame.ToUpper().Contains(IndiceItemArquivoImportacao.METODO_IGM))
+						return "N";
+					else if (Methods.RemoveSpecialsCaracts(resultado).ToUpper().Equals(Methods.RemoveSpecialsCaracts(IndiceItemArquivoImportacao.RESULTADO_SOLICITAR_NOVA_COLETA)) && exame.ToUpper().Contains(IndiceItemArquivoImportacao.METODO_IGG) && !exame.ToUpper().Contains(IndiceItemArquivoImportacao.METODO_IGM))
+						return "I";
+					else
+						return "I";
+
+				case "IGM":
+					if (Methods.RemoveSpecialsCaracts(resultado).ToUpper().Equals(Methods.RemoveSpecialsCaracts(IndiceItemArquivoImportacao.RESULTADO_DETECTAVEL)) && exame.ToUpper().Contains(IndiceItemArquivoImportacao.METODO_IGM) && !exame.ToUpper().Contains(IndiceItemArquivoImportacao.METODO_IGG))
+						return "S";
+					else if (Methods.RemoveSpecialsCaracts(resultado).ToUpper().Equals(Methods.RemoveSpecialsCaracts(IndiceItemArquivoImportacao.RESULTADO_NAO_DETECTAVEL)) && exame.ToUpper().Contains(IndiceItemArquivoImportacao.METODO_IGM) && !exame.ToUpper().Contains(IndiceItemArquivoImportacao.METODO_IGG))
+						return "N";
+					else if (Methods.RemoveSpecialsCaracts(resultado).ToUpper().Equals(Methods.RemoveSpecialsCaracts(IndiceItemArquivoImportacao.RESULTADO_SOLICITAR_NOVA_COLETA)) && exame.ToUpper().Contains(IndiceItemArquivoImportacao.METODO_IGM) && !exame.ToUpper().Contains(IndiceItemArquivoImportacao.METODO_IGG))
+						return "I";
+					else
+						return "I";
+
+				case "IGG/IGM":
+					if (Methods.RemoveSpecialsCaracts(resultado).ToUpper().Equals(Methods.RemoveSpecialsCaracts(IndiceItemArquivoImportacao.RESULTADO_DETECTAVEL)) && exame.ToUpper().Contains(IndiceItemArquivoImportacao.METODO_IGG) && exame.ToUpper().Contains(IndiceItemArquivoImportacao.METODO_IGM))
+						return "S";
+					else if (Methods.RemoveSpecialsCaracts(resultado).ToUpper().Equals(Methods.RemoveSpecialsCaracts(IndiceItemArquivoImportacao.RESULTADO_NAO_DETECTAVEL)) && exame.ToUpper().Contains(IndiceItemArquivoImportacao.METODO_IGG) && exame.ToUpper().Contains(IndiceItemArquivoImportacao.METODO_IGM))
+						return "N";
+					else if (Methods.RemoveSpecialsCaracts(resultado).ToUpper().Equals(Methods.RemoveSpecialsCaracts(IndiceItemArquivoImportacao.RESULTADO_SOLICITAR_NOVA_COLETA)) && exame.ToUpper().Contains(IndiceItemArquivoImportacao.METODO_IGG) && exame.ToUpper().Contains(IndiceItemArquivoImportacao.METODO_IGM))
+						return "I";
+					else
+						return "I";
+
+				default:
+					return "I";
+			}
+		}
+
+		private int GetIdVirusBacteriaItemImportacao(string exame, List<VirusBacteriaModel> virus)
+		{
+			string[] e = exame.Split(',');
+
+			foreach (var item in virus)
+			{
+				if (item.Nome.ToUpper().Contains(e[0]))
+				{
+					return item.IdVirusBacteria;
+				}
+			}
+
+			return virus[0].IdVirusBacteria;
+		}
+
+		private PessoaModel CreatePessoaModelByExame(ExameViewModel exameViewModel, IPessoaService pessoaService)
+		{
+			var user = pessoaService.GetByCpf(exameViewModel.Paciente.Cpf.ToUpper());
+			if (user == null)
+			{
+				exameViewModel.Paciente.Idpessoa = 0;
+				exameViewModel.Paciente.IdAreaAtuacao = exameViewModel.Exame.IdAreaAtuacao;
+				if (exameViewModel.Exame.AguardandoResultado == true || exameViewModel.Exame.Resultado.Equals(ExameModel.RESULTADO_POSITIVO) ||
+					exameViewModel.Exame.Resultado.Equals(ExameModel.RESULTADO_IGMIGG))
+					exameViewModel.Paciente.SituacaoSaude = PessoaModel.SITUACAO_ISOLAMENTO;
+			}
+			else
+			{
+				exameViewModel.Paciente.Idpessoa = user.Idpessoa;
+				exameViewModel.Paciente.IdAreaAtuacao = exameViewModel.Exame.IdAreaAtuacao;
+				if ((exameViewModel.Paciente.SituacaoSaude.Equals(PessoaModel.SITUACAO_SAUDAVEL) & !exameViewModel.Paciente.SituacaoSaude.Equals(PessoaModel.SITUACAO_SAUDAVEL) && exameViewModel.Exame.AguardandoResultado == false)
+					|| (exameViewModel.Paciente.SituacaoSaude.Equals(PessoaModel.SITUACAO_SAUDAVEL) && exameViewModel.Exame.AguardandoResultado == true))
+				{
+					exameViewModel.Paciente.SituacaoSaude = PessoaModel.SITUACAO_ISOLAMENTO;
+				}
+				else if (exameViewModel.Exame.Resultado.Equals(ExameModel.RESULTADO_NEGATIVO) || exameViewModel.Exame.Resultado.Equals(ExameModel.RESULTADO_RECUPERADO)
+				  || exameViewModel.Exame.Resultado.Equals(ExameModel.RESULTADO_INDETERMINADO))
+				{
+					var virus = (new VirusBacteriaService(_context)).GetById(exameViewModel.Exame.IdVirusBacteria); 
+					DateTime dataMinima = DateTime.Now.AddDays(virus.DiasRecuperacao * (-1));
+					var exames = GetByIdPaciente(user.Idpessoa).Where(e => e.Exame.DataExame >= dataMinima).ToList();
+					if (exames.Count() <= 1 && exameViewModel.Paciente.SituacaoSaude.Equals(PessoaModel.SITUACAO_ISOLAMENTO))
+					{
+						exameViewModel.Paciente.SituacaoSaude = PessoaModel.SITUACAO_SAUDAVEL;
+					}
+				}
+			}
+			return exameViewModel.Paciente;
+		}
+
+
+		private SituacaoPessoaVirusBacteriaModel CreateSituacaoPessoaModelByExame(ExameViewModel exame, SituacaoPessoaVirusBacteriaModel situacao, IPessoaService pessoaService)
+		{
+
+			if (situacao != null)
+			{
+				situacao.UltimaSituacaoSaude = exame.Exame.ResultadoStatus;
+			}
+			else
+			{
+				situacao = new SituacaoPessoaVirusBacteriaModel();
+				situacao.IdVirusBacteria = exame.Exame.IdVirusBacteria;
+				situacao.Idpessoa = pessoaService.GetByCpf(Methods.RemoveSpecialsCaracts(exame.Paciente.Cpf)).Idpessoa;
+				situacao.UltimaSituacaoSaude = exame.Exame.ResultadoStatus;
+				situacao.DataUltimoMonitoramento = null;
+			}
+
+			return situacao;
+		}
+
+		public void Import(IFormFile file, UsuarioViewModel agente)
+		{
+			var _pessoaTrabalhaMunicipioService = new PessoaTrabalhaMunicipioService(_context);
+			var _pessoaTrabalhaEstadoContext = new PessoaTrabalhaEstadoService(_context);
+			var _municipioGeoService = new MunicipioGeoService(_context);
+			var _virusBacteriaService = new VirusBacteriaService(_context);
+			var _pessoaService = new PessoaService(_context);
+			var _empresaExameService = new EmpresaExameService(_context);
+			var _situacaoPessoaService = new SituacaoVirusBacteriaService(_context);
+			var _municipioService = new MunicipioService(_context);
+			var secretarioMunicipio = _pessoaTrabalhaMunicipioService.GetByIdPessoa(agente.UsuarioModel.IdPessoa);
+			var secretarioEstado = _pessoaTrabalhaEstadoContext.GetByIdPessoa(agente.UsuarioModel.IdPessoa);
+			var exames = new List<ExameViewModel>();
+			var indices = new IndiceItemArquivoImportacao();
+			var listVirusBacteria = _virusBacteriaService.GetAll();
+			MunicipioGeoModel cidadePaciente = new MunicipioGeoModel(),
+							  cidadeEmpresa = new MunicipioGeoModel();
+
+
+			using (var reader = new StreamReader(file.OpenReadStream()))
+			{
+				indices = IndexaColunasArquivoImportacao(reader.ReadLine());
+
+				if (indices == null)
+					throw new ServiceException("Essa planilha não possui as informações necessárias para fazer a importação, " +
+														"por favor verifique a planilha e tente novamente.");
+
+				while (reader.Peek() >= 0)
+				{
+					var line = reader.ReadLine().Split(';');
+
+					cidadePaciente = _municipioGeoService.GetByName(line[53]);
+					cidadeEmpresa = _municipioGeoService.GetByName(line[7]);
+
+					var exame = new ExameViewModel();
+					exame.Paciente = new PessoaModel
+					{
+						Nome = line[indices.IndiceNomePaciente],
+						Cidade = line[indices.IndiceCidadePaciente],
+						Cpf = line[indices.IndiceTipoDocumento1Paciente].Equals("CPF") && Methods.ValidarCpf(line[indices.IndiceDocumento1Paciente]) ?
+								Methods.RemoveSpecialsCaracts(line[indices.IndiceDocumento1Paciente]) : line[indices.IndiceTipoDocumento2Paciente].Equals("CPF") && Methods.ValidarCpf(line[indices.IndiceDocumento2Paciente]) ?
+								Methods.RemoveSpecialsCaracts(line[indices.IndiceDocumento2Paciente]) : "",
+
+						Sexo = line[indices.IndiceSexoPaciente].Equals("FEMININO") ? "Feminino" : "Masculino",
+						Cep = line[indices.IndiceCepPaciente].Length > 0 ? Methods.RemoveSpecialsCaracts(line[indices.IndiceCepPaciente]) : "00000000",
+						Rua = line[indices.IndiceRuaPaciente].Length > 0 ? line[indices.IndiceRuaPaciente].Split('-')[0] : "NÃO INFORMADO",
+						Bairro = line[indices.IndiceBairroPaciente].Length > 0 ? line[indices.IndiceBairroPaciente] : "NAO INFORMADO",
+						Estado = line[indices.IndiceEstadoPaciente],
+						Numero = line[indices.IndiceRuaPaciente].Length > 0 && line[indices.IndiceRuaPaciente].Split('-').Length >= 2 ? line[indices.IndiceRuaPaciente].Split('-')[1].Trim() : "",
+						Complemento = line[indices.IndiceRuaPaciente].Length > 0 && line[indices.IndiceRuaPaciente].Split('-').Length == 3 ? line[indices.IndiceRuaPaciente].Split('-')[2].Trim() : "",
+						FoneCelular = line[indices.IndiceFoneCelularPaciente],
+						DataNascimento = Convert.ToDateTime(line[indices.IndiceDataNascimentoPaciente]),
+						IdAreaAtuacao = 0,
+						Longitude = cidadePaciente != null ? cidadePaciente.Longitude.ToString() : "0",
+						Latitude = cidadePaciente != null ? cidadePaciente.Latitude.ToString() : "0",
+						Cns = line[indices.IndiceCnsPaciente],
+						Profissao = "NÃO INFORMADA",
+						OutrasComorbidades = "",
+						OutrosSintomas = ""
+					};
+
+					exame.Exame.IdVirusBacteria = GetIdVirusBacteriaItemImportacao(line[indices.IndiceTipoExame], listVirusBacteria);
+					exame.Exame.IdAgenteSaude = agente.UsuarioModel.IdPessoa;
+					exame.Exame.DataExame = Convert.ToDateTime(line[indices.IndiceDataExame]);
+					exame.Exame.DataInicioSintomas = line[indices.IndiceDataInicioSintomas].Equals("") ? Convert.ToDateTime(line[indices.IndiceDataExame]) : Convert.ToDateTime(line[indices.IndiceDataInicioSintomas]);
+					exame.Exame.IgG = line[indices.IndiceMetodoExame].ToUpper().Contains(IndiceItemArquivoImportacao.METODO_IGG) && !line[indices.IndiceMetodoExame].ToUpper().Contains(IndiceItemArquivoImportacao.METODO_IGM) ? GetMetodoExame(line[indices.IndiceMetodoExame], IndiceItemArquivoImportacao.METODO_IGG, line[indices.IndiceResultadoExame].Length > 0 ? line[indices.IndiceResultadoExame] : line[indices.IndiceObservacaoExame]) : "N";
+					exame.Exame.IgM = line[indices.IndiceMetodoExame].ToUpper().Contains(IndiceItemArquivoImportacao.METODO_IGM) && !line[indices.IndiceMetodoExame].ToUpper().Contains(IndiceItemArquivoImportacao.METODO_IGG) ? GetMetodoExame(line[indices.IndiceMetodoExame], IndiceItemArquivoImportacao.METODO_IGM, line[indices.IndiceResultadoExame].Length > 0 ? line[indices.IndiceResultadoExame] : line[indices.IndiceObservacaoExame]) : "N";
+					exame.Exame.Pcr = line[indices.IndiceMetodoExame].ToUpper().Contains(IndiceItemArquivoImportacao.METODO_PCR) ? GetMetodoExame(line[indices.IndiceMetodoExame], IndiceItemArquivoImportacao.METODO_PCR, line[indices.IndiceResultadoExame].Length > 0 ? line[indices.IndiceResultadoExame] : line[indices.IndiceObservacaoExame]) : "N";
+					exame.Exame.IgGIgM = line[indices.IndiceMetodoExame].ToUpper().Contains(IndiceItemArquivoImportacao.METODO_IGG) && line[indices.IndiceMetodoExame].ToUpper().Contains(IndiceItemArquivoImportacao.METODO_IGM) ? GetMetodoExame(line[indices.IndiceMetodoExame], IndiceItemArquivoImportacao.METODO_IGG_IGM, line[indices.IndiceResultadoExame].Length > 0 ? line[indices.IndiceResultadoExame] : line[indices.IndiceObservacaoExame]) : "N";
+					if (secretarioMunicipio != null)
+						exame.Exame.IdMunicipio = secretarioMunicipio.IdMunicipio;
+					else
+						exame.Exame.IdMunicipio = null;
+					exame.Exame.IdEstado = secretarioMunicipio != null ? Convert.ToInt32(_municipioService.GetById(secretarioMunicipio.IdMunicipio).Uf) : secretarioEstado.IdEstado;
+					exame.EmpresaExame = new EmpresaExameModel
+					{
+						Cnpj = "NÃO INFORMADO",
+						Nome = line[indices.IndiceNomeEmpresa],
+						Cnes = line[indices.IndiceCnesEmpresa],
+						Cidade = line[indices.IndiceCidadeEmpresa],
+						Latitude = cidadeEmpresa != null ? cidadeEmpresa.Latitude.ToString() : "0",
+						Longitude = cidadeEmpresa != null ? cidadeEmpresa.Longitude.ToString() : "0",
+						Estado = line[indices.IndiceEstadoEmpresa],
+						Rua = "NÃO INFORMADO",
+						Bairro = "NÃO INFORMADO",
+						Cep = "00000000",
+						FoneCelular = "00000000000",
+					};
+					exame.Exame.IdAreaAtuacao = 0;
+					exame.Exame.CodigoColeta = line[indices.IndiceCodigoColeta];
+					exame.Paciente.Cns = line[indices.IndiceCnsPaciente];
+					exames.Add(exame);
+				}
+			}
+
+			foreach (var item in exames)
+			{
+				var pessoa = !String.IsNullOrWhiteSpace(item.Paciente.Cpf) ?
+						   _pessoaService.GetByCpf(item.Paciente.Cpf) : !String.IsNullOrWhiteSpace(item.Paciente.Cns) ?
+						   _pessoaService.GetByCns(item.Paciente.Cns) : new PessoaModel { Idpessoa = -1 };
+
+				if (pessoa == null || pessoa.Idpessoa == -1)
+				{
+					pessoa = _pessoaService.Insert(item.Paciente);
+					item.Paciente.Idpessoa = pessoa.Idpessoa;
+					item.Paciente.Cpf = pessoa.Cpf;
+				}
+				else
+				{
+					item.Paciente.Idpessoa = pessoa.Idpessoa;
+					item.Paciente.Cpf = pessoa.Cpf;
+					_pessoaService.Update(item.Paciente, true);
+				}
+
+				
+			   var empresa = _empresaExameService.GetByCNES(item.EmpresaExame.Cnes);
+
+				if (empresa == null)
+					_empresaExameService.Insert(item.EmpresaExame);
+
+				item.Exame.IdEmpresaSaude = _empresaExameService.GetByCNES(item.EmpresaExame.Cnes).Id;
+
+			   var situacaoPessoa = _situacaoPessoaService.GetById(item.Paciente.Idpessoa, item.Exame.IdVirusBacteria);
+
+				if (situacaoPessoa == null)
+					_situacaoPessoaService.Insert(CreateSituacaoPessoaModelByExame(item, situacaoPessoa, _pessoaService));
+				else
+					_situacaoPessoaService.Update(CreateSituacaoPessoaModelByExame(item, situacaoPessoa, _pessoaService));
+
+
+			   var exame = GetByIdColeta(item.Exame.CodigoColeta);
+
+				var ex = new ExameModel
+				{
+					IdExame = exame != null ? exame.IdExame : 0,
+					IdPaciente = item.Paciente.Idpessoa,
+					IdVirusBacteria = item.Exame.IdVirusBacteria,
+					IdAgenteSaude = item.Exame.IdAgenteSaude,
+					DataExame = item.Exame.DataExame,
+					DataInicioSintomas = item.Exame.DataInicioSintomas,
+					IgG = item.Exame.IgG,
+					IgM = item.Exame.IgM,
+					Pcr = item.Exame.Pcr,
+					IgGIgM = item.Exame.IgGIgM,
+					IdMunicipio = item.Exame.IdMunicipio,
+					IdEstado = item.Exame.IdEstado,
+					IdEmpresaSaude = item.Exame.IdEmpresaSaude,
+					IdAreaAtuacao = item.Exame.IdAreaAtuacao,
+					CodigoColeta = item.Exame.CodigoColeta,
+					IdNotificacao = "",
+					OutrosSintomas = "",
+					MetodoExame = "F",
+					StatusNotificacao = exame != null ? exame.StatusNotificacao : "N"
+				};
+
+				var check = GetExamesRelizadosData(ex.IdPaciente, item.Exame.IdVirusBacteria, item.Exame.DataExame, item.Exame.MetodoExame);
+				if (exame != null)
+				{
+					if (check.Count > 0)
+					{
+						var status = false;
+						foreach (var index in check)
+						{
+							if (index.IdExame == exame.IdExame)
+								status = true;
+						}
+
+						if (status)
+						{
+							_context.Update(ex);
+							_context.SaveChanges();
+						}
+					}
+				}
+				else
+				{
+					if (check.Count == 0)
+					{
+						_context.Add(ex);
+						_context.SaveChanges();
+					}
+				}
+			}
 		}
 	}
 }

@@ -264,14 +264,8 @@
 }
 else if (TempData["mensagemErro"] != null)
 {
-    <div id="mensagem-retorno" onclick="swtAlert('error','Falha!', '@TempData["mensagemErro"]')"></div>
+    <div id="mensagem-retorno" onclick="swtAlert('warning','Falha!', '@TempData["mensagemErro"]')"></div>
 }
-else if (TempData["planilhaInconsistente"] != null)
-{
-    <div id="mensagem-retorno" onclick="swtAlert('warning','Falha!', '@TempData["planilhaInconsistente"]')"></div>
-}
-
-
 
 
 @section Scripts {

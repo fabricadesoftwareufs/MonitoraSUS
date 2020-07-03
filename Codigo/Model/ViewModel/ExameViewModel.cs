@@ -7,9 +7,8 @@ namespace Model
     {
 		public ExameViewModel()
 		{
-			VirusBacteria = new VirusBacteriaModel();
 			Paciente = new PessoaModel();
-			AreaAtuacao = new AreaAtuacaoModel();
+			Usuario = new UsuarioModel();
 			Exame = new ExameModel()
 			{
 				IgM = "N",
@@ -24,10 +23,10 @@ namespace Model
 			};
 			PesquisarCpf = 0;
 		}
-		public AreaAtuacaoModel AreaAtuacao { get; set; }
-		public VirusBacteriaModel VirusBacteria { get; set; }
         public PessoaModel Paciente { get; set; }
 		public ExameModel Exame { get; set; }
+		public UsuarioModel Usuario { get; set; }
+		public EmpresaExameModel EmpresaExame { get; set; }
 		public int PesquisarCpf { get; set; }
 		
 	}

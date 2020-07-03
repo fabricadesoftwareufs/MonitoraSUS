@@ -1,5 +1,5 @@
 ﻿using Model;
-using MonitoraSUS.Util;
+using Util;
 using Persistence;
 using Service.Interface;
 using System;

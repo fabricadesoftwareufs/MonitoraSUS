@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Configuration;
 using Model;
 using Model.ViewModel;
-using MonitoraSUS.Util;
+using Util;
 using Service.Interface;
 using System;
 using System.Collections.Generic;

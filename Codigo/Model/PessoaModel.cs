@@ -18,33 +18,40 @@ namespace Model
 		}
 
 		public int Idpessoa { get; set; }
-        [Required]
         [Display(Name = "CPF")]
-        [StringLength(11)]
-        public string Cpf { get; set; }
-        [Required]
+        [StringLength(11, ErrorMessage ="Máximo são 11 caracteres")]
+		[Util.ValidateCPF(ErrorMessage = "CPF Inválido")]
+		public string Cpf { get; set; }
+        [Required(ErrorMessage = "Campo obrigatório")]
         [Display(Name = "Nome")]
-        [StringLength(100)]
+        [StringLength(60, ErrorMessage = "Máximo são 60 caracteres")]
         public string Nome { get; set; }
         [Required]
         [Display(Name = "Sexo")]
         public string Sexo { get; set; }
+		[Required(ErrorMessage = "Campo obrigatório")]
+		[StringLength(8, ErrorMessage = "Máximo são 08 caracteres")]
 		public string Cep { get; set; }
-        public string Rua { get; set; }
-        public string Bairro { get; set; }
-        [Required]
-        public string Cidade { get; set; }
-        [Required]
-        public string Estado { get; set; }
+		[Required(ErrorMessage = "Campo obrigatório")]
+		[StringLength(60, ErrorMessage = "Máximo são 60 caracteres")]
+		public string Rua { get; set; }
+		[Required(ErrorMessage = "Campo obrigatório")]
+		[StringLength(60, ErrorMessage = "Máximo são 60 caracteres")]
+		public string Bairro { get; set; }
+		[Required(ErrorMessage = "Campo obrigatório")]
+		public string Cidade { get; set; }
+		[Required(ErrorMessage = "Campo obrigatório")]
+		public string Estado { get; set; }
         public string Numero { get; set; }
         public string Complemento { get; set; }
         public string Latitude { get; set; }
         public string Longitude { get; set; }
-        public string FoneCelular { get; set; }
+		[Required(ErrorMessage = "Campo obrigatório")]
+		public string FoneCelular { get; set; }
         public string FoneFixo { get; set; }
         public string Email { get; set; }
-        [Required]
-        [DataType(DataType.Date)]
+		[Required(ErrorMessage = "Campo obrigatório")]
+		[DataType(DataType.Date)]
         [Display(Name = "Data de Nascimento")]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime DataNascimento { get; set; }

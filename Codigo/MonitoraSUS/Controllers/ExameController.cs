@@ -4,11 +4,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Configuration;
 using Model;
+using Model.AuxModel;
 using Model.ViewModel;
-using MonitoraSUS.Util;
+using Util;
+using Service;
 using Service.Interface;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
@@ -99,7 +102,7 @@ namespace MonitoraSUS.Controllers
 				}
 				else
 				{
-					//var pacienteModel = _pessoaContext.GetById(exame.Exame.IdPaciente);
+					//var pacienteModel = _pessoaContext.GetById(exame.exame.Paciente);
 					string statusAnteriorSMS = exameView.Exame.StatusNotificacao;
 					ExameModel exame = exameView.Exame;
 					if (exameView.Paciente.TemFoneCelularValido)
@@ -251,11 +254,12 @@ namespace MonitoraSUS.Controllers
 
 		public IActionResult Export(List<ExameViewModel> exames)
 		{
+			var listaVirusBacteria = _virusBacteriaContext.GetAll();
 			var builder = new StringBuilder();
 			builder.AppendLine("Código Coleta;Vírus;Data Exame;Resultado;Situação Paciente;CPF/RG/Temp; Nome; Data Nascimento;Estado;Município;Bairro;Rua;Numero;Complemento;Fone;Diabetes;Cardiopatia;Hipertenso;Imunodeprimido;Obeso;Cancer;Doença Respiratória;Outras Comorbidades");
-			foreach (var e in exames)
+			foreach (var ex in exames)
 			{
-				var exame = _exameContext.GetById(e.Exame.IdExame);
+				var exame = _exameContext.GetById(ex.Exame.IdExame);
 				string coleta = exame.Exame.CodigoColeta;
 				string cpfRgTemp = exame.Paciente.Cpf;
 				string nome = exame.Paciente.Nome;
@@ -278,7 +282,7 @@ namespace MonitoraSUS.Controllers
 				string outrasComorbidades = exame.Paciente.OutrasComorbidades;
 				string dataExame = exame.Exame.DataExame.ToString("dd/MM/yyyy");
 				string resultadoExame = exame.Exame.Resultado;
-				string virus = exame.VirusBacteria.Nome;
+				string virus = listaVirusBacteria.Where(e => e.IdVirusBacteria == exame.Exame.IdVirusBacteria).FirstOrDefault().Nome;
 				builder.AppendLine($"{coleta};{virus};{dataExame};{resultadoExame};{situacaoSaude};{cpfRgTemp};{nome};{dataNascimento};{estado};{municipio};{bairro};{rua};{numero};{complemento};{foneCelular};{diabetes};{cardiopatia};{hipertenso};{imunodeprimido};{obeso};{cancer};{doencaRespiratoria};{outrasComorbidades};");
 			}
 
@@ -331,7 +335,8 @@ namespace MonitoraSUS.Controllers
 			ViewBag.googleKey = _configuration["GOOGLE_KEY"];
 			ViewBag.VirusBacteria = new SelectList(_virusBacteriaContext.GetAll(), "IdVirusBacteria", "Nome");
 			ViewBag.AreaAtuacao = new SelectList(_areaAtuacaoContext.GetAll(), "IdAreaAtuacao", "Descricao");
-			return View(_exameContext.GetById(id));
+			var exameViewModel = _exameContext.GetById(id);
+			return View(exameViewModel);
 		}
 
 		/// <summary>
@@ -343,86 +348,24 @@ namespace MonitoraSUS.Controllers
 		[ValidateAntiForgeryToken]
 		public IActionResult Edit(ExameViewModel exameViewModel)
 		{
+
 			ViewBag.VirusBacteria = new SelectList(_virusBacteriaContext.GetAll(), "IdVirusBacteria", "Nome");
 			ViewBag.AreaAtuacao = new SelectList(_areaAtuacaoContext.GetAll(), "IdAreaAtuacao", "Descricao");
 			ViewBag.googleKey = _configuration["GOOGLE_KEY"];
-
-			exameViewModel.Paciente.Cpf = exameViewModel.Paciente.Cpf ?? "";
-			if (Methods.SoContemNumeros(exameViewModel.Paciente.Cpf) && !exameViewModel.Paciente.Cpf.Equals(""))
-			{
-				if (!Methods.ValidarCpf(exameViewModel.Paciente.Cpf))
-				{
-					TempData["resultadoPesquisa"] = "Esse esse cpf não é válido!";
-					var exameVazio = new ExameViewModel();
-					exameVazio.Paciente.Cpf = exameViewModel.Paciente.Cpf;
-					return View(exameVazio);
-				}
-			}
-
+			if (!ModelState.IsValid)
+				return View(exameViewModel);
 			try
 			{
-				/* 
-                 * Verificando se o usuario está atualizando 
-                 * cpf/rg duplicado duplicado 
-                 */
-				var usuarioDuplicado = _pessoaContext.GetByCpf(exameViewModel.Paciente.Cpf);
-				if (usuarioDuplicado != null)
-				{
-					if (!(usuarioDuplicado.Idpessoa == exameViewModel.Paciente.Idpessoa))
-					{
-						TempData["mensagemErro"] = "Já existe um paciente com esse CPF/RG, tente novamente!";
-						return View(exameViewModel);
-					}
-				}
-
-				/* 
-                 * Verificando duplicidade de exames no mesmo dia
-                 * na hora de atulizar um registro
-                 */
-				var check = _exameContext.CheckDuplicateExamToday(exameViewModel.Paciente.Idpessoa, exameViewModel.VirusBacteria.IdVirusBacteria, exameViewModel.Exame.DataExame, exameViewModel.Exame.MetodoExame);
-				if (check.Count > 0)
-				{
-					var status = false;
-					foreach (var item in check)
-					{
-						if (item.IdExame == exameViewModel.Exame.IdExame)
-							status = true;
-					}
-
-					if (!status)
-					{
-						TempData["mensagemErro"] = "Notificação DUPLICADA! Já existe um exame registrado desse paciente para esse Vírus/Bactéria na " +
-													"data informada. Por favor, verifique se os dados da notificação estão corretos.";
-						return View(exameViewModel);
-					}
-				}
-
-				var situacao = _situacaoPessoaContext.GetById(exameViewModel.Paciente.Idpessoa, exameViewModel.VirusBacteria.IdVirusBacteria);
-				if (situacao == null)
-					_situacaoPessoaContext.Insert(CreateSituacaoPessoaModelByExame(exameViewModel, situacao));
-				else
-					_situacaoPessoaContext.Update(CreateSituacaoPessoaModelByExame(exameViewModel, situacao));
-
-				_pessoaContext.Update(CreatePessoaModelByExame(exameViewModel), false);
-				var usuario = _usuarioContext.RetornLoggedUser((ClaimsIdentity)User.Identity);
-				exameViewModel.Exame.IdAgenteSaude = usuario.UsuarioModel.IdPessoa;
-				_exameContext.Update(exameViewModel.Exame);
-
-				TempData["mensagemSucesso"] = "Edição realizada com SUCESSO!";
-
-				return View(new ExameViewModel());
-
+				exameViewModel.Usuario = _usuarioContext.RetornLoggedUser((ClaimsIdentity)User.Identity).UsuarioModel;
+				_exameContext.Update(exameViewModel);
 			}
-			catch (Exception e)
+			catch (ServiceException se)
 			{
-				TempData["mensagemErro"] = "Houve um problema ao atualizar as informações, tente novamente." +
-				  " Se o erro persistir, entre em contato com a Fábrica de Software da UFS pelo email fabricadesoftware@ufs.br";
-
-				return View(exameViewModel);
+				TempData["mensagemErro"] = se.Message;
 			}
+			TempData["mensagemSucesso"] = "Edição realizada com SUCESSO!";
+			return View(new ExameViewModel());
 		}
-
-
 
 		public IActionResult Create()
 		{
@@ -439,103 +382,54 @@ namespace MonitoraSUS.Controllers
 			ViewBag.googleKey = _configuration["GOOGLE_KEY"];
 			ViewBag.VirusBacteria = new SelectList(_virusBacteriaContext.GetAll(), "IdVirusBacteria", "Nome");
 			ViewBag.AreaAtuacao = new SelectList(_areaAtuacaoContext.GetAll(), "IdAreaAtuacao", "Descricao");
-
-			exameViewModel.Paciente.Cpf = exameViewModel.Paciente.Cpf ?? "";
-			if (Methods.SoContemNumeros(exameViewModel.Paciente.Cpf) && !exameViewModel.Paciente.Cpf.Equals(""))
+			exameViewModel.Usuario = _usuarioContext.RetornLoggedUser((ClaimsIdentity)User.Identity).UsuarioModel;
+			if (!ModelState.IsValid)
+				return View(exameViewModel);
+			try
 			{
-				if (!Methods.ValidarCpf(exameViewModel.Paciente.Cpf))
+				if (exameViewModel.PesquisarCpf == 1)
 				{
-					TempData["resultadoPesquisa"] = "Esse esse cpf não é válido!";
-					var exameVazio = new ExameViewModel();
-					exameVazio.Paciente.Cpf = exameViewModel.Paciente.Cpf;
-					return View(exameVazio);
-				}
-			}
-
-			/* 
-             * verificando se é pra pesquisar ou inserir um novo exame 
-             */
-			if (exameViewModel.PesquisarCpf == 1)
-			{
-				var cpf = Methods.RemoveSpecialsCaracts(exameViewModel.Paciente.Cpf); // cpf sem caracteres especiais
-				var pessoa = _pessoaContext.GetByCpf(cpf);
-				if (pessoa != null)
-				{
-					exameViewModel.Paciente = pessoa;
-					return View(exameViewModel);
-				}
-				else
-				{
-					var exameVazio = new ExameViewModel();
-					exameVazio.Paciente.Cpf = exameViewModel.Paciente.Cpf;
-					return View(exameVazio);
-				}
-			}
-			else
-			{
-				CreatePessoaModelByExame(exameViewModel);
-				if (_exameContext.CheckDuplicateExamToday(exameViewModel.Paciente.Idpessoa, exameViewModel.VirusBacteria.IdVirusBacteria, exameViewModel.Exame.DataExame, exameViewModel.Exame.MetodoExame).Count > 0)
-				{
-					TempData["mensagemErro"] = "Notificação DUPLICADA! Já existe um exame registrado desse paciente para esse Vírus/Bactéria na " +
-												"data informada e método aplicado. Por favor, verifique se os dados da notificação estão corretos.";
-					return View(exameViewModel);
-				}
-
-
-				try
-				{
-					if (!ModelState.IsValid)
+					var cpf = Methods.RemoveSpecialsCaracts(exameViewModel.Paciente.Cpf); // cpf sem caracteres especiais
+					var pessoa = _pessoaContext.GetByCpf(cpf);
+					if (pessoa != null)
 					{
+						exameViewModel.Paciente = pessoa;
 						return View(exameViewModel);
 					}
-					
-					if (exameViewModel.Paciente.Idpessoa == 0)
-						exameViewModel.Paciente = _pessoaContext.Insert(exameViewModel.Paciente);
 					else
-						exameViewModel.Paciente = _pessoaContext.Update(exameViewModel.Paciente, false);
-					
-
-					// inserindo o resultado do exame (situacao da pessoa)                  
-					var situacaoPessoa = _situacaoPessoaContext.GetById(exameViewModel.Paciente.Idpessoa, exameViewModel.VirusBacteria.IdVirusBacteria);
-					if (situacaoPessoa == null)
-						_situacaoPessoaContext.Insert(CreateSituacaoPessoaModelByExame(exameViewModel, situacaoPessoa));
-					else
-						_situacaoPessoaContext.Update(CreateSituacaoPessoaModelByExame(exameViewModel, situacaoPessoa));
-					var usuario = _usuarioContext.RetornLoggedUser((ClaimsIdentity)User.Identity);
-					exameViewModel.Exame.IdAgenteSaude = usuario.UsuarioModel.IdPessoa;
-					_exameContext.Insert(exameViewModel.Exame);
+					{
+						var exameVazio = new ExameViewModel();
+						exameVazio.Paciente.Cpf = exameViewModel.Paciente.Cpf;
+						return View(exameVazio);
+					}
 				}
-				catch (Exception)
-				{
-					TempData["mensagemErro"] = "Cadastro não pode ser concluido pois houve um problema ao inserir os dados do exame, tente novamente." +
-											   " Se o erro persistir, entre em contato com a Fábrica de Software da UFS pelo email fabricadesoftware@ufs.br";
-					return View(exameViewModel);
-				}
-
-				TempData["mensagemSucesso"] = "Notificação realizada com SUCESSO!";
-
-				return RedirectToAction(nameof(Create));
+				_exameContext.Insert(exameViewModel);
+			} catch (ServiceException se )
+			{
+				TempData["mensagemErro"] = se.Message;
 			}
+			TempData["mensagemSucesso"] = "Notificação realizada com SUCESSO!";
+			return RedirectToAction(nameof(Create));
 		}
 
-		public SituacaoPessoaVirusBacteriaModel CreateSituacaoPessoaModelByExame(ExameViewModel exame, SituacaoPessoaVirusBacteriaModel situacao)
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public IActionResult Import(IFormFile file, IFormCollection collection)
 		{
-
-			if (situacao != null)
+			try
 			{
-				situacao.UltimaSituacaoSaude = exame.Exame.ResultadoStatus;
-			}
-			else
-			{
-				situacao = new SituacaoPessoaVirusBacteriaModel();
-				situacao.IdVirusBacteria = exame.VirusBacteria.IdVirusBacteria;
-				situacao.Idpessoa = _pessoaContext.GetByCpf(Methods.RemoveSpecialsCaracts(exame.Paciente.Cpf)).Idpessoa;
-				situacao.UltimaSituacaoSaude = exame.Exame.ResultadoStatus;
-				situacao.DataUltimoMonitoramento = null;
-			}
+				var agente = _usuarioContext.RetornLoggedUser((ClaimsIdentity)User.Identity);
+				_exameContext.Import(file, agente);
 
-			return situacao;
+				TempData["mensagemSucesso"] = "O processamento da planilha GAL foi concluido com sucesso!";
+			}
+			catch (ServiceException se)
+			{
+				TempData["mensagemErro"] = se.Message;
+			}
+			return RedirectToAction("Index", "Home");
 		}
+
 
 		public PesquisaExameViewModel BuscaExamesViewModel(PesquisaExameViewModel pesquisaExame)
 		{
@@ -615,40 +509,6 @@ namespace MonitoraSUS.Controllers
 
 			pesquisaExame.Exames = pesquisaExame.Exames.OrderBy(ex => ex.Exame.CodigoColeta).ToList();
 			return PreencheTotalizadores(pesquisaExame);
-		}
-
-		public PessoaModel CreatePessoaModelByExame(ExameViewModel exameViewModel)
-		{
-			var user = _pessoaContext.GetByCpf(exameViewModel.Paciente.Cpf.ToUpper());
-			if (user == null)
-			{
-				exameViewModel.Paciente.Idpessoa = 0;
-				exameViewModel.Paciente.IdAreaAtuacao = exameViewModel.Exame.IdAreaAtuacao;
-				if (exameViewModel.Exame.AguardandoResultado == true || exameViewModel.Exame.Resultado.Equals(ExameModel.RESULTADO_POSITIVO) ||
-					exameViewModel.Exame.Resultado.Equals(ExameModel.RESULTADO_IGMIGG))
-					exameViewModel.Paciente.SituacaoSaude = PessoaModel.SITUACAO_ISOLAMENTO;
-			}
-			else
-			{
-				exameViewModel.Paciente.Idpessoa = user.Idpessoa;
-				exameViewModel.Paciente.IdAreaAtuacao = exameViewModel.Exame.IdAreaAtuacao;
-				if ((exameViewModel.Paciente.SituacaoSaude.Equals(PessoaModel.SITUACAO_SAUDAVEL) & !exameViewModel.Paciente.SituacaoSaude.Equals(PessoaModel.SITUACAO_SAUDAVEL) && exameViewModel.Exame.AguardandoResultado == false)
-					|| (exameViewModel.Paciente.SituacaoSaude.Equals(PessoaModel.SITUACAO_SAUDAVEL) && exameViewModel.Exame.AguardandoResultado == true))
-				{
-					exameViewModel.Paciente.SituacaoSaude = PessoaModel.SITUACAO_ISOLAMENTO;
-				}
-				else if (exameViewModel.Exame.Resultado.Equals(ExameModel.RESULTADO_NEGATIVO) || exameViewModel.Exame.Resultado.Equals(ExameModel.RESULTADO_RECUPERADO)
-				  || exameViewModel.Exame.Resultado.Equals(ExameModel.RESULTADO_INDETERMINADO))
-				{
-					DateTime dataMinima = DateTime.Now.AddDays(exameViewModel.VirusBacteria.DiasRecuperacao * (-1));
-					var exames = _exameContext.GetByIdPaciente(user.Idpessoa).Where(e => e.Exame.DataExame >= dataMinima).ToList();
-					if (exames.Count() <= 1 && exameViewModel.Paciente.SituacaoSaude.Equals(PessoaModel.SITUACAO_ISOLAMENTO))
-					{
-						exameViewModel.Paciente.SituacaoSaude = PessoaModel.SITUACAO_SAUDAVEL;
-					}
-				}
-			}
-			return exameViewModel.Paciente;
 		}
 
 		public PesquisaExameViewModel PreencheTotalizadores(PesquisaExameViewModel examesTotalizados)

@@ -4,8 +4,8 @@
     ViewData["Title"] = "Editar";
 
     var idPessoa = Model.Paciente.Idpessoa;
-    var cpf = Model.Paciente.Cpf;
-    var nome = Model.Paciente.Nome;
+    //var cpf = Model.Paciente.Cpf;
+    //var nome = Model.Paciente.Nome;
     string dataNascimento = Model.Paciente.DataNascimento != DateTime.MinValue ? Model.Paciente.DataNascimento.ToString("dd/MM/yyyy") : DateTime.Now.ToString("dd/MM/yyyy");
     var rua = Model.Paciente.Rua;
     var cep = Model.Paciente.Cep;
@@ -74,13 +74,15 @@
 									</div>
 									<div class="form-group">
 										<label class="form-control-label" for="input-cpf">CPF ou RG</label>
-										<input asp-for="Paciente.Cpf" id="input-cpf" placeholder="000.000.000-00" value="@cpf" class="form-control" />
+										<input asp-for="Paciente.Cpf" id="input-cpf" placeholder="000.000.000-00" class="form-control" />
+										<span asp-validation-for="Paciente.Cpf" class="text-danger"></span>
 									</div>
 								</div>
 								<div class="col-md-6">
 									<div class="form-group">
 										<label class="form-control-label" for="input-nome">Paciente</label>
-										<input asp-for="Paciente.Nome" id="input-nome" placeholder="Nome Completo" class="form-control" value="@nome" />
+										<input asp-for="Paciente.Nome" id="input-nome" placeholder="Nome Completo" class="form-control" />
+										<span asp-validation-for="Paciente.Nome" class="text-danger"></span>
 									</div>
 								</div>
 								<div class="col-md-2">
@@ -453,7 +455,7 @@
 								<div class="col-lg-3">
 									<div class="form-group">
 										<label class="form-control-label" for="input-atuacao-estado">Vírus</label>
-										@Html.DropDownListFor(model => model.VirusBacteria.IdVirusBacteria, ViewBag.VirusBacteria as SelectList, new
+										@Html.DropDownListFor(model => model.Exame.IdVirusBacteria, ViewBag.VirusBacteria as SelectList, new
 										{ @class = "form-control", @id = "input-virus-bacteria" })
 									</div>
 								</div>
@@ -667,7 +669,7 @@
 }
 else if (TempData["mensagemErro"] != null)
 {
-<div id="mensagem-retorno" onclick="swtAlert('error','Falha!', '@TempData["mensagemErro"]')"></div>
+<div id="mensagem-retorno" onclick="swtAlert('warning','Falha!', '@TempData["mensagemErro"]')"></div>
 }
 
 

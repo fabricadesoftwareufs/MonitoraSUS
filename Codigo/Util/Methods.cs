@@ -7,7 +7,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks; 
 
-namespace MonitoraSUS.Util
+namespace Util
 {
     public class Methods
     {
@@ -70,12 +70,26 @@ namespace MonitoraSUS.Util
             return cpf;
         }
 
-        public static bool ValidarCpf(string cpf)
+		/// <summary>
+		/// Remove caracteres não numéricos
+		/// </summary>
+		/// <param name="text"></param>
+		/// <returns></returns>
+		public static string RemoveNaoNumericos(string text)
+		{
+			System.Text.RegularExpressions.Regex reg = new System.Text.RegularExpressions.Regex(@"[^0-9]");
+			string ret = reg.Replace(text, string.Empty);
+			return ret;
+		}
+
+		public static bool ValidarCpf(string cpf)
         {
+			cpf = RemoveNaoNumericos(cpf);
+
             if (string.IsNullOrEmpty(cpf))
                 return false;
 
-            var multiplicador1 = new int[9] { 10, 9, 8, 7, 6, 5, 4, 3, 2 };
+			var multiplicador1 = new int[9] { 10, 9, 8, 7, 6, 5, 4, 3, 2 };
             var multiplicador2 = new int[10] { 11, 10, 9, 8, 7, 6, 5, 4, 3, 2 };
             string tempCpf;
             string digito;
