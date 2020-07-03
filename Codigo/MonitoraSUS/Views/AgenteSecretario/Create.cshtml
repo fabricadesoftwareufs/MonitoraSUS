@@ -38,19 +38,21 @@
                                     <div class="form-group">
                                         <label class="form-control-label" for="input-cpf">CPF</label>
                                         <input type="text" id="input-cpf" asp-for="Cpf" onfocus="loadEstados()" oninput="validaCpf()" required class="form-control" placeholder="000.000.000-00">
-                                        <span id="spanInvalidCpf" hidden class="text-danger text-center" style="padding: 10px">CPF Invalido!!</span>
+										<span asp-validation-for="Cpf" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label class="form-control-label" for="input-nome">Nome</label>
                                         <input type="search" id="input-nome" asp-for="Nome" required class="form-control" placeholder="Nome Completo">
-                                    </div>
+										<span asp-validation-for="Nome" class="text-danger"></span>
+									</div>
                                 </div>
 								<div class="col-md-2">
 									<div class="form-group">
 										<label for="input-data-nascimento" class="form-control-label">Data de Nascimento</label>
 										<input class="form-control" type="text" asp-for="DataNascimento" placeholder="dd-mm-aaaa" required id="input-data-nascimento">
+										<span asp-validation-for="DataNascimento" class="text-danger"></span>
 									</div>
 								</div>
                                 <div class="col-md-2">
@@ -80,46 +82,52 @@
                                     </div>
                                 </div>
                                 <div class="col-lg-2">
-                                    <div class="form-group">
-                                        <label class="form-control-label" for="postal_code">CEP (Não sabe? </label> <a href="http://www.buscacep.correios.com.br/sistemas/buscacep/" target="_blank">Busque aqui</a>)
-                                        <input asp-for="Cep" name="Cep" oninput="PreencheFormCEP()" id="postal_code" class="form-control" required placeholder="CEP">
-                                        <span id="spanInvalidCep" hidden class="text-danger text-center" style="padding: 10px">Cep Invalido!!</span>
-                                    </div>
+									<div class="form-group">
+										<label class="form-control-label" for="postal_code">CEP (Não sabe? </label> <a href="http://www.buscacep.correios.com.br/sistemas/buscacep/" target="_blank">Busque aqui</a>)
+										<input asp-for="Cep" name="Cep" oninput="PreencheFormCEP()" id="postal_code" class="form-control" required placeholder="CEP">
+										<span id="spanInvalidCep" hidden class="text-danger text-center" style="padding: 10px">Cep Invalido!!</span>
+									</div>
                                 </div>
                                 <div class="col-lg-5">
-                                    <div class="form-group">
-                                        <label class="form-control-label" for="route">Logradouro</label>
-                                        <input asp-for="Rua" name="Logradouro" type="search" oninput="PreencheForm()" placeholder="Pesquise pelo CEP, Rua, Bairro, Número" autocomplete="off" id="route" required class="form-control">
-                                    </div>
+									<div class="form-group">
+										<label class="form-control-label" for="route">Logradouro</label>
+										<input asp-for="Rua" name="Logradouro" type="search" oninput="PreencheForm()" placeholder="Pesquise pelo CEP, Rua, Bairro, Número" autocomplete="off" id="route" required class="form-control">
+										<span asp-validation-for="Rua" class="text-danger"></span>
+									</div>
                                 </div>
                                 <div class="col-lg-1">
-                                    <div class="form-group">
-                                        <label class="form-control-label" for="street_number">Número</label>
-                                        <input asp-for="Numero" name="Numero" id="street_number" class="form-control" placeholder="">
-                                    </div>
+									<div class="form-group">
+										<label class="form-control-label" for="street_number">Número</label>
+										<input asp-for="Numero" name="Numero" id="street_number" class="form-control" placeholder="">
+										<span asp-validation-for="Numero" class="text-danger"></span>
+									</div>
                                 </div>
                                 <div class="col-lg-4">
-                                    <div class="form-group">
-                                        <label class="form-control-label" for="sublocality_level_1">Bairro</label>
-                                        <input asp-for="Bairro" name="Bairro" id="sublocality_level_1" required class="form-control" placeholder="Bairro">
-                                    </div>
+									<div class="form-group">
+										<label class="form-control-label" for="sublocality_level_1">Bairro</label>
+										<input asp-for="Bairro" name="Bairro" id="sublocality_level_1" required class="form-control" placeholder="Bairro">
+										<span asp-validation-for="Bairro" class="text-danger"></span>
+									</div>
                                 </div>
                                 <div class="col-lg-4">
-                                    <div class="form-group">
-                                        <label class="form-control-label" for="input-cidade">Cidade</label>
-                                        <input type="text" readonly id="administrative_area_level_2" required class="form-control" asp-for="Cidade" name="Localidade" placeholder="Cidade">
-                                    </div>
+									<div class="form-group">
+										<label class="form-control-label" for="input-cidade">Cidade</label>
+										<input type="text" readonly id="administrative_area_level_2" required class="form-control" asp-for="Cidade" name="Localidade" placeholder="Cidade">
+										<span asp-validation-for="Cidade" class="text-danger"></span>
+									</div>
                                 </div>
                                 <div class="col-lg-4">
-                                    <div class="form-group">
-                                        <label class="form-control-label" for="input-estado">Estado</label>
-                                        <input type="text" readonly id="administrative_area_level_1" class="form-control" asp-for="Estado" name="UF" placeholder="Estado">
-                                    </div>
+									<div class="form-group">
+										<label class="form-control-label" for="input-estado">Estado</label>
+										<input type="text" readonly id="administrative_area_level_1" class="form-control" asp-for="Estado" name="UF" placeholder="Estado">
+										<span asp-validation-for="Estado" class="text-danger"></span>
+									</div>
                                 </div>
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label class="form-control-label" for="input-complemento">Complemento</label>
                                         <input type="text" id="input-complemento" class="form-control" asp-for="Complemento" placeholder="Complemento">
+										<span asp-validation-for="Complemento" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="col-lg-4">

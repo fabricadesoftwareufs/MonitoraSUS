@@ -7,12 +7,12 @@ namespace Util
 	/// <summary>
 	/// Validação customizada para CPF
 	/// </summary>
-	public class ValidateCPFAttribute : ValidationAttribute
+	public class CPFAttribute : ValidationAttribute
 	{
 		/// <summary>
 		/// Construtor
 		/// </summary>
-		public ValidateCPFAttribute() { }
+		public CPFAttribute() { }
 
 		/// <summary>
 		/// Validação server
@@ -21,6 +21,7 @@ namespace Util
 		/// <returns></returns>
 		public override bool IsValid(object value)
 		{
+			value = Methods.RemoveSpecialsCaracts((string)value);
 			if (value == null || string.IsNullOrEmpty(value.ToString()))
 				return true;
 

@@ -105,7 +105,7 @@ namespace MonitoraSUS.Controllers
 					//var pacienteModel = _pessoaContext.GetById(exame.exame.Paciente);
 					string statusAnteriorSMS = exameView.Exame.StatusNotificacao;
 					ExameModel exame = exameView.Exame;
-					if (exameView.Paciente.TemFoneCelularValido)
+					if (new Util.TelefoneCelularAttribute().IsValid(exameView.Paciente.FoneCelular))
 					{
 						if (exame.StatusNotificacao.Equals(ExameModel.NOTIFICADO_ENVIADO))
 						{
@@ -173,7 +173,7 @@ namespace MonitoraSUS.Controllers
 				{
 					var exameModel = _exameContext.GetById(exame.Exame.IdExame);
 					var pacienteModel = _pessoaContext.GetById(exame.Paciente.Idpessoa);
-					if (pacienteModel.TemFoneCelularValido)
+					if (new Util.TelefoneCelularAttribute().IsValid(pacienteModel.FoneCelular))
 					{
 						if (exameModel.Exame.StatusNotificacao.Equals(ExameModel.NOTIFICADO_ENVIADO))
 						{
