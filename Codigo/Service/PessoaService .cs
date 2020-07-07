@@ -5,6 +5,7 @@ using Service.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace Service
 {
@@ -43,9 +44,10 @@ namespace Service
                         pessoaInserida.Cpf = "T" + Convert.ToString(pessoaInserida.Idpessoa).PadLeft(8, '0') + pessoaInserida.Estado;
                     }
                     _context.SaveChanges();
+					_context.Entry(pessoaInserida).State = EntityState.Detached;
 
-                    // Returning the last inserted ID.
-                    pessoaModel.Cpf = pessoaInserida.Cpf;
+					// Returning the last inserted ID.
+					pessoaModel.Cpf = pessoaInserida.Cpf;
                     pessoaModel.Idpessoa = pessoaInserida.Idpessoa;
                     return pessoaModel;
                 }
@@ -74,9 +76,10 @@ namespace Service
                         pessoaInserida.Cpf = "T" + Convert.ToString(pessoaInserida.Idpessoa).PadLeft(8, '0') + pessoaInserida.Estado;
                     }
                     _context.SaveChanges();
+					_context.Entry(pessoaInserida).State = EntityState.Detached;
 
-                    // Returning the last inserted ID.
-                    pessoaModel.Cpf = pessoaInserida.Cpf;
+					// Returning the last inserted ID.
+					pessoaModel.Cpf = pessoaInserida.Cpf;
                     pessoaModel.Idpessoa = pessoaInserida.Idpessoa;
                     return pessoaModel;
                 }

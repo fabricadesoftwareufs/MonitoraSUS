@@ -1491,7 +1491,7 @@ namespace Service
 			{
 				indices = IndexaColunasArquivoImportacao(reader.ReadLine());
 
-				if (indices == null)
+				if (indices == null || reader == null)
 					throw new ServiceException("Essa planilha não possui as informações necessárias para fazer a importação, " +
 														"por favor verifique a planilha e tente novamente.");
 
@@ -1511,7 +1511,7 @@ namespace Service
 								Methods.RemoveSpecialsCaracts(line[indices.IndiceDocumento1Paciente]) : line[indices.IndiceTipoDocumento2Paciente].Equals("CPF") && Methods.ValidarCpf(line[indices.IndiceDocumento2Paciente]) ?
 								Methods.RemoveSpecialsCaracts(line[indices.IndiceDocumento2Paciente]) : "",
 
-						Sexo = line[indices.IndiceSexoPaciente].Equals("FEMININO") ? "Feminino" : "Masculino",
+						Sexo = line[indices.IndiceSexoPaciente].Equals("FEMININO") ? "F" : "M",
 						Cep = line[indices.IndiceCepPaciente].Length > 0 ? Methods.RemoveSpecialsCaracts(line[indices.IndiceCepPaciente]) : "00000000",
 						Rua = line[indices.IndiceRuaPaciente].Length > 0 ? line[indices.IndiceRuaPaciente].Split('-')[0] : "NÃO INFORMADO",
 						Bairro = line[indices.IndiceBairroPaciente].Length > 0 ? line[indices.IndiceBairroPaciente] : "NAO INFORMADO",
@@ -1600,7 +1600,7 @@ namespace Service
 
 			   var exame = GetByIdColeta(item.Exame.CodigoColeta);
 
-				var ex = new ExameModel
+				var ex = new Exame
 				{
 					IdExame = exame != null ? exame.IdExame : 0,
 					IdPaciente = item.Paciente.Idpessoa,
@@ -1608,17 +1608,18 @@ namespace Service
 					IdAgenteSaude = item.Exame.IdAgenteSaude,
 					DataExame = item.Exame.DataExame,
 					DataInicioSintomas = item.Exame.DataInicioSintomas,
+					DataNotificacao = DateTime.Now,
 					IgG = item.Exame.IgG,
 					IgM = item.Exame.IgM,
 					Pcr = item.Exame.Pcr,
-					IgGIgM = item.Exame.IgGIgM,
+					IgMigG = item.Exame.IgGIgM,
 					IdMunicipio = item.Exame.IdMunicipio,
 					IdEstado = item.Exame.IdEstado,
 					IdEmpresaSaude = item.Exame.IdEmpresaSaude,
 					IdAreaAtuacao = item.Exame.IdAreaAtuacao,
 					CodigoColeta = item.Exame.CodigoColeta,
 					IdNotificacao = "",
-					OutrosSintomas = "",
+					OutroSintomas = "",
 					MetodoExame = "F",
 					StatusNotificacao = exame != null ? exame.StatusNotificacao : "N"
 				};
