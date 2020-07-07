@@ -127,11 +127,9 @@
                                                 importado para base de dados do MonitoraSUS, os dados serão apenas atualizados.
                                             </p>
 
-                                            <form name="form-arquivo" enctype="multipart/form-data" accept-charset="UTF-8" method="post" asp-action="Import" asp-controller="Exame">
-
-
+                                            <form name="form-arquivo" enctype="multipart/form-data" method="post" asp-action="Import" asp-controller="Exame">
                                                 <h4>Selecione a Planilha do GAL: </h4>
-                                                <input lang="pt-br"  id="input-file" required name="file" type="file" accept=".csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-Excel">
+                                                <input lang="pt-br" required id="input-file" name="file" type="file" accept=".csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-Excel">
 
                                                 <div class="modal-footer">
                                                     <div style="text-align: center;">
@@ -139,7 +137,6 @@
                                                         <button onclick="submitArquivoGal()" id="btn-importar-arquivo" class="btn btn-success" value="Enviar"><i class="fa fa-save"></i> Enviar</button>
                                                     </div>
                                                 </div>
-
                                             </form>
                                         </div>
                                     </div>
@@ -276,16 +273,16 @@ else if (TempData["mensagemErro"] != null)
         $(document).ready(function () {
             if (document.querySelector('#mensagem-retorno'))
                 document.getElementById("mensagem-retorno").click();
+            alert("mostra filho da puta");
         });
 
         function submitArquivoGal() {
-
-           if ($('input-file').val()) {
+            if ($('#input-file').val().length > 0){
+                alert("entrei filho da puta");
                 document.getElementById('container-importacao').hidden = true;
                 document.getElementById('container-espera').hidden = false;
-
                 document.forms["form-arquivo"].submit();
-           } 
+            } 
         }
     </script>
 
