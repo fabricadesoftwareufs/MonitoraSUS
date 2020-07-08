@@ -24,7 +24,8 @@ namespace Controller.Test
             var mockEstado = new Mock<IEstadoService>();
             var mockMunicipio = new Mock<IMunicipioService>();
             var mockEmpresaExame = new Mock<IEmpresaExameService>();
-            
+            var mockUsuario = new Mock<IUsuarioService>();
+
             //para que ocorra o cadastro com sucesso, não pode ter outra empresa com o mesmo cnpj 
             mockEmpresaExame.Setup(repo => repo.GetByCnpj(It.IsAny<string>())).Returns(new List<EmpresaExameModel>() { });
 
@@ -36,14 +37,15 @@ namespace Controller.Test
             tempData["MensagemSucesso"] = "Organização Cadastrada com sucesso!";
 
             var controller =
-                    new EmpresaExameController(mockConfig.Object,
+                    new EmpresaExameController( mockConfig.Object,
                                                 mockEmpresaExame.Object,
                                                 mockExame.Object,
                                                 mockPessoa.Object,
                                                 mockPessoaEstado.Object,
                                                 mockPessoaMunicipio.Object,
                                                 mockEstado.Object,
-                                                mockMunicipio.Object
+                                                mockMunicipio.Object,
+                                                mockUsuario.Object
                                               )
                                               {
                                                     TempData = tempData
