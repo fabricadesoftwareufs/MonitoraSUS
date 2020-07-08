@@ -1517,8 +1517,10 @@ namespace Service
                             Rua = line[indices.IndiceRuaPaciente].Length > 0 && line[indices.IndiceRuaPaciente].Length < 60 ? line[indices.IndiceRuaPaciente].Split('-')[0] : "NÃO INFORMADO",
                             Bairro = line[indices.IndiceBairroPaciente].Length > 0 && line[indices.IndiceBairroPaciente].Length < 60 ? line[indices.IndiceBairroPaciente] : "NAO INFORMADO",
                             Estado = line[indices.IndiceEstadoPaciente],
-                            Numero = line[indices.IndiceRuaPaciente].Length > 0 && line[indices.IndiceRuaPaciente].Split('-').Length >= 2 && Methods.SoContemNumeros(line[indices.IndiceRuaPaciente].Split('-')[1].Trim()) ? line[indices.IndiceRuaPaciente].Split('-')[1].Trim() : "",
-                            Complemento = line[indices.IndiceRuaPaciente].Length > 0 && line[indices.IndiceRuaPaciente].Split('-').Length == 3 ? line[indices.IndiceRuaPaciente].Split('-')[2].Trim() : "",
+                            Numero = line[indices.IndiceRuaPaciente].Length > 0 && line[indices.IndiceRuaPaciente].Split('-').Length >= 2 ? 
+                                    (Methods.SoContemNumeros(line[indices.IndiceRuaPaciente].Split('-')[1].Trim()) ? line[indices.IndiceRuaPaciente].Split('-')[1].Trim() : "")  :  "",
+                            Complemento = line[indices.IndiceRuaPaciente].Length > 0 && line[indices.IndiceRuaPaciente].Split('-').Length == 3 ? 
+                                    (line[indices.IndiceRuaPaciente].Split('-')[2].Trim().Length < 100 ? line[indices.IndiceRuaPaciente].Split('-')[2].Trim() : "")  :  "",
                             FoneCelular = line[indices.IndiceFoneCelularPaciente],
                             DataNascimento = !line[indices.IndiceDataNascimentoPaciente].Equals("") ? Convert.ToDateTime(line[indices.IndiceDataNascimentoPaciente]) : DateTime.MinValue,
                             IdAreaAtuacao = 0,
