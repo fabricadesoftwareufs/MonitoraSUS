@@ -1633,7 +1633,7 @@ namespace Service
                     StatusNotificacao = exame != null ? exame.StatusNotificacao : "N"
                 };
 
-                var check = GetExamesRelizadosData(ex.IdPaciente, item.Exame.IdVirusBacteria, item.Exame.DataExame, item.Exame.MetodoExame);
+                var check = GetExamesRelizadosData(ex.IdPaciente, ex.IdVirusBacteria, ex.DataExame, ex.MetodoExame);
                 if (exame != null)
                 {
                     if (check.Count > 0)
