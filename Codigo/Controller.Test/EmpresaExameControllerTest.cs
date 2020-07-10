@@ -31,7 +31,7 @@ namespace Controller.Test
 
             mockEmpresaExame.Setup(repo => repo.Insert(It.IsAny<EmpresaExameModel>())).Verifiable();
 
-            // fazendo isso pq o resultado foi feito retornando view();
+            // mock do TempData
             var httpContext = new DefaultHttpContext();
             var tempData = new TempDataDictionary(httpContext, Mock.Of<ITempDataProvider>());
             tempData["MensagemSucesso"] = "Organização Cadastrada com sucesso!";
