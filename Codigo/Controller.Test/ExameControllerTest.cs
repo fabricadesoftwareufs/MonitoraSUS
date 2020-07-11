@@ -27,6 +27,8 @@ namespace Controller.Test
         private Mock<IAreaAtuacaoService> mockArea;
         private Mock<IUsuarioService> mockUsuario;
         private Mock<IConfiguration> mockConfig;
+        private ExameController controller;
+        private DefaultHttpContext httpContext;
 
         [Fact(DisplayName = "Adiciona um Exame com sucesso e o paciente não está cadastrado")]
         public void AddExameComSucesso()
@@ -38,39 +40,12 @@ namespace Controller.Test
 
             mockUsuario.Setup(repo => repo.RetornLoggedUser(It.IsAny<ClaimsIdentity>())).Returns(GetUsuario());
 
-            // mock do TempData e HttpContext com claims
-            var httpContext = new DefaultHttpContext()
-            {
-                User = GetClaims()
-            };
+            InstanciateController();
 
             var tempData = new TempDataDictionary(httpContext, Mock.Of<ITempDataProvider>());
             tempData["mensagemSucesso"] = "Notificação realizada com SUCESSO!";
 
-        var controller =
-                   new ExameController(
-                                               mockVirus.Object,
-                                               mockExame.Object,
-                                               mockPessoa.Object,
-                                               mockMunicipio.Object,
-                                               mockEstado.Object,
-                                               mockConfig.Object,
-                                               mockSituacao.Object,
-                                               mockTrabalhaEstado.Object,
-                                               mockTrabalhaMunicipio.Object,
-                                               mockArea.Object,
-                                               mockUsuario.Object
-
-                                       )
-                   {
-
-                       //config mock claims
-                       ControllerContext = new ControllerContext
-                       {
-                           HttpContext = httpContext
-                       },
-                       TempData = tempData
-                   };
+            controller.TempData = tempData;
 
             var novoExame = GetExame();
             // Act
@@ -92,35 +67,7 @@ namespace Controller.Test
             mockPessoa.Setup(repo => repo.GetByCpf(It.IsAny<string>())).Returns(GetExame().Paciente); // paciente existe
             mockUsuario.Setup(repo => repo.RetornLoggedUser(It.IsAny<ClaimsIdentity>())).Returns(GetUsuario());
 
-            // mock do TempData e HttpContext com claims
-            var httpContext = new DefaultHttpContext()
-            {
-                User = GetClaims()
-            };
-
-            var controller =
-                   new ExameController(
-                                               mockVirus.Object,
-                                               mockExame.Object,
-                                               mockPessoa.Object,
-                                               mockMunicipio.Object,
-                                               mockEstado.Object,
-                                               mockConfig.Object,
-                                               mockSituacao.Object,
-                                               mockTrabalhaEstado.Object,
-                                               mockTrabalhaMunicipio.Object,
-                                               mockArea.Object,
-                                               mockUsuario.Object
-
-                                       )
-                   {
-
-                       //config mock claims
-                       ControllerContext = new ControllerContext
-                       {
-                           HttpContext = httpContext
-                       }
-                   };
+            InstanciateController();
 
             var novoExame = GetExame();
             novoExame.PesquisarCpf = 1; //Pesquisa por cpf
@@ -142,38 +89,10 @@ namespace Controller.Test
 
             mockVirus.Setup(repo => repo.GetAll()).Returns(new List<VirusBacteriaModel>() { });
             mockArea.Setup(repo => repo.GetAll()).Returns(new List<AreaAtuacaoModel>() { });
-            mockPessoa.Setup(repo => repo.GetByCpf(It.IsAny<string>())).Returns(new PessoaModel {  }); // paciente não existe
+            mockPessoa.Setup(repo => repo.GetByCpf(It.IsAny<string>())).Returns(new PessoaModel { }); // paciente não existe
             mockUsuario.Setup(repo => repo.RetornLoggedUser(It.IsAny<ClaimsIdentity>())).Returns(GetUsuario());
 
-            // mock do TempData e HttpContext com claims
-            var httpContext = new DefaultHttpContext()
-            {
-                User = GetClaims()
-            };
-
-            var controller =
-                   new ExameController(
-                                               mockVirus.Object,
-                                               mockExame.Object,
-                                               mockPessoa.Object,
-                                               mockMunicipio.Object,
-                                               mockEstado.Object,
-                                               mockConfig.Object,
-                                               mockSituacao.Object,
-                                               mockTrabalhaEstado.Object,
-                                               mockTrabalhaMunicipio.Object,
-                                               mockArea.Object,
-                                               mockUsuario.Object
-
-                                       )
-                   {
-
-                       //config mock claims
-                       ControllerContext = new ControllerContext
-                       {
-                           HttpContext = httpContext
-                       },
-                   };
+            InstanciateController();
 
             var novoExame = GetExame();
             novoExame.PesquisarCpf = 1; //Pesquisa por cpf
@@ -191,7 +110,7 @@ namespace Controller.Test
 
         [Fact(DisplayName = "Tenta adicionar um Exame, mas modelo é invalido")]
         public void ErrorExameModeloInvalido()
-        { 
+        {
             InstantiateMock();
 
             mockVirus.Setup(repo => repo.GetAll()).Returns(new List<VirusBacteriaModel>() { });
@@ -199,48 +118,20 @@ namespace Controller.Test
             mockPessoa.Setup(repo => repo.GetByCpf(It.IsAny<string>())).Returns(new PessoaModel { }); // paciente não existe
             mockUsuario.Setup(repo => repo.RetornLoggedUser(It.IsAny<ClaimsIdentity>())).Returns(GetUsuario());
 
-            // mock do TempData e HttpContext com claims
-            var httpContext = new DefaultHttpContext()
-            {
-                User = GetClaims()
-            };
+            InstanciateController();
 
-            var tempData = new TempDataDictionary(httpContext, Mock.Of<ITempDataProvider>());
-            tempData["mensagemErro"] = "Error, modelo invalido";
-
-            var controller =
-                   new ExameController(
-                                               mockVirus.Object,
-                                               mockExame.Object,
-                                               mockPessoa.Object,
-                                               mockMunicipio.Object,
-                                               mockEstado.Object,
-                                               mockConfig.Object,
-                                               mockSituacao.Object,
-                                               mockTrabalhaEstado.Object,
-                                               mockTrabalhaMunicipio.Object,
-                                               mockArea.Object,
-                                               mockUsuario.Object
-
-                                       )
-                   {
-
-                       //config mock claims
-                       ControllerContext = new ControllerContext
-                       {
-                           HttpContext = httpContext
-                       },
-                       TempData = tempData
-                   };
-
-            controller.ModelState.AddModelError("ExameModel", "Error");
             var novoExame = GetExame();
+            novoExame.Exame = null;
+            novoExame.Paciente = null;
 
+            controller.ModelState.AddModelError("erro", "Modelo invalido")
+                ;
             // Act
-            var resultado = controller.Create(novoExame) as ViewResult;
+            var resultado = controller.Create(novoExame);
+
             // Assert
-            Assert.IsType<ExameViewModel>(resultado.Model);
-            Assert.Equal("Error, modelo invalido", resultado.TempData["mensagemErro"]);
+            var viewResult = Assert.IsType<ViewResult>(resultado);
+            Assert.False(viewResult.ViewData.ModelState.IsValid);
         }
 
 
@@ -257,6 +148,36 @@ namespace Controller.Test
             mockArea = new Mock<IAreaAtuacaoService>();
             mockUsuario = new Mock<IUsuarioService>();
             mockConfig = new Mock<IConfiguration>();
+        }
+
+        private void InstanciateController()
+        {
+            controller =
+                  new ExameController(
+                                              mockVirus.Object,
+                                              mockExame.Object,
+                                              mockPessoa.Object,
+                                              mockMunicipio.Object,
+                                              mockEstado.Object,
+                                              mockConfig.Object,
+                                              mockSituacao.Object,
+                                              mockTrabalhaEstado.Object,
+                                              mockTrabalhaMunicipio.Object,
+                                              mockArea.Object,
+                                              mockUsuario.Object
+                                     );
+
+            // mock do TempData e HttpContext com claims
+            httpContext = new DefaultHttpContext()
+            {
+                User = GetClaims()
+            };
+
+            controller.ControllerContext = new ControllerContext
+            {
+                HttpContext = httpContext
+            };
+
         }
 
         private ExameViewModel GetExame()
