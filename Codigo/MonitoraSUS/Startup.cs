@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Persistence;
+using Repository;
+using Repository.Interfaces;
 using Service;
 using Service.Interface;
 
@@ -49,23 +51,27 @@ namespace MonitoraSUS
                 options.UseMySQL(
                     Configuration.GetConnectionString("MySqlConnection")));
 
-            services.AddScoped<IVirusBacteriaService, VirusBacteriaService>();
-            services.AddScoped<IExameService, ExameService>();
-            services.AddScoped<IPessoaService, PessoaService>();
-            services.AddScoped<IEstadoService, EstadoService>();
-            services.AddScoped<ISituacaoVirusBacteriaService, SituacaoVirusBacteriaService>();
-            services.AddScoped<IMunicipioService, MunicipioService>();
-            services.AddScoped<IPessoaTrabalhaMunicipioService, PessoaTrabalhaMunicipioService>();
-            services.AddScoped<IPessoaTrabalhaEstadoService, PessoaTrabalhaEstadoService>();
-            services.AddScoped<IUsuarioService, UsuarioService>();
-            services.AddScoped<IRecuperarSenhaService, RecuperarSenhaService>();
-            services.AddScoped<IEmailService, EmailService>();
-            services.AddScoped<IEmpresaExameService, EmpresaExameService>();
-            services.AddScoped<IInternacaoService, InternacaoService>();
-			services.AddScoped<IAreaAtuacaoService, AreaAtuacaoService>();
-            services.AddScoped<IMunicipioGeoService, MunicipioGeoService>();
+            // Serviços
+            services.AddSingleton<IVirusBacteriaService, VirusBacteriaService>();
+            services.AddSingleton<IExameService, ExameService>();
+            services.AddSingleton<IPessoaService, PessoaService>();
+            services.AddSingleton<IEstadoService, EstadoService>();
+            services.AddSingleton<ISituacaoVirusBacteriaService, SituacaoVirusBacteriaService>();
+            services.AddSingleton<IMunicipioService, MunicipioService>();
+            services.AddSingleton<IPessoaTrabalhaMunicipioService, PessoaTrabalhaMunicipioService>();
+            services.AddSingleton<IPessoaTrabalhaEstadoService, PessoaTrabalhaEstadoService>();
+            services.AddSingleton<IUsuarioService, UsuarioService>();
+            services.AddSingleton<IRecuperarSenhaService, RecuperarSenhaService>();
+            services.AddSingleton<IEmailService, EmailService>();
+            services.AddSingleton<IEmpresaExameService, EmpresaExameService>();
+            services.AddSingleton<IInternacaoService, InternacaoService>();
+			services.AddSingleton<IAreaAtuacaoService, AreaAtuacaoService>();
+            services.AddSingleton<IMunicipioGeoService, MunicipioGeoService>();
 
-			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            // Repositorios
+            services.AddSingleton<IExameRepository, ExameRepository>();
+
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddMvc().AddJsonOptions(options =>
             {
                 options.SerializerSettings.Culture = new System.Globalization.CultureInfo("pt-BR");

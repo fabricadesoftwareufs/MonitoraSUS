@@ -379,12 +379,11 @@ namespace MonitoraSUS.Controllers
 		[ValidateAntiForgeryToken]
 		public IActionResult Create(ExameViewModel exameViewModel)
 		{
-			ViewBag.googleKey = _configuration["GOOGLE_KEY"];
-			ViewBag.VirusBacteria = new SelectList(_virusBacteriaContext.GetAll(), "IdVirusBacteria", "Nome");
-			ViewBag.AreaAtuacao = new SelectList(_areaAtuacaoContext.GetAll(), "IdAreaAtuacao", "Descricao");
-			exameViewModel.Usuario = _usuarioContext.RetornLoggedUser((ClaimsIdentity)User.Identity).UsuarioModel;
 			if (!ModelState.IsValid)
 				return View(exameViewModel);
+
+			// Pegar usuario somente se a model for valida, não inverso.
+			exameViewModel.Usuario = _usuarioContext.RetornLoggedUser((ClaimsIdentity)User.Identity).UsuarioModel;
 			try
 			{
 				if (exameViewModel.PesquisarCpf == 1)
@@ -404,7 +403,7 @@ namespace MonitoraSUS.Controllers
 					}
 				}
 				_exameContext.Insert(exameViewModel);
-			} catch (ServiceException se )
+			} catch (ServiceException se)
 			{
 				TempData["mensagemErro"] = se.Message;
 			}
