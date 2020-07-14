@@ -1,11 +1,9 @@
-using Microsoft.AspNetCore.Razor.Language.CodeGeneration;
 using Model;
 using Model.ViewModel;
 using Moq;
-using Persistence;
-using Repository.Interfaces;
 using Service;
 using Service.Interface;
+using Service.UnitiesOfWorks.Interfaces;
 using System;
 using Xunit;
 
@@ -13,35 +11,30 @@ namespace Test.Service
 {
     public class ExameServiceTest
     {
-        private Mock<monitorasusContext> _mockContext;
-        private Mock<IExameRepository> _mockExameRepo;
+        private Mock<IExameService> _mockExame;
         private Mock<IPessoaService> _mockPessoa;
-        private Mock<ISituacaoVirusBacteriaService> _mockSituacao;
+        private Mock<IExameSituacaoPessoaUnityOfWork> _mockUnity;
+
+        public ExameServiceTest()
+        {
+            _mockExame = new Mock<IExameService>();
+            _mockPessoa = new Mock<IPessoaService>();
+            _mockUnity = new Mock<IExameSituacaoPessoaUnityOfWork>();
+        }
 
         [Fact(DisplayName = "Adiciona um Exame com sucesso e o paciente está cadastrado")]
         public void InserirExameComSucessoPacienteExiste()
         {
-            // Configurando os mocks
-            IniciarMocks();
-            //_mockPessoa.Setup(mp => mp.GetByCpf(It.IsAny<string>())).Returns(GetExame().Paciente); // paciente existe
-            //_mockExameRepo.Setup(x => x.Insert(GetExame())).Returns(true);
+            // Configurando o mock
+            _mockExame.Setup(x => x.Insert(GetExame())).Returns(true);
 
-            var exameService = new ExameService(_mockContext.Object,
-                _mockPessoa.Object, _mockSituacao.Object, _mockExameRepo.Object);
-            var exame = GetExame();
-            var result = exameService.Insert(exame);
+            var exameService = new ExameServiceProvisorio(_mockPessoa.Object, _mockUnity.Object);
+            var resultado = exameService.Insert(GetExame());
 
-            Assert.True(result);
+            Assert.True(resultado);
         }
 
         // Metodos privados
-        private void IniciarMocks()
-        {
-            _mockContext = new Mock<monitorasusContext>();
-            _mockExameRepo = new Mock<IExameRepository>();
-            _mockPessoa = new Mock<IPessoaService>();
-            _mockSituacao = new Mock<ISituacaoVirusBacteriaService>();
-        }
         private ExameViewModel GetExame()
             => new ExameViewModel
             {

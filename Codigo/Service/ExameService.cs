@@ -12,6 +12,7 @@ using System.Net.Http;
 using Microsoft.AspNetCore.Http;
 using System.IO;
 using Repository.Interfaces;
+using Service.UnitiesOfWorks.Interfaces;
 
 namespace Service
 {
@@ -19,61 +20,60 @@ namespace Service
     {
         /**
          * Não retirei o contexto devido aos outros metodos.
+         * CONTEXTO NÃO PODE ESTAR EXPOSTO!!!
          * Ideal usar apenas services, visto que o mesmo contexto será passado/obtido.
+         * Caso necessite de transação mantendo o contexto, utilizar UNIDADES DE TRABALHO.
          */
         private readonly monitorasusContext _context;
         private readonly IPessoaService _pessoaService;
-        private readonly ISituacaoVirusBacteriaService _situacaoPessoaService;
-
-        // Repositorios
         private readonly IExameRepository _exameRepository;
+
+        // Unidades de trabalho
+        private readonly IExameSituacaoPessoaUnityOfWork _exameSituacaoUnidadeTrabalho;
 
         public ExameService(monitorasusContext context,
             IPessoaService pessoaService,
-            ISituacaoVirusBacteriaService situacaoPessoaService,
+            IExameSituacaoPessoaUnityOfWork exameSituacaoUnidadeTrabalho,
             IExameRepository exameRepository)
         {
             _context = context;
             _pessoaService = pessoaService;
-            _situacaoPessoaService = situacaoPessoaService;
-
-            // Repositorio de Exame
             _exameRepository = exameRepository;
+
+            // Unidade de trabalho
+            _exameSituacaoUnidadeTrabalho = exameSituacaoUnidadeTrabalho;
         }
 
         public bool Insert(ExameViewModel exameModel)
         {
-            using (var transaction = _exameRepository.GetContext().Database.BeginTransaction())
+            try
             {
-                try
-                {
-                    if (_exameRepository.GetExamesRelizadosData(exameModel.Paciente.Idpessoa, exameModel.Exame.IdVirusBacteria, exameModel.Exame.DataExame, exameModel.Exame.MetodoExame).Count > 0)
-                        throw new ServiceException("Notificação DUPLICADA! Já existe um exame registrado desse paciente para esse Vírus/Bactéria na " +
-                                                    "data informada e método aplicado. Por favor, verifique se os dados da notificação estão corretos.");
-                    if (exameModel.Paciente.Idpessoa == 0)
-                        exameModel.Paciente = _pessoaService.Insert(exameModel.Paciente);
-                    else
-                        exameModel.Paciente = _pessoaService.Update(exameModel.Paciente, false);
+                _exameSituacaoUnidadeTrabalho.BeginTransaction();
+                if (_exameSituacaoUnidadeTrabalho.ExameRepositorio.GetExamesRelizadosData(exameModel.Paciente.Idpessoa, exameModel.Exame.IdVirusBacteria, exameModel.Exame.DataExame, exameModel.Exame.MetodoExame).Count > 0)
+                    throw new ServiceException("Notificação DUPLICADA! Já existe um exame registrado desse paciente para esse Vírus/Bactéria na " +
+                                                "data informada e método aplicado. Por favor, verifique se os dados da notificação estão corretos.");
+                if (exameModel.Paciente.Idpessoa == 0)
+                    exameModel.Paciente = _pessoaService.Insert(exameModel.Paciente);
+                else
+                    exameModel.Paciente = _pessoaService.Update(exameModel.Paciente, false);
 
-                    // inserindo o resultado do exame (situacao da pessoa)
-                    var situacaoPessoa = _situacaoPessoaService.GetById(exameModel.Paciente.Idpessoa, exameModel.Exame.IdVirusBacteria);
-                    if (situacaoPessoa == null)
-                        _situacaoPessoaService.Insert(CreateSituacaoPessoaModelByExame(exameModel, situacaoPessoa, _pessoaService));
-                    else
-                        _situacaoPessoaService.Update(CreateSituacaoPessoaModelByExame(exameModel, situacaoPessoa, _pessoaService));
+                // Inserindo o resultado do exame (situacao da pessoa)
+                var situacaoPessoa = _exameSituacaoUnidadeTrabalho.SituacaoPessoaService.GetById(exameModel.Paciente.Idpessoa, exameModel.Exame.IdVirusBacteria);
+                if (situacaoPessoa == null)
+                    _exameSituacaoUnidadeTrabalho.SituacaoPessoaService.Insert(CreateSituacaoPessoaModelByExame(exameModel, situacaoPessoa, _pessoaService));
+                else
+                    _exameSituacaoUnidadeTrabalho.SituacaoPessoaService.Update(CreateSituacaoPessoaModelByExame(exameModel, situacaoPessoa, _pessoaService));
 
-                    // repositorio
-                    _exameRepository.Insert(exameModel);
-
-                    // Caso dê tudo certo, commita.
-                    transaction.Commit();
-                    return true;
-                }
-                catch (Exception e)
-                {
-                    transaction.Rollback();
-                    throw e;
-                }
+                // Repositorio
+                _exameSituacaoUnidadeTrabalho.ExameRepositorio.Insert(exameModel);
+                // Caso dê tudo certo, commita.
+                _exameSituacaoUnidadeTrabalho.Commit();
+                return true;
+            }
+            catch (Exception e)
+            {
+                _exameSituacaoUnidadeTrabalho.Rollback();
+                throw e;
             }
         }
 
