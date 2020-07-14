@@ -30,6 +30,7 @@ namespace Service
         private readonly IExameRepository _exameRepository;
         private readonly INotificacoesRepository _notificacaoRepository;
         private readonly IPessoaVirusEmpresaSituacaoMunicipioGeoTrabalhaMuniEstadoUnityOfWork _importUnidadeTrabalho;
+        private readonly IPessoaExameSituacaoUnidadeTrabalhoUnityOfWork _pessoaExameSituacaoTrabalhaUnidadeTrabalho;
 
         // Unidades de trabalho
         private readonly IExameSituacaoPessoaUnityOfWork _exameSituacaoUnidadeTrabalho;
@@ -38,6 +39,7 @@ namespace Service
             IPessoaService pessoaService,
             IExameSituacaoPessoaUnityOfWork exameSituacaoUnidadeTrabalho,
             IPessoaVirusEmpresaSituacaoMunicipioGeoTrabalhaMuniEstadoUnityOfWork importUnidadeTrabalho,
+            IPessoaExameSituacaoUnidadeTrabalhoUnityOfWork pessoaExameSituacaoTrabalhaUnidadeTrabalho,
             IExameRepository exameRepository,
             INotificacoesRepository notificacaoRepository)
         {
@@ -49,6 +51,7 @@ namespace Service
             // Unidade de trabalho
             _exameSituacaoUnidadeTrabalho = exameSituacaoUnidadeTrabalho;
             _importUnidadeTrabalho = importUnidadeTrabalho;
+            _pessoaExameSituacaoTrabalhaUnidadeTrabalho = pessoaExameSituacaoTrabalhaUnidadeTrabalho;
         }
 
         public bool Insert(ExameViewModel exameModel)
@@ -91,16 +94,16 @@ namespace Service
             try
             {
                 // Abrindo transação.
-                _exameSituacaoUnidadeTrabalho.BeginTransaction();
+                _pessoaExameSituacaoTrabalhaUnidadeTrabalho.BeginTransaction();
                 exameModel.Exame.IdAgenteSaude = exameModel.Usuario.IdPessoa;
-                var usuarioDuplicado = _pessoaService.GetByCpf(exameModel.Paciente.Cpf);
+                var usuarioDuplicado = _pessoaExameSituacaoTrabalhaUnidadeTrabalho.PessoaService.GetByCpf(exameModel.Paciente.Cpf);
                 if (usuarioDuplicado != null)
                 {
                     if (!(usuarioDuplicado.Idpessoa == exameModel.Paciente.Idpessoa))
                         throw new ServiceException("Já existe um paciente com esse CPF/RG, tente novamente!");
                 }
 
-                var examesRealizados = GetExamesRelizadosData(exameModel.Paciente.Idpessoa, exameModel.Exame.IdVirusBacteria, exameModel.Exame.DataExame, exameModel.Exame.MetodoExame);
+                var examesRealizados = _pessoaExameSituacaoTrabalhaUnidadeTrabalho.ExameRepository.GetExamesRelizadosData(exameModel.Paciente.Idpessoa, exameModel.Exame.IdVirusBacteria, exameModel.Exame.DataExame, exameModel.Exame.MetodoExame);
                 if (examesRealizados.Count > 0)
                 {
                     var exame = examesRealizados.FirstOrDefault();
@@ -109,24 +112,24 @@ namespace Service
                                                         "data informada. Por favor, verifique se os dados da notificação estão corretos.");
                 }
 
-                var situacao = _exameSituacaoUnidadeTrabalho.SituacaoPessoaService.GetById(exameModel.Paciente.Idpessoa, exameModel.Exame.IdVirusBacteria);
+                var situacao = _pessoaExameSituacaoTrabalhaUnidadeTrabalho.SituacaoPessoaService.GetById(exameModel.Paciente.Idpessoa, exameModel.Exame.IdVirusBacteria);
                 if (situacao == null)
-                    _exameSituacaoUnidadeTrabalho.SituacaoPessoaService.Insert(CreateSituacaoPessoaModelByExame(exameModel, situacao, _pessoaService));
+                    _pessoaExameSituacaoTrabalhaUnidadeTrabalho.SituacaoPessoaService.Insert(CreateSituacaoPessoaModelByExame(exameModel, situacao, _pessoaService));
                 else
-                    _exameSituacaoUnidadeTrabalho.SituacaoPessoaService.Update(CreateSituacaoPessoaModelByExame(exameModel, situacao, _pessoaService));
+                    _pessoaExameSituacaoTrabalhaUnidadeTrabalho.SituacaoPessoaService.Update(CreateSituacaoPessoaModelByExame(exameModel, situacao, _pessoaService));
 
-                _pessoaService.Update(CreatePessoaModelByExame(exameModel, _pessoaService), false);
+                _pessoaExameSituacaoTrabalhaUnidadeTrabalho.PessoaService.Update(CreatePessoaModelByExame(exameModel, _pessoaService), false);
 
-                _exameSituacaoUnidadeTrabalho.ExameRepositorio.Update(exameModel);
+                _pessoaExameSituacaoTrabalhaUnidadeTrabalho.ExameRepository.Update(exameModel);
 
                 // Commitando
-                _exameSituacaoUnidadeTrabalho.Commit();
+                _pessoaExameSituacaoTrabalhaUnidadeTrabalho.Commit();
                 return true;
 
             }
             catch (Exception e)
             {
-                _exameSituacaoUnidadeTrabalho.Rollback();
+                _pessoaExameSituacaoTrabalhaUnidadeTrabalho.Rollback();
                 throw e;
             }
         }

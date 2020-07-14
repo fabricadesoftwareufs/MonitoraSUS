@@ -78,6 +78,7 @@ namespace MonitoraSUS
             // Unidades de trabalho
             services.AddScoped<IExameSituacaoPessoaUnityOfWork, ExameSituacaoPessoaUnityOfWork>();
             services.AddScoped<IPessoaVirusEmpresaSituacaoMunicipioGeoTrabalhaMuniEstadoUnityOfWork, PessoaVirusEmpresaSituacaoMunicipioGeoTrabalhaMuniEstadoUnityOfWork>();
+            services.AddScoped<IPessoaExameSituacaoUnidadeTrabalhoUnityOfWork, PessoaExameSituacaoUnidadeTrabalhoUnityOfWork>();
 
             // Testes
             services.AddScoped<ExameServiceTest>();
