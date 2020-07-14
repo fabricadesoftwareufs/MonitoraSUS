@@ -41,7 +41,7 @@ namespace Service
             _context.Entry(entity).State = EntityState.Detached;
             return value;
         }
-            
+
 
         private Empresaexame ModelToEntity(EmpresaExameModel empresa)
         {
@@ -64,49 +64,49 @@ namespace Service
                 Email = empresa.Email,
                 // A partir daqui
                 EmiteLaudoExame = Convert.ToByte(empresa.EmiteLaudoExame),
-				EhPublico = Convert.ToByte(empresa.EhPublico),
-				FazMonitoramento = Convert.ToByte(empresa.FazMonitoramento),
-				NumeroLeitos = empresa.PossuiLeitosInternacao ? empresa.NumeroLeitos : 0,
+                EhPublico = Convert.ToByte(empresa.EhPublico),
+                FazMonitoramento = Convert.ToByte(empresa.FazMonitoramento),
+                NumeroLeitos = empresa.PossuiLeitosInternacao ? empresa.NumeroLeitos : 0,
                 NumeroLeitosDisponivel = empresa.PossuiLeitosInternacao ? empresa.NumeroLeitosDisponivel : 0,
                 NumeroLeitosUti = empresa.PossuiLeitosInternacao ? empresa.NumeroLeitosUti : 0,
                 NumeroLeitosUtidisponivel = empresa.PossuiLeitosInternacao ? empresa.NumeroLeitosUtidisponivel : 0,
                 PossuiLeitosInternacao = Convert.ToByte(empresa.PossuiLeitosInternacao),
-				Cnes = empresa.Cnes
+                Cnes = empresa.Cnes
             };
         }
 
-		public List<EmpresaExameModel> GetHospitais()
-	   => _context.Empresaexame
-		   .Where(empresaExame => empresaExame.Id != 1 && empresaExame.PossuiLeitosInternacao==1)
-		   .Select(empresa => new EmpresaExameModel
-		   {
-			   Id = empresa.Id,
-			   Cnpj = empresa.Cnpj,
-			   Nome = empresa.Nome,
-			   Cep = empresa.Cep,
-			   Rua = empresa.Rua,
-			   Bairro = empresa.Bairro,
-			   Cidade = empresa.Cidade,
-			   Estado = empresa.Estado,
-			   Numero = empresa.Numero,
-			   Complemento = empresa.Complemento,
-			   Latitude = empresa.Latitude,
-			   Longitude = empresa.Longitude,
-			   FoneCelular = empresa.FoneCelular,
-			   FoneFixo = empresa.FoneFixo,
-			   Email = empresa.Email,
-			   EmiteLaudoExame = Convert.ToBoolean(empresa.EmiteLaudoExame),
-			   NumeroLeitos = empresa.NumeroLeitos,
-			   NumeroLeitosDisponivel = empresa.NumeroLeitosDisponivel,
-			   NumeroLeitosUti = empresa.NumeroLeitosUti,
-			   NumeroLeitosUtidisponivel = empresa.NumeroLeitosUtidisponivel,
-			   PossuiLeitosInternacao = Convert.ToBoolean(empresa.PossuiLeitosInternacao),
-			   EhPublico = Convert.ToBoolean(empresa.EhPublico),
-			   FazMonitoramento = Convert.ToBoolean(empresa.FazMonitoramento),
-			   Cnes = empresa.Cnes
-		   }).ToList();
+        public List<EmpresaExameModel> GetHospitais()
+       => _context.Empresaexame
+           .Where(empresaExame => empresaExame.Id != 1 && empresaExame.PossuiLeitosInternacao == 1)
+           .Select(empresa => new EmpresaExameModel
+           {
+               Id = empresa.Id,
+               Cnpj = empresa.Cnpj,
+               Nome = empresa.Nome,
+               Cep = empresa.Cep,
+               Rua = empresa.Rua,
+               Bairro = empresa.Bairro,
+               Cidade = empresa.Cidade,
+               Estado = empresa.Estado,
+               Numero = empresa.Numero,
+               Complemento = empresa.Complemento,
+               Latitude = empresa.Latitude,
+               Longitude = empresa.Longitude,
+               FoneCelular = empresa.FoneCelular,
+               FoneFixo = empresa.FoneFixo,
+               Email = empresa.Email,
+               EmiteLaudoExame = Convert.ToBoolean(empresa.EmiteLaudoExame),
+               NumeroLeitos = empresa.NumeroLeitos,
+               NumeroLeitosDisponivel = empresa.NumeroLeitosDisponivel,
+               NumeroLeitosUti = empresa.NumeroLeitosUti,
+               NumeroLeitosUtidisponivel = empresa.NumeroLeitosUtidisponivel,
+               PossuiLeitosInternacao = Convert.ToBoolean(empresa.PossuiLeitosInternacao),
+               EhPublico = Convert.ToBoolean(empresa.EhPublico),
+               FazMonitoramento = Convert.ToBoolean(empresa.FazMonitoramento),
+               Cnes = empresa.Cnes
+           }).ToList();
 
-		public List<EmpresaExameModel> GetAll()
+        public List<EmpresaExameModel> GetAll()
         => _context.Empresaexame
             .Where(empresaExame => empresaExame.Id != 1)
             .Select(empresa => new EmpresaExameModel
@@ -132,10 +132,10 @@ namespace Service
                 NumeroLeitosUti = empresa.NumeroLeitosUti,
                 NumeroLeitosUtidisponivel = empresa.NumeroLeitosUtidisponivel,
                 PossuiLeitosInternacao = Convert.ToBoolean(empresa.PossuiLeitosInternacao),
-				EhPublico = Convert.ToBoolean(empresa.EhPublico),
-				FazMonitoramento = Convert.ToBoolean(empresa.FazMonitoramento),
-				Cnes = empresa.Cnes
-			}).ToList();
+                EhPublico = Convert.ToBoolean(empresa.EhPublico),
+                FazMonitoramento = Convert.ToBoolean(empresa.FazMonitoramento),
+                Cnes = empresa.Cnes
+            }).ToList();
 
         public EmpresaExameModel GetById(int id)
          => _context.Empresaexame
@@ -163,10 +163,10 @@ namespace Service
                 NumeroLeitosUti = empresa.NumeroLeitosUti,
                 NumeroLeitosUtidisponivel = empresa.NumeroLeitosUtidisponivel,
                 PossuiLeitosInternacao = Convert.ToBoolean(empresa.PossuiLeitosInternacao),
-				EhPublico = Convert.ToBoolean(empresa.EhPublico),
-				FazMonitoramento = Convert.ToBoolean(empresa.FazMonitoramento),
-				Cnes = empresa.Cnes
-			}).FirstOrDefault();
+                EhPublico = Convert.ToBoolean(empresa.EhPublico),
+                FazMonitoramento = Convert.ToBoolean(empresa.FazMonitoramento),
+                Cnes = empresa.Cnes
+            }).FirstOrDefault();
 
         public List<EmpresaExameModel> GetByCnpj(string cnpj)
          => _context.Empresaexame
@@ -194,10 +194,10 @@ namespace Service
                 NumeroLeitosUti = empresa.NumeroLeitosUti,
                 NumeroLeitosUtidisponivel = empresa.NumeroLeitosUtidisponivel,
                 PossuiLeitosInternacao = Convert.ToBoolean(empresa.PossuiLeitosInternacao),
-				EhPublico = Convert.ToBoolean(empresa.EhPublico),
-				FazMonitoramento = Convert.ToBoolean(empresa.FazMonitoramento),
-				Cnes = empresa.Cnes
-			}).ToList();
+                EhPublico = Convert.ToBoolean(empresa.EhPublico),
+                FazMonitoramento = Convert.ToBoolean(empresa.FazMonitoramento),
+                Cnes = empresa.Cnes
+            }).ToList();
 
         public List<EmpresaExameModel> GetByUF(string uf)
              => _context.Empresaexame
@@ -225,10 +225,10 @@ namespace Service
                     NumeroLeitosUti = empresa.NumeroLeitosUti,
                     NumeroLeitosUtidisponivel = empresa.NumeroLeitosUtidisponivel,
                     PossuiLeitosInternacao = Convert.ToBoolean(empresa.PossuiLeitosInternacao),
-					EhPublico = Convert.ToBoolean(empresa.EhPublico),
-					FazMonitoramento = Convert.ToBoolean(empresa.FazMonitoramento),
-					Cnes = empresa.Cnes
-				}).ToList();
+                    EhPublico = Convert.ToBoolean(empresa.EhPublico),
+                    FazMonitoramento = Convert.ToBoolean(empresa.FazMonitoramento),
+                    Cnes = empresa.Cnes
+                }).ToList();
 
         public List<EmpresaExameModel> ListByUF(string uf)
              => _context.Empresaexame
@@ -256,10 +256,10 @@ namespace Service
                     NumeroLeitosUti = empresa.NumeroLeitosUti,
                     NumeroLeitosUtidisponivel = empresa.NumeroLeitosUtidisponivel,
                     PossuiLeitosInternacao = Convert.ToBoolean(empresa.PossuiLeitosInternacao),
-					EhPublico = Convert.ToBoolean(empresa.EhPublico),
-					FazMonitoramento = Convert.ToBoolean(empresa.FazMonitoramento),
-					Cnes = empresa.Cnes
-				}).ToList();
+                    EhPublico = Convert.ToBoolean(empresa.EhPublico),
+                    FazMonitoramento = Convert.ToBoolean(empresa.FazMonitoramento),
+                    Cnes = empresa.Cnes
+                }).ToList();
         public List<EmpresaExameModel> ListAll()
              => _context.Empresaexame
                 .Select(empresa => new EmpresaExameModel
@@ -285,10 +285,10 @@ namespace Service
                     NumeroLeitosUti = empresa.NumeroLeitosUti,
                     NumeroLeitosUtidisponivel = empresa.NumeroLeitosUtidisponivel,
                     PossuiLeitosInternacao = Convert.ToBoolean(empresa.PossuiLeitosInternacao),
-					EhPublico = Convert.ToBoolean(empresa.EhPublico),
-					FazMonitoramento = Convert.ToBoolean(empresa.FazMonitoramento),
-					Cnes = empresa.Cnes
-				}).ToList();
+                    EhPublico = Convert.ToBoolean(empresa.EhPublico),
+                    FazMonitoramento = Convert.ToBoolean(empresa.FazMonitoramento),
+                    Cnes = empresa.Cnes
+                }).ToList();
 
         public EmpresaExameModel GetByCNES(string cnes)
         => _context.Empresaexame

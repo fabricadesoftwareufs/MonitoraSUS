@@ -7,7 +7,7 @@ using System.Linq;
 namespace Service
 {
     public class AreaAtuacaoService : IAreaAtuacaoService
-	{
+    {
         private readonly monitorasusContext _context;
         public AreaAtuacaoService(monitorasusContext context)
         {
@@ -18,19 +18,19 @@ namespace Service
              => _context.Areaatuacao
                 .Select(area => new AreaAtuacaoModel
                 {
-					IdAreaAtuacao = area.IdAreaAtuacao,
-					Descricao = area.Descricao
+                    IdAreaAtuacao = area.IdAreaAtuacao,
+                    Descricao = area.Descricao
                 }).ToList();
 
 
         public AreaAtuacaoModel GetById(int id)
         => _context.Areaatuacao
-				.Where(area => area.IdAreaAtuacao == id)
-				.Select(area => new AreaAtuacaoModel
-				{
-					IdAreaAtuacao = area.IdAreaAtuacao,
-					Descricao = area.Descricao
-				}).FirstOrDefault();
+                .Where(area => area.IdAreaAtuacao == id)
+                .Select(area => new AreaAtuacaoModel
+                {
+                    IdAreaAtuacao = area.IdAreaAtuacao,
+                    Descricao = area.Descricao
+                }).FirstOrDefault();
 
     }
 }

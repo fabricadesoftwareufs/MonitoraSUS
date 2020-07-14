@@ -27,13 +27,13 @@ namespace MonitoraSUS.Controllers
             try
             {
                 _internacaoContext.Insert(internacao);
-				TempData["mensagemSucessoInternacao"] = "Internacao cadastrada com sucesso!";
-			}
-			catch (ServiceException e)
-			{
-				TempData["mensagemErro"] = e.Message;
-			}
-			catch (Exception)
+                TempData["mensagemSucessoInternacao"] = "Internacao cadastrada com sucesso!";
+            }
+            catch (ServiceException e)
+            {
+                TempData["mensagemErro"] = e.Message;
+            }
+            catch (Exception)
             {
                 TempData["mensagemErro"] = "Houve problemas na insercao da internacao. Tente novamente em alguns minutos." +
                                             " Se o erro persistir, entre em contato com a Fábrica de Software da UFS pelo email fabricadesoftware@ufs.br";
@@ -50,8 +50,8 @@ namespace MonitoraSUS.Controllers
             try
             {
                 _internacaoContext.update(internacao);
-				TempData["mensagemSucessoInternacao"] = "Internacao atualizada com sucesso!";
-			}
+                TempData["mensagemSucessoInternacao"] = "Internacao atualizada com sucesso!";
+            }
             catch
             {
                 TempData["mensagemErro"] = "Houve problemas ao atualizar a internacao. Tente novamente em alguns minutos." +
@@ -71,8 +71,8 @@ namespace MonitoraSUS.Controllers
             try
             {
                 _internacaoContext.Delete(idInternacao);
-				TempData["mensagemSucessoInternacao"] = "Internacao removida com sucesso!";
-			}
+                TempData["mensagemSucessoInternacao"] = "Internacao removida com sucesso!";
+            }
             catch
             {
                 TempData["mensagemErro"] = "Houve problemas na insercao da internacao. Tente novamente em alguns minutos." +

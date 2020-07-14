@@ -6,6 +6,6 @@ namespace Service.Interface
     public interface IAreaAtuacaoService
     {
         List<AreaAtuacaoModel> GetAll();
-		AreaAtuacaoModel GetById(int id);
+        AreaAtuacaoModel GetById(int id);
     }
 }

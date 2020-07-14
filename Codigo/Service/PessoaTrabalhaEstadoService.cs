@@ -48,8 +48,8 @@ namespace Service
                     Estado = p.IdEstadoNavigation.Uf,
                     Status = p.SituacaoCadastro,
                     EhSecretario = Convert.ToBoolean(p.EhSecretario),
-					IdEmpresa = p.IdEmpresaExame,
-					FoneCelular = p.IdpessoaNavigation.FoneCelular
+                    IdEmpresa = p.IdEmpresaExame,
+                    FoneCelular = p.IdpessoaNavigation.FoneCelular
                 }).ToList();
         public List<SolicitanteAprovacaoViewModel> GetAllGestoresEstado(int idEstado)
             => _context
@@ -64,9 +64,9 @@ namespace Service
                     Estado = p.IdEstadoNavigation.Uf,
                     Status = p.SituacaoCadastro,
                     EhSecretario = Convert.ToBoolean(p.EhSecretario),
-					IdEmpresa = p.IdEmpresaExame,
-					FoneCelular = p.IdpessoaNavigation.FoneCelular
-				}).ToList();
+                    IdEmpresa = p.IdEmpresaExame,
+                    FoneCelular = p.IdpessoaNavigation.FoneCelular
+                }).ToList();
         public List<SolicitanteAprovacaoViewModel> GetAllGestoresEmpresa(int idEmpresa)
             => _context
                 .Pessoatrabalhaestado
@@ -80,9 +80,9 @@ namespace Service
                     Estado = p.IdEstadoNavigation.Uf,
                     Status = p.SituacaoCadastro,
                     EhSecretario = Convert.ToBoolean(p.EhSecretario),
-					IdEmpresa = p.IdEmpresaExame,
-					FoneCelular = p.IdpessoaNavigation.FoneCelular
-				}).ToList();
+                    IdEmpresa = p.IdEmpresaExame,
+                    FoneCelular = p.IdpessoaNavigation.FoneCelular
+                }).ToList();
         public List<SolicitanteAprovacaoViewModel> GetAllNotificadores()
             => _context
                 .Pessoatrabalhaestado
@@ -96,9 +96,9 @@ namespace Service
                     Estado = p.IdEstadoNavigation.Uf,
                     Status = p.SituacaoCadastro,
                     EhSecretario = Convert.ToBoolean(p.EhSecretario),
-					IdEmpresa = p.IdEmpresaExame,
-					FoneCelular = p.IdpessoaNavigation.FoneCelular
-				}).ToList();
+                    IdEmpresa = p.IdEmpresaExame,
+                    FoneCelular = p.IdpessoaNavigation.FoneCelular
+                }).ToList();
         public List<SolicitanteAprovacaoViewModel> GetAllNotificadoresEstado(int idEstado)
                 => _context
                 .Pessoatrabalhaestado
@@ -112,9 +112,9 @@ namespace Service
                     Estado = p.IdEstadoNavigation.Uf,
                     Status = p.SituacaoCadastro,
                     EhSecretario = Convert.ToBoolean(p.EhSecretario),
-					IdEmpresa = p.IdEmpresaExame,
-					FoneCelular = p.IdpessoaNavigation.FoneCelular
-				}).ToList();
+                    IdEmpresa = p.IdEmpresaExame,
+                    FoneCelular = p.IdpessoaNavigation.FoneCelular
+                }).ToList();
         public List<SolicitanteAprovacaoViewModel> GetAllNotificadoresEmpresa(int idEmpresa)
                 => _context
                 .Pessoatrabalhaestado
@@ -128,9 +128,9 @@ namespace Service
                     Estado = p.IdEstadoNavigation.Uf,
                     Status = p.SituacaoCadastro,
                     EhSecretario = Convert.ToBoolean(p.EhSecretario),
-					IdEmpresa = p.IdEmpresaExame,
-					FoneCelular = p.IdpessoaNavigation.FoneCelular
-				}).ToList();
+                    IdEmpresa = p.IdEmpresaExame,
+                    FoneCelular = p.IdpessoaNavigation.FoneCelular
+                }).ToList();
 
         public PessoaTrabalhaEstadoModel GetByIdPessoa(int idPessoa)
             => _context

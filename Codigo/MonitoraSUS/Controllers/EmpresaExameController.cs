@@ -3,11 +3,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Model;
-using Util;
 using Service.Interface;
 using System;
 using System.Collections.Generic;
 using System.Security.Claims;
+using Util;
 
 namespace MonitoraSUS.Controllers
 {
@@ -22,9 +22,9 @@ namespace MonitoraSUS.Controllers
         private readonly IPessoaTrabalhaMunicipioService _trabalhaMunicipioContext;
         private readonly IEstadoService _estadoContext;
         private readonly IMunicipioService _municipioContext;
-		private readonly IUsuarioService _usuarioContext;
+        private readonly IUsuarioService _usuarioContext;
 
-		public EmpresaExameController(IConfiguration configuration,
+        public EmpresaExameController(IConfiguration configuration,
                                       IEmpresaExameService empresaContext,
                                       IExameService exameContext,
                                       IPessoaService pessoaContext,
@@ -32,7 +32,7 @@ namespace MonitoraSUS.Controllers
                                       IPessoaTrabalhaMunicipioService trabalhaMunicipioContext,
                                       IEstadoService estadoContext,
                                       IMunicipioService municipioContext,
-									  IUsuarioService usuarioContext)
+                                      IUsuarioService usuarioContext)
         {
             _configuration = configuration;
             _empresaContext = empresaContext;
@@ -42,7 +42,7 @@ namespace MonitoraSUS.Controllers
             _trabalhaMunicipioContext = trabalhaMunicipioContext;
             _estadoContext = estadoContext;
             _municipioContext = municipioContext;
-			_usuarioContext = usuarioContext;
+            _usuarioContext = usuarioContext;
         }
 
         public IActionResult Index()
@@ -100,9 +100,9 @@ namespace MonitoraSUS.Controllers
         {
             ViewBag.googleKey = _configuration["GOOGLE_KEY"];
 
-			if (Methods.ValidarCnpj(empresa.Cnpj))
+            if (Methods.ValidarCnpj(empresa.Cnpj))
             {
-				if (VerificaQtdLeitos(empresa) == 1)
+                if (VerificaQtdLeitos(empresa) == 1)
                 {
                     TempData["MensagemErro"] = "A quantidade de leitos disponíveis não pode ser menor do que " +
                                                "a quantidade total de leitos!";

@@ -27,12 +27,12 @@ namespace Service
           => _context.Municipiosgeo
                 .Select(municipio => new MunicipioGeoModel
                 {
-                       CodigoIbge = municipio.CodigoIbge,
-                        Nome = municipio.Nome,
-                        Latitude = municipio.Latitude,
-                        Longitude = municipio.Longitude,
-                        Capital = municipio.Capital,
-                        CodigoUf = municipio.CodigoUf
+                    CodigoIbge = municipio.CodigoIbge,
+                    Nome = municipio.Nome,
+                    Latitude = municipio.Latitude,
+                    Longitude = municipio.Longitude,
+                    Capital = municipio.Capital,
+                    CodigoUf = municipio.CodigoUf
                 }).ToList();
 
         public MunicipioGeoModel GetById(int id)

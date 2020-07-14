@@ -1,19 +1,19 @@
-﻿using Model;
+﻿using Microsoft.AspNetCore.Http;
+using Model;
 using Model.AuxModel;
 using Model.ViewModel;
-using Util;
 using Newtonsoft.Json;
 using Persistence;
+using Repository.Interfaces;
 using Service.Interface;
+using Service.UnitiesOfWorks.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
-using Microsoft.AspNetCore.Http;
-using System.IO;
-using Repository.Interfaces;
-using Service.UnitiesOfWorks.Interfaces;
 using System.Threading.Tasks;
+using Util;
 
 namespace Service
 {

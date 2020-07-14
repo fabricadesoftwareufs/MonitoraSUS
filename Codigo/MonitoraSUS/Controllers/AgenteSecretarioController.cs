@@ -4,13 +4,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Model;
 using Model.ViewModel;
-using Util;
 using Service.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Util;
 
 namespace MonitoraSUS.Controllers
 {
@@ -268,7 +268,7 @@ namespace MonitoraSUS.Controllers
             var autenticadoTrabalhaMunicipio = _pessoaTrabalhaMunicipioService.GetByIdPessoa(usuarioAutenticado.UsuarioModel.IdPessoa);
             if (autenticadoTrabalhaEstado != null || ehAdmin)
             {
-				var ehEmpresa = autenticadoTrabalhaEstado.IdEmpresaExame != EmpresaExameModel.EMPRESA_ESTADO_MUNICIPIO;
+                var ehEmpresa = autenticadoTrabalhaEstado.IdEmpresaExame != EmpresaExameModel.EMPRESA_ESTADO_MUNICIPIO;
 
                 if (ehAdmin)
                     solicitantes = _pessoaTrabalhaEstadoService.GetAllGestores();
@@ -298,7 +298,7 @@ namespace MonitoraSUS.Controllers
             }
             if (autenticadoTrabalhaMunicipio != null || ehAdmin)
             {
-				if (ehAdmin)
+                if (ehAdmin)
                     solicitantes = solicitantes.Concat(_pessoaTrabalhaMunicipioService.GetAllGestores()).ToList();
                 else
                 {
@@ -307,12 +307,13 @@ namespace MonitoraSUS.Controllers
                     else if (!ehListarGestores)
                         solicitantes = _pessoaTrabalhaMunicipioService.GetAllNotificadoresMunicipio(autenticadoTrabalhaMunicipio.IdMunicipio);
                 }
-				foreach(SolicitanteAprovacaoViewModel solicitante in solicitantes) {
-					if (solicitante.Estado.All(char.IsDigit))
-					{
-						solicitante.Estado = _estadoService.GetById(Convert.ToInt32(solicitante.Estado)).Uf;
-					}
-				}
+                foreach (SolicitanteAprovacaoViewModel solicitante in solicitantes)
+                {
+                    if (solicitante.Estado.All(char.IsDigit))
+                    {
+                        solicitante.Estado = _estadoService.GetById(Convert.ToInt32(solicitante.Estado)).Uf;
+                    }
+                }
             }
             if (TempData["responseOp"] != null)
                 ViewBag.responseOp = TempData["responseOp"];
@@ -326,11 +327,11 @@ namespace MonitoraSUS.Controllers
             else if (autenticadoTrabalhaEstado != null && autenticadoTrabalhaEstado.IdEmpresaExame != EmpresaExameModel.EMPRESA_ESTADO_MUNICIPIO)
                 empresas = new List<EmpresaExameModel>() { _empresaExameService.GetById(autenticadoTrabalhaEstado.IdEmpresaExame) };
             else if (autenticadoTrabalhaEstado != null && autenticadoTrabalhaEstado.IdEmpresaExame == EmpresaExameModel.EMPRESA_ESTADO_MUNICIPIO)
-				empresas = _empresaExameService.ListByUF(_estadoService.GetById(autenticadoTrabalhaEstado.IdEstado).Uf);
-			else if (autenticadoTrabalhaMunicipio != null)
-				empresas = _empresaExameService.ListByUF(_estadoService.GetById(Convert.ToInt32(_municipioService.GetById(autenticadoTrabalhaMunicipio.IdMunicipio).Uf)).Uf);
-			solicitantes = solicitantes.OrderBy(s => s.Nome).ToList();
-			if (empresas != null)
+                empresas = _empresaExameService.ListByUF(_estadoService.GetById(autenticadoTrabalhaEstado.IdEstado).Uf);
+            else if (autenticadoTrabalhaMunicipio != null)
+                empresas = _empresaExameService.ListByUF(_estadoService.GetById(Convert.ToInt32(_municipioService.GetById(autenticadoTrabalhaMunicipio.IdMunicipio).Uf)).Uf);
+            solicitantes = solicitantes.OrderBy(s => s.Nome).ToList();
+            if (empresas != null)
                 tupleModel = new Tuple<List<SolicitanteAprovacaoViewModel>, List<EmpresaExameModel>>(solicitantes, empresas);
             else
                 tupleModel = new Tuple<List<SolicitanteAprovacaoViewModel>, List<EmpresaExameModel>>(solicitantes, null);
@@ -349,16 +350,16 @@ namespace MonitoraSUS.Controllers
                 _pessoaTrabalhaMunicipioService.Delete(idPessoa);
 
             var exames = _exameService.GetByIdPaciente(idPessoa);
-            
+
             if (exames.Count() == 0)
             {
-				var examesRealizados = _exameService.GetByIdAgente(idPessoa, DateTime.MinValue, DateTime.MaxValue);
-				var usuario = _usuarioService.GetByIdPessoa(idPessoa);
-				if (usuario != null && examesRealizados.Count() == 0)
-				{
-					_recuperarSenhaService.DeleteByUser(usuario.IdUsuario);
-					_usuarioService.Delete(usuario.IdUsuario);
-				}
+                var examesRealizados = _exameService.GetByIdAgente(idPessoa, DateTime.MinValue, DateTime.MaxValue);
+                var usuario = _usuarioService.GetByIdPessoa(idPessoa);
+                if (usuario != null && examesRealizados.Count() == 0)
+                {
+                    _recuperarSenhaService.DeleteByUser(usuario.IdUsuario);
+                    _usuarioService.Delete(usuario.IdUsuario);
+                }
                 _pessoaService.Delete(idPessoa);
             }
             else
@@ -473,11 +474,11 @@ namespace MonitoraSUS.Controllers
             int tipoUsuario = ativarPerfil.Equals("Agente") ? UsuarioModel.PERFIL_AGENTE : UsuarioModel.PERFIL_GESTOR;
             if (ehAdmin && idEmpresa == EmpresaExameModel.EMPRESA_ESTADO_MUNICIPIO)
                 tipoUsuario = UsuarioModel.PERFIL_SECRETARIO;
-			else if (ehAdmin && idEmpresa != EmpresaExameModel.EMPRESA_ESTADO_MUNICIPIO)
-				tipoUsuario = UsuarioModel.PERFIL_GESTOR;
+            else if (ehAdmin && idEmpresa != EmpresaExameModel.EMPRESA_ESTADO_MUNICIPIO)
+                tipoUsuario = UsuarioModel.PERFIL_GESTOR;
 
 
-			string resposta = "";
+            string resposta = "";
             if (usuarioModel == null)
             {
                 var pessoa = _pessoaService.GetById(idPessoa);
@@ -490,39 +491,39 @@ namespace MonitoraSUS.Controllers
                     TipoUsuario = tipoUsuario
                 };
                 _usuarioService.Insert(usuarioModel);
-				if (tipoUsuario == UsuarioModel.PERFIL_SECRETARIO)
-				{
-					(bool nCpf, bool nUsuario, bool nToken) = await new
-										  LoginController(
-											_usuarioService,
-											_pessoaService,
-											_pessoaTrabalhaEstadoService,
-											_pessoaTrabalhaMunicipioService,
-											_estadoService,
-											_municipioService,
-											_empresaExameService,
-											_emailService,
-											_recuperarSenhaService)
-										  .GenerateToken(usuarioModel.Cpf, 4);
-					resposta = ReturnMsgOper(nCpf, nUsuario, nToken);
-				}
-				else
-				{
-					(bool nCpf, bool nUsuario, bool nToken) = await new
-										  LoginController(
-											_usuarioService,
-											_pessoaService,
-											_pessoaTrabalhaEstadoService,
-											_pessoaTrabalhaMunicipioService,
-											_estadoService,
-											_municipioService,
-											_empresaExameService,
-											_emailService,
-											_recuperarSenhaService)
-										  .GenerateToken(usuarioModel.Cpf, 1);
-					resposta = ReturnMsgOper(nCpf, nUsuario, nToken);
-				}
-               
+                if (tipoUsuario == UsuarioModel.PERFIL_SECRETARIO)
+                {
+                    (bool nCpf, bool nUsuario, bool nToken) = await new
+                                          LoginController(
+                                            _usuarioService,
+                                            _pessoaService,
+                                            _pessoaTrabalhaEstadoService,
+                                            _pessoaTrabalhaMunicipioService,
+                                            _estadoService,
+                                            _municipioService,
+                                            _empresaExameService,
+                                            _emailService,
+                                            _recuperarSenhaService)
+                                          .GenerateToken(usuarioModel.Cpf, 4);
+                    resposta = ReturnMsgOper(nCpf, nUsuario, nToken);
+                }
+                else
+                {
+                    (bool nCpf, bool nUsuario, bool nToken) = await new
+                                          LoginController(
+                                            _usuarioService,
+                                            _pessoaService,
+                                            _pessoaTrabalhaEstadoService,
+                                            _pessoaTrabalhaMunicipioService,
+                                            _estadoService,
+                                            _municipioService,
+                                            _empresaExameService,
+                                            _emailService,
+                                            _recuperarSenhaService)
+                                          .GenerateToken(usuarioModel.Cpf, 1);
+                    resposta = ReturnMsgOper(nCpf, nUsuario, nToken);
+                }
+
             }
             else
             {
@@ -618,10 +619,10 @@ namespace MonitoraSUS.Controllers
             var imunoDepri = collection["Imunodeprimido"];
             var cancer = collection["Cancer"];
             var doencaResp = collection["DoencaRespiratoria"];
-			var doencaRenal = collection["DoencaRenal"];
-			var epilepsia = collection["Epilepsia"];
-			var outrasComorbidades = collection["OutrasComorbidades"];
-			
+            var doencaRenal = collection["DoencaRenal"];
+            var epilepsia = collection["Epilepsia"];
+            var outrasComorbidades = collection["OutrasComorbidades"];
+
 
             var pessoa = _pessoaService.GetByCpf(cpf);
             // Se pessoa existe retorna 0 para indicar que a pessoa já tem cadastro
@@ -654,9 +655,9 @@ namespace MonitoraSUS.Controllers
                 DoencaRespiratoria = doencaResp.Contains("true") ? true : false,
                 Imunodeprimido = imunoDepri.Contains("true") ? true : false,
                 Obeso = obeso.Contains("true") ? true : false,
-				DoencaRenal = doencaRenal.Contains("true") ? true : false,
-				Epilepsia = epilepsia.Contains("true") ? true : false,
-				OutrasComorbidades = outrasComorbidades
+                DoencaRenal = doencaRenal.Contains("true") ? true : false,
+                Epilepsia = epilepsia.Contains("true") ? true : false,
+                OutrasComorbidades = outrasComorbidades
             });
 
             return pessoa.Idpessoa;

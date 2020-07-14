@@ -1,7 +1,6 @@
 using Model;
 using Model.ViewModel;
 using Moq;
-using Service;
 using Service.Interface;
 using Service.UnitiesOfWorks.Interfaces;
 using System;
@@ -11,9 +10,9 @@ namespace Test.Service
 {
     public class ExameServiceTest
     {
-        private Mock<IExameService> _mockExame;
-        private Mock<IPessoaService> _mockPessoa;
-        private Mock<IExameSituacaoPessoaUnityOfWork> _mockUnity;
+        private readonly Mock<IExameService> _mockExame;
+        private readonly Mock<IPessoaService> _mockPessoa;
+        private readonly Mock<IExameSituacaoPessoaUnityOfWork> _mockUnity;
 
         public ExameServiceTest()
         {

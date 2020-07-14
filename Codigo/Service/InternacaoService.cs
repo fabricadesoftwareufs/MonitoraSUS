@@ -1,9 +1,7 @@
 ﻿using Model;
 using Persistence;
 using Service.Interface;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Linq;
 
 namespace Service
@@ -62,15 +60,15 @@ namespace Service
                 UsoO2 = internacao.UsoO2
             }).ToList();
 
-		public bool Insert(InternacaoModel internacaoModel)
-		{
-			if (internacaoModel.DataFim == null)
-			{
-				bool haInternacaoAberta = _context.Internacao.Where(internacao => internacao.DataFim == null && internacao.Idpessoa == internacaoModel.IdPessoa).Count() > 0;
-				if (haInternacaoAberta)
-					throw new ServiceException("Não é possível adicionar uma nova internação quando existe internações em aberto. Favor colocar data final da internação que encerrou.");
-			}
-			_context.Add(ModelToEntity(internacaoModel));
+        public bool Insert(InternacaoModel internacaoModel)
+        {
+            if (internacaoModel.DataFim == null)
+            {
+                bool haInternacaoAberta = _context.Internacao.Where(internacao => internacao.DataFim == null && internacao.Idpessoa == internacaoModel.IdPessoa).Count() > 0;
+                if (haInternacaoAberta)
+                    throw new ServiceException("Não é possível adicionar uma nova internação quando existe internações em aberto. Favor colocar data final da internação que encerrou.");
+            }
+            _context.Add(ModelToEntity(internacaoModel));
             return _context.SaveChanges() == 1 ? true : false;
         }
 

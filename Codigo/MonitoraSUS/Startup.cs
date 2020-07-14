@@ -68,7 +68,7 @@ namespace MonitoraSUS
             services.AddScoped<IEmailService, EmailService>();
             services.AddScoped<IEmpresaExameService, EmpresaExameService>();
             services.AddScoped<IInternacaoService, InternacaoService>();
-			services.AddScoped<IAreaAtuacaoService, AreaAtuacaoService>();
+            services.AddScoped<IAreaAtuacaoService, AreaAtuacaoService>();
             services.AddScoped<IMunicipioGeoService, MunicipioGeoService>();
 
             // Repositorios

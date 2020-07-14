@@ -12,11 +12,11 @@ namespace Model.ViewModel
         public string Cidade { get; set; }
         public string Status { get; set; }
         public bool EhSecretario { get; set; }
-		public int IdEmpresa { get; set; }
-		[Display(Name = "Fone Celular")]
-		public string FoneCelular { get; set; }
+        public int IdEmpresa { get; set; }
+        [Display(Name = "Fone Celular")]
+        public string FoneCelular { get; set; }
 
-		public string StatusDescricao
+        public string StatusDescricao
         {
             get
             {

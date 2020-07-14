@@ -13,6 +13,6 @@ namespace Service.Interface
         PessoaModel GetByCpf(string cpf);
         PessoaModel GetByCns(string cns);
         List<PessoaModel> GetByCidade(string cidade);
-		List<PessoaModel> GetByEstado(string estado);
-	}
+        List<PessoaModel> GetByEstado(string estado);
+    }
 }
