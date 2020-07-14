@@ -29,6 +29,7 @@ namespace Service
         private readonly IPessoaService _pessoaService;
         private readonly IExameRepository _exameRepository;
         private readonly INotificacoesRepository _notificacaoRepository;
+        private readonly IPessoaVirusEmpresaSituacaoMunicipioGeoTrabalhaMuniEstadoUnityOfWork _importUnidadeTrabalho;
 
         // Unidades de trabalho
         private readonly IExameSituacaoPessoaUnityOfWork _exameSituacaoUnidadeTrabalho;
@@ -36,6 +37,7 @@ namespace Service
         public ExameService(monitorasusContext context,
             IPessoaService pessoaService,
             IExameSituacaoPessoaUnityOfWork exameSituacaoUnidadeTrabalho,
+            IPessoaVirusEmpresaSituacaoMunicipioGeoTrabalhaMuniEstadoUnityOfWork importUnidadeTrabalho,
             IExameRepository exameRepository,
             INotificacoesRepository notificacaoRepository)
         {
@@ -46,6 +48,7 @@ namespace Service
 
             // Unidade de trabalho
             _exameSituacaoUnidadeTrabalho = exameSituacaoUnidadeTrabalho;
+            _importUnidadeTrabalho = importUnidadeTrabalho;
         }
 
         public bool Insert(ExameViewModel exameModel)
@@ -247,19 +250,11 @@ namespace Service
 
         public void Import(IFormFile file, UsuarioViewModel agente)
         {
-            var _pessoaTrabalhaMunicipioService = new PessoaTrabalhaMunicipioService(_context);
-            var _pessoaTrabalhaEstadoContext = new PessoaTrabalhaEstadoService(_context);
-            var _municipioGeoService = new MunicipioGeoService(_context);
-            var _virusBacteriaService = new VirusBacteriaService(_context);
-            var _pessoaService = new PessoaService(_context);
-            var _empresaExameService = new EmpresaExameService(_context);
-            var _situacaoPessoaService = new SituacaoVirusBacteriaService(_context);
-            var _municipioService = new MunicipioService(_context);
-            var secretarioMunicipio = _pessoaTrabalhaMunicipioService.GetByIdPessoa(agente.UsuarioModel.IdPessoa);
-            var secretarioEstado = _pessoaTrabalhaEstadoContext.GetByIdPessoa(agente.UsuarioModel.IdPessoa);
+            var secretarioMunicipio = _importUnidadeTrabalho.PessoaTrabalhaMunicipioService.GetByIdPessoa(agente.UsuarioModel.IdPessoa);
+            var secretarioEstado = _importUnidadeTrabalho.PessoaTrabalhaEstadoContext.GetByIdPessoa(agente.UsuarioModel.IdPessoa);
             var exames = new List<ExameViewModel>();
             var indices = new IndiceItemArquivoImportacao();
-            var listVirusBacteria = _virusBacteriaService.GetAll();
+            var listVirusBacteria = _importUnidadeTrabalho.VirusBacteriaService.GetAll();
             MunicipioGeoModel cidadePaciente = new MunicipioGeoModel(),
                               cidadeEmpresa = new MunicipioGeoModel();
 
@@ -276,8 +271,8 @@ namespace Service
                 {
                     var line = reader.ReadLine().Split(';');
 
-                    cidadePaciente = _municipioGeoService.GetByName(line[53]);
-                    cidadeEmpresa = _municipioGeoService.GetByName(line[7]);
+                    cidadePaciente = _importUnidadeTrabalho.MunicipioGeoService.GetByName(line[53]);
+                    cidadeEmpresa = _importUnidadeTrabalho.MunicipioGeoService.GetByName(line[7]);
 
                     var exame = new ExameViewModel();
                     exame.Paciente = new PessoaModel
@@ -318,7 +313,7 @@ namespace Service
                         exame.Exame.IdMunicipio = secretarioMunicipio.IdMunicipio;
                     else
                         exame.Exame.IdMunicipio = null;
-                    exame.Exame.IdEstado = secretarioMunicipio != null ? Convert.ToInt32(_municipioService.GetById(secretarioMunicipio.IdMunicipio).Uf) : secretarioEstado.IdEstado;
+                    exame.Exame.IdEstado = secretarioMunicipio != null ? Convert.ToInt32(_importUnidadeTrabalho.MunicipioService.GetById(secretarioMunicipio.IdMunicipio).Uf) : secretarioEstado.IdEstado;
                     exame.EmpresaExame = new EmpresaExameModel
                     {
                         Cnpj = "NÃO INFORMADO",
@@ -336,19 +331,20 @@ namespace Service
                     exame.Exame.IdAreaAtuacao = 0;
                     exame.Exame.CodigoColeta = line[indices.IndiceCodigoColeta];
                     exame.Paciente.Cns = line[indices.IndiceCnsPaciente];
+
                     exames.Add(exame);
                 }
             }
 
             foreach (var item in exames)
             {
-                var pessoa = !String.IsNullOrWhiteSpace(item.Paciente.Cpf) ?
-                           _pessoaService.GetByCpf(item.Paciente.Cpf) : !String.IsNullOrWhiteSpace(item.Paciente.Cns) ?
-                           _pessoaService.GetByCns(item.Paciente.Cns) : new PessoaModel { Idpessoa = -1 };
+                var pessoa = !string.IsNullOrWhiteSpace(item.Paciente.Cpf) ?
+                           _importUnidadeTrabalho.PessoaService.GetByCpf(item.Paciente.Cpf) : !string.IsNullOrWhiteSpace(item.Paciente.Cns) ?
+                           _importUnidadeTrabalho.PessoaService.GetByCns(item.Paciente.Cns) : new PessoaModel { Idpessoa = -1 };
 
                 if (pessoa == null || pessoa.Idpessoa == -1)
                 {
-                    pessoa = _pessoaService.Insert(item.Paciente);
+                    pessoa = _importUnidadeTrabalho.PessoaService.Insert(item.Paciente);
                     item.Paciente.Idpessoa = pessoa.Idpessoa;
                     item.Paciente.Cpf = pessoa.Cpf;
                 }
@@ -356,26 +352,26 @@ namespace Service
                 {
                     item.Paciente.Idpessoa = pessoa.Idpessoa;
                     item.Paciente.Cpf = pessoa.Cpf;
-                    _pessoaService.Update(item.Paciente, true);
+                    _importUnidadeTrabalho.PessoaService.Update(item.Paciente, true);
                 }
 
 
-                var empresa = _empresaExameService.GetByCNES(item.EmpresaExame.Cnes);
+                var empresa = _importUnidadeTrabalho.EmpresaExameService.GetByCNES(item.EmpresaExame.Cnes);
 
                 if (empresa == null)
-                    _empresaExameService.Insert(item.EmpresaExame);
+                    _importUnidadeTrabalho.EmpresaExameService.Insert(item.EmpresaExame);
 
-                item.Exame.IdEmpresaSaude = _empresaExameService.GetByCNES(item.EmpresaExame.Cnes).Id;
+                item.Exame.IdEmpresaSaude = _importUnidadeTrabalho.EmpresaExameService.GetByCNES(item.EmpresaExame.Cnes).Id;
 
-                var situacaoPessoa = _situacaoPessoaService.GetById(item.Paciente.Idpessoa, item.Exame.IdVirusBacteria);
+                var situacaoPessoa = _importUnidadeTrabalho.SituacaoPessoaService.GetById(item.Paciente.Idpessoa, item.Exame.IdVirusBacteria);
 
                 if (situacaoPessoa == null)
-                    _situacaoPessoaService.Insert(CreateSituacaoPessoaModelByExame(item, situacaoPessoa, _pessoaService));
+                    _importUnidadeTrabalho.SituacaoPessoaService.Insert(CreateSituacaoPessoaModelByExame(item, situacaoPessoa, _pessoaService));
                 else
-                    _situacaoPessoaService.Update(CreateSituacaoPessoaModelByExame(item, situacaoPessoa, _pessoaService));
+                    _importUnidadeTrabalho.SituacaoPessoaService.Update(CreateSituacaoPessoaModelByExame(item, situacaoPessoa, _pessoaService));
 
 
-                var exame = GetByIdColeta(item.Exame.CodigoColeta);
+                var exame = _importUnidadeTrabalho.ExameRepository.GetByIdColeta(item.Exame.CodigoColeta);
 
                 var ex = new ExameModel
                 {
@@ -400,32 +396,24 @@ namespace Service
                     StatusNotificacao = exame != null ? exame.StatusNotificacao : "N"
                 };
 
-                var check = GetExamesRelizadosData(ex.IdPaciente, item.Exame.IdVirusBacteria, item.Exame.DataExame, item.Exame.MetodoExame);
+                var check = _importUnidadeTrabalho.ExameRepository.GetExamesRelizadosData(ex.IdPaciente, item.Exame.IdVirusBacteria, item.Exame.DataExame, item.Exame.MetodoExame);
                 if (exame != null)
                 {
                     if (check.Count > 0)
                     {
                         var status = false;
                         foreach (var index in check)
-                        {
                             if (index.IdExame == exame.IdExame)
                                 status = true;
-                        }
 
                         if (status)
-                        {
-                            _context.Update(ex);
-                            _context.SaveChanges();
-                        }
+                            _importUnidadeTrabalho.ExameRepository.Update(ex);
                     }
                 }
                 else
                 {
                     if (check.Count == 0)
-                    {
-                        _context.Add(ex);
-                        _context.SaveChanges();
-                    }
+                        _importUnidadeTrabalho.ExameRepository.Update(ex);
                 }
             }
         }

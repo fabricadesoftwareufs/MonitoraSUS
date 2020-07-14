@@ -6,7 +6,7 @@ using Service.UnitiesOfWorks.Interfaces;
 
 namespace Service.UnitiesOfWorks
 {
-    public class ExameSituacaoPessoaUnityOfWork : IExameSituacaoPessoaUnityOfWork
+    public class ExameSituacaoPessoaUnityOfWork : IExameSituacaoPessoaUnityOfWork, ITransactions
     {
         private readonly monitorasusContext _context;
         public IExameRepository ExameRepositorio { get; }
