@@ -25,8 +25,8 @@ namespace Service
          * Ideal usar apenas services, visto que o mesmo contexto será passado/obtido.
          * Caso necessite de transação mantendo o contexto, utilizar UNIDADES DE TRABALHO.
          */
-        private readonly monitorasusContext _context;
         private readonly IPessoaService _pessoaService;
+        private readonly IVirusBacteriaService _virusBacteriaService;
         private readonly IExameRepository _exameRepository;
         private readonly INotificacoesRepository _notificacaoRepository;
         private readonly IPessoaVirusEmpresaSituacaoMunicipioGeoTrabalhaMuniEstadoUnityOfWork _importUnidadeTrabalho;
@@ -35,16 +35,18 @@ namespace Service
         // Unidades de trabalho
         private readonly IExameSituacaoPessoaUnityOfWork _exameSituacaoUnidadeTrabalho;
 
-        public ExameService(monitorasusContext context,
-            IPessoaService pessoaService,
+        public ExameService(IPessoaService pessoaService,
+            IVirusBacteriaService virusBacteriaService,
             IExameSituacaoPessoaUnityOfWork exameSituacaoUnidadeTrabalho,
             IPessoaVirusEmpresaSituacaoMunicipioGeoTrabalhaMuniEstadoUnityOfWork importUnidadeTrabalho,
             IPessoaExameSituacaoUnidadeTrabalhoUnityOfWork pessoaExameSituacaoTrabalhaUnidadeTrabalho,
             IExameRepository exameRepository,
             INotificacoesRepository notificacaoRepository)
         {
-            _context = context;
             _pessoaService = pessoaService;
+            _virusBacteriaService = virusBacteriaService;
+
+            // Repositorios
             _exameRepository = exameRepository;
             _notificacaoRepository = notificacaoRepository;
 
@@ -597,7 +599,7 @@ namespace Service
                 else if (exameViewModel.Exame.Resultado.Equals(ExameModel.RESULTADO_NEGATIVO) || exameViewModel.Exame.Resultado.Equals(ExameModel.RESULTADO_RECUPERADO)
                   || exameViewModel.Exame.Resultado.Equals(ExameModel.RESULTADO_INDETERMINADO))
                 {
-                    var virus = (new VirusBacteriaService(_context)).GetById(exameViewModel.Exame.IdVirusBacteria);
+                    var virus = (_virusBacteriaService.GetById(exameViewModel.Exame.IdVirusBacteria));
                     DateTime dataMinima = DateTime.Now.AddDays(virus.DiasRecuperacao * (-1));
                     var exames = GetByIdPaciente(user.Idpessoa).Where(e => e.Exame.DataExame >= dataMinima).ToList();
                     if (exames.Count() <= 1 && exameViewModel.Paciente.SituacaoSaude.Equals(PessoaModel.SITUACAO_ISOLAMENTO))
