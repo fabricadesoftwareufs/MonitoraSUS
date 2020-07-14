@@ -47,6 +47,23 @@ namespace Repository
                     throw e.InnerException;
                 }
             }
+            return false;
+        }
+
+        public bool Update(ExameModel exameModel)
+        {
+            if (exameModel != null)
+            {
+                try
+                {
+                    _context.Exame.Update(ModelToEntity(exameModel));
+                    return _context.SaveChanges() == 1;
+                }
+                catch (Exception e)
+                {
+                    throw e.InnerException;
+                }
+            }
 
             return false;
         }

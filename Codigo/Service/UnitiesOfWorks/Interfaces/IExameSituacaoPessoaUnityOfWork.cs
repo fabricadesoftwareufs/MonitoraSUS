@@ -6,12 +6,9 @@ using System.Text;
 
 namespace Service.UnitiesOfWorks.Interfaces
 {
-    public interface IExameSituacaoPessoaUnityOfWork
+    public interface IExameSituacaoPessoaUnityOfWork : ITransactions
     {
         IExameRepository ExameRepositorio { get; }
         ISituacaoVirusBacteriaService SituacaoPessoaService { get; }
-        void BeginTransaction();
-        void Commit();
-        void Rollback();
     }
 }

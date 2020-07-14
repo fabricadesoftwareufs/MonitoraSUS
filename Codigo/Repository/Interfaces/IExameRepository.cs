@@ -8,6 +8,9 @@ namespace Repository.Interfaces
 {
     public interface IExameRepository
     {
+        bool Insert(ExameViewModel exameModel);
+        bool Update(ExameViewModel exameModel);
+        bool Update(ExameModel exameModel);
         bool Delete(int id);
         List<MonitoraPacienteViewModel> GetByCidadeResidenciaPaciente(string cidade, string siglaEstado, int idVirusBacteria, DateTime dataInicio, DateTime dataFim);
         List<MonitoraPacienteViewModel> GetByEstadoResidenciaPaciente(string siglaEstado, int idVirusBacteria, DateTime dataInicio, DateTime dataFim);
@@ -29,7 +32,5 @@ namespace Repository.Interfaces
         List<TotalEstadoMunicipioBairro> GetTotaisRealizadosByEmpresa(int idEempresa);
         List<TotalEstadoMunicipioBairro> GetTotaisRealizadosByEstado(int idEstado);
         List<TotalEstadoMunicipioBairro> GetTotaisRealizadosByMunicipio(int idMunicipio);
-        bool Insert(ExameViewModel exameModel);
-        bool Update(ExameViewModel exameModel);
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Model;
 using Persistence;
 using Repository.Interfaces;
+using System;
 using System.Linq;
 
 namespace Repository
@@ -54,5 +55,24 @@ namespace Repository
                         Sid = conf.Sid,
                         Token = conf.Token
                     }).FirstOrDefault();
+
+        public Configuracaonotificar Configura(ConfiguracaoNotificarModel configuracaoNotificar) => _context.Configuracaonotificar.Where(s => s.IdConfiguracaoNotificar == configuracaoNotificar.IdConfiguracaoNotificar).FirstOrDefault();
+
+        public bool Update(Configuracaonotificar configuracao)
+        {
+            if (configuracao != null)
+            {
+                try
+                {
+                    _context.Configuracaonotificar.Update(configuracao);
+                    return _context.SaveChanges() == 1;
+                }
+                catch (Exception e)
+                {
+                    throw e.InnerException;
+                }
+            }
+            return false;
+        }
     }
 }
