@@ -1052,6 +1052,62 @@ namespace Repository
             };
         }
 
+        private Exame ModelToEntity(ExameModel exameModel)
+        {
+            exameModel.CodigoColeta = (exameModel.CodigoColeta == null) ? "" : exameModel.CodigoColeta;
+            exameModel.IdNotificacao = (exameModel.IdNotificacao == null) ? "" : exameModel.IdNotificacao;
+            var secretarioMunicipio = _context.Pessoatrabalhamunicipio.Where(p => p.IdPessoa == exameModel.IdAgenteSaude).FirstOrDefault();
+
+            if (secretarioMunicipio != null)
+            {
+                exameModel.IdMunicipio = secretarioMunicipio.IdMunicipio;
+                exameModel.IdEstado = Convert.ToInt32(secretarioMunicipio.IdMunicipioNavigation.Uf);
+                exameModel.IdEmpresaSaude = 1; // empresa padrão do banco 
+            }
+            else
+            {
+                var secretarioEstado = _context.Pessoatrabalhaestado.Where(p => p.Idpessoa == exameModel.IdAgenteSaude).FirstOrDefault();
+                exameModel.IdEstado = secretarioEstado.IdEstado;
+                exameModel.IdEmpresaSaude = secretarioEstado.IdEmpresaExame;
+                exameModel.IdMunicipio = null;
+            }
+            return new Exame
+            {
+                IdAreaAtuacao = exameModel.IdAreaAtuacao,
+                IdExame = exameModel.IdExame,
+                IdAgenteSaude = exameModel.IdAgenteSaude,
+                IdPaciente = exameModel.IdPaciente,
+                IdVirusBacteria = exameModel.IdVirusBacteria,
+                IgG = exameModel.IgG,
+                IgM = exameModel.IgM,
+                Pcr = exameModel.Pcr,
+                IgMigG = exameModel.IgGIgM,
+                MetodoExame = exameModel.MetodoExame,
+                IdEstado = exameModel.IdEstado,
+                IdMunicipio = exameModel.IdMunicipio,
+                DataInicioSintomas = exameModel.DataInicioSintomas,
+                DataExame = exameModel.DataExame,
+                IdEmpresaSaude = exameModel.IdEmpresaSaude,
+                CodigoColeta = exameModel.CodigoColeta,
+                StatusNotificacao = exameModel.StatusNotificacao,
+                IdNotificacao = exameModel.IdNotificacao,
+                DataNotificacao = DateTime.Now,
+                AguardandoResultado = Convert.ToByte(exameModel.AguardandoResultado),
+                Coriza = Convert.ToByte(exameModel.Coriza),
+                Nausea = Convert.ToByte(exameModel.Nausea),
+                Tosse = Convert.ToByte(exameModel.Tosse),
+                PerdaOlfatoPaladar = Convert.ToByte(exameModel.PerdaOlfatoPaladar),
+                RelatouSintomas = Convert.ToByte(exameModel.RelatouSintomas),
+                Diarreia = Convert.ToByte(exameModel.Diarreia),
+                DificuldadeRespiratoria = Convert.ToByte(exameModel.DificuldadeRespiratoria),
+                DorAbdominal = Convert.ToByte(exameModel.DorAbdominal),
+                DorGarganta = Convert.ToByte(exameModel.DorGarganta),
+                DorOuvido = Convert.ToByte(exameModel.DorOuvido),
+                Febre = Convert.ToByte(exameModel.Febre),
+                OutroSintomas = exameModel.OutrosSintomas,
+            };
+        }
+
         private List<MonitoraPacienteViewModel> BuscarNaoNegativos(int idVirusBacteria, List<MonitoraPacienteViewModel> monitoraPacientes)
         {
             var listaMonitoramentoNaoNegativos = new List<MonitoraPacienteViewModel>();
