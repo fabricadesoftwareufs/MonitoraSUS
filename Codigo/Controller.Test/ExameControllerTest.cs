@@ -124,8 +124,7 @@ namespace Controller.Test
             novoExame.Exame = null;
             novoExame.Paciente = null;
 
-            controller.ModelState.AddModelError("erro", "Modelo invalido")
-                ;
+            controller.ModelState.AddModelError("erro", "Modelo invalido");
             // Act
             var resultado = controller.Create(novoExame);
 
