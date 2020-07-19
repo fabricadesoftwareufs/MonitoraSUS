@@ -1,9 +1,11 @@
-﻿using Model;
+﻿using Google.Protobuf.WellKnownTypes;
+using Model;
 using Persistence;
 using Service.Interface;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Util;
 
 namespace Service
 {
@@ -50,7 +52,7 @@ namespace Service
 
         public MunicipioGeoModel GetByName(string name)
          => _context.Municipiosgeo
-                .Where(municipioModel => Regex.Replace(municipioModel.Nome, "[^0-9a-zA-Z]+", "").ToUpper().Equals(Regex.Replace(name, "[^0-9a-zA-Z]+", "").ToUpper()))
+                .Where(municipioModel => Methods.RemoveSpecialsCaracts(municipioModel.Nome).ToUpper().Equals(Methods.RemoveSpecialsCaracts(name).ToUpper()))
                 .Select(municipio => new MunicipioGeoModel
                 {
                     CodigoIbge = municipio.CodigoIbge,
