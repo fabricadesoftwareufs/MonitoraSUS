@@ -55,7 +55,7 @@ function fillInAddress() {
     else
         $('#street_number').focus();
 
-    //removeReadOnlyCampoVazio();
+    removeReadOnlyCampoVazio();
 
 
 }
@@ -213,7 +213,7 @@ function BuscaViaCep(cep) {
             else if (formCep.localidade.value != "")
                 ProcuraEndereco(formCep.localidade.value);
 
-            //removeReadOnlyCampoVazio();
+            removeReadOnlyCampoVazio();
 
         } else
             span.hidden = false;
