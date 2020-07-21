@@ -511,6 +511,12 @@ namespace MonitoraSUS.Controllers
 			return PreencheTotalizadores(pesquisaExame);
 		}
 
+		[HttpPost]
+		public IActionResult CalculaResultadoExame(bool aguardandoResultado, string iggIgm, string igm, string igg, string pcr) {
+			return Ok(ExameModel.CalculaResultadoExame(aguardandoResultado, iggIgm, igm, igg,pcr));
+		}
+
+
 		public PesquisaExameViewModel PreencheTotalizadores(PesquisaExameViewModel examesTotalizados)
 		{
 

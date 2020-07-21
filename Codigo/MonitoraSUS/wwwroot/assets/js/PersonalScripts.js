@@ -55,7 +55,7 @@ function fillInAddress() {
     else
         $('#street_number').focus();
 
-    removeReadOnlyCampoVazio();
+    //removeReadOnlyCampoVazio();
 
 
 }
@@ -140,8 +140,8 @@ function loadEstados() {
 
 function validaCpf() {
 
-    let cpf = document.getElementById('input-cpf')
-    let span = document.getElementById('spanInvalidCpf')
+    let cpf = document.getElementById('input-cpf');
+    let span = document.getElementById('spanInvalidCpf');
 
     let url = "/Login/ValidaCpf";
 
@@ -213,7 +213,7 @@ function BuscaViaCep(cep) {
             else if (formCep.localidade.value != "")
                 ProcuraEndereco(formCep.localidade.value);
 
-            removeReadOnlyCampoVazio();
+            //removeReadOnlyCampoVazio();
 
         } else
             span.hidden = false;

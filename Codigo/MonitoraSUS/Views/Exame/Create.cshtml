@@ -1,679 +1,680 @@
 ﻿@model Model.ExameViewModel
 
 @{
-	ViewData["Title"] = "Create";
-	string dataNascimento = Model.Paciente.DataNascimento != DateTime.MinValue ? Model.Paciente.DataNascimento.ToString("dd/MM/yyyy") : DateTime.Now.ToString("dd/MM/yyyy");
-	var rua = Model.Paciente.Rua;
-	var cep = Model.Paciente.Cep;
-	var bairro = Model.Paciente.Bairro;
-	var cidade = Model.Paciente.Cidade;
-	var complemento = Model.Paciente.Complemento;
-	string numero = Model.Paciente.Numero;
-	string estado = Model.Paciente.Estado;
-	var latitude = Model.Paciente.Latitude;
-	var longitude = Model.Paciente.Longitude;
-	string email = Model.Paciente.Email;
-	string foneCelular = Model.Paciente.FoneCelular;
-	string foneFixo = Model.Paciente.FoneFixo;
-	bool hipertenso = Model.Paciente.Hipertenso;
-	bool cardiopata = Model.Paciente.Cardiopatia;
-	bool cancer = Model.Paciente.Cancer;
-	bool diabetico = Model.Paciente.Diabetes;
-	bool doenRespiatoria = Model.Paciente.DoencaRespiratoria;
-	bool doencaRenal = Model.Paciente.DoencaRenal;
-	bool epilepsia = Model.Paciente.Epilepsia;
-	bool obeso = Model.Paciente.Obeso;
-	bool imunodeprimido = Model.Paciente.Imunodeprimido;
-	String situacaoSaude = Model.Paciente.SituacaoSaude;
-	string dataExame = Model.Exame.DataExame != DateTime.MinValue ? Model.Exame.DataExame.ToString("yyyy-MM-dd") : DateTime.Now.ToString("yyyy-MM-dd");
-	string DataInicioSintomas = Model.Exame.DataInicioSintomas != DateTime.MinValue ? Model.Exame.DataInicioSintomas.ToString("yyyy-MM-dd") : DateTime.Now.ToString("yyyy-MM-dd");
-	var googleKey = ViewBag.googleKey;
-	var outrasComorbidades = Model.Paciente.OutrasComorbidades;
-	var codigoColeta = Model.Exame.CodigoColeta;
+    ViewData["Title"] = "Create";
+    string dataNascimento = Model.Paciente.DataNascimento != DateTime.MinValue ? Model.Paciente.DataNascimento.ToString("dd/MM/yyyy") : DateTime.Now.ToString("dd/MM/yyyy");
+    var rua = Model.Paciente.Rua;
+    var cep = Model.Paciente.Cep;
+    var bairro = Model.Paciente.Bairro;
+    var cidade = Model.Paciente.Cidade;
+    var complemento = Model.Paciente.Complemento;
+    string numero = Model.Paciente.Numero;
+    string estado = Model.Paciente.Estado;
+    var latitude = Model.Paciente.Latitude;
+    var longitude = Model.Paciente.Longitude;
+    string email = Model.Paciente.Email;
+    string foneCelular = Model.Paciente.FoneCelular;
+    string foneFixo = Model.Paciente.FoneFixo;
+    bool hipertenso = Model.Paciente.Hipertenso;
+    bool cardiopata = Model.Paciente.Cardiopatia;
+    bool cancer = Model.Paciente.Cancer;
+    bool diabetico = Model.Paciente.Diabetes;
+    bool doenRespiatoria = Model.Paciente.DoencaRespiratoria;
+    bool doencaRenal = Model.Paciente.DoencaRenal;
+    bool epilepsia = Model.Paciente.Epilepsia;
+    bool obeso = Model.Paciente.Obeso;
+    bool imunodeprimido = Model.Paciente.Imunodeprimido;
+    String situacaoSaude = Model.Paciente.SituacaoSaude;
+    string dataExame = Model.Exame.DataExame != DateTime.MinValue ? Model.Exame.DataExame.ToString("yyyy-MM-dd") : DateTime.Now.ToString("yyyy-MM-dd");
+    string DataInicioSintomas = Model.Exame.DataInicioSintomas != DateTime.MinValue ? Model.Exame.DataInicioSintomas.ToString("yyyy-MM-dd") : DateTime.Now.ToString("yyyy-MM-dd");
+    var googleKey = ViewBag.googleKey;
+    var outrasComorbidades = Model.Paciente.OutrasComorbidades;
+    var codigoColeta = Model.Exame.CodigoColeta;
 }
 
 
 <!-- Page Content -->
 <div class="container-fluid mt--6">
-	<div class="row">
-		<div class="col-md-12">
-			<div class="card card-content">
-				<div class="card-header bg-transparent">
-					<div class="row align-items-center">
-						<div class="col">
-							<h5 class="card-title  text-muted mb-0">MonitoraSUS</h5>
-							<h5 class="h3 mb-0">Notificar Exame</h5>
-						</div>
-						<div class="col text-right">
-							<a class="btn btn-default" asp-controller="Home" asp-action="Index"> <i class="fas fa-arrow-left"></i> Voltar</a><br />
-						</div>
-					</div>
-				</div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card card-content">
+                <div class="card-header bg-transparent">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h5 class="card-title  text-muted mb-0">MonitoraSUS</h5>
+                            <h5 class="h3 mb-0">Notificar Exame</h5>
+                        </div>
+                        <div class="col text-right">
+                            <a class="btn btn-default" asp-controller="Home" asp-action="Index"> <i class="fas fa-arrow-left"></i> Voltar</a><br />
+                        </div>
+                    </div>
+                </div>
 
-				<div class="card-body">
-					<form asp-action="Create" name="form-exame" id="form-exame" autocomplete="off">
-						<h6 class="heading-small text-muted mb-4">Dados Pessoais</h6>
-						<h6 class="heading-small text-muted pl-lg-4">Digite um CPF para carregar as informações do paciente ou cadastre-o agora mesmo</h6>
-						<div class="pl-lg-4">
-							<div class="row">
-								<div class="col-md-2" hidden>
-									<div class="form-group">
-										<input asp-for="Paciente.Idpessoa" required id="input-id-pessoa" value="@Model.Paciente.Idpessoa" class="form-control" />
-									</div>
-								</div>
-								<div class="col-md-2">
-									<div class="form-group">
-										<label class="form-control-label" for="input-cpf">CPF ou RG</label>
-										<input asp-for="Paciente.Cpf" id="input-cpf" placeholder="000.000.000-00" type="text" class="form-control" />
-										<span asp-validation-for="Paciente.Cpf" class="text-danger"></span>
-										@if (TempData["resultadoPesquisa"] != null)
-										{
-											<h6 class="heading-small text-danger">@TempData["resultadoPesquisa"]</h6>
-										}
-									</div>
-								</div>
-								<div class="col-md-6">
-									<div class="form-group">
-										<label class="form-control-label" for="input-nome">Paciente</label>
-										<input asp-for="Paciente.Nome" required id="input-nome" placeholder="Nome Completo" class="form-control"/>
-										<span asp-validation-for="Paciente.Nome" class="text-danger"></span>
-									</div>
-								</div>
-								<div class="col-md-2">
-									<div class="form-group">
-										<label for="input-data-nascimento" class="form-control-label">Data de Nascimento</label>
-										<input asp-for="Paciente.DataNascimento" type="text" id="input-data-nascimento" placeholder="dd/mm/aaaa" class="form-control" value="@dataNascimento" required />
-										<span asp-validation-for="Paciente.DataNascimento" class="text-danger"></span>
-									</div>
-								</div>
-								<div class="col-md-2">
-									<div class="form-group">
-										<label class="form-control-label" for="sexo">Sexo</label><br>
-										<div class="custom-control custom-radio custom-control-inline">
-											@Html.RadioButtonFor(model => Model.Paciente.Sexo, "M", new { @class = "custom-control-input", @id = "input-sexo-masc", @name = "sexo" })
-											<label class="custom-control-label" for="input-sexo-masc">Masculino</label>
-										</div>
-										<div class="custom-control custom-radio custom-control-inline">
-											@Html.RadioButtonFor(model => Model.Paciente.Sexo, "F", new { @class = "custom-control-input", @id = "input-sexo-fem", @name = "sexo" })
-											<label class="custom-control-label" for="input-sexo-fem">Feminino</label>
-										</div>
-									</div>
-								</div>
-								<div class="col-md-4">
-									<div class="form-group">
-										<label asp-for="Paciente.Cns" class="form-control-label"></label>
-										<input asp-for="Paciente.Cns" required id="input-cns" placeholder="CNS" class="form-control" value="@Model.Paciente.Cns" />
-										<span asp-validation-for="Paciente.Cns" class="text-danger"></span>
-									</div>
-								</div>
-								<div class="col-md-4">
-									<div class="form-group">
-										<label class="form-control-label" for="input-area-atuacao">Área de Atuação:</label>
-										@Html.DropDownListFor(model => Model.Exame.IdAreaAtuacao, ViewBag.AreaAtuacao as SelectList, new
-										{ @class = "form-control", @id = "input-area-atuacao" })
-									</div>
-								</div>
-								<div class="col-md-4">
-									<div class="form-group">
-										<label class="form-control-label" for="input-profissao">Profissão</label>
-										<input asp-for="Paciente.Profissao" required id="input-profissao" class="form-control" value="@Model.Paciente.Profissao" />
-										<span asp-validation-for="Paciente.Profissao" class="text-danger"></span>
-									</div>
-								</div>
+                <div class="card-body">
+                    <form asp-action="Create" name="form-exame" id="form-exame" autocomplete="off">
+                        <h6 class="heading-small text-muted mb-4">Dados Pessoais</h6>
+                        <h6 class="heading-small text-muted pl-lg-4">Digite um CPF para carregar as informações do paciente ou cadastre-o agora mesmo</h6>
+                        <div class="pl-lg-4">
+                            <div class="row">
+                                <div class="col-md-2" hidden>
+                                    <div class="form-group">
+                                        <input asp-for="Paciente.Idpessoa" required id="input-id-pessoa" value="@Model.Paciente.Idpessoa" class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="input-cpf">CPF ou RG</label>
+                                        <input asp-for="Paciente.Cpf" id="input-cpf" placeholder="000.000.000-00" type="text" class="form-control" />
+                                        <span asp-validation-for="Paciente.Cpf" class="text-danger"></span>
+                                        @if (TempData["resultadoPesquisa"] != null)
+                                        {
+                                            <h6 class="heading-small text-danger">@TempData["resultadoPesquisa"]</h6>
+                                        }
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="input-nome">Paciente</label>
+                                        <input asp-for="Paciente.Nome" required id="input-nome" placeholder="Nome Completo" class="form-control" />
+                                        <span asp-validation-for="Paciente.Nome" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label for="input-data-nascimento" class="form-control-label">Data de Nascimento</label>
+                                        <input asp-for="Paciente.DataNascimento" type="text" id="input-data-nascimento" placeholder="dd/mm/aaaa" class="form-control" value="@dataNascimento" required />
+                                        <span asp-validation-for="Paciente.DataNascimento" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="sexo">Sexo</label><br>
+                                        <div class="custom-control custom-radio custom-control-inline">
+                                            @Html.RadioButtonFor(model => Model.Paciente.Sexo, "M", new { @class = "custom-control-input", @id = "input-sexo-masc", @name = "sexo" })
+                                            <label class="custom-control-label" for="input-sexo-masc">Masculino</label>
+                                        </div>
+                                        <div class="custom-control custom-radio custom-control-inline">
+                                            @Html.RadioButtonFor(model => Model.Paciente.Sexo, "F", new { @class = "custom-control-input", @id = "input-sexo-fem", @name = "sexo" })
+                                            <label class="custom-control-label" for="input-sexo-fem">Feminino</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label asp-for="Paciente.Cns" class="form-control-label"></label>
+                                        <input asp-for="Paciente.Cns" required id="input-cns" placeholder="CNS" class="form-control" value="@Model.Paciente.Cns" />
+                                        <span asp-validation-for="Paciente.Cns" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="input-area-atuacao">Área de Atuação:</label>
+                                        @Html.DropDownListFor(model => Model.Exame.IdAreaAtuacao, ViewBag.AreaAtuacao as SelectList, new
+                                        { @class = "form-control", @id = "input-area-atuacao" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="input-profissao">Profissão</label>
+                                        <input asp-for="Paciente.Profissao" required id="input-profissao" class="form-control" value="@Model.Paciente.Profissao" />
+                                        <span asp-validation-for="Paciente.Profissao" class="text-danger"></span>
+                                    </div>
+                                </div>
 
-							</div>
-						</div>
-						<hr class="my-4" />
-						<h6 class="heading-small text-muted mb-4">Informações de Contato</h6>
-						<div class="pl-lg-4">
-							<div class="row">
-								<div class="col-lg-2">
-									<div class="form-group">
-										<label class="form-control-label" for="postal_code">CEP (Não sabe? </label> <a href="http://www.buscacep.correios.com.br/sistemas/buscacep/" target="_blank">Busque aqui</a>)
-										<input asp-for="Paciente.Cep" oninput="PreencheFormCEP()" id="postal_code" class="form-control" required placeholder="CEP" value="@cep">
-										<span id="spanInvalidCep" hidden class="text-danger text-center" style="padding: 10px">Cep Invalido!!</span>
-									</div>
-								</div>
-								<div class="col-lg-5">
-									<div class="form-group">
-										<label class="form-control-label" for="route">Logradouro</label>
-										<input asp-for="Paciente.Rua" type="search" oninput="PreencheForm()" required placeholder="Pesquise pelo CEP, Rua, Bairro, Número" autocomplete="off" id="route" class="form-control" value="@rua">
-										<span asp-validation-for="Paciente.Rua" class="text-danger"></span>
-									</div>
-								</div>
-								<div class="col-lg-1">
-									<div class="form-group">
-										<label class="form-control-label" for="street_number">Número</label>
-										<input asp-for="Paciente.Numero" id="street_number" class="form-control" placeholder="" value="@numero">
-										<span asp-validation-for="Paciente.Numero" class="text-danger"></span>
-									</div>
-								</div>
-								<div class="col-lg-4">
-									<div class="form-group">
-										<label class="form-control-label" for="sublocality_level_1">Bairro</label>
-										<input asp-for="Paciente.Bairro" id="sublocality_level_1" required class="form-control" placeholder="Bairro" value="@bairro">
-										<span asp-validation-for="Paciente.Bairro" class="text-danger"></span>
-									</div>
-								</div>
-								<div class="col-lg-4">
-									<div class="form-group">
-										<label class="form-control-label" for="administrative_area_level_2">Cidade</label>
-										<input asp-for="Paciente.Cidade" readonly id="administrative_area_level_2" required class="form-control" placeholder="Cidade" value="@cidade">
-										<span asp-validation-for="Paciente.Cidade" class="text-danger"></span>
-									</div>
-								</div>
-								<div class="col-lg-4">
-									<div class="form-group">
-										<label class="form-control-label" for="administrative_area_level_1">Estado</label>
-										<input asp-for="Paciente.Estado" readonly id="administrative_area_level_1" class="form-control" placeholder="Estado" value="@estado">
-										<span asp-validation-for="Paciente.Estado" class="text-danger"></span>
-									</div>
-								</div>
-								<div class="col-lg-4">
-									<div class="form-group">
-										<label class="form-control-label" for="input-complemento">Complemento</label>
-										<input asp-for="Paciente.Complemento" id="input-complemento" class="form-control" placeholder="Complemento" value="@complemento">
-										<span asp-validation-for="Paciente.Complemento" class="text-danger"></span>
-									</div>
-								</div>
-								<div class="col-lg-4" hidden>
-									<div class="form-group">
-										<label class="form-control-label" for="input-latitude">Latitude</label>
-										<input asp-for="Paciente.Latitude" id="latitude" class="form-control" placeholder="" value="@latitude">
-									</div>
-								</div>
-								<div class="col-lg-4" hidden>
-									<div class="form-group">
-										<label class="form-control-label" for="input-longitude">Longitude</label>
-										<input asp-for="Paciente.Longitude" id="longitude" class="form-control" placeholder="" value="@longitude">
-									</div>
-								</div>
-								<div class="col-lg-4" hidden>
-									<div class="form-group">
-										<label class="form-control-label" for="input-situacaoSaude">SituacaoSaude</label>
-										<input asp-for="Paciente.SituacaoSaude" id="situacaoSaude" class="form-control" placeholder="" value="@situacaoSaude">
-									</div>
-								</div>
-								<div class="col-lg-4">
-									<div class="form-group">
-										<label class="form-control-label" for="input-celular">Celular</label>
-										<input asp-for="Paciente.FoneCelular" id="input-celular" required class="form-control" placeholder=" (99) 99999 9999" value="@foneCelular">
-									</div>
-								</div>
-								<div class="col-lg-4">
-									<div class="form-group">
-										<label class="form-control-label" for="input-telefone">Telefone</label>
-										<input asp-for="Paciente.FoneFixo" id="input-telefone" class="form-control" placeholder=" (99) 9999 9999" value="@foneFixo">
-									</div>
-								</div>
-								<div class="col-lg-4">
-									<div class="form-group">
-										<label class="form-control-label" for="input-email">E-mail</label>
-										<input asp-for="Paciente.Email" id="input-email" class="form-control" placeholder="email@example.com" value="@email">
-									</div>
-								</div>
-							</div>
-						</div>
-						<hr class="my-4" />
-						<h6 class="heading-small text-muted mb-4">Comorbidades</h6>
-						<div class="pl-lg-4">
-							<div class="row">
-								<div class="col-lg-3">
-									<div class="form-group">
-										<div class="custom-control custom-checkbox checkbox">
-											<label>
-												<input asp-for="Paciente.Cardiopatia" checked="@cardiopata" class="custom-control-input" id="customCheck1" />
-												<label class="custom-control-label" for="customCheck1">Cardiopatia</label>
-											</label>
-										</div>
-									</div>
-								</div>
-								<div class="col-lg-3">
-									<div class="form-group">
-										<div class="custom-control custom-checkbox checkbox">
-											<label>
-												<input asp-for="Paciente.Diabetes" checked="@diabetico" class="custom-control-input" id="customCheck2" />
-												<label class="custom-control-label" for="customCheck2">Diabetes</label>
-											</label>
-										</div>
-									</div>
-								</div>
-								<div class="col-lg-3">
-									<div class="form-group">
-										<div class="custom-control custom-checkbox checkbox">
-											<label>
-												<input asp-for="Paciente.Obeso" checked="@obeso" class="custom-control-input" id="customCheck3" />
-												<label class="custom-control-label" for="customCheck3">Obesidade</label>
-											</label>
-										</div>
-									</div>
-								</div>
-								<div class="col-lg-3">
-									<div class="form-group">
-										<div class="custom-control custom-checkbox checkbox">
-											<label>
-												<input asp-for="Paciente.Hipertenso" checked="@hipertenso" class="custom-control-input" id="customCheck4" />
-												<label class="custom-control-label" for="customCheck4">Hipertenso</label>
-											</label>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-lg-3">
-									<div class="form-group">
-										<div class="custom-control custom-checkbox checkbox">
-											<label>
-												<input asp-for="Paciente.Imunodeprimido" checked="@imunodeprimido" class="custom-control-input" id="customCheck5" />
-												<label class="custom-control-label" for="customCheck5">Imunodeprimido</label>
-											</label>
-										</div>
-									</div>
-								</div>
-								<div class="col-lg-3">
-									<div class="form-group">
-										<div class="custom-control custom-checkbox checkbox">
-											<label>
-												<input asp-for="Paciente.Cancer" checked="@cancer" class="custom-control-input" id="customCheck6" />
-												<label class="custom-control-label" for="customCheck6">Câncer</label>
-											</label>
-										</div>
-									</div>
-								</div>
-								<div class="col-lg-3">
-									<div class="form-group">
-										<div class="custom-control custom-checkbox checkbox">
-											<label>
-												<input asp-for="Paciente.DoencaRespiratoria" checked="@doenRespiatoria" class="custom-control-input" id="customCheck7" />
-												<label class="custom-control-label" for="customCheck7">Doença Respiratória</label>
-											</label>
-										</div>
-									</div>
-								</div>
-								<div class="col-lg-3">
-									<div class="form-group">
-										<div class="custom-control custom-checkbox checkbox">
-											<label>
-												<input asp-for="Paciente.DoencaRenal" checked="@doencaRenal" class="custom-control-input" id="customCheck8" />
-												<label class="custom-control-label" for="customCheck8">Doença Renal</label>
-											</label>
-										</div>
-									</div>
-								</div>
-								<div class="col-lg-3">
-									<div class="form-group">
-										<div class="custom-control custom-checkbox checkbox">
-											<label>
-												<input asp-for="Paciente.Epilepsia" checked="@epilepsia" class="custom-control-input" id="customCheck9" />
-												<label class="custom-control-label" for="customCheck9">Epilepsia</label>
-											</label>
-										</div>
-									</div>
-								</div>
-								<div class="col-lg-3">
-									<div class="form-group">
-										<input type="search" id="input-outrasComorbidades" class="form-control" style="margin-top: 1px;" asp-for="Paciente.OutrasComorbidades" placeholder="Outras comorbidades" value="@outrasComorbidades">
-									</div>
-								</div>
-							</div>
-						</div>
-						<hr class="my-4" />
-						<h6 class="heading-small text-muted mb-4">Sintomas</h6>
-						<div class="pl-lg-4">
-							<div class="row">
-								<div class="col-lg-3">
-									<div class="form-group">
-										<label class="form-control-label" for="RelatouSintomas">Relatou Sintomas?</label><br />
-										<div class="custom-control custom-radio custom-control-inline">
-											@Html.RadioButtonFor(model => model.Exame.RelatouSintomas, false, new { @class = "custom-control-input", @id = "input-relatouSintomas-nao", @onclick = "ocultaViewSintomas()" })
-											<label class="custom-control-label" for="input-relatouSintomas-nao">Não</label>
-										</div>
-										<div class="custom-control custom-radio custom-control-inline">
-											@Html.RadioButtonFor(model => model.Exame.RelatouSintomas, true, new { @class = "custom-control-input", @id = "input-relatouSintomas-sim", @onclick = "ocultaViewSintomas()" })
-											<label class="custom-control-label" for="input-relatouSintomas-sim">Sim</label>
-										</div>
-									</div>
-								</div>
-								<div class="col-lg-3" id="contaner-inicio-sintomas">
-									<div class="form-group">
-										<label for="input-data-sintomas" class="form-control-label">Início dos Sintomas</label>
-										<input asp-for="Exame.DataInicioSintomas" class="form-control" required value="@DataInicioSintomas" id="input-data-sintomas">
-									</div>
-								</div>
-							</div>
-							<div class="row" id="container-sintomas">
-								<div class="col-lg-3">
-									<div class="form-group">
-										<div class="custom-control custom-checkbox checkbox">
-											<label>
-												<input asp-for="Exame.Febre" checked="@Model.Exame.Febre" class="custom-control-input" id="customCheck12" />
-												<label class="custom-control-label" for="customCheck12">Febre</label>
-											</label>
-										</div>
-									</div>
-								</div>
-								<div class="col-lg-3">
-									<div class="form-group">
-										<div class="custom-control custom-checkbox checkbox">
-											<label>
-												<input asp-for="Exame.Tosse" checked="@Model.Exame.Tosse" class="custom-control-input" id="customCheck13" />
-												<label class="custom-control-label" for="customCheck13">Tosse</label>
-											</label>
-										</div>
-									</div>
-								</div>
-								<div class="col-lg-3">
-									<div class="form-group">
-										<div class="custom-control custom-checkbox checkbox">
-											<label>
-												<input asp-for="Exame.Coriza" checked="@Model.Exame.Coriza" class="custom-control-input" id="customCheck14" />
-												<label class="custom-control-label" for="customCheck14">Coriza</label>
-											</label>
-										</div>
-									</div>
-								</div>
-								<div class="col-lg-3">
-									<div class="form-group">
-										<div class="custom-control custom-checkbox checkbox">
-											<label>
-												<input asp-for="Exame.DificuldadeRespiratoria" checked="@Model.Exame.DificuldadeRespiratoria" class="custom-control-input" id="customCheck15" />
-												<label class="custom-control-label" for="customCheck15">Dificuldade Respiratória</label>
-											</label>
-										</div>
-									</div>
-								</div>
-								<div class="col-lg-3">
-									<div class="form-group">
-										<div class="custom-control custom-checkbox checkbox">
-											<label>
-												<input asp-for="Exame.PerdaOlfatoPaladar" checked="@Model.Exame.PerdaOlfatoPaladar" class="custom-control-input" id="customCheck16" />
-												<label class="custom-control-label" for="customCheck16">Perda Olfato/Paladar</label>
-											</label>
-										</div>
-									</div>
-								</div>
-								<div class="col-lg-3">
-									<div class="form-group">
-										<div class="custom-control custom-checkbox checkbox">
-											<label>
-												<input asp-for="Exame.DorGarganta" checked="@Model.Exame.DorGarganta" class="custom-control-input" id="customCheck17" />
-												<label class="custom-control-label" for="customCheck17">Dor de Garganta</label>
-											</label>
-										</div>
-									</div>
-								</div>
-								<div class="col-lg-3">
-									<div class="form-group">
-										<div class="custom-control custom-checkbox checkbox">
-											<label>
-												<input asp-for="Exame.DorOuvido" checked="@Model.Exame.DorOuvido" class="custom-control-input" id="customCheck18" />
-												<label class="custom-control-label" for="customCheck18">Dor no Ouvido</label>
-											</label>
-										</div>
-									</div>
-								</div>
-								<div class="col-lg-3">
-									<div class="form-group">
-										<div class="custom-control custom-checkbox checkbox">
-											<label>
-												<input asp-for="Exame.DorAbdominal" checked="@Model.Exame.DorAbdominal" class="custom-control-input" id="customCheck19" />
-												<label class="custom-control-label" for="customCheck19">Dor Abdominal</label>
-											</label>
-										</div>
-									</div>
-								</div>
-								<div class="col-lg-3">
-									<div class="form-group">
-										<div class="custom-control custom-checkbox checkbox">
-											<label>
-												<input asp-for="Exame.Diarreia" checked="@Model.Exame.Diarreia" class="custom-control-input" id="customCheck20" />
-												<label class="custom-control-label" for="customCheck20">Diarréia</label>
-											</label>
-										</div>
-									</div>
-								</div>
-								<div class="col-lg-3">
-									<div class="form-group">
-										<div class="custom-control custom-checkbox checkbox">
-											<label>
-												<input asp-for="Exame.Nausea" checked="@Model.Exame.Nausea" class="custom-control-input" id="customCheck21" />
-												<label class="custom-control-label" for="customCheck21">Náusea</label>
-											</label>
-										</div>
-									</div>
-								</div>
-								<div class="col-lg-3">
-									<div class="form-group">
-										<input type="text" id="input-outrosSintomas" class="form-control" style="margin-top: 1px;" asp-for="Exame.OutrosSintomas" placeholder="Outros Sintomas" value="@Model.Exame.OutrosSintomas">
-									</div>
-								</div>
-							</div>
-						</div>
-						<hr class="my-4" />
-						<h6 class="heading-small text-muted mb-4">EXAME REALIZADO</h6>
-						<div class="pl-lg-4">
-							<div class="row" name="cad-exame">
-								<div class="col-lg-3">
-									<div class="form-group">
-										<label class="form-control-label" for="input-atuacao-estado">Vírus</label>
-										@Html.DropDownListFor(model => model.Exame.IdVirusBacteria, ViewBag.VirusBacteria as SelectList, new
-										{ @class = "form-control", @id = "input-virus-bacteria" })
-									</div>
-								</div>
-								<div class="col-lg-3">
-									<div class="form-group">
-										<label for="input-data-exame" class="form-control-label">Data do Exame</label>
-										<input asp-for="Exame.DataExame" class="form-control" required value="@dataExame" id="input-data-exame">
-									</div>
-								</div>
-								<div class="col-lg-3">
-									<div class="form-group">
-										<label class="form-control-label" for="metodo-exame">Método</label><br>
-										<div class="custom-control custom-radio custom-control-inline">
-											@Html.RadioButtonFor(model => model.Exame.MetodoExame, "F", new { @class = "custom-control-input", @id = "input-metodo-fluo", @onclick = "ocultaViewTipoExame()" })
-											<label class="custom-control-label" for="input-metodo-fluo">Fluorêscencia</label>
-										</div>
-										<div class="custom-control custom-radio custom-control-inline">
-											@Html.RadioButtonFor(model => model.Exame.MetodoExame, "C", new { @class = "custom-control-input", @id = "input-metodo-cromo", @onclick = "ocultaViewTipoExame()" })
-											<label class="custom-control-label" for="input-metodo-cromo">Cromatografia</label>
-										</div>
-										<div class="custom-control custom-radio custom-control-inline">
-											@Html.RadioButtonFor(model => model.Exame.MetodoExame, "P", new { @class = "custom-control-input", @id = "input-metodo-rtpcr", @onclick = "ocultaViewTipoExame()" })
-											<label class="custom-control-label" for="input-metodo-rtpcr">RT-PCR</label>
-										</div>
-									</div>
-								</div>
-								<div class="col-lg-3">
-									<div class="form-group">
-										<label class="form-control-label" for="metodo-exame">Situação Resultado</label><br>
-										<div class="custom-control custom-radio custom-control-inline">
-											@Html.RadioButtonFor(model => model.Exame.AguardandoResultado, false, new { @class = "custom-control-input", @id = "input-resultado-disponivel" })
-											<label class="custom-control-label" for="input-resultado-disponivel">Disponível</label>
-										</div>
-										<div class="custom-control custom-radio custom-control-inline">
-											@Html.RadioButtonFor(model => model.Exame.AguardandoResultado, true, new { @class = "custom-control-input", @id = "input-resultado-aguardando" })
-											<label class="custom-control-label" for="input-resultado-aguardando">Aguardando</label>
-										</div>
-									</div>
-								</div>
+                            </div>
+                        </div>
+                        <hr class="my-4" />
+                        <h6 class="heading-small text-muted mb-4">Informações de Contato</h6>
+                        <div class="pl-lg-4">
+                            <div class="row">
+                                <div class="col-lg-2">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="postal_code">CEP (Não sabe? </label> <a href="http://www.buscacep.correios.com.br/sistemas/buscacep/" target="_blank">Busque aqui</a>)
+                                        <input asp-for="Paciente.Cep" oninput="PreencheFormCEP()" id="postal_code" class="form-control" required placeholder="CEP" value="@cep">
+                                        <span id="spanInvalidCep" hidden class="text-danger text-center" style="padding: 10px">Cep Invalido!!</span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-5">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="route">Logradouro</label>
+                                        <input asp-for="Paciente.Rua" type="search" oninput="PreencheForm()" required placeholder="Pesquise pelo CEP, Rua, Bairro, Número" autocomplete="off" id="route" class="form-control" value="@rua">
+                                        <span asp-validation-for="Paciente.Rua" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-1">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="street_number">Número</label>
+                                        <input asp-for="Paciente.Numero" id="street_number" class="form-control" placeholder="" value="@numero">
+                                        <span asp-validation-for="Paciente.Numero" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="sublocality_level_1">Bairro</label>
+                                        <input asp-for="Paciente.Bairro" id="sublocality_level_1" required class="form-control" placeholder="Bairro" value="@bairro">
+                                        <span asp-validation-for="Paciente.Bairro" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="administrative_area_level_2">Cidade</label>
+                                        <input asp-for="Paciente.Cidade" readonly id="administrative_area_level_2" required class="form-control" placeholder="Cidade" value="@cidade">
+                                        <span asp-validation-for="Paciente.Cidade" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="administrative_area_level_1">Estado</label>
+                                        <input asp-for="Paciente.Estado" readonly id="administrative_area_level_1" class="form-control" placeholder="Estado" value="@estado">
+                                        <span asp-validation-for="Paciente.Estado" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="input-complemento">Complemento</label>
+                                        <input asp-for="Paciente.Complemento" id="input-complemento" class="form-control" placeholder="Complemento" value="@complemento">
+                                        <span asp-validation-for="Paciente.Complemento" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4" hidden>
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="input-latitude">Latitude</label>
+                                        <input asp-for="Paciente.Latitude" id="latitude" class="form-control" placeholder="" value="@latitude">
+                                    </div>
+                                </div>
+                                <div class="col-lg-4" hidden>
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="input-longitude">Longitude</label>
+                                        <input asp-for="Paciente.Longitude" id="longitude" class="form-control" placeholder="" value="@longitude">
+                                    </div>
+                                </div>
+                                <div class="col-lg-4" hidden>
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="input-situacaoSaude">SituacaoSaude</label>
+                                        <input asp-for="Paciente.SituacaoSaude" id="situacaoSaude" class="form-control" placeholder="" value="@situacaoSaude">
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="input-celular">Celular</label>
+                                        <input asp-for="Paciente.FoneCelular" id="input-celular" required class="form-control" placeholder=" (99) 99999 9999" value="@foneCelular">
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="input-telefone">Telefone</label>
+                                        <input asp-for="Paciente.FoneFixo" id="input-telefone" class="form-control" placeholder=" (99) 9999 9999" value="@foneFixo">
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="input-email">E-mail</label>
+                                        <input asp-for="Paciente.Email" id="input-email" class="form-control" placeholder="email@example.com" value="@email">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr class="my-4" />
+                        <h6 class="heading-small text-muted mb-4">Comorbidades</h6>
+                        <div class="pl-lg-4">
+                            <div class="row">
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <div class="custom-control custom-checkbox checkbox">
+                                            <label>
+                                                <input asp-for="Paciente.Cardiopatia" checked="@cardiopata" class="custom-control-input" id="customCheck1" />
+                                                <label class="custom-control-label" for="customCheck1">Cardiopatia</label>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <div class="custom-control custom-checkbox checkbox">
+                                            <label>
+                                                <input asp-for="Paciente.Diabetes" checked="@diabetico" class="custom-control-input" id="customCheck2" />
+                                                <label class="custom-control-label" for="customCheck2">Diabetes</label>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <div class="custom-control custom-checkbox checkbox">
+                                            <label>
+                                                <input asp-for="Paciente.Obeso" checked="@obeso" class="custom-control-input" id="customCheck3" />
+                                                <label class="custom-control-label" for="customCheck3">Obesidade</label>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <div class="custom-control custom-checkbox checkbox">
+                                            <label>
+                                                <input asp-for="Paciente.Hipertenso" checked="@hipertenso" class="custom-control-input" id="customCheck4" />
+                                                <label class="custom-control-label" for="customCheck4">Hipertenso</label>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <div class="custom-control custom-checkbox checkbox">
+                                            <label>
+                                                <input asp-for="Paciente.Imunodeprimido" checked="@imunodeprimido" class="custom-control-input" id="customCheck5" />
+                                                <label class="custom-control-label" for="customCheck5">Imunodeprimido</label>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <div class="custom-control custom-checkbox checkbox">
+                                            <label>
+                                                <input asp-for="Paciente.Cancer" checked="@cancer" class="custom-control-input" id="customCheck6" />
+                                                <label class="custom-control-label" for="customCheck6">Câncer</label>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <div class="custom-control custom-checkbox checkbox">
+                                            <label>
+                                                <input asp-for="Paciente.DoencaRespiratoria" checked="@doenRespiatoria" class="custom-control-input" id="customCheck7" />
+                                                <label class="custom-control-label" for="customCheck7">Doença Respiratória</label>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <div class="custom-control custom-checkbox checkbox">
+                                            <label>
+                                                <input asp-for="Paciente.DoencaRenal" checked="@doencaRenal" class="custom-control-input" id="customCheck8" />
+                                                <label class="custom-control-label" for="customCheck8">Doença Renal</label>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <div class="custom-control custom-checkbox checkbox">
+                                            <label>
+                                                <input asp-for="Paciente.Epilepsia" checked="@epilepsia" class="custom-control-input" id="customCheck9" />
+                                                <label class="custom-control-label" for="customCheck9">Epilepsia</label>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <input type="search" id="input-outrasComorbidades" class="form-control" style="margin-top: 1px;" asp-for="Paciente.OutrasComorbidades" placeholder="Outras comorbidades" value="@outrasComorbidades">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr class="my-4" />
+                        <h6 class="heading-small text-muted mb-4">Sintomas</h6>
+                        <div class="pl-lg-4">
+                            <div class="row">
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="RelatouSintomas">Relatou Sintomas?</label><br />
+                                        <div class="custom-control custom-radio custom-control-inline">
+                                            @Html.RadioButtonFor(model => model.Exame.RelatouSintomas, false, new { @class = "custom-control-input", @id = "input-relatouSintomas-nao", @onclick = "ocultaViewSintomas()" })
+                                            <label class="custom-control-label" for="input-relatouSintomas-nao">Não</label>
+                                        </div>
+                                        <div class="custom-control custom-radio custom-control-inline">
+                                            @Html.RadioButtonFor(model => model.Exame.RelatouSintomas, true, new { @class = "custom-control-input", @id = "input-relatouSintomas-sim", @onclick = "ocultaViewSintomas()" })
+                                            <label class="custom-control-label" for="input-relatouSintomas-sim">Sim</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3" id="contaner-inicio-sintomas">
+                                    <div class="form-group">
+                                        <label for="input-data-sintomas" class="form-control-label">Início dos Sintomas</label>
+                                        <input asp-for="Exame.DataInicioSintomas" class="form-control" required value="@DataInicioSintomas" id="input-data-sintomas">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" id="container-sintomas">
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <div class="custom-control custom-checkbox checkbox">
+                                            <label>
+                                                <input asp-for="Exame.Febre" checked="@Model.Exame.Febre" class="custom-control-input" id="customCheck12" />
+                                                <label class="custom-control-label" for="customCheck12">Febre</label>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <div class="custom-control custom-checkbox checkbox">
+                                            <label>
+                                                <input asp-for="Exame.Tosse" checked="@Model.Exame.Tosse" class="custom-control-input" id="customCheck13" />
+                                                <label class="custom-control-label" for="customCheck13">Tosse</label>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <div class="custom-control custom-checkbox checkbox">
+                                            <label>
+                                                <input asp-for="Exame.Coriza" checked="@Model.Exame.Coriza" class="custom-control-input" id="customCheck14" />
+                                                <label class="custom-control-label" for="customCheck14">Coriza</label>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <div class="custom-control custom-checkbox checkbox">
+                                            <label>
+                                                <input asp-for="Exame.DificuldadeRespiratoria" checked="@Model.Exame.DificuldadeRespiratoria" class="custom-control-input" id="customCheck15" />
+                                                <label class="custom-control-label" for="customCheck15">Dificuldade Respiratória</label>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <div class="custom-control custom-checkbox checkbox">
+                                            <label>
+                                                <input asp-for="Exame.PerdaOlfatoPaladar" checked="@Model.Exame.PerdaOlfatoPaladar" class="custom-control-input" id="customCheck16" />
+                                                <label class="custom-control-label" for="customCheck16">Perda Olfato/Paladar</label>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <div class="custom-control custom-checkbox checkbox">
+                                            <label>
+                                                <input asp-for="Exame.DorGarganta" checked="@Model.Exame.DorGarganta" class="custom-control-input" id="customCheck17" />
+                                                <label class="custom-control-label" for="customCheck17">Dor de Garganta</label>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <div class="custom-control custom-checkbox checkbox">
+                                            <label>
+                                                <input asp-for="Exame.DorOuvido" checked="@Model.Exame.DorOuvido" class="custom-control-input" id="customCheck18" />
+                                                <label class="custom-control-label" for="customCheck18">Dor no Ouvido</label>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <div class="custom-control custom-checkbox checkbox">
+                                            <label>
+                                                <input asp-for="Exame.DorAbdominal" checked="@Model.Exame.DorAbdominal" class="custom-control-input" id="customCheck19" />
+                                                <label class="custom-control-label" for="customCheck19">Dor Abdominal</label>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <div class="custom-control custom-checkbox checkbox">
+                                            <label>
+                                                <input asp-for="Exame.Diarreia" checked="@Model.Exame.Diarreia" class="custom-control-input" id="customCheck20" />
+                                                <label class="custom-control-label" for="customCheck20">Diarréia</label>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <div class="custom-control custom-checkbox checkbox">
+                                            <label>
+                                                <input asp-for="Exame.Nausea" checked="@Model.Exame.Nausea" class="custom-control-input" id="customCheck21" />
+                                                <label class="custom-control-label" for="customCheck21">Náusea</label>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <input type="text" id="input-outrosSintomas" class="form-control" style="margin-top: 1px;" asp-for="Exame.OutrosSintomas" placeholder="Outros Sintomas" value="@Model.Exame.OutrosSintomas">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr class="my-4" />
+                        <h6 class="heading-small text-muted mb-4">EXAME REALIZADO</h6>
+                        <div class="pl-lg-4">
+                            <div class="row" name="cad-exame">
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="input-atuacao-estado">Vírus</label>
+                                        @Html.DropDownListFor(model => model.Exame.IdVirusBacteria, ViewBag.VirusBacteria as SelectList, new
+                                        { @class = "form-control", @id = "input-virus-bacteria" })
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <label for="input-data-exame" class="form-control-label">Data do Exame</label>
+                                        <input asp-for="Exame.DataExame" class="form-control" required value="@dataExame" id="input-data-exame">
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="metodo-exame">Método</label><br>
+                                        <div class="custom-control custom-radio custom-control-inline">
+                                            @Html.RadioButtonFor(model => model.Exame.MetodoExame, "F", new { @class = "custom-control-input", @id = "input-metodo-fluo", @onclick = "ocultaViewTipoExame()" })
+                                            <label class="custom-control-label" for="input-metodo-fluo">Fluorêscencia</label>
+                                        </div>
+                                        <div class="custom-control custom-radio custom-control-inline">
+                                            @Html.RadioButtonFor(model => model.Exame.MetodoExame, "C", new { @class = "custom-control-input", @id = "input-metodo-cromo", @onclick = "ocultaViewTipoExame()" })
+                                            <label class="custom-control-label" for="input-metodo-cromo">Cromatografia</label>
+                                        </div>
+                                        <div class="custom-control custom-radio custom-control-inline">
+                                            @Html.RadioButtonFor(model => model.Exame.MetodoExame, "P", new { @class = "custom-control-input", @id = "input-metodo-rtpcr", @onclick = "ocultaViewTipoExame()" })
+                                            <label class="custom-control-label" for="input-metodo-rtpcr">RT-PCR</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="metodo-exame">Situação Resultado</label><br>
+                                        <div class="custom-control custom-radio custom-control-inline">
+                                            @Html.RadioButtonFor(model => model.Exame.AguardandoResultado, false, new { @class = "custom-control-input", @id = "input-resultado-disponivel" })
+                                            <label class="custom-control-label" for="input-resultado-disponivel">Disponível</label>
+                                        </div>
+                                        <div class="custom-control custom-radio custom-control-inline">
+                                            @Html.RadioButtonFor(model => model.Exame.AguardandoResultado, true, new { @class = "custom-control-input", @id = "input-resultado-aguardando" })
+                                            <label class="custom-control-label" for="input-resultado-aguardando">Aguardando</label>
+                                        </div>
+                                    </div>
+                                </div>
 
-								<div class="col-lg-3" id="div-igg">
-									<div class="form-group">
-										<label class="form-control-label" for="igg-reagente">IgG Reagente?</label><br>
-										<div class="custom-control custom-radio custom-control-inline">
-											@Html.RadioButtonFor(model => model.Exame.IgG, "N", new { @class = "custom-control-input", @id = "input-igg-nao" })
-											<label class="custom-control-label" for="input-igg-nao">Não</label>
-										</div>
-										<div class="custom-control custom-radio custom-control-inline">
-											@Html.RadioButtonFor(model => model.Exame.IgG, "S", new { @class = "custom-control-input", @id = "input-igg-sim" })
-											<label class="custom-control-label" for="input-igg-sim">Sim</label>
-										</div>
-										<div class="custom-control custom-radio custom-control-inline">
-											@Html.RadioButtonFor(model => model.Exame.IgG, "I", new { @class = "custom-control-input", @id = "input-igg-indeterminado" })
-											<label class="custom-control-label" for="input-igg-indeterminado">Indeterminado</label>
-										</div>
-									</div>
-								</div>
-								<div class="col-lg-3" id="div-igm">
-									<div class="form-group">
-										<label class="form-control-label" for="igm-reagente">IgM Reagente?</label><br>
+                                <div class="col-lg-3" id="div-igg">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="igg-reagente">IgG Reagente?</label><br>
+                                        <div class="custom-control custom-radio custom-control-inline">
+                                            @Html.RadioButtonFor(model => model.Exame.IgG, "N", new { @class = "custom-control-input", @id = "input-igg-nao" })
+                                            <label class="custom-control-label" for="input-igg-nao">Não</label>
+                                        </div>
+                                        <div class="custom-control custom-radio custom-control-inline">
+                                            @Html.RadioButtonFor(model => model.Exame.IgG, "S", new { @class = "custom-control-input", @id = "input-igg-sim" })
+                                            <label class="custom-control-label" for="input-igg-sim">Sim</label>
+                                        </div>
+                                        <div class="custom-control custom-radio custom-control-inline">
+                                            @Html.RadioButtonFor(model => model.Exame.IgG, "I", new { @class = "custom-control-input", @id = "input-igg-indeterminado" })
+                                            <label class="custom-control-label" for="input-igg-indeterminado">Indeterminado</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3" id="div-igm">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="igm-reagente">IgM Reagente?</label><br>
 
-										<div class="custom-control custom-radio custom-control-inline">
-											@Html.RadioButtonFor(model => model.Exame.IgM, "N", new { @class = "custom-control-input", @id = "input-igm-nao" })
-											<label class="custom-control-label" for="input-igm-nao">Não</label>
-										</div>
-										<div class="custom-control custom-radio custom-control-inline">
-											@Html.RadioButtonFor(model => model.Exame.IgM, "S", new { @class = "custom-control-input", @id = "input-igm-sim" })
-											<label class="custom-control-label" for="input-igm-sim">Sim</label>
-										</div>
-										<div class="custom-control custom-radio custom-control-inline">
-											@Html.RadioButtonFor(model => model.Exame.IgM, "I", new { @class = "custom-control-input", @id = "input-igm-indeterminado" })
-											<label class="custom-control-label" for="input-igm-indeterminado">Indeterminado</label>
-										</div>
-									</div>
-								</div>
-								<div class="col-lg-3" id="div-iggigm">
-									<div class="form-group">
-										<label class="form-control-label" for="igGigM-reagente">IgG/IgM Reagente?</label><br>
+                                        <div class="custom-control custom-radio custom-control-inline">
+                                            @Html.RadioButtonFor(model => model.Exame.IgM, "N", new { @class = "custom-control-input", @id = "input-igm-nao" })
+                                            <label class="custom-control-label" for="input-igm-nao">Não</label>
+                                        </div>
+                                        <div class="custom-control custom-radio custom-control-inline">
+                                            @Html.RadioButtonFor(model => model.Exame.IgM, "S", new { @class = "custom-control-input", @id = "input-igm-sim" })
+                                            <label class="custom-control-label" for="input-igm-sim">Sim</label>
+                                        </div>
+                                        <div class="custom-control custom-radio custom-control-inline">
+                                            @Html.RadioButtonFor(model => model.Exame.IgM, "I", new { @class = "custom-control-input", @id = "input-igm-indeterminado" })
+                                            <label class="custom-control-label" for="input-igm-indeterminado">Indeterminado</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3" id="div-iggigm">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="igGigM-reagente">IgG/IgM Reagente?</label><br>
 
-										<div class="custom-control custom-radio custom-control-inline">
-											@Html.RadioButtonFor(model => model.Exame.IgGIgM, "N", new { @class = "custom-control-input", @id = "input-IgGIgM-nao" })
-											<label class="custom-control-label" for="input-IgGIgM-nao">Não</label>
-										</div>
-										<div class="custom-control custom-radio custom-control-inline">
-											@Html.RadioButtonFor(model => model.Exame.IgGIgM, "S", new { @class = "custom-control-input", @id = "input-IgGIgM-sim" })
-											<label class="custom-control-label" for="input-IgGIgM-sim">Sim</label>
-										</div>
-										<div class="custom-control custom-radio custom-control-inline">
-											@Html.RadioButtonFor(model => model.Exame.IgGIgM, "I", new { @class = "custom-control-input", @id = "input-IgGIgM-indeterminado" })
-											<label class="custom-control-label" for="input-IgGIgM-indeterminado">Indeterminado</label>
-										</div>
-									</div>
-								</div>
-								<div class="col-lg-3" id="div-pcr">
-									<div class="form-group">
-										<label class="form-control-label" for="rt-pcr">RT PCR Reagente?</label><br>
-										<div class="custom-control custom-radio custom-control-inline">
-											@Html.RadioButtonFor(model => model.Exame.Pcr, "N", new { @class = "custom-control-input", @id = "input-rt-pcr-nao" })
-											<label class="custom-control-label" for="input-rt-pcr-nao">Não</label>
-										</div>
-										<div class="custom-control custom-radio custom-control-inline">
-											@Html.RadioButtonFor(model => model.Exame.Pcr, "S", new { @class = "custom-control-input", @id = "input-rt-pcr-sim" })
-											<label class="custom-control-label" for="input-rt-pcr-sim">Sim</label>
-										</div>
-										<div class="custom-control custom-radio custom-control-inline">
-											@Html.RadioButtonFor(model => model.Exame.Pcr, "I", new { @class = "custom-control-input", @id = "input-rt-pcr-indeterminado" })
-											<label class="custom-control-label" for="input-rt-pcr-indeterminado">Indeterminado</label>
-										</div>
-									</div>
-								</div>
-								<div class="col-lg-3">
-									<div class="form-group">
-										<label for="input-codigo-coleta" class="form-control-label">Código da Coleta</label>
-										<input type="search" id="input-codigo-coleta" class="form-control" asp-for="Exame.CodigoColeta" placeholder="" value="@codigoColeta">
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="form-group" hidden>
-							<input asp-for="PesquisarCpf" id="PesquisarCpf" value="0" />
-						</div>
-						<hr class="my-4" />
-						<div class="modal fade bs-example-modal-sm" id="modal-confirmar" tabindex="-1" role="dialog" aria-hidden="true">
-							<div class="modal-dialog modal-sm">
-								<div class="modal-content">
-									<div style="padding: 10pt;text-align: center">
-										<div class="col text-center form-group" id="acoes-model-form">
-											<h3 id="titulo-confirmacao"> Confirmar Notificação do Resultado do Exame ? </h3>
+                                        <div class="custom-control custom-radio custom-control-inline">
+                                            @Html.RadioButtonFor(model => model.Exame.IgGIgM, "N", new { @class = "custom-control-input", @id = "input-IgGIgM-nao" })
+                                            <label class="custom-control-label" for="input-IgGIgM-nao">Não</label>
+                                        </div>
+                                        <div class="custom-control custom-radio custom-control-inline">
+                                            @Html.RadioButtonFor(model => model.Exame.IgGIgM, "S", new { @class = "custom-control-input", @id = "input-IgGIgM-sim" })
+                                            <label class="custom-control-label" for="input-IgGIgM-sim">Sim</label>
+                                        </div>
+                                        <div class="custom-control custom-radio custom-control-inline">
+                                            @Html.RadioButtonFor(model => model.Exame.IgGIgM, "I", new { @class = "custom-control-input", @id = "input-IgGIgM-indeterminado" })
+                                            <label class="custom-control-label" for="input-IgGIgM-indeterminado">Indeterminado</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3" id="div-pcr">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="rt-pcr">RT PCR Reagente?</label><br>
+                                        <div class="custom-control custom-radio custom-control-inline">
+                                            @Html.RadioButtonFor(model => model.Exame.Pcr, "N", new { @class = "custom-control-input", @id = "input-rt-pcr-nao" })
+                                            <label class="custom-control-label" for="input-rt-pcr-nao">Não</label>
+                                        </div>
+                                        <div class="custom-control custom-radio custom-control-inline">
+                                            @Html.RadioButtonFor(model => model.Exame.Pcr, "S", new { @class = "custom-control-input", @id = "input-rt-pcr-sim" })
+                                            <label class="custom-control-label" for="input-rt-pcr-sim">Sim</label>
+                                        </div>
+                                        <div class="custom-control custom-radio custom-control-inline">
+                                            @Html.RadioButtonFor(model => model.Exame.Pcr, "I", new { @class = "custom-control-input", @id = "input-rt-pcr-indeterminado" })
+                                            <label class="custom-control-label" for="input-rt-pcr-indeterminado">Indeterminado</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <label for="input-codigo-coleta" class="form-control-label">Código da Coleta</label>
+                                        <input type="search" id="input-codigo-coleta" class="form-control" asp-for="Exame.CodigoColeta" placeholder="" value="@codigoColeta">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group" hidden>
+                            <input asp-for="PesquisarCpf" id="PesquisarCpf" value="0" />
+                        </div>
+                        <hr class="my-4" />
+                        <div class="modal fade bs-example-modal-sm" id="modal-confirmar" tabindex="-1" role="dialog" aria-hidden="true">
+                            <div class="modal-dialog modal-sm">
+                                <div class="modal-content">
+                                    <div style="padding: 10pt;text-align: center">
+                                        <div class="col text-center form-group" id="acoes-model-form">
+                                            <h3 id="titulo-confirmacao"> Confirmar Notificação do Resultado do Exame ? </h3>
 
-											<h4> CPF/RG</h4>
-											<p id="cpf-paciente"> </p>
+                                            <h4> CPF/RG</h4>
+                                            <p id="cpf-paciente"> </p>
 
-											<h4> Paciente </h4>
-											<p id="nome-paciente"> </p>
+                                            <h4> Paciente </h4>
+                                            <p id="nome-paciente"> </p>
 
-											<h4> VirusBacteria</h4>
-											<p id="virus-paciente"> </p>
+                                            <h4> VirusBacteria</h4>
+                                            <p id="virus-paciente"> </p>
 
-											<h4> Resultado</h4>
-											<p id="resultado-paciente"> </p>
+                                            <h4> Resultado</h4>
+                                            <p id="resultado-paciente">  </p>
 
-											<div class="form-group">
-												<button data-dismiss="modal" class="btn btn-danger text-white">Não</button>
-												<button id="btn-submit" value="Sim" class="btn btn-success text-white">Sim</button>
-											</div>
-										</div>
+                                            <div class="form-group">
+                                                <button data-dismiss="modal" class="btn btn-danger text-white">Não</button>
+                                                <button id="btn-submit" value="Sim" class="btn btn-success text-white">Sim</button>
+                                            </div>
+                                        </div>
 
-										<div class="col text-center" id="ok-model-form">
-											<h3 id="texto-erro"> </h3>
-											<button data-dismiss="modal" class="btn btn-success text-white">Ok</button>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</form>
-					<div class="row align-items-center">
-						<div class="col text-right">
-							<button value="Notificar" onclick='mensagemResultado()' class="btn btn-success">Notificar</button>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+                                        <div class="col text-center" id="ok-model-form">
+                                            <h3 id="texto-erro"> </h3>
+                                            <button data-dismiss="modal" class="btn btn-success text-white">Ok</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="row align-items-center">
+                        <div class="col text-right">
+                            <button value="Notificar" onclick='mensagemResultado()' class="btn btn-success">Notificar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="modal fade bs-example-modal-sm" id="modal-espera" tabindex="-1" role="dialog" aria-hidden="true">
-	<div class="modal-dialog modal-sm">
-		<div class="modal-content">
-			<div class="loading-spinner" style="padding: 20pt;text-align: center">
-				<svg id="hourglass" width='64px' height='64px' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" class="uil-hourglass">
-					<rect x="0" y="0" width="100" height="100" fill="none" class="bk"></rect>
-					<g>
-						<path fill="none" stroke="#007282" stroke-width="5" stroke-miterlimit="10" d="M58.4,51.7c-0.9-0.9-1.4-2-1.4-2.3s0.5-0.4,1.4-1.4 C70.8,43.8,79.8,30.5,80,15.5H70H30H20c0.2,15,9.2,28.1,21.6,32.3c0.9,0.9,1.4,1.2,1.4,1.5s-0.5,1.6-1.4,2.5 C29.2,56.1,20.2,69.5,20,85.5h10h40h10C79.8,69.5,70.8,55.9,58.4,51.7z" class="glass"></path>
-						<clipPath id="uil-hourglass-clip1">
-							<rect x="15" y="20" width="70" height="25" class="clip">
-								<animate attributeName="height" from="25" to="0" dur="1s" repeatCount="indefinite" vlaues="25;0;0" keyTimes="0;0.5;1"></animate>
-								<animate attributeName="y" from="20" to="45" dur="1s" repeatCount="indefinite" vlaues="20;45;45" keyTimes="0;0.5;1"></animate>
-							</rect>
-						</clipPath>
-						<clipPath id="uil-hourglass-clip2">
-							<rect x="15" y="55" width="70" height="25" class="clip">
-								<animate attributeName="height" from="0" to="25" dur="1s" repeatCount="indefinite" vlaues="0;25;25" keyTimes="0;0.5;1"></animate>
-								<animate attributeName="y" from="80" to="55" dur="1s" repeatCount="indefinite" vlaues="80;55;55" keyTimes="0;0.5;1"></animate>
-							</rect>
-						</clipPath>
-						<path d="M29,23c3.1,11.4,11.3,19.5,21,19.5S67.9,34.4,71,23H29z" clip-path="url(#uil-hourglass-clip1)" fill="#ffab00" class="sand"></path>
-						<path d="M71.6,78c-3-11.6-11.5-20-21.5-20s-18.5,8.4-21.5,20H71.6z" clip-path="url(#uil-hourglass-clip2)" fill="#ffab00" class="sand"></path>
-						<animateTransform attributeName="transform" type="rotate" from="0 50 50" to="180 50 50" repeatCount="indefinite" dur="1s" values="0 50 50;0 50 50;180 50 50" keyTimes="0;0.7;1"></animateTransform>
-					</g>
-				</svg>
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="loading-spinner" style="padding: 20pt;text-align: center">
+                <svg id="hourglass" width='64px' height='64px' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" class="uil-hourglass">
+                    <rect x="0" y="0" width="100" height="100" fill="none" class="bk"></rect>
+                    <g>
+                        <path fill="none" stroke="#007282" stroke-width="5" stroke-miterlimit="10" d="M58.4,51.7c-0.9-0.9-1.4-2-1.4-2.3s0.5-0.4,1.4-1.4 C70.8,43.8,79.8,30.5,80,15.5H70H30H20c0.2,15,9.2,28.1,21.6,32.3c0.9,0.9,1.4,1.2,1.4,1.5s-0.5,1.6-1.4,2.5 C29.2,56.1,20.2,69.5,20,85.5h10h40h10C79.8,69.5,70.8,55.9,58.4,51.7z" class="glass"></path>
+                        <clipPath id="uil-hourglass-clip1">
+                            <rect x="15" y="20" width="70" height="25" class="clip">
+                                <animate attributeName="height" from="25" to="0" dur="1s" repeatCount="indefinite" vlaues="25;0;0" keyTimes="0;0.5;1"></animate>
+                                <animate attributeName="y" from="20" to="45" dur="1s" repeatCount="indefinite" vlaues="20;45;45" keyTimes="0;0.5;1"></animate>
+                            </rect>
+                        </clipPath>
+                        <clipPath id="uil-hourglass-clip2">
+                            <rect x="15" y="55" width="70" height="25" class="clip">
+                                <animate attributeName="height" from="0" to="25" dur="1s" repeatCount="indefinite" vlaues="0;25;25" keyTimes="0;0.5;1"></animate>
+                                <animate attributeName="y" from="80" to="55" dur="1s" repeatCount="indefinite" vlaues="80;55;55" keyTimes="0;0.5;1"></animate>
+                            </rect>
+                        </clipPath>
+                        <path d="M29,23c3.1,11.4,11.3,19.5,21,19.5S67.9,34.4,71,23H29z" clip-path="url(#uil-hourglass-clip1)" fill="#ffab00" class="sand"></path>
+                        <path d="M71.6,78c-3-11.6-11.5-20-21.5-20s-18.5,8.4-21.5,20H71.6z" clip-path="url(#uil-hourglass-clip2)" fill="#ffab00" class="sand"></path>
+                        <animateTransform attributeName="transform" type="rotate" from="0 50 50" to="180 50 50" repeatCount="indefinite" dur="1s" values="0 50 50;0 50 50;180 50 50" keyTimes="0;0.7;1"></animateTransform>
+                    </g>
+                </svg>
 
-				<p>Aguarde um momento por favor...</p>
-			</div>
-		</div>
-	</div>
+                <p>Aguarde um momento por favor...</p>
+            </div>
+        </div>
+    </div>
 </div>
 
 @if (TempData["mensagemSucesso"] != null)
 {
-	<div id="mensagem-retorno" onclick="swtAlert('success','Parabéns!', '@TempData["mensagemSucesso"]')"></div>
+    <div id="mensagem-retorno" onclick="swtAlert('success','Parabéns!', '@TempData["mensagemSucesso"]')"></div>
 }
 else if (TempData["mensagemErro"] != null)
 {
-	<div id="mensagem-retorno" onclick="swtAlert('warning','Falha!', '@TempData["mensagemErro"]')"></div>
+    <div id="mensagem-retorno" onclick="swtAlert('warning','Falha!', '@TempData["mensagemErro"]')"></div>
 }
 
 @section Scripts {
 
-	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
-	<script src="~/assets/js/sweet-alert.js"></script>
-	<script src="~/assets/js/custom-exame.js"></script>
-	<script src="~/assets/js/resultado-exame.js"></script>
-	<script src="~/assets/js/PersonalScripts.js"></script>
-	<script src="https://maps.googleapis.com/maps/api/js?key=@googleKey&libraries=places&callback=initAutocomplete&language=pt-BR"
-			async defer></script>
 
-	@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/assets/js/custom-exame.js"></script>
+    <script src="~/assets/js/resultado-exame.js"></script>
+    <script src="~/assets/js/PersonalScripts.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+    <script src="~/assets/js/sweet-alert.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=@googleKey&libraries=places&callback=initAutocomplete&language=pt-BR"
+            async defer></script>
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
