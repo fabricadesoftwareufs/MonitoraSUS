@@ -382,7 +382,8 @@ namespace MonitoraSUS.Controllers
 			ViewBag.googleKey = _configuration["GOOGLE_KEY"];
 			ViewBag.VirusBacteria = new SelectList(_virusBacteriaContext.GetAll(), "IdVirusBacteria", "Nome");
 			ViewBag.AreaAtuacao = new SelectList(_areaAtuacaoContext.GetAll(), "IdAreaAtuacao", "Descricao");
-			exameViewModel.Usuario = _usuarioContext.RetornLoggedUser((ClaimsIdentity)User.Identity).UsuarioModel;
+			var usuarioViewModel = _usuarioContext.RetornLoggedUser((ClaimsIdentity)User.Identity);
+			exameViewModel.Usuario = usuarioViewModel.UsuarioModel;
 			if (!ModelState.IsValid)
 				return View(exameViewModel);
 			try
