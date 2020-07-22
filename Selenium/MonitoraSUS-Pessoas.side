@@ -1,0 +1,1456 @@
+{
+  "id": "3d3c7bf2-c9dd-402e-9789-b475cf41f677",
+  "version": "2.0",
+  "name": "MonitoraSUS",
+  "url": "https://localhost:44383",
+  "tests": [{
+    "id": "a86e7a7f-868d-451b-adf0-9e09ca7db044",
+    "name": "InsertSecretarioEstadualSucesso1",
+    "commands": [{
+      "id": "2d7bc8b5-3d5e-4399-923f-8087943a502a",
+      "comment": "",
+      "command": "open",
+      "target": "/Login?ReturnUrl=%2F",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "6aecd0bf-afcc-45a9-a1bc-a06e22c97228",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1050x708",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "8b1edb73-87ee-48ca-a37e-37037ab3a85e",
+      "comment": "",
+      "command": "click",
+      "target": "css=.form-group:nth-child(6)",
+      "targets": [
+        ["css=.form-group:nth-child(6)", "css:finder"],
+        ["xpath=//div[@id='panel']/div/div/div/div/div/div/div[2]/div/form/div[4]", "xpath:idRelative"],
+        ["xpath=//div[4]", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "5723a0a3-b879-4e6a-bf89-47e806f12018",
+      "comment": "",
+      "command": "assertText",
+      "target": "linkText=Esqueceu sua senha?",
+      "targets": [
+        ["linkText=Esqueceu sua senha?", "linkText"],
+        ["css=.form-group > a", "css:finder"],
+        ["xpath=//a[contains(text(),'Esqueceu sua senha?')]", "xpath:link"],
+        ["xpath=//div[@id='panel']/div/div/div/div/div/div/div[2]/div/form/div[4]/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, '#exampleModalCenter')]", "xpath:href"],
+        ["xpath=//div[4]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Esqueceu sua senha?')]", "xpath:innerText"]
+      ],
+      "value": "Esqueceu sua senha?"
+    }, {
+      "id": "10b93739-4b98-40c8-a462-1e8b6c832511",
+      "comment": "",
+      "command": "click",
+      "target": "css=.col-6:nth-child(1) > .card-button-primary",
+      "targets": [
+        ["css=.col-6:nth-child(1) > .card-button-primary", "css:finder"],
+        ["xpath=//div[@id='panel']/div/div/div/div/div/div/div[2]/div/div[3]/div/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, '/AgenteSecretario/Create?userType=1')]", "xpath:href"],
+        ["xpath=//div[2]/div/div[3]/div/a", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "8bea51a9-9dea-41cd-8958-d0c54767dc36",
+      "comment": "",
+      "command": "click",
+      "target": "id=input-cpf",
+      "targets": [
+        ["id=input-cpf", "id"],
+        ["name=Cpf", "name"],
+        ["css=#input-cpf", "css:finder"],
+        ["xpath=//input[@id='input-cpf']", "xpath:attributes"],
+        ["xpath=//div[@id='panel']/div/div/div/div/div[2]/form/div/div/div/div/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "1b92f399-5549-46c0-9890-9ec5b5098589",
+      "comment": "",
+      "command": "type",
+      "target": "id=input-cpf",
+      "targets": [
+        ["id=input-cpf", "id"],
+        ["name=Cpf", "name"],
+        ["css=#input-cpf", "css:finder"],
+        ["xpath=//input[@id='input-cpf']", "xpath:attributes"],
+        ["xpath=//div[@id='panel']/div/div/div/div/div[2]/form/div/div/div/div/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": "552.564.636-67"
+    }, {
+      "id": "026c866f-b6aa-49c0-80bd-dbfac41a838d",
+      "comment": "",
+      "command": "type",
+      "target": "id=input-nome",
+      "targets": [
+        ["id=input-nome", "id"],
+        ["name=Nome", "name"],
+        ["css=#input-nome", "css:finder"],
+        ["xpath=//input[@id='input-nome']", "xpath:attributes"],
+        ["xpath=//div[@id='panel']/div/div/div/div/div[2]/form/div/div/div[2]/div/input", "xpath:idRelative"],
+        ["xpath=//div[2]/div/input", "xpath:position"]
+      ],
+      "value": "SECRETARIO SAUDE PE"
+    }, {
+      "id": "5fc53f2c-a7a9-4123-af0e-817f33647fdf",
+      "comment": "",
+      "command": "type",
+      "target": "id=input-data-nascimento",
+      "targets": [
+        ["id=input-data-nascimento", "id"],
+        ["name=DataNascimento", "name"],
+        ["css=#input-data-nascimento", "css:finder"],
+        ["xpath=//input[@id='input-data-nascimento']", "xpath:attributes"],
+        ["xpath=//div[@id='panel']/div/div/div/div/div[2]/form/div/div/div[3]/div/input", "xpath:idRelative"],
+        ["xpath=//div[3]/div/input", "xpath:position"]
+      ],
+      "value": "01-01-1900"
+    }, {
+      "id": "595ecff4-a848-4e5b-977d-8ee5cd2ab722",
+      "comment": "",
+      "command": "click",
+      "target": "css=.col-md-2 .custom-control:nth-child(3) > .custom-control-label",
+      "targets": [
+        ["css=.col-md-2 .custom-control:nth-child(3) > .custom-control-label", "css:finder"],
+        ["xpath=//div[@id='panel']/div/div/div/div/div[2]/form/div/div/div[4]/div/div/label", "xpath:idRelative"],
+        ["xpath=//div[4]/div/div/label", "xpath:position"],
+        ["xpath=//label[contains(.,'Masculino')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "c699c9d3-61ec-42e2-b033-94a4749d5fb6",
+      "comment": "",
+      "command": "click",
+      "target": "id=postal_code",
+      "targets": [
+        ["id=postal_code", "id"],
+        ["name=Cep", "name"],
+        ["css=#postal_code", "css:finder"],
+        ["xpath=//input[@id='postal_code']", "xpath:attributes"],
+        ["xpath=//div[@id='panel']/div/div/div/div/div[2]/form/div[2]/div/div[2]/div/input", "xpath:idRelative"],
+        ["xpath=//div[2]/div/div[2]/div/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "80a4ad6e-fda7-41fc-acca-02e65cd20beb",
+      "comment": "",
+      "command": "type",
+      "target": "id=postal_code",
+      "targets": [
+        ["id=postal_code", "id"],
+        ["name=Cep", "name"],
+        ["css=#postal_code", "css:finder"],
+        ["xpath=//input[@id='postal_code']", "xpath:attributes"],
+        ["xpath=//div[@id='panel']/div/div/div/div/div[2]/form/div[2]/div/div[2]/div/input", "xpath:idRelative"],
+        ["xpath=//div[2]/div/div[2]/div/input", "xpath:position"]
+      ],
+      "value": "31720-200"
+    }, {
+      "id": "f538035d-1ba4-4cf7-a9c0-4426858fbff0",
+      "comment": "",
+      "command": "type",
+      "target": "id=street_number",
+      "targets": [
+        ["id=street_number", "id"],
+        ["name=Numero", "name"],
+        ["css=#street_number", "css:finder"],
+        ["xpath=//input[@id='street_number']", "xpath:attributes"],
+        ["xpath=//div[@id='panel']/div/div/div/div/div[2]/form/div[2]/div/div[4]/div/input", "xpath:idRelative"],
+        ["xpath=//div[4]/div/input", "xpath:position"]
+      ],
+      "value": "100"
+    }, {
+      "id": "549b7fd0-8abc-4340-8f0e-a193ee3e81d7",
+      "comment": "",
+      "command": "type",
+      "target": "id=input-celular",
+      "targets": [
+        ["id=input-celular", "id"],
+        ["name=FoneCelular", "name"],
+        ["css=#input-celular", "css:finder"],
+        ["xpath=//input[@id='input-celular']", "xpath:attributes"],
+        ["xpath=//div[@id='panel']/div/div/div/div/div[2]/form/div[2]/div/div[9]/div/input", "xpath:idRelative"],
+        ["xpath=//div[9]/div/input", "xpath:position"]
+      ],
+      "value": "(79) 99999 - 9999"
+    }, {
+      "id": "f175878e-adda-47f0-95c8-03d3d71327d3",
+      "comment": "",
+      "command": "type",
+      "target": "id=input-email",
+      "targets": [
+        ["id=input-email", "id"],
+        ["name=Email", "name"],
+        ["css=#input-email", "css:finder"],
+        ["xpath=//input[@id='input-email']", "xpath:attributes"],
+        ["xpath=//div[@id='panel']/div/div/div/div/div[2]/form/div[2]/div/div[11]/div/input", "xpath:idRelative"],
+        ["xpath=//div[11]/div/input", "xpath:position"]
+      ],
+      "value": "monitorasus.ufs@gmail.com"
+    }, {
+      "id": "c30733f2-f8d1-4fac-8fe1-eebaa668575b",
+      "comment": "",
+      "command": "click",
+      "target": "css=.row:nth-child(1) > .col-lg-3:nth-child(1) .custom-control-label",
+      "targets": [
+        ["css=.row:nth-child(1) > .col-lg-3:nth-child(1) .custom-control-label", "css:finder"],
+        ["xpath=//div[@id='panel']/div/div/div/div/div[2]/form/div[3]/div/div/div/label", "xpath:idRelative"],
+        ["xpath=//div[3]/div/div/div/label", "xpath:position"],
+        ["xpath=//label[contains(.,'Hipertensão')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "ff91ecf9-8984-4041-8065-2ac867e3ba42",
+      "comment": "",
+      "command": "click",
+      "target": "css=.row:nth-child(1) > .col-lg-3:nth-child(2) .custom-control-label",
+      "targets": [
+        ["css=.row:nth-child(1) > .col-lg-3:nth-child(2) .custom-control-label", "css:finder"],
+        ["xpath=//div[@id='panel']/div/div/div/div/div[2]/form/div[3]/div/div[2]/div/label", "xpath:idRelative"],
+        ["xpath=//div[3]/div/div[2]/div/label", "xpath:position"],
+        ["xpath=//label[contains(.,'Diabetes')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "a1066079-eff3-4ef5-9ffd-1f6581900cc0",
+      "comment": "",
+      "command": "click",
+      "target": "css=.row:nth-child(1) > .col-lg-3:nth-child(3) .custom-control-label",
+      "targets": [
+        ["css=.row:nth-child(1) > .col-lg-3:nth-child(3) .custom-control-label", "css:finder"],
+        ["xpath=//div[@id='panel']/div/div/div/div/div[2]/form/div[3]/div/div[3]/div/label", "xpath:idRelative"],
+        ["xpath=//div[3]/div/div[3]/div/label", "xpath:position"],
+        ["xpath=//label[contains(.,'Obeso')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "db5c7145-9be8-4657-b5b3-b5ea163cf12b",
+      "comment": "",
+      "command": "click",
+      "target": "css=.row:nth-child(1) > .col-lg-3:nth-child(4) .custom-control-label",
+      "targets": [
+        ["css=.row:nth-child(1) > .col-lg-3:nth-child(4) .custom-control-label", "css:finder"],
+        ["xpath=//div[@id='panel']/div/div/div/div/div[2]/form/div[3]/div/div[4]/div/label", "xpath:idRelative"],
+        ["xpath=//div[3]/div/div[4]/div/label", "xpath:position"],
+        ["xpath=//label[contains(.,'Cardiopatia')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "f3fd4f96-f66b-4b61-89d2-42665c91a567",
+      "comment": "",
+      "command": "click",
+      "target": "id=select-atuacao-estado",
+      "targets": [
+        ["id=select-atuacao-estado", "id"],
+        ["name=select-Estado", "name"],
+        ["css=#select-atuacao-estado", "css:finder"],
+        ["xpath=//select[@id='select-atuacao-estado']", "xpath:attributes"],
+        ["xpath=//div[@id='panel']/div/div/div/div/div[2]/form/div[4]/div/div/div/select", "xpath:idRelative"],
+        ["xpath=//select", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "b00a0ea6-a740-4f5b-a547-919e81c1ce3b",
+      "comment": "",
+      "command": "select",
+      "target": "id=select-atuacao-estado",
+      "targets": [],
+      "value": "label=Minas Gerais"
+    }, {
+      "id": "52b37e2e-faf5-4fd8-9b64-3492e12c2f66",
+      "comment": "",
+      "command": "click",
+      "target": "id=select-atuacao-estado",
+      "targets": [
+        ["id=select-atuacao-estado", "id"],
+        ["name=select-Estado", "name"],
+        ["css=#select-atuacao-estado", "css:finder"],
+        ["xpath=//select[@id='select-atuacao-estado']", "xpath:attributes"],
+        ["xpath=//div[@id='panel']/div/div/div/div/div[2]/form/div[4]/div/div/div/select", "xpath:idRelative"],
+        ["xpath=//select", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "b15d5c60-7e86-4bf8-bfbd-3e33ca09e30e",
+      "comment": "",
+      "command": "click",
+      "target": "id=select-atuacao-cidade",
+      "targets": [
+        ["id=select-atuacao-cidade", "id"],
+        ["name=select-Cidade", "name"],
+        ["css=#select-atuacao-cidade", "css:finder"],
+        ["xpath=//select[@id='select-atuacao-cidade']", "xpath:attributes"],
+        ["xpath=//div[@id='panel']/div/div/div/div/div[2]/form/div[4]/div/div[2]/div/select", "xpath:idRelative"],
+        ["xpath=//div[2]/div/select", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "e31ebead-0049-4bac-bc24-3459d7c3fc66",
+      "comment": "",
+      "command": "select",
+      "target": "id=select-atuacao-cidade",
+      "targets": [],
+      "value": "label=Belo Horizonte"
+    }, {
+      "id": "ab9a8ed2-e97e-47bc-87b8-4b2831f37e21",
+      "comment": "",
+      "command": "click",
+      "target": "id=select-atuacao-cidade",
+      "targets": [
+        ["id=select-atuacao-cidade", "id"],
+        ["name=select-Cidade", "name"],
+        ["css=#select-atuacao-cidade", "css:finder"],
+        ["xpath=//select[@id='select-atuacao-cidade']", "xpath:attributes"],
+        ["xpath=//div[@id='panel']/div/div/div/div/div[2]/form/div[4]/div/div[2]/div/select", "xpath:idRelative"],
+        ["xpath=//div[2]/div/select", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "a242e2e4-202d-4535-9078-cf67cc522de1",
+      "comment": "",
+      "command": "click",
+      "target": "id=btn-solicitar",
+      "targets": [
+        ["id=btn-solicitar", "id"],
+        ["css=#btn-solicitar", "css:finder"],
+        ["xpath=//button[@id='btn-solicitar']", "xpath:attributes"],
+        ["xpath=//div[@id='panel']/div/div/div/div/div[2]/form/div[5]/div/button", "xpath:idRelative"],
+        ["xpath=//button", "xpath:position"],
+        ["xpath=//button[contains(.,'Solicitar')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "bbdf92f2-b765-4238-a08c-09b391371aa6",
+      "comment": "",
+      "command": "click",
+      "target": "css=p:nth-child(1)",
+      "targets": [
+        ["css=p:nth-child(1)", "css:finder"],
+        ["xpath=//div[@id='modal-mensagem-retorno']/div/div/div/p", "xpath:idRelative"],
+        ["xpath=//div[3]/div/div/div/p", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "220e904c-c05f-463c-a131-b6e5628a8200",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=p:nth-child(1)",
+      "targets": [
+        ["css=p:nth-child(1)", "css:finder"],
+        ["xpath=//div[@id='modal-mensagem-retorno']/div/div/div/p", "xpath:idRelative"],
+        ["xpath=//div[3]/div/div/div/p", "xpath:position"]
+      ],
+      "value": "Solicitação de cadastro realizado com sucesso! Por favor, aguarde e-mail que será enviado pelo MonitoraSUS assim que seu acesso ao sistema for autorizado por um gestor de saúde estadual. Se você for secretário de saúde ou ainda não há gestores cadastrados no estado, por favor, envie documentação comprobatória para fabricadesoftware@ufs.br para liberarmos o primeiro acesso para seu estado."
+    }, {
+      "id": "50602bbe-0a2b-4e37-864c-362dc4772bbe",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Ok",
+      "targets": [
+        ["linkText=Ok", "linkText"],
+        ["css=.btn-success:nth-child(2)", "css:finder"],
+        ["xpath=//a[contains(text(),'Ok')]", "xpath:link"],
+        ["xpath=//div[@id='modal-mensagem-retorno']/div/div/div/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, '/Login')]", "xpath:href"],
+        ["xpath=//div[3]/div/div/div/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Ok')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }]
+  }, {
+    "id": "2520e814-5007-4103-849e-2327c61f4883",
+    "name": "InserirCoordenadorEstadualSucesso1",
+    "commands": [{
+      "id": "cab63b90-84aa-4457-a904-421d5f81e22c",
+      "comment": "",
+      "command": "open",
+      "target": "/Login?ReturnUrl=%2F",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "5bdaf493-7878-48fc-b4bd-3a411721550d",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1050x708",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "d88eff63-2200-45e2-80f8-423c3c02ee65",
+      "comment": "",
+      "command": "click",
+      "target": "css=.col-6:nth-child(1) > .card-button-primary",
+      "targets": [
+        ["css=.col-6:nth-child(1) > .card-button-primary", "css:finder"],
+        ["xpath=//div[@id='panel']/div/div/div/div/div/div/div[2]/div/div[3]/div/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, '/AgenteSecretario/Create?userType=1')]", "xpath:href"],
+        ["xpath=//div[2]/div/div[3]/div/a", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "32fe43cf-45e3-4514-a7c1-bc41cb2d4b1a",
+      "comment": "",
+      "command": "type",
+      "target": "id=input-cpf",
+      "targets": [
+        ["id=input-cpf", "id"],
+        ["name=Cpf", "name"],
+        ["css=#input-cpf", "css:finder"],
+        ["xpath=//input[@id='input-cpf']", "xpath:attributes"],
+        ["xpath=//div[@id='panel']/div/div/div/div/div[2]/form/div/div/div/div/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": "887.716.676-28"
+    }, {
+      "id": "f8e94fc2-1b10-424d-988f-346da4e69653",
+      "comment": "",
+      "command": "type",
+      "target": "id=input-nome",
+      "targets": [
+        ["id=input-nome", "id"],
+        ["name=Nome", "name"],
+        ["css=#input-nome", "css:finder"],
+        ["xpath=//input[@id='input-nome']", "xpath:attributes"],
+        ["xpath=//div[@id='panel']/div/div/div/div/div[2]/form/div/div/div[2]/div/input", "xpath:idRelative"],
+        ["xpath=//div[2]/div/input", "xpath:position"]
+      ],
+      "value": "COODENADOR PERNAMBUCO 1"
+    }, {
+      "id": "ff2b8740-e69a-42e4-bbbb-cacb6a3ec1de",
+      "comment": "",
+      "command": "type",
+      "target": "id=input-data-nascimento",
+      "targets": [
+        ["id=input-data-nascimento", "id"],
+        ["name=DataNascimento", "name"],
+        ["css=#input-data-nascimento", "css:finder"],
+        ["xpath=//input[@id='input-data-nascimento']", "xpath:attributes"],
+        ["xpath=//div[@id='panel']/div/div/div/div/div[2]/form/div/div/div[3]/div/input", "xpath:idRelative"],
+        ["xpath=//div[3]/div/input", "xpath:position"]
+      ],
+      "value": "01-01-1935"
+    }, {
+      "id": "249a0847-ad7e-4e9f-80a0-1346939f8086",
+      "comment": "",
+      "command": "click",
+      "target": "id=input-sexo-fem",
+      "targets": [
+        ["id=input-sexo-fem", "id"],
+        ["css=#input-sexo-fem", "css:finder"],
+        ["xpath=//input[@id='input-sexo-fem']", "xpath:attributes"],
+        ["xpath=//div[@id='panel']/div/div/div/div/div[2]/form/div/div/div[4]/div/div[2]/input", "xpath:idRelative"],
+        ["xpath=//div[2]/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "efd8ce98-5b64-41dd-b62e-c68a7fc1438f",
+      "comment": "",
+      "command": "type",
+      "target": "id=postal_code",
+      "targets": [
+        ["id=postal_code", "id"],
+        ["name=Cep", "name"],
+        ["css=#postal_code", "css:finder"],
+        ["xpath=//input[@id='postal_code']", "xpath:attributes"],
+        ["xpath=//div[@id='panel']/div/div/div/div/div[2]/form/div[2]/div/div[2]/div/input", "xpath:idRelative"],
+        ["xpath=//div[2]/div/div[2]/div/input", "xpath:position"]
+      ],
+      "value": "31749-185"
+    }, {
+      "id": "170c426c-3baf-4f1d-917f-af0881dd2171",
+      "comment": "",
+      "command": "click",
+      "target": "id=input-nome",
+      "targets": [
+        ["id=input-nome", "id"],
+        ["name=Nome", "name"],
+        ["css=#input-nome", "css:finder"],
+        ["xpath=//input[@id='input-nome']", "xpath:attributes"],
+        ["xpath=//div[@id='panel']/div/div/div/div/div[2]/form/div/div/div[2]/div/input", "xpath:idRelative"],
+        ["xpath=//div[2]/div/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "35a96878-446c-4dc8-b82b-f916ca27a0ff",
+      "comment": "",
+      "command": "type",
+      "target": "id=input-nome",
+      "targets": [
+        ["id=input-nome", "id"],
+        ["name=Nome", "name"],
+        ["css=#input-nome", "css:finder"],
+        ["xpath=//input[@id='input-nome']", "xpath:attributes"],
+        ["xpath=//div[@id='panel']/div/div/div/div/div[2]/form/div/div/div[2]/div/input", "xpath:idRelative"],
+        ["xpath=//div[2]/div/input", "xpath:position"]
+      ],
+      "value": "COODENADOR MG 1"
+    }, {
+      "id": "5e384b77-700a-4421-88ad-448977556d75",
+      "comment": "",
+      "command": "type",
+      "target": "id=street_number",
+      "targets": [
+        ["id=street_number", "id"],
+        ["name=Numero", "name"],
+        ["css=#street_number", "css:finder"],
+        ["xpath=//input[@id='street_number']", "xpath:attributes"],
+        ["xpath=//div[@id='panel']/div/div/div/div/div[2]/form/div[2]/div/div[4]/div/input", "xpath:idRelative"],
+        ["xpath=//div[4]/div/input", "xpath:position"]
+      ],
+      "value": "200"
+    }, {
+      "id": "611e02ba-53ee-48d6-8c88-e93806c21c72",
+      "comment": "",
+      "command": "type",
+      "target": "id=input-celular",
+      "targets": [
+        ["id=input-celular", "id"],
+        ["name=FoneCelular", "name"],
+        ["css=#input-celular", "css:finder"],
+        ["xpath=//input[@id='input-celular']", "xpath:attributes"],
+        ["xpath=//div[@id='panel']/div/div/div/div/div[2]/form/div[2]/div/div[9]/div/input", "xpath:idRelative"],
+        ["xpath=//div[9]/div/input", "xpath:position"]
+      ],
+      "value": "(79) 88888 - 8888"
+    }, {
+      "id": "16c111e6-6613-4e95-ba15-d7beeff8a443",
+      "comment": "",
+      "command": "type",
+      "target": "id=input-email",
+      "targets": [
+        ["id=input-email", "id"],
+        ["name=Email", "name"],
+        ["css=#input-email", "css:finder"],
+        ["xpath=//input[@id='input-email']", "xpath:attributes"],
+        ["xpath=//div[@id='panel']/div/div/div/div/div[2]/form/div[2]/div/div[11]/div/input", "xpath:idRelative"],
+        ["xpath=//div[11]/div/input", "xpath:position"]
+      ],
+      "value": "monitorasus.ufs@gmail.com"
+    }, {
+      "id": "ace30b53-8551-4246-96cb-5fb824dfad0b",
+      "comment": "",
+      "command": "click",
+      "target": "css=.row:nth-child(1) > .col-lg-3:nth-child(1) .custom-control-label",
+      "targets": [
+        ["css=.row:nth-child(1) > .col-lg-3:nth-child(1) .custom-control-label", "css:finder"],
+        ["xpath=//div[@id='panel']/div/div/div/div/div[2]/form/div[3]/div/div/div/label", "xpath:idRelative"],
+        ["xpath=//div[3]/div/div/div/label", "xpath:position"],
+        ["xpath=//label[contains(.,'Hipertensão')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "9bdd8dd4-4156-45fe-b121-4fed372331ea",
+      "comment": "",
+      "command": "click",
+      "target": "css=.row:nth-child(1) > .col-lg-3:nth-child(2) .custom-control-label",
+      "targets": [
+        ["css=.row:nth-child(1) > .col-lg-3:nth-child(2) .custom-control-label", "css:finder"],
+        ["xpath=//div[@id='panel']/div/div/div/div/div[2]/form/div[3]/div/div[2]/div/label", "xpath:idRelative"],
+        ["xpath=//div[3]/div/div[2]/div/label", "xpath:position"],
+        ["xpath=//label[contains(.,'Diabetes')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "b01d3cf1-c4fc-4bdd-a76b-6217d85655c0",
+      "comment": "",
+      "command": "click",
+      "target": "css=.row:nth-child(2) > .col-lg-3:nth-child(2) .custom-control-label",
+      "targets": [
+        ["css=.row:nth-child(2) > .col-lg-3:nth-child(2) .custom-control-label", "css:finder"],
+        ["xpath=//div[@id='panel']/div/div/div/div/div[2]/form/div[3]/div[2]/div[2]/div/label", "xpath:idRelative"],
+        ["xpath=//div[2]/div[2]/div/label", "xpath:position"],
+        ["xpath=//label[contains(.,'Câncer')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "0b506a5a-fd00-4e3f-ae8b-4397b20ca5b5",
+      "comment": "",
+      "command": "click",
+      "target": "css=.row:nth-child(2) > .col-lg-3:nth-child(1) .custom-control-label",
+      "targets": [
+        ["css=.row:nth-child(2) > .col-lg-3:nth-child(1) .custom-control-label", "css:finder"],
+        ["xpath=//div[@id='panel']/div/div/div/div/div[2]/form/div[3]/div[2]/div/div/label", "xpath:idRelative"],
+        ["xpath=//div[2]/div/div/label", "xpath:position"],
+        ["xpath=//label[contains(.,'Imunodeprimido')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "e58181dc-5144-4686-b512-f35c1c868a6d",
+      "comment": "",
+      "command": "click",
+      "target": "id=select-atuacao-estado",
+      "targets": [
+        ["id=select-atuacao-estado", "id"],
+        ["name=select-Estado", "name"],
+        ["css=#select-atuacao-estado", "css:finder"],
+        ["xpath=//select[@id='select-atuacao-estado']", "xpath:attributes"],
+        ["xpath=//div[@id='panel']/div/div/div/div/div[2]/form/div[4]/div/div/div/select", "xpath:idRelative"],
+        ["xpath=//select", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "9b7e614f-5a58-423a-a626-b4621bca41d0",
+      "comment": "",
+      "command": "select",
+      "target": "id=select-atuacao-estado",
+      "targets": [],
+      "value": "label=Minas Gerais"
+    }, {
+      "id": "c3ce1dee-2799-47bc-979a-c205fd62833d",
+      "comment": "",
+      "command": "click",
+      "target": "id=select-atuacao-estado",
+      "targets": [
+        ["id=select-atuacao-estado", "id"],
+        ["name=select-Estado", "name"],
+        ["css=#select-atuacao-estado", "css:finder"],
+        ["xpath=//select[@id='select-atuacao-estado']", "xpath:attributes"],
+        ["xpath=//div[@id='panel']/div/div/div/div/div[2]/form/div[4]/div/div/div/select", "xpath:idRelative"],
+        ["xpath=//select", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "ab03545d-9f60-4a57-b77e-2b7defbc1a38",
+      "comment": "",
+      "command": "click",
+      "target": "id=select-atuacao-cidade",
+      "targets": [
+        ["id=select-atuacao-cidade", "id"],
+        ["name=select-Cidade", "name"],
+        ["css=#select-atuacao-cidade", "css:finder"],
+        ["xpath=//select[@id='select-atuacao-cidade']", "xpath:attributes"],
+        ["xpath=//div[@id='panel']/div/div/div/div/div[2]/form/div[4]/div/div[2]/div/select", "xpath:idRelative"],
+        ["xpath=//div[2]/div/select", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "d123f9f4-4f59-46ed-9986-8939959feb96",
+      "comment": "",
+      "command": "select",
+      "target": "id=select-atuacao-cidade",
+      "targets": [],
+      "value": "label=Belo Horizonte"
+    }, {
+      "id": "38f558a5-2f61-4928-a6db-7f4bb446a5ff",
+      "comment": "",
+      "command": "click",
+      "target": "id=select-atuacao-cidade",
+      "targets": [
+        ["id=select-atuacao-cidade", "id"],
+        ["name=select-Cidade", "name"],
+        ["css=#select-atuacao-cidade", "css:finder"],
+        ["xpath=//select[@id='select-atuacao-cidade']", "xpath:attributes"],
+        ["xpath=//div[@id='panel']/div/div/div/div/div[2]/form/div[4]/div/div[2]/div/select", "xpath:idRelative"],
+        ["xpath=//div[2]/div/select", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "d7ce4f1a-5634-408d-9c96-2e9f580a1793",
+      "comment": "",
+      "command": "click",
+      "target": "id=btn-solicitar",
+      "targets": [
+        ["id=btn-solicitar", "id"],
+        ["css=#btn-solicitar", "css:finder"],
+        ["xpath=//button[@id='btn-solicitar']", "xpath:attributes"],
+        ["xpath=//div[@id='panel']/div/div/div/div/div[2]/form/div[5]/div/button", "xpath:idRelative"],
+        ["xpath=//button", "xpath:position"],
+        ["xpath=//button[contains(.,'Solicitar')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "b05b2b85-32f0-490b-bd88-157a20416477",
+      "comment": "",
+      "command": "click",
+      "target": "css=p:nth-child(1)",
+      "targets": [
+        ["css=p:nth-child(1)", "css:finder"],
+        ["xpath=//div[@id='modal-mensagem-retorno']/div/div/div/p", "xpath:idRelative"],
+        ["xpath=//div[3]/div/div/div/p", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "c9e67c1e-e539-4c1f-aa3a-5ebdfeb963d3",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=p:nth-child(1)",
+      "targets": [
+        ["css=p:nth-child(1)", "css:finder"],
+        ["xpath=//div[@id='modal-mensagem-retorno']/div/div/div/p", "xpath:idRelative"],
+        ["xpath=//div[3]/div/div/div/p", "xpath:position"]
+      ],
+      "value": "Solicitação de cadastro realizado com sucesso! Por favor, aguarde e-mail que será enviado pelo MonitoraSUS assim que seu acesso ao sistema for autorizado por um gestor de saúde estadual. Se você for secretário de saúde ou ainda não há gestores cadastrados no estado, por favor, envie documentação comprobatória para fabricadesoftware@ufs.br para liberarmos o primeiro acesso para seu estado."
+    }, {
+      "id": "291cd1df-25c7-4961-9f8d-6341806209e3",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Ok",
+      "targets": [
+        ["linkText=Ok", "linkText"],
+        ["css=.btn-success:nth-child(2)", "css:finder"],
+        ["xpath=//a[contains(text(),'Ok')]", "xpath:link"],
+        ["xpath=//div[@id='modal-mensagem-retorno']/div/div/div/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, '/Login')]", "xpath:href"],
+        ["xpath=//div[3]/div/div/div/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Ok')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }]
+  }, {
+    "id": "2918a68e-2a16-4aaa-9688-8eb890aac257",
+    "name": "InserirCoordenadorEstadualSucesso2",
+    "commands": [{
+      "id": "9e7b823e-ce84-4a81-998e-15312797a6fa",
+      "comment": "",
+      "command": "open",
+      "target": "/Login?ReturnUrl=%2F",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "944d7adf-5e0e-4a2a-882e-8ef87e2b921f",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1050x708",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "35aa2b5b-e676-4a1d-876c-771406106ff9",
+      "comment": "",
+      "command": "click",
+      "target": "css=.col-6:nth-child(1) > .card-button-primary",
+      "targets": [
+        ["css=.col-6:nth-child(1) > .card-button-primary", "css:finder"],
+        ["xpath=//div[@id='panel']/div/div/div/div/div/div/div[2]/div/div[3]/div/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, '/AgenteSecretario/Create?userType=1')]", "xpath:href"],
+        ["xpath=//div[2]/div/div[3]/div/a", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "1b2ab12c-5d72-438d-9e8f-76c2f09aa502",
+      "comment": "",
+      "command": "type",
+      "target": "id=input-cpf",
+      "targets": [
+        ["id=input-cpf", "id"],
+        ["name=Cpf", "name"],
+        ["css=#input-cpf", "css:finder"],
+        ["xpath=//input[@id='input-cpf']", "xpath:attributes"],
+        ["xpath=//div[@id='panel']/div/div/div/div/div[2]/form/div/div/div/div/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": "495.162.916-00"
+    }, {
+      "id": "bb9c0339-75fb-4ed7-a3c8-b08dcdc40d62",
+      "comment": "",
+      "command": "type",
+      "target": "id=input-nome",
+      "targets": [
+        ["id=input-nome", "id"],
+        ["name=Nome", "name"],
+        ["css=#input-nome", "css:finder"],
+        ["xpath=//input[@id='input-nome']", "xpath:attributes"],
+        ["xpath=//div[@id='panel']/div/div/div/div/div[2]/form/div/div/div[2]/div/input", "xpath:idRelative"],
+        ["xpath=//div[2]/div/input", "xpath:position"]
+      ],
+      "value": "GESTOR MG 02"
+    }, {
+      "id": "f793f4a8-500e-4e03-830a-19cb535720bb",
+      "comment": "",
+      "command": "type",
+      "target": "id=input-data-nascimento",
+      "targets": [
+        ["id=input-data-nascimento", "id"],
+        ["name=DataNascimento", "name"],
+        ["css=#input-data-nascimento", "css:finder"],
+        ["xpath=//input[@id='input-data-nascimento']", "xpath:attributes"],
+        ["xpath=//div[@id='panel']/div/div/div/div/div[2]/form/div/div/div[3]/div/input", "xpath:idRelative"],
+        ["xpath=//div[3]/div/input", "xpath:position"]
+      ],
+      "value": "01-01-1980"
+    }, {
+      "id": "bbec0721-a986-415e-b4e6-916921a6f12a",
+      "comment": "",
+      "command": "click",
+      "target": "css=.col-md-2 .custom-control:nth-child(4) > .custom-control-label",
+      "targets": [
+        ["css=.col-md-2 .custom-control:nth-child(4) > .custom-control-label", "css:finder"],
+        ["xpath=//div[@id='panel']/div/div/div/div/div[2]/form/div/div/div[4]/div/div[2]/label", "xpath:idRelative"],
+        ["xpath=//div[2]/label", "xpath:position"],
+        ["xpath=//label[contains(.,'Feminino')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "2da55af2-85c8-4156-9754-f0d983d322ae",
+      "comment": "",
+      "command": "click",
+      "target": "id=postal_code",
+      "targets": [
+        ["id=postal_code", "id"],
+        ["name=Cep", "name"],
+        ["css=#postal_code", "css:finder"],
+        ["xpath=//input[@id='postal_code']", "xpath:attributes"],
+        ["xpath=//div[@id='panel']/div/div/div/div/div[2]/form/div[2]/div/div[2]/div/input", "xpath:idRelative"],
+        ["xpath=//div[2]/div/div[2]/div/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "5bd3fb4e-a655-4ad3-b185-1f0010b65e57",
+      "comment": "",
+      "command": "type",
+      "target": "id=postal_code",
+      "targets": [
+        ["id=postal_code", "id"],
+        ["name=Cep", "name"],
+        ["css=#postal_code", "css:finder"],
+        ["xpath=//input[@id='postal_code']", "xpath:attributes"],
+        ["xpath=//div[@id='panel']/div/div/div/div/div[2]/form/div[2]/div/div[2]/div/input", "xpath:idRelative"],
+        ["xpath=//div[2]/div/div[2]/div/input", "xpath:position"]
+      ],
+      "value": "31615-250"
+    }, {
+      "id": "9632b467-acf1-410b-bdf3-abce5f2e16fa",
+      "comment": "",
+      "command": "type",
+      "target": "id=street_number",
+      "targets": [
+        ["id=street_number", "id"],
+        ["name=Numero", "name"],
+        ["css=#street_number", "css:finder"],
+        ["xpath=//input[@id='street_number']", "xpath:attributes"],
+        ["xpath=//div[@id='panel']/div/div/div/div/div[2]/form/div[2]/div/div[4]/div/input", "xpath:idRelative"],
+        ["xpath=//div[4]/div/input", "xpath:position"]
+      ],
+      "value": "100"
+    }, {
+      "id": "abd3baf5-3f03-49ce-b584-65b6dbd4af0a",
+      "comment": "",
+      "command": "type",
+      "target": "id=input-celular",
+      "targets": [
+        ["id=input-celular", "id"],
+        ["name=FoneCelular", "name"],
+        ["css=#input-celular", "css:finder"],
+        ["xpath=//input[@id='input-celular']", "xpath:attributes"],
+        ["xpath=//div[@id='panel']/div/div/div/div/div[2]/form/div[2]/div/div[9]/div/input", "xpath:idRelative"],
+        ["xpath=//div[9]/div/input", "xpath:position"]
+      ],
+      "value": "(79) 55555 - 5555"
+    }, {
+      "id": "6a553a9a-2d1d-4f84-a03b-467bb1a5b156",
+      "comment": "",
+      "command": "type",
+      "target": "id=input-email",
+      "targets": [
+        ["id=input-email", "id"],
+        ["name=Email", "name"],
+        ["css=#input-email", "css:finder"],
+        ["xpath=//input[@id='input-email']", "xpath:attributes"],
+        ["xpath=//div[@id='panel']/div/div/div/div/div[2]/form/div[2]/div/div[11]/div/input", "xpath:idRelative"],
+        ["xpath=//div[11]/div/input", "xpath:position"]
+      ],
+      "value": "monitorasus.ufs@gmail.com"
+    }, {
+      "id": "dfd64e45-a7f6-4407-bc03-290acd786afe",
+      "comment": "",
+      "command": "click",
+      "target": "css=.row:nth-child(2) > .col-lg-3:nth-child(1) .custom-control-label",
+      "targets": [
+        ["css=.row:nth-child(2) > .col-lg-3:nth-child(1) .custom-control-label", "css:finder"],
+        ["xpath=//div[@id='panel']/div/div/div/div/div[2]/form/div[3]/div[2]/div/div/label", "xpath:idRelative"],
+        ["xpath=//div[2]/div/div/label", "xpath:position"],
+        ["xpath=//label[contains(.,'Imunodeprimido')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "53faf5c2-6336-4329-b83f-f9df9b97f100",
+      "comment": "",
+      "command": "click",
+      "target": "css=.row:nth-child(2) > .col-lg-3:nth-child(2) .custom-control-label",
+      "targets": [
+        ["css=.row:nth-child(2) > .col-lg-3:nth-child(2) .custom-control-label", "css:finder"],
+        ["xpath=//div[@id='panel']/div/div/div/div/div[2]/form/div[3]/div[2]/div[2]/div/label", "xpath:idRelative"],
+        ["xpath=//div[2]/div[2]/div/label", "xpath:position"],
+        ["xpath=//label[contains(.,'Câncer')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "34962379-dc2a-4930-8128-c613025a9902",
+      "comment": "",
+      "command": "click",
+      "target": "css=.row:nth-child(2) > .col-lg-3:nth-child(3) .custom-control-label",
+      "targets": [
+        ["css=.row:nth-child(2) > .col-lg-3:nth-child(3) .custom-control-label", "css:finder"],
+        ["xpath=//div[@id='panel']/div/div/div/div/div[2]/form/div[3]/div[2]/div[3]/div/label", "xpath:idRelative"],
+        ["xpath=//div[2]/div[3]/div/label", "xpath:position"],
+        ["xpath=//label[contains(.,'Doença Respiratória')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "f32c5e97-c44b-42f8-a9d8-ebfe3a158a48",
+      "comment": "",
+      "command": "click",
+      "target": "css=.row:nth-child(2) > .col-lg-3:nth-child(4) > .custom-control",
+      "targets": [
+        ["css=.row:nth-child(2) > .col-lg-3:nth-child(4) > .custom-control", "css:finder"],
+        ["xpath=//div[@id='panel']/div/div/div/div/div[2]/form/div[3]/div[2]/div[4]/div", "xpath:idRelative"],
+        ["xpath=//div[2]/div[4]/div", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "744c11b7-7571-429d-bf40-7676885c2e93",
+      "comment": "",
+      "command": "click",
+      "target": "css=.row:nth-child(2) > .col-lg-3:nth-child(4) .custom-control-label",
+      "targets": [
+        ["css=.row:nth-child(2) > .col-lg-3:nth-child(4) .custom-control-label", "css:finder"],
+        ["xpath=//div[@id='panel']/div/div/div/div/div[2]/form/div[3]/div[2]/div[4]/div/label", "xpath:idRelative"],
+        ["xpath=//div[2]/div[4]/div/label", "xpath:position"],
+        ["xpath=//label[contains(.,'Doença Renal')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "528b2c8e-02da-4ab4-b00b-6b5e03cb42bb",
+      "comment": "",
+      "command": "click",
+      "target": "css=.row:nth-child(2) > .col-lg-3:nth-child(3) .custom-control-label",
+      "targets": [
+        ["css=.row:nth-child(2) > .col-lg-3:nth-child(3) .custom-control-label", "css:finder"],
+        ["xpath=//div[@id='panel']/div/div/div/div/div[2]/form/div[3]/div[2]/div[3]/div/label", "xpath:idRelative"],
+        ["xpath=//div[2]/div[3]/div/label", "xpath:position"],
+        ["xpath=//label[contains(.,'Doença Respiratória')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "e92de8f3-e20d-40a6-ae61-1c9d9a51d018",
+      "comment": "",
+      "command": "click",
+      "target": "id=select-atuacao-estado",
+      "targets": [
+        ["id=select-atuacao-estado", "id"],
+        ["name=select-Estado", "name"],
+        ["css=#select-atuacao-estado", "css:finder"],
+        ["xpath=//select[@id='select-atuacao-estado']", "xpath:attributes"],
+        ["xpath=//div[@id='panel']/div/div/div/div/div[2]/form/div[4]/div/div/div/select", "xpath:idRelative"],
+        ["xpath=//select", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "6468d6e3-9532-475b-8f73-6008d69333d0",
+      "comment": "",
+      "command": "select",
+      "target": "id=select-atuacao-estado",
+      "targets": [],
+      "value": "label=Minas Gerais"
+    }, {
+      "id": "01109739-9ed2-4a5a-8538-3a28110f8ac6",
+      "comment": "",
+      "command": "click",
+      "target": "id=select-atuacao-estado",
+      "targets": [
+        ["id=select-atuacao-estado", "id"],
+        ["name=select-Estado", "name"],
+        ["css=#select-atuacao-estado", "css:finder"],
+        ["xpath=//select[@id='select-atuacao-estado']", "xpath:attributes"],
+        ["xpath=//div[@id='panel']/div/div/div/div/div[2]/form/div[4]/div/div/div/select", "xpath:idRelative"],
+        ["xpath=//select", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "796c64d5-f2be-45f8-9552-155559aff8b4",
+      "comment": "",
+      "command": "click",
+      "target": "id=select-atuacao-cidade",
+      "targets": [
+        ["id=select-atuacao-cidade", "id"],
+        ["name=select-Cidade", "name"],
+        ["css=#select-atuacao-cidade", "css:finder"],
+        ["xpath=//select[@id='select-atuacao-cidade']", "xpath:attributes"],
+        ["xpath=//div[@id='panel']/div/div/div/div/div[2]/form/div[4]/div/div[2]/div/select", "xpath:idRelative"],
+        ["xpath=//div[2]/div/select", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "2f08a46b-ae88-4fca-bdce-f72cd9f7d754",
+      "comment": "",
+      "command": "select",
+      "target": "id=select-atuacao-cidade",
+      "targets": [],
+      "value": "label=Belo Horizonte"
+    }, {
+      "id": "150acaaa-2631-470b-8095-88ef47e00ec4",
+      "comment": "",
+      "command": "click",
+      "target": "id=select-atuacao-cidade",
+      "targets": [
+        ["id=select-atuacao-cidade", "id"],
+        ["name=select-Cidade", "name"],
+        ["css=#select-atuacao-cidade", "css:finder"],
+        ["xpath=//select[@id='select-atuacao-cidade']", "xpath:attributes"],
+        ["xpath=//div[@id='panel']/div/div/div/div/div[2]/form/div[4]/div/div[2]/div/select", "xpath:idRelative"],
+        ["xpath=//div[2]/div/select", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "e924a916-9065-480b-b104-0f6ee5f3c395",
+      "comment": "",
+      "command": "click",
+      "target": "id=btn-solicitar",
+      "targets": [
+        ["id=btn-solicitar", "id"],
+        ["css=#btn-solicitar", "css:finder"],
+        ["xpath=//button[@id='btn-solicitar']", "xpath:attributes"],
+        ["xpath=//div[@id='panel']/div/div/div/div/div[2]/form/div[5]/div/button", "xpath:idRelative"],
+        ["xpath=//button", "xpath:position"],
+        ["xpath=//button[contains(.,'Solicitar')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "77f33684-ba71-4a65-8800-d743beb147e3",
+      "comment": "",
+      "command": "click",
+      "target": "css=#modal-mensagem-retorno .modal-content > div",
+      "targets": [
+        ["css=#modal-mensagem-retorno .modal-content > div", "css:finder"],
+        ["xpath=//div[@id='modal-mensagem-retorno']/div/div/div", "xpath:idRelative"],
+        ["xpath=//div/div[3]/div/div/div", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "37c976b4-ced8-4d3b-aecd-40264c92e520",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=p:nth-child(1)",
+      "targets": [
+        ["css=p:nth-child(1)", "css:finder"],
+        ["xpath=//div[@id='modal-mensagem-retorno']/div/div/div/p", "xpath:idRelative"],
+        ["xpath=//div[3]/div/div/div/p", "xpath:position"]
+      ],
+      "value": "Solicitação de cadastro realizado com sucesso! Por favor, aguarde e-mail que será enviado pelo MonitoraSUS assim que seu acesso ao sistema for autorizado por um gestor de saúde estadual. Se você for secretário de saúde ou ainda não há gestores cadastrados no estado, por favor, envie documentação comprobatória para fabricadesoftware@ufs.br para liberarmos o primeiro acesso para seu estado."
+    }, {
+      "id": "2e21094d-61c5-4f1a-a123-aa33f13ef50a",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Ok",
+      "targets": [
+        ["linkText=Ok", "linkText"],
+        ["css=.btn-success:nth-child(2)", "css:finder"],
+        ["xpath=//a[contains(text(),'Ok')]", "xpath:link"],
+        ["xpath=//div[@id='modal-mensagem-retorno']/div/div/div/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, '/Login')]", "xpath:href"],
+        ["xpath=//div[3]/div/div/div/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Ok')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "c5371db5-a5bc-44f6-96d2-8e9ab031bbf3",
+      "comment": "",
+      "command": "click",
+      "target": "css=.form-group:nth-child(6)",
+      "targets": [
+        ["css=.form-group:nth-child(6)", "css:finder"],
+        ["xpath=//div[@id='panel']/div/div/div/div/div/div/div[2]/div/form/div[4]", "xpath:idRelative"],
+        ["xpath=//div[4]", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "c1ce64ac-0978-4846-ba2f-170ca1cdb96a",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=.form-group:nth-child(6)",
+      "targets": [
+        ["css=.form-group:nth-child(6)", "css:finder"],
+        ["xpath=//div[@id='panel']/div/div/div/div/div/div/div[2]/div/form/div[4]", "xpath:idRelative"],
+        ["xpath=//div[4]", "xpath:position"]
+      ],
+      "value": "Esqueceu sua senha?"
+    }]
+  }, {
+    "id": "dc83c43d-e682-438c-adc2-b88c12849211",
+    "name": "AdicionarAgenteEstadualFalha1",
+    "commands": [{
+      "id": "f1a31b86-9a62-47a4-8655-2c162d10be60",
+      "comment": "",
+      "command": "open",
+      "target": "/Login?ReturnUrl=%2F",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "d6bf4931-3f52-4ca0-b325-75c578ae64c3",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1050x708",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "c09ce236-d441-4e5a-b053-a7b7b663144f",
+      "comment": "",
+      "command": "click",
+      "target": "css=.text-center:nth-child(4)",
+      "targets": [
+        ["css=.text-center:nth-child(4)", "css:finder"],
+        ["xpath=//div[@id='panel']/div/div/div/div/div/div/div[2]/div/div[2]", "xpath:idRelative"],
+        ["xpath=//div[2]/div/div[2]", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "08b33db0-9cb2-49dc-b679-edd8f0ceaea4",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=.text-center:nth-child(4)",
+      "targets": [
+        ["css=.text-center:nth-child(4)", "css:finder"],
+        ["xpath=//div[@id='panel']/div/div/div/div/div/div/div[2]/div/div[2]", "xpath:idRelative"],
+        ["xpath=//div[2]/div/div[2]", "xpath:position"]
+      ],
+      "value": "Ainda não possui cadastro?"
+    }, {
+      "id": "692dcc3c-1bf3-415e-9078-52a1fb213006",
+      "comment": "",
+      "command": "click",
+      "target": "css=.col-6:nth-child(2) > .card-button-primary",
+      "targets": [
+        ["css=.col-6:nth-child(2) > .card-button-primary", "css:finder"],
+        ["xpath=//div[@id='panel']/div/div/div/div/div/div/div[2]/div/div[3]/div[2]/a", "xpath:idRelative"],
+        ["xpath=(//a[contains(@href, '/AgenteSecretario/Create')])[2]", "xpath:href"],
+        ["xpath=//div[2]/div/div[3]/div[2]/a", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "ce2822f0-bf48-48ff-b54f-e36773ef3a56",
+      "comment": "",
+      "command": "click",
+      "target": "css=.h3",
+      "targets": [
+        ["css=.h3", "css:finder"],
+        ["xpath=//div[@id='panel']/div/div/div/div/div/div/div/h5", "xpath:idRelative"],
+        ["xpath=//h5", "xpath:position"],
+        ["xpath=//h5[contains(.,'Cadastro de Responsável pela Notificação de Exames')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "db51eaf5-f9f3-41d7-b66e-0635965eba71",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=.h3",
+      "targets": [
+        ["css=.h3", "css:finder"],
+        ["xpath=//div[@id='panel']/div/div/div/div/div/div/div/h5", "xpath:idRelative"],
+        ["xpath=//h5", "xpath:position"],
+        ["xpath=//h5[contains(.,'Cadastro de Responsável pela Notificação de Exames')]", "xpath:innerText"]
+      ],
+      "value": "Cadastro de Responsável pela Notificação de Exames"
+    }, {
+      "id": "a9813643-a172-4d69-bb20-7455ab837c02",
+      "comment": "",
+      "command": "click",
+      "target": "id=input-cpf",
+      "targets": [
+        ["id=input-cpf", "id"],
+        ["name=Cpf", "name"],
+        ["css=#input-cpf", "css:finder"],
+        ["xpath=//input[@id='input-cpf']", "xpath:attributes"],
+        ["xpath=//div[@id='panel']/div/div/div/div/div[2]/form/div/div/div/div/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "198a2cea-cc1c-4fb2-811b-ee0b813f7a40",
+      "comment": "",
+      "command": "type",
+      "target": "id=input-cpf",
+      "targets": [
+        ["id=input-cpf", "id"],
+        ["name=Cpf", "name"],
+        ["css=#input-cpf", "css:finder"],
+        ["xpath=//input[@id='input-cpf']", "xpath:attributes"],
+        ["xpath=//div[@id='panel']/div/div/div/div/div[2]/form/div/div/div/div/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": "669.291.146-12"
+    }, {
+      "id": "857ad96b-83b1-4c87-8b05-d7923213ec8a",
+      "comment": "",
+      "command": "type",
+      "target": "id=input-nome",
+      "targets": [
+        ["id=input-nome", "id"],
+        ["name=Nome", "name"],
+        ["css=#input-nome", "css:finder"],
+        ["xpath=//input[@id='input-nome']", "xpath:attributes"],
+        ["xpath=//div[@id='panel']/div/div/div/div/div[2]/form/div/div/div[2]/div/input", "xpath:idRelative"],
+        ["xpath=//div[2]/div/input", "xpath:position"]
+      ],
+      "value": "AGENTE ESTADUAL MG 01"
+    }, {
+      "id": "42db1daf-e3e7-4e2c-a443-8363b16e390e",
+      "comment": "",
+      "command": "type",
+      "target": "id=input-data-nascimento",
+      "targets": [
+        ["id=input-data-nascimento", "id"],
+        ["name=DataNascimento", "name"],
+        ["css=#input-data-nascimento", "css:finder"],
+        ["xpath=//input[@id='input-data-nascimento']", "xpath:attributes"],
+        ["xpath=//div[@id='panel']/div/div/div/div/div[2]/form/div/div/div[3]/div/input", "xpath:idRelative"],
+        ["xpath=//div[3]/div/input", "xpath:position"]
+      ],
+      "value": "01-10-1968"
+    }, {
+      "id": "19989de8-6ee3-4ff9-8935-4ff6874fb772",
+      "comment": "",
+      "command": "click",
+      "target": "css=.col-md-2 .custom-control:nth-child(4) > .custom-control-label",
+      "targets": [
+        ["css=.col-md-2 .custom-control:nth-child(4) > .custom-control-label", "css:finder"],
+        ["xpath=//div[@id='panel']/div/div/div/div/div[2]/form/div/div/div[4]/div/div[2]/label", "xpath:idRelative"],
+        ["xpath=//div[2]/label", "xpath:position"],
+        ["xpath=//label[contains(.,'Feminino')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "54e61914-af93-4520-9762-f251b0e1d941",
+      "comment": "",
+      "command": "type",
+      "target": "id=postal_code",
+      "targets": [
+        ["id=postal_code", "id"],
+        ["name=Cep", "name"],
+        ["css=#postal_code", "css:finder"],
+        ["xpath=//input[@id='postal_code']", "xpath:attributes"],
+        ["xpath=//div[@id='panel']/div/div/div/div/div[2]/form/div[2]/div/div[2]/div/input", "xpath:idRelative"],
+        ["xpath=//div[2]/div/div[2]/div/input", "xpath:position"]
+      ],
+      "value": "31910-112"
+    }, {
+      "id": "dd76c392-3e07-4977-8934-31a92382bd05",
+      "comment": "",
+      "command": "assertAlert",
+      "target": "ERRO AO INICIALIZAR O GEOCODE: ZERO_RESULTS",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "f6721a7d-9ff1-43ea-8b2e-21a367bccfba",
+      "comment": "",
+      "command": "type",
+      "target": "id=street_number",
+      "targets": [
+        ["id=street_number", "id"],
+        ["name=Numero", "name"],
+        ["css=#street_number", "css:finder"],
+        ["xpath=//input[@id='street_number']", "xpath:attributes"],
+        ["xpath=//div[@id='panel']/div/div/div/div/div[2]/form/div[2]/div/div[4]/div/input", "xpath:idRelative"],
+        ["xpath=//div[4]/div/input", "xpath:position"]
+      ],
+      "value": "12"
+    }, {
+      "id": "3a87ee1c-e74a-468e-bb0c-40acaaaf2d98",
+      "comment": "",
+      "command": "type",
+      "target": "id=input-celular",
+      "targets": [
+        ["id=input-celular", "id"],
+        ["name=FoneCelular", "name"],
+        ["css=#input-celular", "css:finder"],
+        ["xpath=//input[@id='input-celular']", "xpath:attributes"],
+        ["xpath=//div[@id='panel']/div/div/div/div/div[2]/form/div[2]/div/div[9]/div/input", "xpath:idRelative"],
+        ["xpath=//div[9]/div/input", "xpath:position"]
+      ],
+      "value": "(79) 95555 - 5555"
+    }, {
+      "id": "7c132c80-834b-4dbb-9aed-b76f5eb4acc8",
+      "comment": "",
+      "command": "type",
+      "target": "id=input-email",
+      "targets": [
+        ["id=input-email", "id"],
+        ["name=Email", "name"],
+        ["css=#input-email", "css:finder"],
+        ["xpath=//input[@id='input-email']", "xpath:attributes"],
+        ["xpath=//div[@id='panel']/div/div/div/div/div[2]/form/div[2]/div/div[11]/div/input", "xpath:idRelative"],
+        ["xpath=//div[11]/div/input", "xpath:position"]
+      ],
+      "value": "monitorasus.ufs@gmail.com"
+    }, {
+      "id": "fd3c970e-efe3-4880-9004-620f1c67abd4",
+      "comment": "",
+      "command": "click",
+      "target": "css=.row:nth-child(2) > .col-lg-3:nth-child(1) .custom-control-label",
+      "targets": [
+        ["css=.row:nth-child(2) > .col-lg-3:nth-child(1) .custom-control-label", "css:finder"],
+        ["xpath=//div[@id='panel']/div/div/div/div/div[2]/form/div[3]/div[2]/div/div/label", "xpath:idRelative"],
+        ["xpath=//div[2]/div/div/label", "xpath:position"],
+        ["xpath=//label[contains(.,'Imunodeprimido')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "92f1a669-9b69-48cc-ada1-b4e71f2fae34",
+      "comment": "",
+      "command": "click",
+      "target": "css=.row:nth-child(2) > .col-lg-3:nth-child(2) .custom-control-label",
+      "targets": [
+        ["css=.row:nth-child(2) > .col-lg-3:nth-child(2) .custom-control-label", "css:finder"],
+        ["xpath=//div[@id='panel']/div/div/div/div/div[2]/form/div[3]/div[2]/div[2]/div/label", "xpath:idRelative"],
+        ["xpath=//div[2]/div[2]/div/label", "xpath:position"],
+        ["xpath=//label[contains(.,'Câncer')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "acd89103-dc53-4fec-a5d5-06cd34a70eed",
+      "comment": "",
+      "command": "click",
+      "target": "css=.row:nth-child(2) > .col-lg-3:nth-child(3) .custom-control-label",
+      "targets": [
+        ["css=.row:nth-child(2) > .col-lg-3:nth-child(3) .custom-control-label", "css:finder"],
+        ["xpath=//div[@id='panel']/div/div/div/div/div[2]/form/div[3]/div[2]/div[3]/div/label", "xpath:idRelative"],
+        ["xpath=//div[2]/div[3]/div/label", "xpath:position"],
+        ["xpath=//label[contains(.,'Doença Respiratória')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "fd1f17ea-2017-4e73-b9ca-18fbfb777846",
+      "comment": "",
+      "command": "click",
+      "target": "id=select-atuacao-estado",
+      "targets": [
+        ["id=select-atuacao-estado", "id"],
+        ["name=select-Estado", "name"],
+        ["css=#select-atuacao-estado", "css:finder"],
+        ["xpath=//select[@id='select-atuacao-estado']", "xpath:attributes"],
+        ["xpath=//div[@id='panel']/div/div/div/div/div[2]/form/div[4]/div/div/div/select", "xpath:idRelative"],
+        ["xpath=//select", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "be64aa72-f42b-45c6-a0f3-62ef0d80050e",
+      "comment": "",
+      "command": "select",
+      "target": "id=select-atuacao-estado",
+      "targets": [],
+      "value": "label=Minas Gerais"
+    }, {
+      "id": "750462ef-b789-4377-978a-31a1ede9e2fb",
+      "comment": "",
+      "command": "click",
+      "target": "id=select-atuacao-estado",
+      "targets": [
+        ["id=select-atuacao-estado", "id"],
+        ["name=select-Estado", "name"],
+        ["css=#select-atuacao-estado", "css:finder"],
+        ["xpath=//select[@id='select-atuacao-estado']", "xpath:attributes"],
+        ["xpath=//div[@id='panel']/div/div/div/div/div[2]/form/div[4]/div/div/div/select", "xpath:idRelative"],
+        ["xpath=//select", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "d301c0aa-0a40-47f1-9efd-eca17ee63a24",
+      "comment": "",
+      "command": "click",
+      "target": "id=select-atuacao-cidade",
+      "targets": [
+        ["id=select-atuacao-cidade", "id"],
+        ["name=select-Cidade", "name"],
+        ["css=#select-atuacao-cidade", "css:finder"],
+        ["xpath=//select[@id='select-atuacao-cidade']", "xpath:attributes"],
+        ["xpath=//div[@id='panel']/div/div/div/div/div[2]/form/div[4]/div/div[2]/div/select", "xpath:idRelative"],
+        ["xpath=//div[2]/div/select", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "aa9cdf35-a469-4be9-9cee-ae0ed759fce3",
+      "comment": "",
+      "command": "select",
+      "target": "id=select-atuacao-cidade",
+      "targets": [],
+      "value": "label=Belo Horizonte"
+    }, {
+      "id": "38cf66c7-44ab-4cad-8d17-9df3dda656f6",
+      "comment": "",
+      "command": "click",
+      "target": "id=select-atuacao-cidade",
+      "targets": [
+        ["id=select-atuacao-cidade", "id"],
+        ["name=select-Cidade", "name"],
+        ["css=#select-atuacao-cidade", "css:finder"],
+        ["xpath=//select[@id='select-atuacao-cidade']", "xpath:attributes"],
+        ["xpath=//div[@id='panel']/div/div/div/div/div[2]/form/div[4]/div/div[2]/div/select", "xpath:idRelative"],
+        ["xpath=//div[2]/div/select", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "ff0b0bcf-b9f9-4820-8df9-7cbfb73470e5",
+      "comment": "",
+      "command": "click",
+      "target": "id=btn-solicitar",
+      "targets": [
+        ["id=btn-solicitar", "id"],
+        ["css=#btn-solicitar", "css:finder"],
+        ["xpath=//button[@id='btn-solicitar']", "xpath:attributes"],
+        ["xpath=//div[@id='panel']/div/div/div/div/div[2]/form/div[5]/div/button", "xpath:idRelative"],
+        ["xpath=//button", "xpath:position"],
+        ["xpath=//button[contains(.,'Solicitar')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "6059caa4-c0f9-4cc0-ae92-6f80fd131253",
+      "comment": "",
+      "command": "click",
+      "target": "css=.titleerror",
+      "targets": [
+        ["css=.titleerror", "css:finder"],
+        ["xpath=//div", "xpath:position"],
+        ["xpath=//div[contains(.,'Exception: Cpf invalido!')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "848586a6-afd8-4433-af87-41e937faa5b5",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=.titleerror",
+      "targets": [
+        ["css=.titleerror", "css:finder"],
+        ["xpath=//div", "xpath:position"],
+        ["xpath=//div[contains(.,'Exception: Cpf invalido!')]", "xpath:innerText"]
+      ],
+      "value": "Exception: Cpf invalido!"
+    }, {
+      "id": "ec145f3f-f6e9-4da9-b2dc-d54d578544ad",
+      "comment": "",
+      "command": "close",
+      "target": "",
+      "targets": [],
+      "value": ""
+    }]
+  }],
+  "suites": [{
+    "id": "a51de588-234f-4a38-a02a-03b4fc1e1e97",
+    "name": "Default Suite",
+    "persistSession": false,
+    "parallel": false,
+    "timeout": 300,
+    "tests": []
+  }, {
+    "id": "4f0c117f-2f8e-4050-8978-c52854ff233c",
+    "name": "AdicionarGestores",
+    "persistSession": false,
+    "parallel": false,
+    "timeout": 300,
+    "tests": ["a86e7a7f-868d-451b-adf0-9e09ca7db044", "2918a68e-2a16-4aaa-9688-8eb890aac257", "2520e814-5007-4103-849e-2327c61f4883"]
+  }, {
+    "id": "f270d51d-f310-41b2-a4b7-6d1cbca888eb",
+    "name": "AdicionarAgentes",
+    "persistSession": false,
+    "parallel": false,
+    "timeout": 300,
+    "tests": ["dc83c43d-e682-438c-adc2-b88c12849211"]
+  }],
+  "urls": ["https://localhost:44383/"],
+  "plugins": []
+}

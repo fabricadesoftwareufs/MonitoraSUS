@@ -13,7 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Service", "..\Service\Servi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Util", "..\Util\Util.csproj", "{4911700A-AF7E-41B4-BB73-3FE4FFB90F77}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonitoraSUS.Controllers.Test", "..\MonitoraSUS.Controllers.Test\MonitoraSUS.Controllers.Test.csproj", "{818A62D1-ACFC-4707-BBC0-BB2985AB4678}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonitoraSUS.Controllers.Test", "..\MonitoraSUS.Controllers.Test\MonitoraSUS.Controllers.Test.csproj", "{818A62D1-ACFC-4707-BBC0-BB2985AB4678}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service.Test", "..\Service.Test\Service.Test.csproj", "{A9BE2E92-8931-4EF9-A752-2D61FD2FDD19}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{818A62D1-ACFC-4707-BBC0-BB2985AB4678}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{818A62D1-ACFC-4707-BBC0-BB2985AB4678}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{818A62D1-ACFC-4707-BBC0-BB2985AB4678}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A9BE2E92-8931-4EF9-A752-2D61FD2FDD19}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A9BE2E92-8931-4EF9-A752-2D61FD2FDD19}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A9BE2E92-8931-4EF9-A752-2D61FD2FDD19}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A9BE2E92-8931-4EF9-A752-2D61FD2FDD19}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

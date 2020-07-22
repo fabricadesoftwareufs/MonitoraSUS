@@ -3,13 +3,6 @@
 @{
     ViewData["Title"] = "Create";
     string dataNascimento = Model.Paciente.DataNascimento != DateTime.MinValue ? Model.Paciente.DataNascimento.ToString("dd/MM/yyyy") : DateTime.Now.ToString("dd/MM/yyyy");
-    var rua = Model.Paciente.Rua;
-    var cep = Model.Paciente.Cep;
-    var bairro = Model.Paciente.Bairro;
-    var cidade = Model.Paciente.Cidade;
-    var complemento = Model.Paciente.Complemento;
-    string numero = Model.Paciente.Numero;
-    string estado = Model.Paciente.Estado;
     var latitude = Model.Paciente.Latitude;
     var longitude = Model.Paciente.Longitude;
     string email = Model.Paciente.Email;
@@ -130,49 +123,49 @@
                                 <div class="col-lg-2">
                                     <div class="form-group">
                                         <label class="form-control-label" for="postal_code">CEP (Não sabe? </label> <a href="http://www.buscacep.correios.com.br/sistemas/buscacep/" target="_blank">Busque aqui</a>)
-                                        <input asp-for="Paciente.Cep" oninput="PreencheFormCEP()" id="postal_code" class="form-control" required placeholder="CEP" value="@cep">
+                                        <input asp-for="Paciente.Cep" oninput="PreencheFormCEP()" id="postal_code" class="form-control" required placeholder="CEP" value="@Model.Paciente.Cep">
                                         <span id="spanInvalidCep" hidden class="text-danger text-center" style="padding: 10px">Cep Invalido!!</span>
                                     </div>
                                 </div>
                                 <div class="col-lg-5">
                                     <div class="form-group">
                                         <label class="form-control-label" for="route">Logradouro</label>
-                                        <input asp-for="Paciente.Rua" type="search" oninput="PreencheForm()" required placeholder="Pesquise pelo CEP, Rua, Bairro, Número" autocomplete="off" id="route" class="form-control" value="@rua">
+                                        <input asp-for="Paciente.Rua" type="search" oninput="PreencheForm()" required placeholder="Pesquise pelo CEP, Rua, Bairro, Número" autocomplete="off" id="route" class="form-control" value="@Model.Paciente.Rua">
                                         <span asp-validation-for="Paciente.Rua" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="col-lg-1">
                                     <div class="form-group">
                                         <label class="form-control-label" for="street_number">Número</label>
-                                        <input asp-for="Paciente.Numero" id="street_number" class="form-control" placeholder="" value="@numero">
+                                        <input asp-for="Paciente.Numero" id="street_number" class="form-control" placeholder="" value="@Model.Paciente.Rua">
                                         <span asp-validation-for="Paciente.Numero" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label class="form-control-label" for="sublocality_level_1">Bairro</label>
-                                        <input asp-for="Paciente.Bairro" id="sublocality_level_1" required class="form-control" placeholder="Bairro" value="@bairro">
+                                        <input asp-for="Paciente.Bairro" id="sublocality_level_1" required class="form-control" placeholder="Bairro" value="@Model.Paciente.Bairro">
                                         <span asp-validation-for="Paciente.Bairro" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label class="form-control-label" for="administrative_area_level_2">Cidade</label>
-                                        <input asp-for="Paciente.Cidade" readonly id="administrative_area_level_2" required class="form-control" placeholder="Cidade" value="@cidade">
+                                        <input asp-for="Paciente.Cidade" readonly id="administrative_area_level_2" required class="form-control" placeholder="Cidade" value="@Model.Paciente.Cidade">
                                         <span asp-validation-for="Paciente.Cidade" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label class="form-control-label" for="administrative_area_level_1">Estado</label>
-                                        <input asp-for="Paciente.Estado" readonly id="administrative_area_level_1" class="form-control" placeholder="Estado" value="@estado">
+                                        <input asp-for="Paciente.Estado" readonly id="administrative_area_level_1" class="form-control" placeholder="Estado" value="@Model.Paciente.Estado">
                                         <span asp-validation-for="Paciente.Estado" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label class="form-control-label" for="input-complemento">Complemento</label>
-                                        <input asp-for="Paciente.Complemento" id="input-complemento" class="form-control" placeholder="Complemento" value="@complemento">
+                                        <input asp-for="Paciente.Complemento" id="input-complemento" class="form-control" placeholder="Complemento" value="@Model.Paciente.Complemento">
                                         <span asp-validation-for="Paciente.Complemento" class="text-danger"></span>
                                     </div>
                                 </div>

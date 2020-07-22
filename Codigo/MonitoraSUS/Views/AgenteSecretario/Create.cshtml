@@ -38,32 +38,32 @@
                                     <div class="form-group">
                                         <label class="form-control-label" for="input-cpf">CPF</label>
                                         <input type="text" id="input-cpf" asp-for="Cpf" onfocus="loadEstados()" oninput="validaCpf()" required class="form-control" placeholder="000.000.000-00">
-										<span asp-validation-for="Cpf" class="text-danger"></span>
+                                        <span asp-validation-for="Cpf" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label class="form-control-label" for="input-nome">Nome</label>
                                         <input type="search" id="input-nome" asp-for="Nome" required class="form-control" placeholder="Nome Completo">
-										<span asp-validation-for="Nome" class="text-danger"></span>
-									</div>
+                                        <span asp-validation-for="Nome" class="text-danger"></span>
+                                    </div>
                                 </div>
-								<div class="col-md-2">
-									<div class="form-group">
-										<label for="input-data-nascimento" class="form-control-label">Data de Nascimento</label>
-										<input class="form-control" type="text" asp-for="DataNascimento" placeholder="dd-mm-aaaa" required id="input-data-nascimento">
-										<span asp-validation-for="DataNascimento" class="text-danger"></span>
-									</div>
-								</div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label for="input-data-nascimento" class="form-control-label">Data de Nascimento</label>
+                                        <input class="form-control" type="text" asp-for="DataNascimento" placeholder="dd-mm-aaaa" required id="input-data-nascimento">
+                                        <span asp-validation-for="DataNascimento" class="text-danger"></span>
+                                    </div>
+                                </div>
                                 <div class="col-md-2">
                                     <div class="form-group">
                                         <label class="form-control-label" for="sexo">Sexo</label><br>
                                         <div class="custom-control custom-radio custom-control-inline">
-                                            <input type="radio" id="input-sexo-masc" required name="sexo" value="Masculino" checked class="custom-control-input">
+                                            @Html.RadioButtonFor(model => Model.Sexo, "M", new { @class = "custom-control-input", @id = "input-sexo-masc", @name = "sexo" })
                                             <label class="custom-control-label" for="input-sexo-masc">Masculino</label>
                                         </div>
                                         <div class="custom-control custom-radio custom-control-inline">
-                                            <input type="radio" id="input-sexo-fem" required name="sexo" value="Feminino" class="custom-control-input">
+                                            @Html.RadioButtonFor(model => Model.Sexo, "F", new { @class = "custom-control-input", @id = "input-sexo-fem", @name = "sexo" })
                                             <label class="custom-control-label" for="input-sexo-fem">Feminino</label>
                                         </div>
                                     </div>
@@ -82,52 +82,52 @@
                                     </div>
                                 </div>
                                 <div class="col-lg-2">
-									<div class="form-group">
-										<label class="form-control-label" for="postal_code">CEP (Não sabe? </label> <a href="http://www.buscacep.correios.com.br/sistemas/buscacep/" target="_blank">Busque aqui</a>)
-										<input asp-for="Cep" name="Cep" oninput="PreencheFormCEP()" id="postal_code" class="form-control" required placeholder="CEP">
-										<span id="spanInvalidCep" hidden class="text-danger text-center" style="padding: 10px">Cep Invalido!!</span>
-									</div>
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="postal_code">CEP (Não sabe? </label> <a href="http://www.buscacep.correios.com.br/sistemas/buscacep/" target="_blank">Busque aqui</a>)
+                                        <input asp-for="Cep" name="Cep" oninput="PreencheFormCEP()" id="postal_code" class="form-control" required placeholder="CEP">
+                                        <span id="spanInvalidCep" hidden class="text-danger text-center" style="padding: 10px">Cep Invalido!!</span>
+                                    </div>
                                 </div>
                                 <div class="col-lg-5">
-									<div class="form-group">
-										<label class="form-control-label" for="route">Logradouro</label>
-										<input asp-for="Rua" name="Logradouro" type="search" oninput="PreencheForm()" placeholder="Pesquise pelo CEP, Rua, Bairro, Número" autocomplete="off" id="route" required class="form-control">
-										<span asp-validation-for="Rua" class="text-danger"></span>
-									</div>
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="route">Logradouro</label>
+                                        <input asp-for="Rua" name="Logradouro" type="search" oninput="PreencheForm()" placeholder="Pesquise pelo CEP, Rua, Bairro, Número" autocomplete="off" id="route" required class="form-control">
+                                        <span asp-validation-for="Rua" class="text-danger"></span>
+                                    </div>
                                 </div>
                                 <div class="col-lg-1">
-									<div class="form-group">
-										<label class="form-control-label" for="street_number">Número</label>
-										<input asp-for="Numero" name="Numero" id="street_number" class="form-control" placeholder="">
-										<span asp-validation-for="Numero" class="text-danger"></span>
-									</div>
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="street_number">Número</label>
+                                        <input asp-for="Numero" name="Numero" id="street_number" class="form-control" placeholder="">
+                                        <span asp-validation-for="Numero" class="text-danger"></span>
+                                    </div>
                                 </div>
                                 <div class="col-lg-4">
-									<div class="form-group">
-										<label class="form-control-label" for="sublocality_level_1">Bairro</label>
-										<input asp-for="Bairro" name="Bairro" id="sublocality_level_1" required class="form-control" placeholder="Bairro">
-										<span asp-validation-for="Bairro" class="text-danger"></span>
-									</div>
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="sublocality_level_1">Bairro</label>
+                                        <input asp-for="Bairro" name="Bairro" id="sublocality_level_1" required class="form-control" placeholder="Bairro">
+                                        <span asp-validation-for="Bairro" class="text-danger"></span>
+                                    </div>
                                 </div>
                                 <div class="col-lg-4">
-									<div class="form-group">
-										<label class="form-control-label" for="input-cidade">Cidade</label>
-										<input type="text" readonly id="administrative_area_level_2" required class="form-control" asp-for="Cidade" name="Localidade" placeholder="Cidade">
-										<span asp-validation-for="Cidade" class="text-danger"></span>
-									</div>
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="input-cidade">Cidade</label>
+                                        <input type="text" readonly id="administrative_area_level_2" required class="form-control" asp-for="Cidade" name="Localidade" placeholder="Cidade">
+                                        <span asp-validation-for="Cidade" class="text-danger"></span>
+                                    </div>
                                 </div>
                                 <div class="col-lg-4">
-									<div class="form-group">
-										<label class="form-control-label" for="input-estado">Estado</label>
-										<input type="text" readonly id="administrative_area_level_1" class="form-control" asp-for="Estado" name="UF" placeholder="Estado">
-										<span asp-validation-for="Estado" class="text-danger"></span>
-									</div>
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="input-estado">Estado</label>
+                                        <input type="text" readonly id="administrative_area_level_1" class="form-control" asp-for="Estado" name="UF" placeholder="Estado">
+                                        <span asp-validation-for="Estado" class="text-danger"></span>
+                                    </div>
                                 </div>
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label class="form-control-label" for="input-complemento">Complemento</label>
                                         <input type="text" id="input-complemento" class="form-control" asp-for="Complemento" placeholder="Complemento">
-										<span asp-validation-for="Complemento" class="text-danger"></span>
+                                        <span asp-validation-for="Complemento" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="col-lg-4">
@@ -179,43 +179,43 @@
                                     </div>
                                 </div>
                             </div>
-							<div class="row">
-								<div class="col-lg-3">
-									<div class="custom-control custom-checkbox">
-										<input type="checkbox" class="custom-control-input" id="Imunodeprimido" asp-for="Imunodeprimido">
-										<label class="custom-control-label" for="Imunodeprimido">Imunodeprimido</label>
-									</div>
-								</div>
-								<div class="col-lg-3">
-									<div class="custom-control custom-checkbox">
-										<input type="checkbox" class="custom-control-input" id="Cancer" asp-for="Cancer">
-										<label class="custom-control-label" for="Cancer">Câncer</label>
-									</div>
-								</div>
-								<div class="col-lg-3">
-									<div class="custom-control custom-checkbox">
-										<input type="checkbox" class="custom-control-input" id="DoencaRespiratoria" asp-for="DoencaRespiratoria">
-										<label class="custom-control-label" for="DoencaRespiratoria">Doença Respiratória</label>
-									</div>
-								</div>
-								<div class="col-lg-3">
-									<div class="custom-control custom-checkbox">
-										<input type="checkbox" class="custom-control-input" id="DoencaRenal" asp-for="DoencaRenal">
-										<label class="custom-control-label" for="DoencaRespiratoria">Doença Renal</label>
-									</div>
-								</div>
-								<div class="col-lg-3">
-									<div class="custom-control custom-checkbox">
-										<input type="checkbox" class="custom-control-input" id="Epilepsia" asp-for="Epilepsia">
-										<label class="custom-control-label" for="DoencaRespiratoria">Epilepsia</label>
-									</div>
-								</div>
-								<div class="col-lg-3">
-									<div class="form-group">
-										<input type="search" id="input-outrasComorbidades" class="form-control" style="margin-top: 1px;" asp-for="OutrasComorbidades" placeholder="Outras comorbidades">
-									</div>
-								</div>
-							</div>
+                            <div class="row">
+                                <div class="col-lg-3">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="Imunodeprimido" asp-for="Imunodeprimido">
+                                        <label class="custom-control-label" for="Imunodeprimido">Imunodeprimido</label>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="Cancer" asp-for="Cancer">
+                                        <label class="custom-control-label" for="Cancer">Câncer</label>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="DoencaRespiratoria" asp-for="DoencaRespiratoria">
+                                        <label class="custom-control-label" for="DoencaRespiratoria">Doença Respiratória</label>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="DoencaRenal" asp-for="DoencaRenal">
+                                        <label class="custom-control-label" for="DoencaRenal">Doença Renal</label>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="Epilepsia" asp-for="Epilepsia">
+                                        <label class="custom-control-label" for="Epilepsia">Epilepsia</label>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <input type="search" id="input-outrasComorbidades" class="form-control" style="margin-top: 1px;" asp-for="OutrasComorbidades" placeholder="Outras comorbidades">
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <hr class="my-4" />
                         <h6 class="heading-small text-muted mb-4">@perguntaVinculo</h6>

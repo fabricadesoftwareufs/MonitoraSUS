@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Service;
 
 namespace MonitoraSUS.Controllers
 {
@@ -140,9 +141,9 @@ namespace MonitoraSUS.Controllers
                     return RedirectToAction("Index", "Login");
 
                 }
-                catch (Exception e)
+                catch (ServiceException se)
                 {
-                    throw e.InnerException;
+                    throw se.InnerException;
                 }
             }
             return RedirectToAction("Index", "Login");
@@ -153,7 +154,7 @@ namespace MonitoraSUS.Controllers
         public async Task<ActionResult> CreateSec(IFormCollection collection)
         {
             var captchaValue = await Methods.ValidateCaptcha(collection["g-recaptcha-response"], _configuration["GOOGLE_RECAPTCHA_SECRET_KEY"]);
-            if (captchaValue > 0.6)
+            if (captchaValue > 0.5)
             {
                 try
                 {
@@ -222,7 +223,7 @@ namespace MonitoraSUS.Controllers
                     // Redirecting
                     return RedirectToAction("Index", "Login");
                 }
-                catch (Exception e)
+                catch (ServiceException e)
                 {
                     throw e.InnerException;
                 }
