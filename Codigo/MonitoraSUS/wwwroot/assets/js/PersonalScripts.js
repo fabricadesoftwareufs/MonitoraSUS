@@ -140,8 +140,8 @@ function loadEstados() {
 
 function validaCpf() {
 
-    let cpf = document.getElementById('input-cpf')
-    let span = document.getElementById('spanInvalidCpf')
+    let cpf = document.getElementById('input-cpf');
+    let span = document.getElementById('spanInvalidCpf');
 
     let url = "/Login/ValidaCpf";
 
