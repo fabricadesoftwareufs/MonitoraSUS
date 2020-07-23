@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using Model.ViewModel;
 
 namespace Service
 {
@@ -93,7 +94,109 @@ namespace Service
         }
 
 
-        public List<PessoaModel> GetAll()
+		public PessoaModel InsertAgente(PessoaViewModel pessoaViewModel)
+		{
+			var pessoa = GetByCpf(pessoaViewModel.Pessoa.Cpf);
+			if (pessoa != null)
+				throw new ServiceException("Já possui um cadastro seu no sistema. Solicite a um Gestor de Saúde " + pessoaViewModel.AreaAtuacao +
+					" para autorizar seu CPF para acessar o sistema.");
+			using (var transaction = _context.Database.BeginTransaction())
+			{
+				try
+				{
+					pessoa = Insert(pessoaViewModel.Pessoa);
+					if (pessoaViewModel.AreaAtuacao.Equals("Municipal"))
+					{
+						PessoaTrabalhaMunicipioService _pessoaTrabalhaMunicipioService = new PessoaTrabalhaMunicipioService(_context);
+						_pessoaTrabalhaMunicipioService
+								.Insert(new PessoaTrabalhaMunicipioModel
+								{
+									IdPessoa = pessoa.Idpessoa,
+									IdMunicipio = pessoaViewModel.IdMunicipio,
+									SituacaoCadastro = EmpresaExameModel.SITUACAO_CADASTRO_SOLICITADA,
+									EhResponsavel = false,
+									EhSecretario = false
+								});
+					}
+					else if (pessoaViewModel.AreaAtuacao.Equals("Estadual"))
+					{
+						PessoaTrabalhaEstadoService _pessoaTrabalhaEstadoService = new PessoaTrabalhaEstadoService(_context);
+						_pessoaTrabalhaEstadoService
+								.Insert(new PessoaTrabalhaEstadoModel
+								{
+									IdPessoa = pessoa.Idpessoa,
+									IdEstado = Convert.ToInt32(pessoaViewModel.IdEstado),
+									SituacaoCadastro = EmpresaExameModel.SITUACAO_CADASTRO_SOLICITADA,
+									IdEmpresaExame = EmpresaExameModel.EMPRESA_ESTADO_MUNICIPIO,
+									EhSecretario = false,
+									EhResponsavel = false,
+								});
+					}
+					transaction.Commit();
+				} catch (Exception e)
+                {
+					transaction.Rollback();
+					throw e;
+				}
+			}
+			return pessoa;
+		}
+
+
+		public PessoaModel InsertGestor(PessoaViewModel pessoaViewModel)
+		{
+			var pessoa = GetByCpf(pessoaViewModel.Pessoa.Cpf);
+			if (pessoa != null)
+				throw new ServiceException("Já possui um cadastro seu no sistema. Solicite a um Gestor de Saúde " + pessoaViewModel.AreaAtuacao +
+					" para autorizar seu CPF para acessar o sistema.");
+
+			using (var transaction = _context.Database.BeginTransaction())
+			{
+				try
+				{
+
+					pessoa = Insert(pessoaViewModel.Pessoa);
+
+					if (pessoaViewModel.AreaAtuacao.Equals("Municipal"))
+					{
+						PessoaTrabalhaMunicipioService _pessoaTrabalhaMunicipioService = new PessoaTrabalhaMunicipioService(_context);
+						_pessoaTrabalhaMunicipioService
+								.Insert(new PessoaTrabalhaMunicipioModel
+								{
+
+									IdPessoa = pessoa.Idpessoa,
+									IdMunicipio = pessoaViewModel.IdMunicipio,
+									SituacaoCadastro = EmpresaExameModel.SITUACAO_CADASTRO_SOLICITADA,
+									EhSecretario = false,
+									EhResponsavel = true
+								});
+					}
+					else if (pessoaViewModel.AreaAtuacao.Equals("Estadual"))
+					{
+						PessoaTrabalhaEstadoService _pessoaTrabalhaEstadoService = new PessoaTrabalhaEstadoService(_context);
+						_pessoaTrabalhaEstadoService
+								.Insert(new PessoaTrabalhaEstadoModel
+								{
+									IdPessoa = pessoa.Idpessoa,
+									IdEstado = pessoaViewModel.IdEstado,
+									SituacaoCadastro = EmpresaExameModel.SITUACAO_CADASTRO_SOLICITADA,
+									IdEmpresaExame = EmpresaExameModel.EMPRESA_ESTADO_MUNICIPIO,    //valor padrão
+									EhSecretario = false,
+									EhResponsavel = true
+								});
+					}
+					transaction.Commit();
+				}
+				catch (Exception e)
+				{
+					transaction.Rollback();
+					throw e;
+				}
+			}
+			return pessoa;
+		}
+
+		public List<PessoaModel> GetAll()
          => _context.Pessoa
                 .Select(pessoa => new PessoaModel
                 {

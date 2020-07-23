@@ -48,18 +48,6 @@ namespace MonitoraSUS.Controllers
             _empresaExameService = empresaExameService;
         }
 
-        // GET: AgenteSecretario
-        public ActionResult Index()
-        {
-            return View();
-        }
-
-        // GET: AgenteSecretario/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
-
         // GET: AgenteSecretario/Create
         [AllowAnonymous]
         public ActionResult Create(int userType)
@@ -72,162 +60,51 @@ namespace MonitoraSUS.Controllers
 
         // POST: AgenteSecretario/Create
         [HttpPost, ValidateAntiForgeryToken, AllowAnonymous]
-        public async Task<ActionResult> CreateAgent(IFormCollection collection)
+        public async Task<ActionResult> CreateAgente(PessoaViewModel pessoaViewModel)
         {
-            var captchaValue = await Methods.ValidateCaptcha(collection["g-recaptcha-response"], _configuration["GOOGLE_RECAPTCHA_SECRET_KEY"]);
-            //float captchaValue = 0.7f;
+            var captchaValue = await Methods.ValidateCaptcha(pessoaViewModel.RecaptchaResponse, _configuration["GOOGLE_RECAPTCHA_SECRET_KEY"]);
             if (captchaValue > 0.6)
             {
+                if (!ModelState.IsValid)
+                    return View("Create", pessoaViewModel);
                 try
                 {
-                    // INSERTING A USER AND RETURNING THE ID.
-                    var idPessoaInserida = PeopleInserted(collection);
-                    // ===================== OTHERS ENTITIES =====================
-                    var atuacao = collection["areaAtuacao"];
-                    if (atuacao.Equals("Municipal"))
-                    {
-                        if (idPessoaInserida == 0)
-                        {
-                            TempData["mensagemErro"] = "Você já possui um cadastro no sistema. Solicite ao "
-                                 + "gestor de saúde municipal sua inclusão como notificador.";
-                            return RedirectToAction("Create", "AgenteSecretario");
-                        }
-                        if (_pessoaTrabalhaMunicipioService
-                                .Insert(new PessoaTrabalhaMunicipioModel
-                                {
-                                    IdPessoa = idPessoaInserida,
-                                    IdMunicipio = Convert.ToInt32(collection["select-Cidade"]),
-                                    EhSecretario = false,
-                                    SituacaoCadastro = EmpresaExameModel.SITUACAO_CADASTRO_SOLICITADA,
-                                    EhResponsavel = false
-                                }))
-                        {
-                            TempData["mensagemSucesso"] = "Solicitação de cadastro realizado com sucesso! Por favor, aguarde e-mail " +
-                                "que será enviado pelo MonitoraSUS assim que seu acesso ao sistema for autorizado pelo gestor de saúde municipal.";
-                        }
-                        else
-                            TempData["mensagemErro"] = "Não foi possível concluir seu cadastro. Por favor, tente novamente.";
-                        return RedirectToAction("Create", "AgenteSecretario");
-                    }
-
-                    if (atuacao.Equals("Estadual"))
-                    {
-                        if (idPessoaInserida == 0)
-                        {
-                            TempData["mensagemErro"] = "Você já possui um cadastro no sistema. Solicite ao "
-                                 + "gestor de saúde estadual sua inclusão como notificador.";
-                            return RedirectToAction("Create", "AgenteSecretario");
-                        }
-                        if (_pessoaTrabalhaEstadoService
-                                .Insert(new PessoaTrabalhaEstadoModel
-                                {
-                                    IdPessoa = idPessoaInserida,
-                                    IdEstado = Convert.ToInt32(collection["select-Estado"]),
-                                    EhSecretario = false,
-                                    EhResponsavel = false,
-                                    SituacaoCadastro = EmpresaExameModel.SITUACAO_CADASTRO_SOLICITADA,
-                                    IdEmpresaExame = EmpresaExameModel.EMPRESA_ESTADO_MUNICIPIO
-                                }))
-                        {
-                            TempData["mensagemSucesso"] = "Solicitação de cadastro realizado com sucesso! Por favor, aguarde e-mail " +
-                                "que será enviado pelo MonitoraSUS assim que seu acesso ao sistema for autorizado pelo gestor de saúde estadual.";
-                        }
-                        else
-                            TempData["mensagemErro"] = "Não foi possível concluir seu cadastro. Por favor, tente novamente.";
-                        return RedirectToAction("Create", "AgenteSecretario");
-                    }
-
-                    // Redirecting
-                    return RedirectToAction("Index", "Login");
-
+                    _pessoaService.InsertAgente(pessoaViewModel);
                 }
                 catch (ServiceException se)
                 {
-                    throw se.InnerException;
+                    TempData["mensagemErro"] = se.Message;
+                    return RedirectToAction("Create", "AgenteSecretario");
                 }
             }
+            TempData["mensagemSucesso"] = "Solicitação de cadastro realizado com sucesso! Por favor, aguarde e-mail " +
+                    "que será enviado pelo MonitoraSUS assim que seu acesso ao sistema for autorizado.";
             return RedirectToAction("Index", "Login");
         }
 
         // POST: AgenteSecretario/Create
         [HttpPost, AllowAnonymous, ValidateAntiForgeryToken]
-        public async Task<ActionResult> CreateSec(IFormCollection collection)
+        public async Task<ActionResult> CreateGestor(PessoaViewModel pessoaViewModel)
         {
-            var captchaValue = await Methods.ValidateCaptcha(collection["g-recaptcha-response"], _configuration["GOOGLE_RECAPTCHA_SECRET_KEY"]);
-            if (captchaValue > 0.5)
+            var captchaValue = await Methods.ValidateCaptcha(pessoaViewModel.RecaptchaResponse, _configuration["GOOGLE_RECAPTCHA_SECRET_KEY"]);
+            if (captchaValue > 0.6)
             {
+                if (!ModelState.IsValid)
+                    return View("Create", pessoaViewModel);
                 try
                 {
-                    // INSERTING A USER AND RETURNING THE ID.
-                    var idPessoaInserida = PeopleInserted(collection);
-
-                    // ===================== OTHERS ENTITIES =====================
-                    var atuacao = collection["areaAtuacao"];
-                    if (atuacao.Equals("Municipal"))
-                    {
-
-                        if (idPessoaInserida == 0)
-                        {
-                            TempData["mensagemErro"] = "Você já possui um cadastro no sistema. Solicite ao "
-                                 + "gestor de saúde municipal sua inclusão como gestor.";
-                            return RedirectToAction("Create", "AgenteSecretario");
-                        }
-                        if (_pessoaTrabalhaMunicipioService
-                                .Insert(new PessoaTrabalhaMunicipioModel
-                                {
-                                    IdPessoa = idPessoaInserida,
-                                    IdMunicipio = Convert.ToInt32(collection["select-Cidade"]),
-                                    EhSecretario = false,
-                                    SituacaoCadastro = EmpresaExameModel.SITUACAO_CADASTRO_SOLICITADA,
-                                    EhResponsavel = true
-                                }))
-                        {
-                            TempData["mensagemSucesso"] = "Solicitação de cadastro realizado com sucesso! Por favor, aguarde e-mail " +
-                                "que será enviado pelo MonitoraSUS assim que seu acesso ao sistema for autorizado por um gestor de saúde municipal. " +
-                                "Se você for secretário de saúde ou ainda não há gestores cadastrados no município, por favor, envie documentação comprobatória " +
-                                " para fabricadesoftware@ufs.br para liberarmos o primeiro acesso para seu município."; ;
-                        }
-                        else
-                            TempData["mensagemErro"] = "Não foi possível concluir seu cadastro. Por favor, tente novamente";
-                        return RedirectToAction("Create", "AgenteSecretario");
-                    }
-
-                    if (atuacao.Equals("Estadual"))
-                    {
-                        if (idPessoaInserida == 0)
-                        {
-                            TempData["mensagemErro"] = "Você já possui um cadastro no sistema. Solicite ao "
-                                 + "gestor de saúde estadual sua inclusão como gestor.";
-                            return RedirectToAction("Create", "AgenteSecretario");
-                        }
-                        if (_pessoaTrabalhaEstadoService
-                                .Insert(new PessoaTrabalhaEstadoModel
-                                {
-                                    IdPessoa = idPessoaInserida,
-                                    IdEstado = Convert.ToInt32(collection["select-Estado"]),
-                                    EhSecretario = false,
-                                    EhResponsavel = true,
-                                    SituacaoCadastro = EmpresaExameModel.SITUACAO_CADASTRO_SOLICITADA,
-                                    IdEmpresaExame = EmpresaExameModel.EMPRESA_ESTADO_MUNICIPIO    //valor padrão
-                                }))
-                        {
-                            TempData["mensagemSucesso"] = "Solicitação de cadastro realizado com sucesso! Por favor, aguarde e-mail " +
-                                "que será enviado pelo MonitoraSUS assim que seu acesso ao sistema for autorizado por um gestor de saúde estadual." +
-                                " Se você for secretário de saúde ou ainda não há gestores cadastrados no estado, por favor, envie documentação comprobatória " +
-                                " para fabricadesoftware@ufs.br para liberarmos o primeiro acesso para seu estado.";
-                        }
-                        else
-                            TempData["mensagemErro"] = "Não foi possível concluir seu cadastro. Por favor, tente novamente.";
-                        return RedirectToAction("Create", "AgenteSecretario");
-                    }
-                    // Redirecting
-                    return RedirectToAction("Index", "Login");
+                    _pessoaService.InsertGestor(pessoaViewModel);
                 }
-                catch (ServiceException e)
+                catch (ServiceException se)
                 {
-                    throw e.InnerException;
+                    TempData["mensagemErro"] = se.Message;
+                    return RedirectToAction("Create", "AgenteSecretario");
                 }
             }
+            TempData["mensagemSucesso"] = "Solicitação de cadastro realizado com sucesso! Por favor, aguarde e-mail " +
+                                "que será enviado pelo MonitoraSUS assim que seu acesso ao sistema for autorizado por um gestor de saúde municipal. " +
+                                "Se você for secretário de saúde ou ainda não há gestores cadastrados no município, por favor, envie documentação comprobatória " +
+                                " para fabricadesoftware@ufs.br para liberarmos o primeiro acesso para seu município.";
             return RedirectToAction("Index", "Login");
         }
 
@@ -269,7 +146,7 @@ namespace MonitoraSUS.Controllers
             var autenticadoTrabalhaMunicipio = _pessoaTrabalhaMunicipioService.GetByIdPessoa(usuarioAutenticado.UsuarioModel.IdPessoa);
             if (autenticadoTrabalhaEstado != null || ehAdmin)
             {
-				var ehEmpresa = autenticadoTrabalhaEstado.IdEmpresaExame != EmpresaExameModel.EMPRESA_ESTADO_MUNICIPIO;
+                var ehEmpresa = autenticadoTrabalhaEstado.IdEmpresaExame != EmpresaExameModel.EMPRESA_ESTADO_MUNICIPIO;
 
                 if (ehAdmin)
                     solicitantes = _pessoaTrabalhaEstadoService.GetAllGestores();
@@ -299,7 +176,7 @@ namespace MonitoraSUS.Controllers
             }
             if (autenticadoTrabalhaMunicipio != null || ehAdmin)
             {
-				if (ehAdmin)
+                if (ehAdmin)
                     solicitantes = solicitantes.Concat(_pessoaTrabalhaMunicipioService.GetAllGestores()).ToList();
                 else
                 {
@@ -308,12 +185,13 @@ namespace MonitoraSUS.Controllers
                     else if (!ehListarGestores)
                         solicitantes = _pessoaTrabalhaMunicipioService.GetAllNotificadoresMunicipio(autenticadoTrabalhaMunicipio.IdMunicipio);
                 }
-				foreach(SolicitanteAprovacaoViewModel solicitante in solicitantes) {
-					if (solicitante.Estado.All(char.IsDigit))
-					{
-						solicitante.Estado = _estadoService.GetById(Convert.ToInt32(solicitante.Estado)).Uf;
-					}
-				}
+                foreach (SolicitanteAprovacaoViewModel solicitante in solicitantes)
+                {
+                    if (solicitante.Estado.All(char.IsDigit))
+                    {
+                        solicitante.Estado = _estadoService.GetById(Convert.ToInt32(solicitante.Estado)).Uf;
+                    }
+                }
             }
             if (TempData["responseOp"] != null)
                 ViewBag.responseOp = TempData["responseOp"];
@@ -327,11 +205,11 @@ namespace MonitoraSUS.Controllers
             else if (autenticadoTrabalhaEstado != null && autenticadoTrabalhaEstado.IdEmpresaExame != EmpresaExameModel.EMPRESA_ESTADO_MUNICIPIO)
                 empresas = new List<EmpresaExameModel>() { _empresaExameService.GetById(autenticadoTrabalhaEstado.IdEmpresaExame) };
             else if (autenticadoTrabalhaEstado != null && autenticadoTrabalhaEstado.IdEmpresaExame == EmpresaExameModel.EMPRESA_ESTADO_MUNICIPIO)
-				empresas = _empresaExameService.ListByUF(_estadoService.GetById(autenticadoTrabalhaEstado.IdEstado).Uf);
-			else if (autenticadoTrabalhaMunicipio != null)
-				empresas = _empresaExameService.ListByUF(_estadoService.GetById(Convert.ToInt32(_municipioService.GetById(autenticadoTrabalhaMunicipio.IdMunicipio).Uf)).Uf);
-			solicitantes = solicitantes.OrderBy(s => s.Nome).ToList();
-			if (empresas != null)
+                empresas = _empresaExameService.ListByUF(_estadoService.GetById(autenticadoTrabalhaEstado.IdEstado).Uf);
+            else if (autenticadoTrabalhaMunicipio != null)
+                empresas = _empresaExameService.ListByUF(_estadoService.GetById(Convert.ToInt32(_municipioService.GetById(autenticadoTrabalhaMunicipio.IdMunicipio).Uf)).Uf);
+            solicitantes = solicitantes.OrderBy(s => s.Nome).ToList();
+            if (empresas != null)
                 tupleModel = new Tuple<List<SolicitanteAprovacaoViewModel>, List<EmpresaExameModel>>(solicitantes, empresas);
             else
                 tupleModel = new Tuple<List<SolicitanteAprovacaoViewModel>, List<EmpresaExameModel>>(solicitantes, null);
@@ -350,16 +228,16 @@ namespace MonitoraSUS.Controllers
                 _pessoaTrabalhaMunicipioService.Delete(idPessoa);
 
             var exames = _exameService.GetByIdPaciente(idPessoa);
-            
+
             if (exames.Count() == 0)
             {
-				var examesRealizados = _exameService.GetByIdAgente(idPessoa, DateTime.MinValue, DateTime.MaxValue);
-				var usuario = _usuarioService.GetByIdPessoa(idPessoa);
-				if (usuario != null && examesRealizados.Count() == 0)
-				{
-					_recuperarSenhaService.DeleteByUser(usuario.IdUsuario);
-					_usuarioService.Delete(usuario.IdUsuario);
-				}
+                var examesRealizados = _exameService.GetByIdAgente(idPessoa, DateTime.MinValue, DateTime.MaxValue);
+                var usuario = _usuarioService.GetByIdPessoa(idPessoa);
+                if (usuario != null && examesRealizados.Count() == 0)
+                {
+                    _recuperarSenhaService.DeleteByUser(usuario.IdUsuario);
+                    _usuarioService.Delete(usuario.IdUsuario);
+                }
                 _pessoaService.Delete(idPessoa);
             }
             else
@@ -474,11 +352,11 @@ namespace MonitoraSUS.Controllers
             int tipoUsuario = ativarPerfil.Equals("Agente") ? UsuarioModel.PERFIL_AGENTE : UsuarioModel.PERFIL_GESTOR;
             if (ehAdmin && idEmpresa == EmpresaExameModel.EMPRESA_ESTADO_MUNICIPIO)
                 tipoUsuario = UsuarioModel.PERFIL_SECRETARIO;
-			else if (ehAdmin && idEmpresa != EmpresaExameModel.EMPRESA_ESTADO_MUNICIPIO)
-				tipoUsuario = UsuarioModel.PERFIL_GESTOR;
+            else if (ehAdmin && idEmpresa != EmpresaExameModel.EMPRESA_ESTADO_MUNICIPIO)
+                tipoUsuario = UsuarioModel.PERFIL_GESTOR;
 
 
-			string resposta = "";
+            string resposta = "";
             if (usuarioModel == null)
             {
                 var pessoa = _pessoaService.GetById(idPessoa);
@@ -491,39 +369,39 @@ namespace MonitoraSUS.Controllers
                     TipoUsuario = tipoUsuario
                 };
                 _usuarioService.Insert(usuarioModel);
-				if (tipoUsuario == UsuarioModel.PERFIL_SECRETARIO)
-				{
-					(bool nCpf, bool nUsuario, bool nToken) = await new
-										  LoginController(
-											_usuarioService,
-											_pessoaService,
-											_pessoaTrabalhaEstadoService,
-											_pessoaTrabalhaMunicipioService,
-											_estadoService,
-											_municipioService,
-											_empresaExameService,
-											_emailService,
-											_recuperarSenhaService)
-										  .GenerateToken(usuarioModel.Cpf, 4);
-					resposta = ReturnMsgOper(nCpf, nUsuario, nToken);
-				}
-				else
-				{
-					(bool nCpf, bool nUsuario, bool nToken) = await new
-										  LoginController(
-											_usuarioService,
-											_pessoaService,
-											_pessoaTrabalhaEstadoService,
-											_pessoaTrabalhaMunicipioService,
-											_estadoService,
-											_municipioService,
-											_empresaExameService,
-											_emailService,
-											_recuperarSenhaService)
-										  .GenerateToken(usuarioModel.Cpf, 1);
-					resposta = ReturnMsgOper(nCpf, nUsuario, nToken);
-				}
-               
+                if (tipoUsuario == UsuarioModel.PERFIL_SECRETARIO)
+                {
+                    (bool nCpf, bool nUsuario, bool nToken) = await new
+                                          LoginController(
+                                            _usuarioService,
+                                            _pessoaService,
+                                            _pessoaTrabalhaEstadoService,
+                                            _pessoaTrabalhaMunicipioService,
+                                            _estadoService,
+                                            _municipioService,
+                                            _empresaExameService,
+                                            _emailService,
+                                            _recuperarSenhaService)
+                                          .GenerateToken(usuarioModel.Cpf, 4);
+                    resposta = ReturnMsgOper(nCpf, nUsuario, nToken);
+                }
+                else
+                {
+                    (bool nCpf, bool nUsuario, bool nToken) = await new
+                                          LoginController(
+                                            _usuarioService,
+                                            _pessoaService,
+                                            _pessoaTrabalhaEstadoService,
+                                            _pessoaTrabalhaMunicipioService,
+                                            _estadoService,
+                                            _municipioService,
+                                            _empresaExameService,
+                                            _emailService,
+                                            _recuperarSenhaService)
+                                          .GenerateToken(usuarioModel.Cpf, 1);
+                    resposta = ReturnMsgOper(nCpf, nUsuario, nToken);
+                }
+
             }
             else
             {
@@ -587,81 +465,6 @@ namespace MonitoraSUS.Controllers
 
 
         public bool ExistePessoa(string cpf) => (_pessoaService.GetByCpf(Methods.RemoveSpecialsCaracts(cpf))) != null ? true : false;
-
-        // ======================== PRIVATE METHODS ========================
-        private int PeopleInserted(IFormCollection collection)
-        {
-            // Info Pessoal
-            var cpf = Methods.ValidarCpf(collection["Cpf"]) ? Methods.RemoveSpecialsCaracts(collection["Cpf"]) : throw new Exception("Cpf invalido!");
-            var nome = collection["Nome"];
-            var dataNascimento = collection["DataNascimento"];
-            var sexo = collection["sexo"];
-            var cell = Methods.RemoveSpecialsCaracts(collection["FoneCelular"]);
-            var fixo = Methods.RemoveSpecialsCaracts(collection["FoneFixo"]);
-            var email = collection["Email"];
-
-            // Localização
-            var cep = Methods.RemoveSpecialsCaracts(collection["Cep"]);
-            var rua = collection["Logradouro"];
-            var numero = collection["Numero"];
-            var bairro = collection["Bairro"];
-            var cidade = collection["Localidade"];
-            var estado = collection["UF"];
-            var complemento = collection["Complemento"];
-            var latitude = collection["Latitude"];
-            var longitude = collection["Longitude"];
-
-            // Doenças
-            var hipertenso = collection["Hipertenso"];
-            var diabetes = collection["Diabetes"];
-            var obeso = collection["Obeso"];
-            var cardiopata = collection["Cardiopatia"];
-            var imunoDepri = collection["Imunodeprimido"];
-            var cancer = collection["Cancer"];
-            var doencaResp = collection["DoencaRespiratoria"];
-			var doencaRenal = collection["DoencaRenal"];
-			var epilepsia = collection["Epilepsia"];
-			var outrasComorbidades = collection["OutrasComorbidades"];
-			
-
-            var pessoa = _pessoaService.GetByCpf(cpf);
-            // Se pessoa existe retorna 0 para indicar que a pessoa já tem cadastro
-            if (pessoa != null)
-                return 0;
-
-            // Inserção e recebendo o objeto inserido (ID)
-            pessoa = _pessoaService.Insert(new PessoaModel
-            {
-                Cpf = cpf,
-                Nome = nome,
-                DataNascimento = Convert.ToDateTime(dataNascimento),
-                Sexo = sexo,
-                FoneCelular = cell,
-                FoneFixo = fixo,
-                Email = email,
-                Cep = cep,
-                Rua = rua,
-                Numero = numero,
-                Bairro = bairro,
-                Cidade = cidade,
-                Estado = estado,
-                Complemento = complemento,
-                Latitude = latitude,
-                Longitude = longitude,
-                Hipertenso = hipertenso.Contains("true") ? true : false,
-                Cardiopatia = cardiopata.Contains("true") ? true : false,
-                Cancer = cancer.Contains("true") ? true : false,
-                Diabetes = diabetes.Contains("true") ? true : false,
-                DoencaRespiratoria = doencaResp.Contains("true") ? true : false,
-                Imunodeprimido = imunoDepri.Contains("true") ? true : false,
-                Obeso = obeso.Contains("true") ? true : false,
-				DoencaRenal = doencaRenal.Contains("true") ? true : false,
-				Epilepsia = epilepsia.Contains("true") ? true : false,
-				OutrasComorbidades = outrasComorbidades
-            });
-
-            return pessoa.Idpessoa;
-        }
 
         private string ReturnMsgOper(bool nCpf, bool nUsuario, bool nToken)
         {
