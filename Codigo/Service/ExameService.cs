@@ -16,6 +16,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections;
 using Microsoft.AspNetCore.Hosting;
 using System.Text;
+using Microsoft.EntityFrameworkCore.Internal;
 
 namespace Service
 {
@@ -1597,6 +1598,7 @@ namespace Service
             var exames = new List<ExameViewModel>();
             var indices = new IndiceItemArquivoImportacao();
             var listVirusBacteria = _virusBacteriaService.GetAll();
+            string [] line = {};
             MunicipioGeoModel cidadePaciente = new MunicipioGeoModel(),
                               cidadeEmpresa = new MunicipioGeoModel();
 
@@ -1604,7 +1606,6 @@ namespace Service
             using (var reader = new StreamReader(file.OpenReadStream(), Encoding.UTF7))
             {
                 var cabecalho = reader.ReadLine();
-
                 indices = IndexaColunasArquivoGal(cabecalho) ?? IndexaColunasArquivoUFS(cabecalho);
 
                 if (indices == null)
@@ -1613,9 +1614,9 @@ namespace Service
 
                 if (indices.EhPlanilhaGal)
                 {
-                    while (reader.Peek() >= 0)
+                    line = reader.ReadLine().Split(';');
+                    while (reader.Peek() >= 0 && String.Concat(line).Length > 0)
                     {
-                        var line = reader.ReadLine().Split(';');
                         cidadePaciente = _municipioGeoService.GetByName(line[indices.IndiceCidadePaciente]);
                         cidadeEmpresa = _municipioGeoService.GetByName(line[indices.IndiceCidadeEmpresa]);
 
@@ -1687,13 +1688,15 @@ namespace Service
                             exame.Exame.IdMunicipio = null;
 
                         exames.Add(exame);
+
+                        line = reader.ReadLine().Split(';');
                     }
                 }
                 else
                 {
-                    while (reader.Peek() >= 0)
+                    line = reader.ReadLine().Split(';');
+                    while (reader.Peek() >= 0 && String.Concat(line).Length > 0)
                     {
-                        var line = reader.ReadLine().Split(';');
                         cidadePaciente = _municipioGeoService.GetByName(line[indices.IndiceCidadePaciente]);
                         var exame = new ExameViewModel
                         {
@@ -1762,6 +1765,8 @@ namespace Service
                             exame.Exame.IdMunicipio = null;
 
                         exames.Add(exame);
+
+                        line = reader.ReadLine().Split(';');
                     }
                 }
             }
