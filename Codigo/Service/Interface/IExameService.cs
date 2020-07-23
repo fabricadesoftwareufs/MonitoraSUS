@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Model;
 using Model.ViewModel;
 using System;
@@ -38,6 +39,6 @@ namespace Service.Interface
         ConfiguracaoNotificarModel BuscarConfiguracaoNotificar(int IdMunicipio);
         System.Threading.Tasks.Task<ExameModel> EnviarSMSResultadoExameAsync(ConfiguracaoNotificarModel configuracaoNotificar, ExameModel exame, PessoaModel pessoa);
         System.Threading.Tasks.Task<ExameModel> ConsultarSMSExameAsync(ConfiguracaoNotificarModel configuracaoNotificar, ExameModel exame);
-		void Import(IFormFile file, UsuarioViewModel agente);
+		void Import(IFormFile file,  UsuarioViewModel agente);
 	}
 }
