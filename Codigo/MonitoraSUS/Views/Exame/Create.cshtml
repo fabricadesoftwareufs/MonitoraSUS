@@ -125,6 +125,7 @@
                                         <label class="form-control-label" for="postal_code">CEP (Não sabe? </label> <a href="http://www.buscacep.correios.com.br/sistemas/buscacep/" target="_blank">Busque aqui</a>)
                                         <input asp-for="Paciente.Cep" oninput="PreencheFormCEP()" id="postal_code" class="form-control" required placeholder="CEP" value="@Model.Paciente.Cep">
                                         <span id="spanInvalidCep" hidden class="text-danger text-center" style="padding: 10px">Cep Invalido!!</span>
+                                        <span asp-validation-for="Paciente.Cep" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="col-lg-5">
@@ -191,12 +192,14 @@
                                     <div class="form-group">
                                         <label class="form-control-label" for="input-celular">Celular</label>
                                         <input asp-for="Paciente.FoneCelular" id="input-celular" required class="form-control" placeholder=" (99) 99999 9999" value="@foneCelular">
+                                        <span asp-validation-for="Paciente.FoneCelular" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label class="form-control-label" for="input-telefone">Telefone</label>
                                         <input asp-for="Paciente.FoneFixo" id="input-telefone" class="form-control" placeholder=" (99) 9999 9999" value="@foneFixo">
+                                        <span asp-validation-for="Paciente.FoneFixo" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="col-lg-4">
