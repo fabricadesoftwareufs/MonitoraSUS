@@ -96,7 +96,8 @@ namespace Service
 
 		public PessoaModel InsertAgente(PessoaViewModel pessoaViewModel)
 		{
-			var pessoa = GetByCpf(pessoaViewModel.Pessoa.Cpf);
+			String cpf = Methods.RemoveSpecialsCaracts(pessoaViewModel.Pessoa.Cpf);
+			var pessoa = GetByCpf(cpf);
 			if (pessoa != null)
 				throw new ServiceException("Já possui um cadastro seu no sistema. Solicite a um Gestor de Saúde " + pessoaViewModel.AreaAtuacao +
 					" para autorizar seu CPF para acessar o sistema.");
@@ -145,7 +146,8 @@ namespace Service
 
 		public PessoaModel InsertGestor(PessoaViewModel pessoaViewModel)
 		{
-			var pessoa = GetByCpf(pessoaViewModel.Pessoa.Cpf);
+			String cpf = Methods.RemoveSpecialsCaracts(pessoaViewModel.Pessoa.Cpf);
+			var pessoa = GetByCpf(cpf);
 			if (pessoa != null)
 				throw new ServiceException("Já possui um cadastro seu no sistema. Solicite a um Gestor de Saúde " + pessoaViewModel.AreaAtuacao +
 					" para autorizar seu CPF para acessar o sistema.");

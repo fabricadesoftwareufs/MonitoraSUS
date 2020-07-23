@@ -29,7 +29,7 @@ namespace Model
         [Display(Name = "Sexo")]
         public string Sexo { get; set; }
 		[Required(ErrorMessage = "Campo obrigatório")]
-		[StringLength(8, ErrorMessage = "Máximo são 08 caracteres")]
+		[Util.Cep]
 		public string Cep { get; set; }
 		[Required(ErrorMessage = "Campo obrigatório")]
 		[StringLength(60, ErrorMessage = "Máximo são 60 caracteres")]
@@ -50,10 +50,9 @@ namespace Model
         public string Latitude { get; set; }
         public string Longitude { get; set; }
 		[Required(ErrorMessage = "Campo obrigatório")]
-		[StringLength(15, ErrorMessage = "Máximo são 15 caracteres")]
 		[Util.TelefoneCelular]
 		public string FoneCelular { get; set; }
-		[StringLength(15, ErrorMessage = "Máximo são 15 caracteres")]
+		[Util.TelefoneFixo]
 		public string FoneFixo { get; set; }
 		[StringLength(60, ErrorMessage = "Máximo são 60 caracteres")]
 		public string Email { get; set; }

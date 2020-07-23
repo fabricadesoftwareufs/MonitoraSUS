@@ -198,6 +198,7 @@ function BuscaViaCep(cep) {
                 formCep[input].value = '';
                 for (let value in data) {
                     if (formCep[input].name.toLowerCase() == value ||
+                        formCep[input].name == nameInputPessoa(value) ||
                         formCep[input].name == nameInputExame(value) ||
                         formCep[input].name == nameInputEmpresaExame(value)) {
 
@@ -218,6 +219,25 @@ function BuscaViaCep(cep) {
         } else
             span.hidden = false;
     })
+}
+
+function nameInputPessoa(s) {
+    switch (s) {
+        case 'cep':
+            return 'Pessoa.Cep';
+            break;
+        case 'bairro':
+            return 'Pessoa.Bairro';
+            break;
+        case 'localidade':
+            return 'Pessoa.Cidade';
+            break;
+        case 'uf':
+            return 'Pessoa.Estado';
+            break;
+        case 'logradouro':
+            return 'Pessoa.Rua';
+    }
 }
 
 function nameInputExame(s) {

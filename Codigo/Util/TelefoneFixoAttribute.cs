@@ -7,12 +7,12 @@ namespace Util
 	/// <summary>
 	/// Validação customizada para CPF
 	/// </summary>
-	public class TelefoneCelularAttribute : ValidationAttribute
+	public class TelefoneFixoAttribute : ValidationAttribute
 	{
 		/// <summary>
 		/// Construtor
 		/// </summary>
-		public TelefoneCelularAttribute() { }
+		public TelefoneFixoAttribute() { }
 
 		/// <summary>
 		/// Validação server
@@ -24,7 +24,7 @@ namespace Util
 			value = Methods.RemoveSpecialsCaracts((string)value);
 			if (value == null || string.IsNullOrEmpty(value.ToString()))
 				return true;
-			if (value.ToString().Length != 11)
+			if (value.ToString().Length != 10)
 				return false;
 			if (value.ToString().StartsWith("0"))
 				return false;
@@ -32,6 +32,6 @@ namespace Util
 		}
 
 		public string GetErrorMessage() =>
-			$"Celular Inválido";
+			$"Telefone Fixo Inválido";
 	}
 }
