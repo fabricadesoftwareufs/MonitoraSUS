@@ -82,18 +82,7 @@ namespace Model
         {
             get
             {
-				if (AguardandoResultado)
-					return RESULTADO_AGUARDANDO;
-				else if (IgGIgM.Equals("S"))
-					return RESULTADO_IGMIGG;
-				else if (IgM.Equals("S") || Pcr.Equals("S"))
-					return RESULTADO_POSITIVO;
-				else if (IgM.Equals("N") && Pcr.Equals("N") && IgG.Equals("N") &&  IgGIgM.Equals("N"))
-					return RESULTADO_NEGATIVO;
-				else if ((IgM.Equals("N") && IgG.Equals("S")) || (Pcr.Equals("N") && IgG.Equals("S")))
-					return RESULTADO_RECUPERADO;
-				else
-					return RESULTADO_INDETERMINADO;
+				return CalculaResultadoExame(AguardandoResultado,IgGIgM,IgM,IgG,Pcr);
             }
         }
 
@@ -133,5 +122,21 @@ namespace Model
 		[Display(Name = "Perda Olfato/Paladar")]
 		public bool PerdaOlfatoPaladar { get; set; }
 		public string OutrosSintomas { get; set; }
+
+		public static string CalculaResultadoExame(bool aguardandoResultado,string iggIgm,string igm, string igg, string pcr) {
+
+			if (aguardandoResultado)
+				return RESULTADO_AGUARDANDO;
+			else if (iggIgm.Equals("S"))
+				return RESULTADO_IGMIGG;
+			else if (igm.Equals("S") || pcr.Equals("S"))
+				return RESULTADO_POSITIVO;
+			else if (igm.Equals("N") && pcr.Equals("N") && igg.Equals("N") && iggIgm.Equals("N"))
+				return RESULTADO_NEGATIVO;
+			else if ((igm.Equals("N") && igg.Equals("S")) || (pcr.Equals("N") && igg.Equals("S")))
+				return RESULTADO_RECUPERADO;
+			else
+				return RESULTADO_INDETERMINADO;
+		} 
 	}
 }

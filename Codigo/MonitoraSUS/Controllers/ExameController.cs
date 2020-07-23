@@ -4,14 +4,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Configuration;
 using Model;
-using Model.AuxModel;
 using Model.ViewModel;
 using Util;
 using Service;
 using Service.Interface;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
@@ -383,7 +381,8 @@ namespace MonitoraSUS.Controllers
 			ViewBag.googleKey = _configuration["GOOGLE_KEY"];
 			ViewBag.VirusBacteria = new SelectList(_virusBacteriaContext.GetAll(), "IdVirusBacteria", "Nome");
 			ViewBag.AreaAtuacao = new SelectList(_areaAtuacaoContext.GetAll(), "IdAreaAtuacao", "Descricao");
-			exameViewModel.Usuario = _usuarioContext.RetornLoggedUser((ClaimsIdentity)User.Identity).UsuarioModel;
+			var usuarioViewModel = _usuarioContext.RetornLoggedUser((ClaimsIdentity)User.Identity);
+			exameViewModel.Usuario = usuarioViewModel.UsuarioModel;
 			if (!ModelState.IsValid)
 				return View(exameViewModel);
 			try
@@ -511,6 +510,12 @@ namespace MonitoraSUS.Controllers
 			pesquisaExame.Exames = pesquisaExame.Exames.OrderBy(ex => ex.Exame.CodigoColeta).ToList();
 			return PreencheTotalizadores(pesquisaExame);
 		}
+
+		[HttpPost]
+		public IActionResult CalculaResultadoExame(bool aguardandoResultado, string iggIgm, string igm, string igg, string pcr) {
+			return Ok(ExameModel.CalculaResultadoExame(aguardandoResultado, iggIgm, igm, igg,pcr));
+		}
+
 
 		public PesquisaExameViewModel PreencheTotalizadores(PesquisaExameViewModel examesTotalizados)
 		{

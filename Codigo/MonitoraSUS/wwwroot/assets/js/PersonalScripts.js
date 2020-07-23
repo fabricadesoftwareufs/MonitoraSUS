@@ -140,8 +140,8 @@ function loadEstados() {
 
 function validaCpf() {
 
-    let cpf = document.getElementById('input-cpf')
-    let span = document.getElementById('spanInvalidCpf')
+    let cpf = document.getElementById('input-cpf');
+    let span = document.getElementById('spanInvalidCpf');
 
     let url = "/Login/ValidaCpf";
 
@@ -198,6 +198,7 @@ function BuscaViaCep(cep) {
                 formCep[input].value = '';
                 for (let value in data) {
                     if (formCep[input].name.toLowerCase() == value ||
+                        formCep[input].name == nameInputPessoa(value) ||
                         formCep[input].name == nameInputExame(value) ||
                         formCep[input].name == nameInputEmpresaExame(value)) {
 
@@ -220,22 +221,41 @@ function BuscaViaCep(cep) {
     })
 }
 
+function nameInputPessoa(s) {
+    switch (s) {
+        case 'cep':
+            return 'Pessoa.Cep';
+            break;
+        case 'bairro':
+            return 'Pessoa.Bairro';
+            break;
+        case 'localidade':
+            return 'Pessoa.Cidade';
+            break;
+        case 'uf':
+            return 'Pessoa.Estado';
+            break;
+        case 'logradouro':
+            return 'Pessoa.Rua';
+    }
+}
+
 function nameInputExame(s) {
     switch (s) {
         case 'cep':
-            return 'IdPaciente.Cep';
+            return 'Paciente.Cep';
             break;
         case 'bairro':
-            return 'IdPaciente.Bairro';
+            return 'Paciente.Bairro';
             break;
         case 'localidade':
-            return 'IdPaciente.Cidade';
+            return 'Paciente.Cidade';
             break;
         case 'uf':
-            return 'IdPaciente.Estado';
+            return 'Paciente.Estado';
             break;
         case 'logradouro':
-            return 'IdPaciente.Rua';
+            return 'Paciente.Rua';
     }
 }
 
@@ -271,6 +291,7 @@ $(document).ready(function () {
         $('#modal-mensagem-retorno').modal('show');
 });
 
+/*
 $('#btn-solicitar').on('click', function () {
 
     var cpf = $('#input-cpf').val();
@@ -291,6 +312,7 @@ $('#btn-solicitar').on('click', function () {
 
     }
 });
+*/
 
 // detectando tab do usuario
 $(window).keydown(function (event) {

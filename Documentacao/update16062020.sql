@@ -14,7 +14,6 @@ ADD COLUMN `cnes` VARCHAR(20) NOT NULL DEFAULT '' AFTER `numeroLeitosUTIDisponiv
 
 ALTER TABLE `monitorasus`.`exame` 
 ADD COLUMN `outroSintomas` VARCHAR(100) AFTER `idAreaAtuacao`,
-ADD COLUMN `profissao` VARCHAR(50) NOT NULL DEFAULT 'Não Informada' AFTER `outroSintomas`,
 DROP INDEX `fk_exame_municipio1_idx` ,
 ADD INDEX `fk_exame_municipio1_idx` (`idMunicipio` ASC),
 ADD INDEX `fk_exame_AreaAtuacao1_idx` (`idAreaAtuacao` ASC);
