@@ -14,6 +14,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
 
 namespace MonitoraSUS.Controllers
 {
@@ -418,7 +419,7 @@ namespace MonitoraSUS.Controllers
 			try
 			{
 				var agente = _usuarioContext.RetornLoggedUser((ClaimsIdentity)User.Identity);
-				_exameContext.Import(file, agente);
+				_exameContext.Import(file,agente);
 
 				TempData["mensagemSucesso"] = "O processamento da planilha GAL foi concluido com sucesso!";
 			}
