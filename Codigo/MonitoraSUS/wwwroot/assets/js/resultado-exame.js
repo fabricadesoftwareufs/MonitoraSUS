@@ -58,7 +58,7 @@ function mensagemResultado() {
     var nome = document.getElementById('input-nome').value;
     var idVirus = document.getElementById('input-virus-bacteria').value;
     var virus = document.getElementById('input-virus-bacteria')[idVirus - 1].text;
-    var mensagem = verificaCampoVazio();
+    var mensagem = ""; //verificaCampoVazio();
 
     $('#ok-model-form').hide();
     $('#acoes-model-form').hide();

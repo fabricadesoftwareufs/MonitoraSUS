@@ -78,7 +78,10 @@ namespace MonitoraSUS
 
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
+                //app.UseDeveloperExceptionPage();
+                app.UseExceptionHandler("/Error/500");
+                app.UseStatusCodePagesWithReExecute("/Error/{0}");
+                app.UseHsts();
             }
             else
             {
