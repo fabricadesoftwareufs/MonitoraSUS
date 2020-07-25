@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Create";
+    string nome = Model.Paciente.Nome ?? "";
     string dataNascimento = Model.Paciente.DataNascimento != DateTime.MinValue ? Model.Paciente.DataNascimento.ToString("dd/MM/yyyy") : DateTime.Now.ToString("dd/MM/yyyy");
     var rua = Model.Paciente.Rua;
     var cep = Model.Paciente.Cep;
@@ -75,7 +76,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label class="form-control-label" for="input-nome">Paciente</label>
-                                        <input asp-for="Paciente.Nome" required id="input-nome" placeholder="Nome Completo" class="form-control" />
+                                        <input asp-for="Paciente.Nome" required id="input-nome" placeholder="Nome Completo" class="form-control" value="@nome"/>
                                         <span asp-validation-for="Paciente.Nome" class="text-danger"></span>
                                     </div>
                                 </div>

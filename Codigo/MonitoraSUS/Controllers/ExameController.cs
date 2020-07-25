@@ -383,8 +383,8 @@ namespace MonitoraSUS.Controllers
 			ViewBag.VirusBacteria = new SelectList(_virusBacteriaContext.GetAll(), "IdVirusBacteria", "Nome");
 			ViewBag.AreaAtuacao = new SelectList(_areaAtuacaoContext.GetAll(), "IdAreaAtuacao", "Descricao");
 			exameViewModel.Usuario = _usuarioContext.RetornLoggedUser((ClaimsIdentity)User.Identity).UsuarioModel;
-			if (!ModelState.IsValid)
-				return View(exameViewModel);
+			
+			
 			try
 			{
 				if (exameViewModel.PesquisarCpf == 1)
@@ -403,12 +403,21 @@ namespace MonitoraSUS.Controllers
 						return View(exameVazio);
 					}
 				}
-				_exameContext.Insert(exameViewModel);
+				else
+				{
+					if (ModelState.IsValid)
+					{
+						_exameContext.Insert(exameViewModel);
+						TempData["mensagemSucesso"] = "Notificação realizada com SUCESSO!";
+					}
+					else
+						return View(exameViewModel);
+				}
 			} catch (ServiceException se )
 			{
 				TempData["mensagemErro"] = se.Message;
 			}
-			TempData["mensagemSucesso"] = "Notificação realizada com SUCESSO!";
+			
 			return RedirectToAction(nameof(Create));
 		}
 
