@@ -91,7 +91,10 @@ namespace MonitoraSUS.Controllers
             if (captchaValue > 0.6)
             {
                 if (!ModelState.IsValid)
+                {
+                    ViewBag.userType = 1;
                     return View("Create", pessoaViewModel);
+                }
                 try
                 {
                     _pessoaService.InsertGestor(pessoaViewModel);

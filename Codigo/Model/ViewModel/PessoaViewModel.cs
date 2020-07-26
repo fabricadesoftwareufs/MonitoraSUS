@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace Model.ViewModel
@@ -10,6 +11,9 @@ namespace Model.ViewModel
         {
             Pessoa = new PessoaModel();
         }
+        [Required(ErrorMessage ="CPF requerido")]
+        [Util.CPF]
+        public string Cpf { get; set; }
         public PessoaModel Pessoa { get; set; }
         public String RecaptchaResponse { get; set; }
         public String AreaAtuacao { get; set; }
