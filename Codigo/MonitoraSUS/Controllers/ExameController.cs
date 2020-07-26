@@ -382,8 +382,7 @@ namespace MonitoraSUS.Controllers
 			ViewBag.VirusBacteria = new SelectList(_virusBacteriaContext.GetAll(), "IdVirusBacteria", "Nome");
 			ViewBag.AreaAtuacao = new SelectList(_areaAtuacaoContext.GetAll(), "IdAreaAtuacao", "Descricao");
 			exameViewModel.Usuario = _usuarioContext.RetornLoggedUser((ClaimsIdentity)User.Identity).UsuarioModel;
-			
-		
+
 			try
 			{
 				if (exameViewModel.PesquisarCpf == 1)
@@ -393,6 +392,7 @@ namespace MonitoraSUS.Controllers
 					if (pessoa != null)
 					{
 						exameViewModel.Paciente = pessoa;
+						ModelState.Clear();
 						return View(exameViewModel);
 					}
 					else
