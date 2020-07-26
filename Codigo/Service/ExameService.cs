@@ -246,6 +246,7 @@ namespace Service
 
         private Exame ModelToEntity(ExameViewModel exameModel)
         {
+            exameModel.Exame.IdAgenteSaude = exameModel.Usuario.IdPessoa;
             exameModel.Exame.CodigoColeta = (exameModel.Exame.CodigoColeta == null) ? "" : exameModel.Exame.CodigoColeta;
             exameModel.Exame.IdNotificacao = (exameModel.Exame.IdNotificacao == null) ? "" : exameModel.Exame.IdNotificacao;
             var secretarioMunicipio = _context.Pessoatrabalhamunicipio.Where(p => p.IdPessoa == exameModel.Exame.IdAgenteSaude).FirstOrDefault();
