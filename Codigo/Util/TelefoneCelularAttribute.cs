@@ -21,9 +21,9 @@ namespace Util
 		/// <returns></returns>
 		public override bool IsValid(object value)
 		{
-			value = Methods.RemoveSpecialsCaracts((string)value);
 			if (value == null || string.IsNullOrEmpty(value.ToString()))
 				return true;
+			value = Methods.RemoveSpecialsCaracts((string)value);
 			if (value.ToString().Length != 11)
 				return false;
 			if (value.ToString().StartsWith("0"))

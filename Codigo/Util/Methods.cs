@@ -199,11 +199,11 @@ namespace Util
                 if (jsonResponse.Success)
                     return jsonResponse.Score;
                 else
-                    throw new Exception(jsonResponse.ErrorCodes.ToString());
+                    return 0;
             }
             catch (Exception e)
             {
-                throw e.InnerException;
+                throw e;
             }
         }
     }

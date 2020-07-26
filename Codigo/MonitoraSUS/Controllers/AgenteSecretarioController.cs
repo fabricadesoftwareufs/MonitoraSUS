@@ -74,11 +74,12 @@ namespace MonitoraSUS.Controllers
                 catch (ServiceException se)
                 {
                     TempData["mensagemErro"] = se.Message;
-                    return RedirectToAction("Create", "AgenteSecretario");
+                    
                 }
+                TempData["mensagemSucesso"] = "Solicitação de cadastro realizado com sucesso! Por favor, aguarde e-mail " +
+                        "que será enviado pelo MonitoraSUS assim que seu acesso ao sistema for autorizado.";
+                return RedirectToAction("Create", "AgenteSecretario");
             }
-            TempData["mensagemSucesso"] = "Solicitação de cadastro realizado com sucesso! Por favor, aguarde e-mail " +
-                    "que será enviado pelo MonitoraSUS assim que seu acesso ao sistema for autorizado.";
             return RedirectToAction("Index", "Login");
         }
 
@@ -98,13 +99,13 @@ namespace MonitoraSUS.Controllers
                 catch (ServiceException se)
                 {
                     TempData["mensagemErro"] = se.Message;
-                    return RedirectToAction("Create", "AgenteSecretario");
                 }
+                TempData["mensagemSucesso"] = "Solicitação de cadastro realizado com sucesso! Por favor, aguarde e-mail " +
+                                    "que será enviado pelo MonitoraSUS assim que seu acesso ao sistema for autorizado por um gestor de saúde municipal. " +
+                                    "Se você for secretário de saúde ou ainda não há gestores cadastrados no município, por favor, envie documentação comprobatória " +
+                                    " para fabricadesoftware@ufs.br para liberarmos o primeiro acesso para seu município.";
+                return RedirectToAction("Create", "AgenteSecretario");
             }
-            TempData["mensagemSucesso"] = "Solicitação de cadastro realizado com sucesso! Por favor, aguarde e-mail " +
-                                "que será enviado pelo MonitoraSUS assim que seu acesso ao sistema for autorizado por um gestor de saúde municipal. " +
-                                "Se você for secretário de saúde ou ainda não há gestores cadastrados no município, por favor, envie documentação comprobatória " +
-                                " para fabricadesoftware@ufs.br para liberarmos o primeiro acesso para seu município.";
             return RedirectToAction("Index", "Login");
         }
 

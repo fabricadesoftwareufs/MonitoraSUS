@@ -35,7 +35,7 @@
                                 <div class="col-md-2">
                                     <div class="form-group">
                                         <label class="form-control-label" for="input-cpf">CPF</label>
-                                        <input asp-for="Pessoa.Cpf" id="input-cpf" placeholder="000.000.000-00" type="text" required class="form-control" onfocus="loadEstados()" />
+                                        <input asp-for="Pessoa.Cpf" id="input-cpf" placeholder="000.000.000-00" type="text" class="form-control" onfocus="loadEstados()" />
                                         <span asp-validation-for="Pessoa.Cpf" class="text-danger"></span>
 
                                     </div>
@@ -43,14 +43,14 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label class="form-control-label" for="input-nome">Nome</label>
-                                        <input type="search" id="input-nome" asp-for="Pessoa.Nome" required class="form-control" placeholder="Nome Completo">
-                                        <span asp-validation-for="Pessoa.Nome" class="text-danger"></span>
+                                        <input type="search" id="input-nome" asp-for="Pessoa.Nome" class="form-control" placeholder="Nome Completo">
+                                        <span asp-validation-for="Pessoa.Nome" id="error-nome" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="col-md-2">
                                     <div class="form-group">
                                         <label for="input-data-nascimento" class="form-control-label">Data de Nascimento</label>
-                                        <input class="form-control" type="text" asp-for="Pessoa.DataNascimento" placeholder="dd-mm-aaaa" required id="input-data-nascimento">
+                                        <input class="form-control" type="text" asp-for="Pessoa.DataNascimento" placeholder="dd-mm-aaaa" id="input-data-nascimento">
                                         <span asp-validation-for="Pessoa.DataNascimento" class="text-danger"></span>
                                     </div>
                                 </div>
@@ -83,7 +83,7 @@
                                 <div class="col-lg-2">
                                     <div class="form-group">
                                         <label class="form-control-label" for="postal_code">CEP (Não sabe? </label> <a href="http://www.buscacep.correios.com.br/sistemas/buscacep/" target="_blank">Busque aqui</a>)
-                                        <input asp-for="Pessoa.Cep" name="Pessoa.Cep" oninput="PreencheFormCEP()" id="postal_code" class="form-control" required placeholder="CEP">
+                                        <input asp-for="Pessoa.Cep" name="Pessoa.Cep" oninput="PreencheFormCEP()" id="postal_code" class="form-control" placeholder="CEP">
                                         <span id="spanInvalidCep" hidden class="text-danger text-center" style="padding: 10px">Cep Invalido!!</span>
                                         <span asp-validation-for="Pessoa.Cep" class="text-danger"></span>
                                     </div>
@@ -91,7 +91,7 @@
                                 <div class="col-lg-5">
                                     <div class="form-group">
                                         <label class="form-control-label" for="route">Logradouro</label>
-                                        <input asp-for="Pessoa.Rua" name="Pessoa.Rua" type="search" oninput="PreencheForm()" placeholder="Pesquise pelo CEP, Rua, Bairro, Número" autocomplete="off" id="route" required class="form-control">
+                                        <input asp-for="Pessoa.Rua" name="Pessoa.Rua" type="search" oninput="PreencheForm()" placeholder="Pesquise pelo CEP, Rua, Bairro, Número" autocomplete="off" id="route" class="form-control">
                                         <span asp-validation-for="Pessoa.Rua" class="text-danger"></span>
                                     </div>
                                 </div>
@@ -105,14 +105,14 @@
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label class="form-control-label" for="sublocality_level_1">Bairro</label>
-                                        <input asp-for="Pessoa.Bairro" name="Pessoa.Bairro" id="sublocality_level_1" required class="form-control" placeholder="Bairro">
+                                        <input asp-for="Pessoa.Bairro" name="Pessoa.Bairro" id="sublocality_level_1" class="form-control" placeholder="Bairro">
                                         <span asp-validation-for="Pessoa.Bairro" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label class="form-control-label" for="input-cidade">Cidade</label>
-                                        <input type="text" readonly id="administrative_area_level_2" required class="form-control" asp-for="Pessoa.Cidade" name="Pessoa.Cidade" placeholder="Cidade">
+                                        <input type="text" readonly id="administrative_area_level_2" class="form-control" asp-for="Pessoa.Cidade" name="Pessoa.Cidade" placeholder="Cidade">
                                         <span asp-validation-for="Pessoa.Cidade" class="text-danger"></span>
                                     </div>
                                 </div>
@@ -133,7 +133,7 @@
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label class="form-control-label" for="input-celular">Celular</label>
-                                        <input type="text" id="input-celular" required class="form-control" asp-for="Pessoa.FoneCelular" placeholder=" (99) 99999 9999">
+                                        <input type="text" id="input-celular" class="form-control" asp-for="Pessoa.FoneCelular" placeholder=" (99) 99999 9999">
                                         <span asp-validation-for="Pessoa.FoneCelular" class="text-danger"></span>
                                     </div>
                                 </div>
@@ -146,7 +146,7 @@
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label class="form-control-label" for="input-email">E-mail</label>
-                                        <input type="email" id="input-email" class="form-control" required autocomplete="off" asp-for="Pessoa.Email" placeholder="email@example.com">
+                                        <input type="email" id="input-email" class="form-control" autocomplete="off" asp-for="Pessoa.Email" placeholder="email@example.com">
                                     </div>
                                 </div>
                             </div>
@@ -225,7 +225,7 @@
                                 <div class="col-lg-6">
                                     <div class="form-group">
                                         <label class="form-control-label" for="select-atuacao-estado">Estado</label>
-                                        <select class="form-control" id="select-atuacao-estado" asp-for="IdEstado" required onchange="cidadeSelect()">
+                                        <select class="form-control" id="select-atuacao-estado" asp-for="IdEstado" onchange="cidadeSelect()">
                                             <option selected>Selecione o estado</option>
                                         </select>
                                     </div>
@@ -233,7 +233,7 @@
                                 <div class="col-lg-6">
                                     <div class="form-group">
                                         <label class="form-control-label" for="select-atuacao-cidade">Município</label>
-                                        <select class="form-control" id="select-atuacao-cidade" required asp-for="IdMunicipio" disabled>
+                                        <select class="form-control" id="select-atuacao-cidade" asp-for="IdMunicipio" disabled>
                                         </select>
                                     </div>
                                 </div>
@@ -241,11 +241,11 @@
                                     <div class="form-group">
                                         <label class="form-control-label" for="nivel-atuacao">Nível de Atuação:</label><br>
                                         <div class="custom-control custom-radio custom-control-inline">
-                                            <input type="radio" id="input-atuacao-estadual" asp-for="AreaAtuacao" checked value="Estadual" required class="custom-control-input">
+                                            <input type="radio" id="input-atuacao-estadual" asp-for="AreaAtuacao" checked value="Estadual" class="custom-control-input">
                                             <label class="custom-control-label" for="input-atuacao-estadual">Estadual</label>
                                         </div>
                                         <div class="custom-control custom-radio custom-control-inline">
-                                            <input type="radio" id="input-atuacao-municipal" asp-for="AreaAtuacao" value="Municipal" required class="custom-control-input">
+                                            <input type="radio" id="input-atuacao-municipal" asp-for="AreaAtuacao" value="Municipal" class="custom-control-input">
                                             <label class="custom-control-label" for="input-atuacao-municipal">Municipal</label>
                                         </div>
                                     </div>

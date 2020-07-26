@@ -58,7 +58,6 @@ namespace Model
         public string Email { get; set; }
         [Required(ErrorMessage = "Campo obrigatório")]
         [DataType(DataType.Date, ErrorMessage = "Data inválida")]
-        [Display(Name = "Data de Nascimento")]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime DataNascimento { get; set; }
         public bool Hipertenso { get; set; }
