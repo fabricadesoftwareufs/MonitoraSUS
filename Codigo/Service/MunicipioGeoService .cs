@@ -50,9 +50,10 @@ namespace Service
                     CodigoUf = municipio.CodigoUf
                 }).FirstOrDefault();
 
-        public MunicipioGeoModel GetByName(string name)
+        public MunicipioGeoModel GetByName(string name, int codUf)
          => _context.Municipiosgeo
-                .Where(municipioModel => Methods.RemoveSpecialsCaracts(municipioModel.Nome).ToUpper().Equals(Methods.RemoveSpecialsCaracts(name).ToUpper()))
+                .Where(municipioModel => Methods.RemoverAcentos(municipioModel.Nome).ToUpper().Equals(Methods.RemoverAcentos(name).ToUpper())
+                 && municipioModel.CodigoUf == codUf)
                 .Select(municipio => new MunicipioGeoModel
                 {
                     CodigoIbge = municipio.CodigoIbge,

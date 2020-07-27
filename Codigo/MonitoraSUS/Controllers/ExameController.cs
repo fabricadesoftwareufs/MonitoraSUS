@@ -33,7 +33,7 @@ namespace MonitoraSUS.Controllers
 		private readonly IUsuarioService _usuarioContext;
 		private readonly IConfiguration _configuration;
 		private readonly ISmsService _smsService;
-
+		private readonly IImportarExameService _importarExameService;
 
 		public ExameController(IVirusBacteriaService virusBacteriaContext,
 							   IExameService exameContext,
@@ -46,7 +46,8 @@ namespace MonitoraSUS.Controllers
 							   IPessoaTrabalhaMunicipioService pessoaTrabalhaMunicipioContext,
 							   IAreaAtuacaoService areaAtuacaoContext,
 							   IUsuarioService usuarioContext,
-							   ISmsService smsService)
+							   ISmsService smsService,
+							   IImportarExameService importarExameService)
 		{
 			_virusBacteriaContext = virusBacteriaContext;
 			_exameContext = exameContext;
@@ -60,6 +61,7 @@ namespace MonitoraSUS.Controllers
 			_areaAtuacaoContext = areaAtuacaoContext;
 			_usuarioContext = usuarioContext;
 			_smsService = smsService;
+			_importarExameService = importarExameService;
 		}
 
 		public IActionResult Index(PesquisaExameViewModel pesquisaExame)
@@ -401,7 +403,7 @@ namespace MonitoraSUS.Controllers
 			try
 			{
 				var agente = _usuarioContext.RetornLoggedUser((ClaimsIdentity)User.Identity);
-				_exameContext.Import(file,agente);
+				_importarExameService.Import(file,agente);
 
 				TempData["mensagemSucesso"] = "O processamento da planilha GAL foi concluido com sucesso!";
 			}

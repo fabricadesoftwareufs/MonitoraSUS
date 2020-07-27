@@ -88,7 +88,7 @@ namespace Service
 
         public EstadoModel GetByUf(string uf)
          => _context.Estado
-             .Where(estadoModel => estadoModel.Uf.Equals(uf))
+             .Where(estadoModel => estadoModel.Uf.ToUpper().Equals(uf.ToUpper()))
              .Select(e => new EstadoModel
              {
                  Id = e.Id,

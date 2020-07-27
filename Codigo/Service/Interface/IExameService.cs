@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Model;
+﻿using Model;
 using Model.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -35,6 +33,6 @@ namespace Service.Interface
         List<TotalEstadoMunicipioBairro> GetTotaisRealizadosByMunicipio(int idMunicipio);
         List<TotalEstadoMunicipioBairro> GetTotaisPopulacaoByEstado(string siglaEstado);
         List<TotalEstadoMunicipioBairro> GetTotaisPopulacaoByMunicipio(string siglaEstado, string cidade);
-		void Import(IFormFile file,  UsuarioViewModel agente);
+		
 	}
 }

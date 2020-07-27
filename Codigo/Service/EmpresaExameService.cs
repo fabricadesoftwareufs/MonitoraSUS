@@ -24,22 +24,23 @@ namespace Service
             return _context.SaveChanges() == 1 ? true : false;
         }
 
-        public bool Insert(EmpresaExameModel empresaExameModel)
+        public EmpresaExameModel Insert(EmpresaExameModel empresaExameModel)
         {
             var entity = ModelToEntity(empresaExameModel);
             _context.Add(entity);
             var value = _context.SaveChanges() == 1 ? true : false;
             _context.Entry(entity).State = EntityState.Detached;
-            return value;
+            empresaExameModel.Id = entity.Id;
+            return empresaExameModel;
         }
 
-        public bool Update(EmpresaExameModel empresaExameModel)
+        public EmpresaExameModel Update(EmpresaExameModel empresaExameModel)
         {
             var entity = ModelToEntity(empresaExameModel);
             _context.Update(entity);
             var value = _context.SaveChanges() == 1 ? true : false;
             _context.Entry(entity).State = EntityState.Detached;
-            return value;
+            return empresaExameModel;
         }
             
 

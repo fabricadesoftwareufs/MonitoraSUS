@@ -1,5 +1,6 @@
 using Newtonsoft.Json;
 using System;
+using System.Globalization;
 using System.Linq;
 using System.Net.Http;
 using System.Security.Claims;
@@ -11,8 +12,17 @@ namespace Util
 {
     public class Methods
     {
-        public static string RemoveSpecialsCaracts(string poluatedString) => Regex.Replace(poluatedString, "[^0-9a-zA-Z]+", "");
+        public static string RemoveSpecialsCaracts(string poluatedString) =>  Regex.Replace(poluatedString, @"[^0-9a-zA-Z_]", string.Empty);
 
+        public static string RemoverAcentos(string texto)
+        {
+            return new string(texto
+                .Normalize(NormalizationForm.FormD)
+                .Where(ch => char.GetUnicodeCategory(ch) != UnicodeCategory.NonSpacingMark)
+                .ToArray());
+        }
+
+        
         public static string GenerateToken()
         {
             var frase = new StringBuilder();

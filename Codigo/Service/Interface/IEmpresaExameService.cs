@@ -5,8 +5,8 @@ namespace Service.Interface
 {
     public interface IEmpresaExameService
     {
-        bool Insert(EmpresaExameModel empresaExameModel);
-        bool Update(EmpresaExameModel empresaExameModel);
+        EmpresaExameModel Insert(EmpresaExameModel empresaExameModel);
+        EmpresaExameModel Update(EmpresaExameModel empresaExameModel);
         bool Delete(int id);
         List<EmpresaExameModel> GetAll();
 		List<EmpresaExameModel> GetHospitais();

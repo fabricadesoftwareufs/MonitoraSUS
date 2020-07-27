@@ -12,6 +12,6 @@ namespace Service.Interface
         List<MunicipioGeoModel> GetByUFCode(int codigoUf);
         MunicipioGeoModel GetByIBGECode(int code);
         MunicipioGeoModel GetById(int id);
-        MunicipioGeoModel GetByName(string name);
+        MunicipioGeoModel GetByName(string name, int codUf);
     }
 }

@@ -31,6 +31,8 @@ namespace MonitoraSUS.Controllers.Test
             var mockTrabalhaMunicipioService = new Mock<IPessoaTrabalhaMunicipioService>();
             var mockAreaAtuacaoService = new Mock<IAreaAtuacaoService>();
             var mockUsuarioService = new Mock<IUsuarioService>();
+            var mockSmsService = new Mock<ISmsService>();
+            var mockImportarExameService = new Mock<IImportarExameService>();
             var mockConfiguration = new Mock<IConfiguration>();
             mockVirusService.Setup(repo => repo.GetAll()).Returns(new List<VirusBacteriaModel>() { });
             mockAreaAtuacaoService.Setup(repo => repo.GetAll()).Returns(new List<AreaAtuacaoModel>() { });
@@ -46,7 +48,9 @@ namespace MonitoraSUS.Controllers.Test
                                                  mockTrabalhaEstadoService.Object,
                                                  mockTrabalhaMunicipioService.Object,
                                                  mockAreaAtuacaoService.Object,
-                                                 mockUsuarioService.Object
+                                                 mockUsuarioService.Object,
+                                                 mockSmsService.Object,
+                                                 mockImportarExameService.Object
                                         );
             DefaultHttpContext httpContext = new DefaultHttpContext()
             {
