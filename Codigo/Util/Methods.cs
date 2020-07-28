@@ -1,12 +1,15 @@
 using Newtonsoft.Json;
 using System;
 using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Security.Claims;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks; 
+using System.Threading.Tasks;
+using Util.Util;
 
 namespace Util
 {
@@ -216,5 +219,33 @@ namespace Util
                 throw e;
             }
         }
+
+        public static async Task<(string lat, string lng)> BuscaLatLong(string address, string googleKey)
+        {
+            var root = new RootObject();
+
+            var url =
+                string.Format(
+                    "https://maps.googleapis.com/maps/api/geocode/json?address={0}&sensor=false&key={1}", address, googleKey);
+            var req = (HttpWebRequest)WebRequest.Create(url);
+
+            var res = (HttpWebResponse)req.GetResponse();
+
+            using (var streamreader = new StreamReader(res.GetResponseStream()))
+            {
+                var result = streamreader.ReadToEnd();
+
+                if (!string.IsNullOrWhiteSpace(result))
+                {
+                    root = JsonConvert.DeserializeObject<RootObject>(result);
+                }
+            }
+            var latitude = Convert.ToString(root.results[0].geometry.location.lat, CultureInfo.InvariantCulture);
+
+            var longitude = Convert.ToString(root.results[0].geometry.location.lng, CultureInfo.InvariantCulture);
+
+            return (latitude, longitude);
+        }
+
     }
 }

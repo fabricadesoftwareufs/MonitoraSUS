@@ -382,6 +382,8 @@ namespace MonitoraSUS.Controllers
 				{
 					if (ModelState.IsValid)
 					{
+						_exameContext.CorrigeLocalizacao(exameViewModel.Paciente, _configuration["GOOGLE_KEY"]);
+
 						_exameContext.Insert(exameViewModel);
 						TempData["mensagemSucesso"] = "Notificação realizada com SUCESSO!";
 					}
