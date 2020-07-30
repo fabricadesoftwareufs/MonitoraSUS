@@ -46,9 +46,12 @@ namespace Service
                         _situacaoPessoaService.Insert(CreateSituacaoPessoaModelByExame(exameModel, situacaoPessoa, _pessoaService));
                     else
                         _situacaoPessoaService.Update(CreateSituacaoPessoaModelByExame(exameModel, situacaoPessoa, _pessoaService));
-                    _context.Add(ModelToEntity(exameModel));
+                   
+                    var exameEntity = ModelToEntity(exameModel);
+                    _context.Add(exameEntity);
                     _context.SaveChanges();
                     transaction.Commit();
+                    _context.Entry(exameEntity).State = EntityState.Detached;
                     return true;
                 }
                 catch (Exception e)
@@ -98,9 +101,13 @@ namespace Service
                         _situacaoPessoaService.Update(CreateSituacaoPessoaModelByExame(exameModel, situacao, _pessoaService));
 
                     _pessoaService.Update(CreatePessoaModelByExame(exameModel, _pessoaService), false);
-                    _context.Update(ModelToEntity(exameModel));
+
+                    var exameEntity = ModelToEntity(exameModel);
+                    _context.Update(exameEntity);
                     _context.SaveChanges();
                     transaction.Commit();
+                    _context.Entry(exameEntity).State = EntityState.Detached;
+
                     return true;
 
                 }

@@ -271,6 +271,7 @@ namespace Service
                         IdEmpresa = ex.IdEmpresaSaude,
                         IdPaciente = ex.IdPaciente
                     }).FirstOrDefault();
+
                 if (exameGravado == null || (exameGravado != null && exameGravado.IdEmpresa < 1))
                 {
                     if (exameView.Exame.IdEmpresaSaude < 1)
