@@ -85,8 +85,8 @@ namespace Service
                     var examesRealizados = GetExamesRelizadosData(exameModel.Paciente.Idpessoa, exameModel.Exame.IdVirusBacteria, exameModel.Exame.DataExame, exameModel.Exame.MetodoExame);
                     if (examesRealizados.Count > 0)
                     {
-                        var exame = examesRealizados.FirstOrDefault();
-                        if (exame.IdExame != exameModel.Exame.IdExame)
+                        var exameBusca = examesRealizados.FirstOrDefault();
+                        if (exameBusca.IdExame != exameModel.Exame.IdExame)
                             throw new ServiceException("Notificação DUPLICADA! Já existe um exame registrado desse paciente para esse Vírus/Bactéria na " +
                                                             "data informada. Por favor, verifique se os dados da notificação estão corretos.");
                     }
@@ -243,20 +243,23 @@ namespace Service
             exameModel.Exame.IdAgenteSaude = exameModel.Usuario.IdPessoa;
             exameModel.Exame.CodigoColeta = (exameModel.Exame.CodigoColeta == null) ? "" : exameModel.Exame.CodigoColeta;
             exameModel.Exame.IdNotificacao = (exameModel.Exame.IdNotificacao == null) ? "" : exameModel.Exame.IdNotificacao;
-            var secretarioMunicipio = _context.Pessoatrabalhamunicipio.Where(p => p.IdPessoa == exameModel.Exame.IdAgenteSaude).FirstOrDefault();
+            if (exameModel.Exame.IdEstado == 0)
+            {
+                var secretarioMunicipio = _context.Pessoatrabalhamunicipio.Where(p => p.IdPessoa == exameModel.Exame.IdAgenteSaude).FirstOrDefault();
 
-            if (secretarioMunicipio != null)
-            {
-                exameModel.Exame.IdMunicipio = secretarioMunicipio.IdMunicipio;
-                exameModel.Exame.IdEstado = Convert.ToInt32(secretarioMunicipio.IdMunicipioNavigation.Uf);
-                exameModel.Exame.IdEmpresaSaude = 1; // empresa padrão do banco 
-            }
-            else
-            {
-                var secretarioEstado = _context.Pessoatrabalhaestado.Where(p => p.Idpessoa == exameModel.Exame.IdAgenteSaude).FirstOrDefault();
-                exameModel.Exame.IdEstado = secretarioEstado.IdEstado;
-                exameModel.Exame.IdEmpresaSaude = secretarioEstado.IdEmpresaExame;
-                exameModel.Exame.IdMunicipio = null;
+                if (secretarioMunicipio != null)
+                {
+                    exameModel.Exame.IdMunicipio = secretarioMunicipio.IdMunicipio;
+                    exameModel.Exame.IdEstado = Convert.ToInt32(secretarioMunicipio.IdMunicipioNavigation.Uf);
+                    exameModel.Exame.IdEmpresaSaude = 1; // empresa padrão do banco 
+                }
+                else
+                {
+                    var secretarioEstado = _context.Pessoatrabalhaestado.Where(p => p.Idpessoa == exameModel.Exame.IdAgenteSaude).FirstOrDefault();
+                    exameModel.Exame.IdEstado = secretarioEstado.IdEstado;
+                    exameModel.Exame.IdEmpresaSaude = secretarioEstado.IdEmpresaExame;
+                    exameModel.Exame.IdMunicipio = null;
+                }
             }
             return new Exame
             {
@@ -1169,9 +1172,9 @@ namespace Service
             PessoaModel pessoaModel = null;
             if (exameViewModel.Paciente.Idpessoa > 0)
                 pessoaModel = pessoaService.GetById(exameViewModel.Paciente.Idpessoa);
-            if (pessoaModel == null)
+            if (pessoaModel == null && !String.IsNullOrEmpty(exameViewModel.Paciente.Cpf))
                 pessoaModel = pessoaService.GetByCpf(exameViewModel.Paciente.Cpf.ToUpper());
-            if (pessoaModel == null)
+            if (pessoaModel == null && !String.IsNullOrEmpty(exameViewModel.Paciente.Cns))
                 pessoaModel = pessoaService.GetByCns(exameViewModel.Paciente.Cns.ToUpper());
             if (pessoaModel == null)
             {

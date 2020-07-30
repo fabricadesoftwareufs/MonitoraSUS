@@ -405,7 +405,7 @@ namespace MonitoraSUS.Controllers
 				var agente = _usuarioContext.RetornLoggedUser((ClaimsIdentity)User.Identity);
 				_importarExameService.Import(file,agente);
 
-				TempData["mensagemSucesso"] = "O processamento da planilha GAL foi concluido com sucesso!";
+				TempData["mensagemSucesso"] = "O processamento da planilha de Exames foi concluido com sucesso!";
 			}
 			catch (ServiceException se)
 			{
