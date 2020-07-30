@@ -1,4 +1,4 @@
--- MySQL dump 10.13  Distrib 8.0.16, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.20, for Win64 (x86_64)
 --
 -- Host: localhost    Database: monitorasus
 -- ------------------------------------------------------
@@ -7,7 +7,7 @@
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
- SET NAMES utf8 ;
+/*!50503 SET NAMES utf8 */;
 /*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
 /*!40103 SET TIME_ZONE='+00:00' */;
 /*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
@@ -21,7 +21,7 @@
 
 DROP TABLE IF EXISTS `areaatuacao`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `areaatuacao` (
   `idAreaAtuacao` int(11) NOT NULL,
   `descricao` varchar(50) NOT NULL,
@@ -46,7 +46,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `configuracaonotificar`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `configuracaonotificar` (
   `idConfiguracaoNotificar` int(11) NOT NULL AUTO_INCREMENT,
   `habilitadoSMS` tinyint(4) NOT NULL DEFAULT '0',
@@ -87,7 +87,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `empresaexame`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `empresaexame` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `cnpj` varchar(14) NOT NULL,
@@ -113,7 +113,8 @@ CREATE TABLE `empresaexame` (
   `numeroLeitosDisponivel` int(11) NOT NULL DEFAULT '0',
   `numeroLeitosUTIDisponivel` int(11) NOT NULL DEFAULT '0',
   `cnes` varchar(20) NOT NULL DEFAULT '',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `INDEX_CNES` (`cnes`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -133,7 +134,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `estado`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `estado` (
   `Id` int(11) NOT NULL AUTO_INCREMENT,
   `CodigoUf` int(11) NOT NULL,
@@ -160,7 +161,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `exame`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `exame` (
   `idExame` int(11) NOT NULL AUTO_INCREMENT,
   `idVirusBacteria` int(11) NOT NULL,
@@ -201,8 +202,9 @@ CREATE TABLE `exame` (
   KEY `fk_exame_pessoa2_idx` (`idAgenteSaude`),
   KEY `fk_exame_estado1_idx` (`idEstado`),
   KEY `fk_exame_empresasaude1_idx` (`idEmpresaSaude`),
-  KEY `fk_exame_municipio1_idx` (`idMunicipio`),
   KEY `fk_exame_AreaAtuacao1_idx` (`idAreaAtuacao`),
+  KEY `fk_exame_municipio1_idx` (`idMunicipio`),
+  KEY `fk_exame_CodigoColeta` (`codigoColeta`),
   CONSTRAINT `fk_exame_AreaAtuacao1` FOREIGN KEY (`idAreaAtuacao`) REFERENCES `areaatuacao` (`idAreaAtuacao`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_exame_empresasaude1` FOREIGN KEY (`idEmpresaSaude`) REFERENCES `empresaexame` (`id`),
   CONSTRAINT `fk_exame_estado1` FOREIGN KEY (`idEstado`) REFERENCES `estado` (`Id`),
@@ -229,7 +231,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `internacao`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `internacao` (
   `idInternacao` int(11) NOT NULL AUTO_INCREMENT,
   `idpessoa` int(11) NOT NULL,
@@ -260,7 +262,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `municipio`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `municipio` (
   `Id` int(11) NOT NULL AUTO_INCREMENT,
   `Codigo` int(11) NOT NULL,
@@ -286,7 +288,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `municipiosgeo`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `municipiosgeo` (
   `codigo_ibge` int(11) NOT NULL,
   `nome` varchar(100) NOT NULL,
@@ -314,7 +316,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `pessoa`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `pessoa` (
   `idpessoa` int(11) NOT NULL AUTO_INCREMENT,
   `cpf` varchar(11) NOT NULL,
@@ -362,6 +364,7 @@ CREATE TABLE `pessoa` (
   PRIMARY KEY (`idpessoa`),
   UNIQUE KEY `cpf_UNIQUE` (`cpf`),
   KEY `fk_pessoa_AreaAtuacao1_idx` (`idAreaAtuacao`),
+  KEY `INDEX_CNS` (`cns`),
   CONSTRAINT `fk_pessoa_AreaAtuacao1` FOREIGN KEY (`idAreaAtuacao`) REFERENCES `areaatuacao` (`idAreaAtuacao`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -382,7 +385,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `pessoatrabalhaestado`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `pessoatrabalhaestado` (
   `idpessoa` int(11) NOT NULL,
   `idEstado` int(11) NOT NULL,
@@ -416,7 +419,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `pessoatrabalhamunicipio`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `pessoatrabalhamunicipio` (
   `idPessoa` int(11) NOT NULL,
   `idMunicipio` int(11) NOT NULL,
@@ -447,7 +450,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `recuperarsenha`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `recuperarsenha` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `token` varchar(100) NOT NULL,
@@ -477,7 +480,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `situacaopessoavirusbacteria`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `situacaopessoavirusbacteria` (
   `idVirusBacteria` int(11) NOT NULL,
   `idpessoa` int(11) NOT NULL,
@@ -510,7 +513,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `usuario`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `usuario` (
   `idUsuario` int(11) NOT NULL AUTO_INCREMENT,
   `cpf` varchar(45) NOT NULL,
@@ -540,7 +543,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `virusbacteria`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `virusbacteria` (
   `idVirusBacteria` int(11) NOT NULL AUTO_INCREMENT,
   `nome` varchar(60) NOT NULL,
@@ -568,4 +571,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-07-01  0:39:55
+-- Dump completed on 2020-07-30  8:23:10

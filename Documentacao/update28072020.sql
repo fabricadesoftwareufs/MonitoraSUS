@@ -1,5 +1,5 @@
 -- MySQL Workbench Synchronization
--- Generated: 2020-07-27 11:53
+-- Generated: 2020-07-30 08:22
 -- Model: New Model
 -- Version: 1.0
 -- Project: Name of the project
@@ -13,9 +13,16 @@ ALTER TABLE `monitorasus`.`empresaexame`
 ADD INDEX `INDEX_CNES` (`cnes` ASC) ;
 ;
 
+ALTER TABLE `monitorasus`.`exame` 
+DROP INDEX `fk_exame_municipio1_idx` ,
+ADD INDEX `fk_exame_municipio1_idx` (`idMunicipio` ASC),
+ADD INDEX `fk_exame_CodigoColeta` (`codigoColeta` ASC);
+;
+
 ALTER TABLE `monitorasus`.`pessoa` 
 ADD INDEX `INDEX_CNS` (`cns` ASC);
 ;
+
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
