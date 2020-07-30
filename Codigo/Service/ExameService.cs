@@ -347,7 +347,7 @@ namespace Service
                 }).ToList();
         public List<ExameBuscaModel> GetByIdAgente(int idAgente, int lastRecord)
          => _context.Exame
-                .Where(exameModel => exameModel.IdAgenteSaude == idAgente).Take(lastRecord)
+                .Where(exameModel => exameModel.IdAgenteSaude == idAgente).OrderByDescending(e => e.DataNotificacao).Take(lastRecord)
                 .Select(exame => new ExameBuscaModel
                 {
                     Cns = exame.IdPacienteNavigation.Cns,
@@ -440,7 +440,7 @@ namespace Service
               }).ToList();
         public List<ExameBuscaModel> GetByIdEmpresa(int idEempresa, int lastRecord)
         => _context.Exame
-              .Where(exameModel => exameModel.IdEmpresaSaude == idEempresa).Take(lastRecord)
+              .Where(exameModel => exameModel.IdEmpresaSaude == idEempresa).OrderByDescending(e => e.DataNotificacao).Take(lastRecord)
               .Select(exame => new ExameBuscaModel
               {
                   Cns = exame.IdPacienteNavigation.Cns,
@@ -532,7 +532,7 @@ namespace Service
                 }).ToList();
         public List<ExameBuscaModel> GetByIdMunicipio(int idMunicicpio, int lastRecord)
          => _context.Exame
-                .Where(exameModel => exameModel.IdMunicipio == idMunicicpio).Take(lastRecord)
+                .Where(exameModel => exameModel.IdMunicipio == idMunicicpio).OrderByDescending(e => e.DataNotificacao).Take(lastRecord)
                 .Select(exame => new ExameBuscaModel
                 {
                     Cns = exame.IdPacienteNavigation.Cns,
@@ -627,7 +627,7 @@ namespace Service
         => _context.Exame
                .Where(exameModel => (exameModel.IdEstado == idEstado)
                && exameModel.IdEmpresaSaude.Equals(EmpresaExameModel.EMPRESA_ESTADO_MUNICIPIO)
-               && (exameModel.IdMunicipio == null)).Take(lastRecord)
+               && (exameModel.IdMunicipio == null)).OrderByDescending(e => e.DataNotificacao).Take(lastRecord)
                .Select(exame => new ExameBuscaModel
                {
                    Cns = exame.IdPacienteNavigation.Cns,

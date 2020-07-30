@@ -375,6 +375,7 @@ namespace MonitoraSUS.Controllers
 					{
 						var exameVazio = new ExameViewModel();
 						exameVazio.Paciente.Cpf = exameViewModel.Paciente.Cpf;
+						ModelState.Clear();
 						return View(exameVazio);
 					}
 				}
