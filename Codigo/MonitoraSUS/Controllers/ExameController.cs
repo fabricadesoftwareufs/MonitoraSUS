@@ -383,8 +383,12 @@ namespace MonitoraSUS.Controllers
 				{
 					if (ModelState.IsValid)
 					{
-						_exameContext.Insert(exameViewModel);
-						TempData["mensagemSucesso"] = "Notificação realizada com SUCESSO!";
+						if (_exameContext.Insert(exameViewModel))
+							TempData["mensagemSucesso"] = "Notificação realizada com SUCESSO!";
+						else
+							TempData["mensagemErro"] = "Notificação DUPLICADA! Já existe um exame registrado desse paciente para esse Vírus/Bactéria na " +
+						                            "data informada e método aplicado. Por favor, verifique se os dados da notificação estão corretos.";
+
 					}
 					else
 						return View(exameViewModel);

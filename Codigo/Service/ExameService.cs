@@ -33,8 +33,7 @@ namespace Service
                     ISituacaoVirusBacteriaService _situacaoPessoaService = new SituacaoVirusBacteriaService(_context);
                     CreatePessoaModelByExame(exameModel, _pessoaService);
                     if (GetExamesRelizadosData(exameModel.Paciente.Idpessoa, exameModel.Exame.IdVirusBacteria, exameModel.Exame.DataExame, exameModel.Exame.MetodoExame).Count > 0)
-                        throw new ServiceException("Notificação DUPLICADA! Já existe um exame registrado desse paciente para esse Vírus/Bactéria na " +
-                                                    "data informada e método aplicado. Por favor, verifique se os dados da notificação estão corretos.");
+                        return false;
                     if (exameModel.Paciente.Idpessoa == 0)
                         exameModel.Paciente = _pessoaService.Insert(exameModel.Paciente);
                     else
