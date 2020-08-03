@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Configuration;
 using Model;
 using Model.ViewModel;
-using Util;
 using Service;
 using Service.Interface;
 using System;
@@ -14,11 +13,11 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Hosting;
+using Util;
 
 namespace MonitoraSUS.Controllers
 {
-	[Authorize(Roles = "AGENTE, GESTOR, SECRETARIO")]
+    [Authorize(Roles = "AGENTE, GESTOR, SECRETARIO")]
 	public class ExameController : Controller
 	{
 		private readonly IVirusBacteriaService _virusBacteriaContext;

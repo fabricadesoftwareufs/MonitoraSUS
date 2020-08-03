@@ -506,19 +506,19 @@ namespace Service
 			pessoaModel.FoneCelular = Methods.RemoveSpecialsCaracts(pessoaModel.FoneCelular);
 
 			entity.Idpessoa = pessoaModel.Idpessoa;
-			entity.Nome = pessoaModel.Nome;
+			entity.Nome = pessoaModel.Nome.ToUpper();
 			entity.Cpf = pessoaModel.Cpf;
 			entity.Cns = pessoaModel.Cns;
 			entity.Sexo = pessoaModel.Sexo;
 			entity.IdAreaAtuacao = pessoaModel.IdAreaAtuacao;
 			entity.Profissao = pessoaModel.Profissao;
 			entity.Cep = pessoaModel.Cep;
-			entity.Rua = pessoaModel.Rua;
-			entity.Bairro = pessoaModel.Bairro;
-			entity.Cidade = pessoaModel.Cidade;
-			entity.Estado = pessoaModel.Estado;
+			entity.Rua = pessoaModel.Rua.ToUpper();
+			entity.Bairro = pessoaModel.Bairro.ToUpper();
+			entity.Cidade = pessoaModel.Cidade.ToUpper();
+			entity.Estado = pessoaModel.Estado.ToUpper();
 			entity.Numero = pessoaModel.Numero;
-			entity.Complemento = pessoaModel.Complemento;
+			entity.Complemento = pessoaModel.Complemento.ToUpper();
 			entity.Latitude = pessoaModel.Latitude;
 			entity.Longitude = pessoaModel.Longitude;
 			entity.FoneCelular = pessoaModel.FoneCelular;
