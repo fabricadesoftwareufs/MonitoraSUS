@@ -322,7 +322,6 @@ namespace MonitoraSUS.Controllers
 		[ValidateAntiForgeryToken]
 		public IActionResult Edit(ExameViewModel exameViewModel)
 		{
-
 			ViewBag.VirusBacteria = new SelectList(_virusBacteriaContext.GetAll(), "IdVirusBacteria", "Nome");
 			ViewBag.AreaAtuacao = new SelectList(_areaAtuacaoContext.GetAll(), "IdAreaAtuacao", "Descricao");
 			ViewBag.googleKey = _configuration["GOOGLE_KEY"];
@@ -331,13 +330,16 @@ namespace MonitoraSUS.Controllers
 			try
 			{
 				exameViewModel.Usuario = _usuarioContext.RetornLoggedUser((ClaimsIdentity)User.Identity).UsuarioModel;
-				_exameContext.Update(exameViewModel);
+				if (_exameContext.Update(exameViewModel))
+					TempData["mensagemSucesso"] = "Edição realizada com SUCESSO!";
+				else
+					TempData["mensagemErro"] = "Notificação DUPLICADA! Já existe um exame registrado desse paciente para esse Vírus/Bactéria na " +
+											"data informada e método aplicado. Por favor, verifique se os dados da notificação estão corretos.";
 			}
 			catch (ServiceException se)
 			{
 				TempData["mensagemErro"] = se.Message;
 			}
-			TempData["mensagemSucesso"] = "Edição realizada com SUCESSO!";
 			return View(new ExameViewModel());
 		}
 
@@ -384,8 +386,6 @@ namespace MonitoraSUS.Controllers
 					{
 						//_exameContext.CorrigeLocalizacao(exameViewModel.Paciente, _configuration["GOOGLE_KEY"]);
 
-						_exameContext.Insert(exameViewModel);
-						TempData["mensagemSucesso"] = "Notificação realizada com SUCESSO!";
 						if (_exameContext.Insert(exameViewModel))
 							TempData["mensagemSucesso"] = "Notificação realizada com SUCESSO!";
 						else

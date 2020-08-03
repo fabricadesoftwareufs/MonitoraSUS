@@ -518,7 +518,7 @@ namespace Service
 			entity.Cidade = pessoaModel.Cidade.ToUpper();
 			entity.Estado = pessoaModel.Estado.ToUpper();
 			entity.Numero = pessoaModel.Numero;
-			entity.Complemento = pessoaModel.Complemento.ToUpper();
+			entity.Complemento = pessoaModel.Complemento != null? pessoaModel.Complemento.ToUpper() : pessoaModel.Complemento;
 			entity.Latitude = pessoaModel.Latitude;
 			entity.Longitude = pessoaModel.Longitude;
 			entity.FoneCelular = pessoaModel.FoneCelular;
