@@ -33,6 +33,6 @@ namespace Service.Interface
         List<TotalEstadoMunicipioBairro> GetTotaisRealizadosByMunicipio(int idMunicipio);
         List<TotalEstadoMunicipioBairro> GetTotaisPopulacaoByEstado(string siglaEstado);
         List<TotalEstadoMunicipioBairro> GetTotaisPopulacaoByMunicipio(string siglaEstado, string cidade);
-		
+		void CorrigeLocalizacao(PessoaModel pessoa, string googleKey);
 	}
 }

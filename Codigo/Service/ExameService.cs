@@ -1232,6 +1232,46 @@ namespace Service
 
             return situacao;
         }
-        
+
+        public async void CorrigeLocalizacao(PessoaModel pessoa, string googleKey)
+        {
+            MunicipioGeoService geoService = new MunicipioGeoService(_context);
+            MunicipioService municipioService = new MunicipioService(_context);
+
+            var municipio = municipioService.GetByName(pessoa.Cidade);
+            var geoLocation = geoService.GetByIBGECode(municipio.Codigo);
+            double latPadrao = geoLocation.Latitude;
+            double longPadrao = geoLocation.Longitude;
+
+            // sequencia recomendada:  Number, Street Direction, Street Name, Street Suffix, City, State, Zip, Country
+
+            string address = "";
+            if (!pessoa.Numero.Equals(""))
+                address += pessoa.Numero + "+";
+            if (!pessoa.Bairro.Equals(""))
+                address += pessoa.Bairro + "+";
+            if (!pessoa.Rua.Equals(""))
+                address += pessoa.Rua + "+";
+
+            address += pessoa.Cidade + "+" + pessoa.Estado;
+            if (!pessoa.Cep.Equals(""))
+                address += "+" + pessoa.Cep;
+
+            (string lat, string lng) = await Methods.BuscaLatLong(address, googleKey);
+            double latitude = Convert.ToDouble(lat);
+            double longitude = Convert.ToDouble(lng);
+
+            if (Math.Abs(Convert.ToDouble(pessoa.Latitude) - latPadrao) > 10 || Math.Abs(Convert.ToDouble(pessoa.Longitude) - longPadrao) > 10 || latitude == 0 || longitude == 0)
+            {
+                pessoa.Latitude = Convert.ToString(latPadrao);
+                pessoa.Longitude = Convert.ToString(longPadrao);
+            }
+            else
+            {
+                pessoa.Latitude = lat;
+                pessoa.Longitude = lng;
+            }
+        }
+
     }
 }
