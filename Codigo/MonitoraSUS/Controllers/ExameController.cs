@@ -375,6 +375,7 @@ namespace MonitoraSUS.Controllers
 					{
 						var exameVazio = new ExameViewModel();
 						exameVazio.Paciente.Cpf = exameViewModel.Paciente.Cpf;
+						ModelState.Clear();
 						return View(exameVazio);
 					}
 				}
@@ -382,10 +383,15 @@ namespace MonitoraSUS.Controllers
 				{
 					if (ModelState.IsValid)
 					{
-						_exameContext.CorrigeLocalizacao(exameViewModel.Paciente, _configuration["GOOGLE_KEY"]);
+						//_exameContext.CorrigeLocalizacao(exameViewModel.Paciente, _configuration["GOOGLE_KEY"]);
 
 						_exameContext.Insert(exameViewModel);
 						TempData["mensagemSucesso"] = "Notificação realizada com SUCESSO!";
+						if (_exameContext.Insert(exameViewModel))
+							TempData["mensagemSucesso"] = "Notificação realizada com SUCESSO!";
+						else
+							TempData["mensagemErro"] = "Notificação DUPLICADA! Já existe um exame registrado desse paciente para esse Vírus/Bactéria na " +
+						                            "data informada e método aplicado. Por favor, verifique se os dados da notificação estão corretos.";
 					}
 					else
 						return View(exameViewModel);
@@ -407,7 +413,7 @@ namespace MonitoraSUS.Controllers
 				var agente = _usuarioContext.RetornLoggedUser((ClaimsIdentity)User.Identity);
 				_importarExameService.Import(file,agente);
 
-				TempData["mensagemSucesso"] = "O processamento da planilha GAL foi concluido com sucesso!";
+				TempData["mensagemSucesso"] = "O processamento da planilha de Exames foi concluido com sucesso!";
 			}
 			catch (ServiceException se)
 			{

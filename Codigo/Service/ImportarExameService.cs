@@ -35,8 +35,8 @@ namespace Service
             var _municipioService = new MunicipioService(_context);
             var _estadoService = new EstadoService(_context);
             var _exameService = new ExameService(_context);
-            var secretarioMunicipio = _pessoaTrabalhaMunicipioService.GetByIdPessoa(agente.UsuarioModel.IdPessoa);
-            var secretarioEstado = _pessoaTrabalhaEstadoContext.GetByIdPessoa(agente.UsuarioModel.IdPessoa);
+            var trabalhaMunicipio = _pessoaTrabalhaMunicipioService.GetByIdPessoa(agente.UsuarioModel.IdPessoa);
+            var trabalhaEstado = _pessoaTrabalhaEstadoContext.GetByIdPessoa(agente.UsuarioModel.IdPessoa);
             var examesPlanilha = new List<ExameViewModel>();
             var indices = new IndiceItemArquivoImportacao();
             var listVirusBacteria = _virusBacteriaService.GetAll();
@@ -44,9 +44,9 @@ namespace Service
             Dictionary<string, MunicipioGeoModel> mapCidade = new Dictionary<string, MunicipioGeoModel>();
             Dictionary<string, EstadoModel> mapEstado = new Dictionary<string, EstadoModel>();
             Dictionary<string, EstadoModel> mapSiglaEstado = new Dictionary<string, EstadoModel>();
-            MunicipioModel municipioSecretario = null;
-            if (secretarioMunicipio != null)
-                municipioSecretario = _municipioService.GetById(secretarioMunicipio.IdMunicipio);
+            MunicipioModel municipioAgente = null;
+            if (trabalhaMunicipio != null)
+                municipioAgente = _municipioService.GetById(trabalhaMunicipio.IdMunicipio);
 
             using (var reader = new StreamReader(file.OpenReadStream(), Encoding.UTF7))
             {
@@ -62,6 +62,11 @@ namespace Service
                     line = reader.ReadLine().Split(';');
                     while (reader.Peek() >= 0 && String.Concat(line).Length > 0)
                     {
+                        if (!line[indices.IndiceStatusExame].ToUpper().Equals("RESULTADO LIBERADO"))
+                        {
+                            line = reader.ReadLine().Split(';');
+                            continue;
+                        }
                         EstadoModel estadoPaciente = null;
                         if (line[indices.IndiceEstadoPaciente].Length > 2)
                         {
@@ -84,6 +89,7 @@ namespace Service
 
                         var exame = new ExameViewModel
                         {
+                            Usuario = agente.UsuarioModel,
                             Paciente = new PessoaModel
                             {
                                 Nome = line[indices.IndiceNomePaciente],
@@ -116,16 +122,19 @@ namespace Service
                             {
                                 IdAgenteSaude = agente.UsuarioModel.IdPessoa,
                                 DataExame = Convert.ToDateTime(line[indices.IndiceDataExame]),
-                                IdEstado = secretarioMunicipio != null ? Convert.ToInt32(municipioSecretario.Uf) : secretarioEstado.IdEstado,
+                                IdEstado = trabalhaMunicipio != null ? Convert.ToInt32(municipioAgente.Uf) : trabalhaEstado.IdEstado,
                                 IdAreaAtuacao = 0,
                                 CodigoColeta = line[indices.IndiceCodigoColeta],
-                                MetodoExame = "F",
+                                MetodoExame = "P",
                                 IdVirusBacteria = GetIdVirusBacteriaItemImportacao(line[indices.IndiceTipoExame], listVirusBacteria),
                                 DataInicioSintomas = line[indices.IndiceDataInicioSintomas].Equals("") ? Convert.ToDateTime(line[indices.IndiceDataExame]) : Convert.ToDateTime(line[indices.IndiceDataInicioSintomas]),
                                 IgG = line[indices.IndiceMetodoExame].ToUpper().Contains(IndiceItemArquivoImportacao.METODO_IGG) && !line[indices.IndiceMetodoExame].ToUpper().Contains(IndiceItemArquivoImportacao.METODO_IGM) ? GetMetodoExameImportacao(line[indices.IndiceMetodoExame], IndiceItemArquivoImportacao.METODO_IGG, line[indices.IndiceResultadoExame].Length > 0 ? line[indices.IndiceResultadoExame] : line[indices.IndiceObservacaoExame]) : "N",
                                 IgM = line[indices.IndiceMetodoExame].ToUpper().Contains(IndiceItemArquivoImportacao.METODO_IGM) && !line[indices.IndiceMetodoExame].ToUpper().Contains(IndiceItemArquivoImportacao.METODO_IGG) ? GetMetodoExameImportacao(line[indices.IndiceMetodoExame], IndiceItemArquivoImportacao.METODO_IGM, line[indices.IndiceResultadoExame].Length > 0 ? line[indices.IndiceResultadoExame] : line[indices.IndiceObservacaoExame]) : "N",
                                 Pcr = line[indices.IndiceMetodoExame].ToUpper().Contains(IndiceItemArquivoImportacao.METODO_PCR) ? GetMetodoExameImportacao(line[indices.IndiceMetodoExame], IndiceItemArquivoImportacao.METODO_PCR, line[indices.IndiceResultadoExame].Length > 0 ? line[indices.IndiceResultadoExame] : line[indices.IndiceObservacaoExame]) : "N",
                                 IgGIgM = line[indices.IndiceMetodoExame].ToUpper().Contains(IndiceItemArquivoImportacao.METODO_IGG) && line[indices.IndiceMetodoExame].ToUpper().Contains(IndiceItemArquivoImportacao.METODO_IGM) ? GetMetodoExameImportacao(line[indices.IndiceMetodoExame], IndiceItemArquivoImportacao.METODO_IGG_IGM, line[indices.IndiceResultadoExame].Length > 0 ? line[indices.IndiceResultadoExame] : line[indices.IndiceObservacaoExame]) : "N",
+                                AguardandoResultado = false,
+                                StatusNotificacao = "N",
+                                
                             },
 
                             EmpresaExame = new EmpresaExameModel
@@ -144,8 +153,8 @@ namespace Service
                             },
                         };
 
-                        if (secretarioMunicipio != null)
-                            exame.Exame.IdMunicipio = secretarioMunicipio.IdMunicipio;
+                        if (trabalhaMunicipio != null)
+                            exame.Exame.IdMunicipio = trabalhaMunicipio.IdMunicipio;
                         else
                             exame.Exame.IdMunicipio = null;
 
@@ -176,11 +185,9 @@ namespace Service
                         if (mapCidade.GetValueOrDefault(line[indices.IndiceCidadePaciente]) == null)
                             mapCidade.Add(line[indices.IndiceCidadePaciente], _municipioGeoService.GetByName(line[indices.IndiceCidadePaciente], estadoPaciente.CodigoUf));
                         MunicipioGeoModel cidadePaciente = mapCidade.GetValueOrDefault(line[indices.IndiceCidadePaciente]);
-                        if (mapCidade.GetValueOrDefault(line[indices.IndiceCidadeEmpresa]) == null)
-                            mapCidade.Add(line[indices.IndiceCidadeEmpresa], _municipioGeoService.GetByName(line[indices.IndiceCidadeEmpresa], estadoPaciente.CodigoUf));
-                        MunicipioGeoModel cidadeEmpresa = mapCidade.GetValueOrDefault(line[indices.IndiceCidadeEmpresa]);
                         var exame = new ExameViewModel
                         {
+                            Usuario = agente.UsuarioModel,
                             Paciente = new PessoaModel
                             {
                                 Nome = line[indices.IndiceNomePaciente],
@@ -216,7 +223,7 @@ namespace Service
                             {
                                 IdAgenteSaude = agente.UsuarioModel.IdPessoa,
                                 DataExame = Convert.ToDateTime(line[indices.IndiceDataExame]),
-                                IdEstado = secretarioMunicipio != null ? Convert.ToInt32(municipioSecretario.Uf) : secretarioEstado.IdEstado,
+                                IdEstado = trabalhaMunicipio != null ? Convert.ToInt32(municipioAgente.Uf) : trabalhaEstado.IdEstado,
                                 IdAreaAtuacao = 0,
                                 CodigoColeta = line[indices.IndiceCodigoColeta],
                                 MetodoExame = "F",
@@ -236,12 +243,14 @@ namespace Service
                                 IgM = line[indices.IndiceRealizouTeste].ToUpper().Contains("POSITIVO") ? "S" : "N",
                                 Pcr = "N",
                                 IgGIgM = "N",
-                                IdEmpresaSaude = EmpresaExameModel.EMPRESA_ESTADO_MUNICIPIO,
+                                IdEmpresaSaude = trabalhaEstado.IdEmpresaExame,
+                                AguardandoResultado = false,
+                                StatusNotificacao = "N",
                             },
                         };
 
-                        if (secretarioMunicipio != null)
-                            exame.Exame.IdMunicipio = secretarioMunicipio.IdMunicipio;
+                        if (trabalhaMunicipio != null)
+                            exame.Exame.IdMunicipio = trabalhaMunicipio.IdMunicipio;
                         else
                             exame.Exame.IdMunicipio = null;
 
@@ -259,15 +268,26 @@ namespace Service
                     .Select(ex => new
                     {
                         IdExame = ex.IdExame,
-                        IdPessoa = ex.IdPaciente,
-                        IdEmpresa = ex.IdEmpresaSaude
+                        IdEmpresa = ex.IdEmpresaSaude,
+                        IdPaciente = ex.IdPaciente
                     }).FirstOrDefault();
+
                 if (exameGravado == null || (exameGravado != null && exameGravado.IdEmpresa < 1))
                 {
-                    var empresa = _empresaExameService.GetByCNES(exameView.EmpresaExame.Cnes);
-                    if (empresa == null)
-                        empresa = _empresaExameService.Insert(exameView.EmpresaExame);
-                    exameView.Exame.IdEmpresaSaude = empresa.Id;
+                    if (exameView.Exame.IdEmpresaSaude < 1)
+                    {
+                        var empresa = _empresaExameService.GetByCNES(exameView.EmpresaExame.Cnes);
+                        if (empresa == null)
+                            empresa = _empresaExameService.Insert(exameView.EmpresaExame);
+                        exameView.Exame.IdEmpresaSaude = empresa.Id;
+                    }
+                } 
+                else
+                {
+                    exameView.Exame.IdEmpresaSaude = exameGravado.IdEmpresa;
+                    exameView.Exame.IdPaciente = exameGravado.IdPaciente;
+                    exameView.Paciente.Idpessoa = exameGravado.IdPaciente;
+                    exameView.Exame.IdExame = exameGravado.IdExame;
                 }
 
                 if (exameGravado == null)
@@ -390,6 +410,8 @@ namespace Service
                     indices.IndiceObservacaoExame = i;
                 else if (Methods.RemoveSpecialsCaracts(itens[i].Trim()).ToUpper().Equals(Methods.RemoveSpecialsCaracts(IndiceItemArquivoImportacao.RESULTADO_GAL).ToUpper()))
                     indices.IndiceResultadoExame = i;
+                else if (Methods.RemoveSpecialsCaracts(itens[i].Trim()).ToUpper().Equals(Methods.RemoveSpecialsCaracts(IndiceItemArquivoImportacao.STATUS_EXAME).ToUpper()))
+                    indices.IndiceStatusExame = i;
             }
 
             var planilhaValida = false;

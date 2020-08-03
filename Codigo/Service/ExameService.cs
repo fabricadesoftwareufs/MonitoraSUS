@@ -33,8 +33,7 @@ namespace Service
                     ISituacaoVirusBacteriaService _situacaoPessoaService = new SituacaoVirusBacteriaService(_context);
                     CreatePessoaModelByExame(exameModel, _pessoaService);
                     if (GetExamesRelizadosData(exameModel.Paciente.Idpessoa, exameModel.Exame.IdVirusBacteria, exameModel.Exame.DataExame, exameModel.Exame.MetodoExame).Count > 0)
-                        throw new ServiceException("Notificação DUPLICADA! Já existe um exame registrado desse paciente para esse Vírus/Bactéria na " +
-                                                    "data informada e método aplicado. Por favor, verifique se os dados da notificação estão corretos.");
+                        return false;
                     if (exameModel.Paciente.Idpessoa == 0)
                         exameModel.Paciente = _pessoaService.Insert(exameModel.Paciente);
                     else
@@ -46,9 +45,12 @@ namespace Service
                         _situacaoPessoaService.Insert(CreateSituacaoPessoaModelByExame(exameModel, situacaoPessoa, _pessoaService));
                     else
                         _situacaoPessoaService.Update(CreateSituacaoPessoaModelByExame(exameModel, situacaoPessoa, _pessoaService));
-                    _context.Add(ModelToEntity(exameModel));
+                   
+                    var exameEntity = ModelToEntity(exameModel);
+                    _context.Add(exameEntity);
                     _context.SaveChanges();
                     transaction.Commit();
+                    _context.Entry(exameEntity).State = EntityState.Detached;
                     return true;
                 }
                 catch (Exception e)
@@ -85,8 +87,8 @@ namespace Service
                     var examesRealizados = GetExamesRelizadosData(exameModel.Paciente.Idpessoa, exameModel.Exame.IdVirusBacteria, exameModel.Exame.DataExame, exameModel.Exame.MetodoExame);
                     if (examesRealizados.Count > 0)
                     {
-                        var exame = examesRealizados.FirstOrDefault();
-                        if (exame.IdExame != exameModel.Exame.IdExame)
+                        var exameBusca = examesRealizados.FirstOrDefault();
+                        if (exameBusca.IdExame != exameModel.Exame.IdExame)
                             throw new ServiceException("Notificação DUPLICADA! Já existe um exame registrado desse paciente para esse Vírus/Bactéria na " +
                                                             "data informada. Por favor, verifique se os dados da notificação estão corretos.");
                     }
@@ -98,9 +100,13 @@ namespace Service
                         _situacaoPessoaService.Update(CreateSituacaoPessoaModelByExame(exameModel, situacao, _pessoaService));
 
                     _pessoaService.Update(CreatePessoaModelByExame(exameModel, _pessoaService), false);
-                    _context.Update(ModelToEntity(exameModel));
+
+                    var exameEntity = ModelToEntity(exameModel);
+                    _context.Update(exameEntity);
                     _context.SaveChanges();
                     transaction.Commit();
+                    _context.Entry(exameEntity).State = EntityState.Detached;
+
                     return true;
 
                 }
@@ -243,20 +249,23 @@ namespace Service
             exameModel.Exame.IdAgenteSaude = exameModel.Usuario.IdPessoa;
             exameModel.Exame.CodigoColeta = (exameModel.Exame.CodigoColeta == null) ? "" : exameModel.Exame.CodigoColeta;
             exameModel.Exame.IdNotificacao = (exameModel.Exame.IdNotificacao == null) ? "" : exameModel.Exame.IdNotificacao;
-            var secretarioMunicipio = _context.Pessoatrabalhamunicipio.Where(p => p.IdPessoa == exameModel.Exame.IdAgenteSaude).FirstOrDefault();
+            if (exameModel.Exame.IdEstado == 0)
+            {
+                var secretarioMunicipio = _context.Pessoatrabalhamunicipio.Where(p => p.IdPessoa == exameModel.Exame.IdAgenteSaude).FirstOrDefault();
 
-            if (secretarioMunicipio != null)
-            {
-                exameModel.Exame.IdMunicipio = secretarioMunicipio.IdMunicipio;
-                exameModel.Exame.IdEstado = Convert.ToInt32(secretarioMunicipio.IdMunicipioNavigation.Uf);
-                exameModel.Exame.IdEmpresaSaude = 1; // empresa padrão do banco 
-            }
-            else
-            {
-                var secretarioEstado = _context.Pessoatrabalhaestado.Where(p => p.Idpessoa == exameModel.Exame.IdAgenteSaude).FirstOrDefault();
-                exameModel.Exame.IdEstado = secretarioEstado.IdEstado;
-                exameModel.Exame.IdEmpresaSaude = secretarioEstado.IdEmpresaExame;
-                exameModel.Exame.IdMunicipio = null;
+                if (secretarioMunicipio != null)
+                {
+                    exameModel.Exame.IdMunicipio = secretarioMunicipio.IdMunicipio;
+                    exameModel.Exame.IdEstado = Convert.ToInt32(secretarioMunicipio.IdMunicipioNavigation.Uf);
+                    exameModel.Exame.IdEmpresaSaude = 1; // empresa padrão do banco 
+                }
+                else
+                {
+                    var secretarioEstado = _context.Pessoatrabalhaestado.Where(p => p.Idpessoa == exameModel.Exame.IdAgenteSaude).FirstOrDefault();
+                    exameModel.Exame.IdEstado = secretarioEstado.IdEstado;
+                    exameModel.Exame.IdEmpresaSaude = secretarioEstado.IdEmpresaExame;
+                    exameModel.Exame.IdMunicipio = null;
+                }
             }
             return new Exame
             {
@@ -344,7 +353,7 @@ namespace Service
                 }).ToList();
         public List<ExameBuscaModel> GetByIdAgente(int idAgente, int lastRecord)
          => _context.Exame
-                .Where(exameModel => exameModel.IdAgenteSaude == idAgente).Take(lastRecord)
+                .Where(exameModel => exameModel.IdAgenteSaude == idAgente).OrderByDescending(e => e.DataNotificacao).Take(lastRecord)
                 .Select(exame => new ExameBuscaModel
                 {
                     Cns = exame.IdPacienteNavigation.Cns,
@@ -437,7 +446,7 @@ namespace Service
               }).ToList();
         public List<ExameBuscaModel> GetByIdEmpresa(int idEempresa, int lastRecord)
         => _context.Exame
-              .Where(exameModel => exameModel.IdEmpresaSaude == idEempresa).Take(lastRecord)
+              .Where(exameModel => exameModel.IdEmpresaSaude == idEempresa).OrderByDescending(e => e.DataNotificacao).Take(lastRecord)
               .Select(exame => new ExameBuscaModel
               {
                   Cns = exame.IdPacienteNavigation.Cns,
@@ -529,7 +538,7 @@ namespace Service
                 }).ToList();
         public List<ExameBuscaModel> GetByIdMunicipio(int idMunicicpio, int lastRecord)
          => _context.Exame
-                .Where(exameModel => exameModel.IdMunicipio == idMunicicpio).Take(lastRecord)
+                .Where(exameModel => exameModel.IdMunicipio == idMunicicpio).OrderByDescending(e => e.DataNotificacao).Take(lastRecord)
                 .Select(exame => new ExameBuscaModel
                 {
                     Cns = exame.IdPacienteNavigation.Cns,
@@ -624,7 +633,7 @@ namespace Service
         => _context.Exame
                .Where(exameModel => (exameModel.IdEstado == idEstado)
                && exameModel.IdEmpresaSaude.Equals(EmpresaExameModel.EMPRESA_ESTADO_MUNICIPIO)
-               && (exameModel.IdMunicipio == null)).Take(lastRecord)
+               && (exameModel.IdMunicipio == null)).OrderByDescending(e => e.DataNotificacao).Take(lastRecord)
                .Select(exame => new ExameBuscaModel
                {
                    Cns = exame.IdPacienteNavigation.Cns,
@@ -1169,9 +1178,9 @@ namespace Service
             PessoaModel pessoaModel = null;
             if (exameViewModel.Paciente.Idpessoa > 0)
                 pessoaModel = pessoaService.GetById(exameViewModel.Paciente.Idpessoa);
-            if (pessoaModel == null)
+            if (pessoaModel == null && !String.IsNullOrEmpty(exameViewModel.Paciente.Cpf))
                 pessoaModel = pessoaService.GetByCpf(exameViewModel.Paciente.Cpf.ToUpper());
-            if (pessoaModel == null)
+            if (pessoaModel == null && !String.IsNullOrEmpty(exameViewModel.Paciente.Cns))
                 pessoaModel = pessoaService.GetByCns(exameViewModel.Paciente.Cns.ToUpper());
             if (pessoaModel == null)
             {

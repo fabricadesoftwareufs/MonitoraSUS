@@ -34,6 +34,7 @@ namespace Model.AuxModel
 		public static string RESULTADO_DETECTAVEL_GAL			 = "DETECTÁVEL";
 		public static string RESULTADO_NAO_DETECTAVEL_GAL		 = "NÃO DETECTÁVEL";
 		public static string RESULTADO_SOLICITAR_NOVA_COLETA_GAL = "SOLICITAR NOVA COLETA";
+		public static string STATUS_EXAME						 = "STATUS EXAME";
 
 		public static string NUMERO_DE_REGISTRO_UFS				= "Nº DE REGISTRO";
 		public static string DATA_DA_COLETA_UFS					= "DATA DA COLETA";
@@ -105,6 +106,7 @@ namespace Model.AuxModel
 			IndiceEstadoEmpresa = -1;
 			IndiceCodigoColeta = -1;
 			IndiceResultadoExame = -1;
+			IndiceStatusExame = -1;
 			IndiceObservacaoExame = -1;
 			IndiceTipoExame = -1;
 			IndiceCpfPaciente = -1;
@@ -144,6 +146,7 @@ namespace Model.AuxModel
 		public int IndiceCnesEmpresa { get; set; }
 		public int IndiceCidadeEmpresa { get; set; }
 		public int IndiceEstadoEmpresa { get; set; }
+		public int IndiceStatusExame { get; set; }
 		public int IndiceObservacaoExame { get; set; }
 		public int IndiceResultadoExame { get; set; }
 		public int IndiceProfissaoPaciente { get; set; }

@@ -99,15 +99,15 @@
                                 </a>
                             </div>
                             <div class="col-md-3">
-                                <a asp-controller="AgenteSecretario" asp-action="IndexApproveAgent" asp-route-ehResponsavel="0" class="btn btn-block card-button-home">
-                                    <i class="fas fa-clipboard-list fa-2x"></i>
-                                    <br>Autorizar Notificadores<br> de Exames
+                                <a data-toggle="modal" data-target="#modal-importar" class="btn btn-block card-button-home text-white">
+                                    <i class="fas fa-file-import fa-2x"></i>
+                                    <br>Importar<br> Planilha Exames
                                 </a>
                             </div>
                             <div class="col-md-3">
-                                <a data-toggle="modal" data-target="#modal-importar" class="btn btn-block card-button-home text-white">
-                                    <i class="fas fa-file-import fa-2x"></i>
-                                    <br>Importar<br> Planilha GAL
+                                <a asp-controller="AgenteSecretario" asp-action="IndexApproveAgent" asp-route-ehResponsavel="0" class="btn btn-block card-button-home">
+                                    <i class="fas fa-clipboard-list fa-2x"></i>
+                                    <br>Autorizar Notificadores<br> de Exames
                                 </a>
                             </div>
                         </div>
@@ -150,6 +150,12 @@
                                 </a>
                             </div>
                             <div class="col-md-3">
+                                <a data-toggle="modal" data-target="#modal-importar" class="btn btn-block card-button-home text-white">
+                                    <i class="fas fa-file-import fa-2x"></i>
+                                    <br>Importar<br> Planilha Exames
+                                </a>
+                            </div>
+                            <div class="col-md-3">
                                 <a asp-controller="AgenteSecretario" asp-action="IndexApproveAgent" asp-route-ehResponsavel="0" class="btn btn-block card-button-home">
                                     <i class="fas fa-clipboard-list fa-2x"></i>
                                     <br>Autorizar Notificadores<br> de Exames
@@ -165,12 +171,6 @@
                                 <a asp-controller="EmpresaExame" asp-action="Index" class="btn btn-block card-button-home">
                                     <i class="fas fa-users-cog fa-2x"></i>
                                     <br>Cadastro de <br>Hospital/Laboratório
-                                </a>
-                            </div>
-                            <div class="col-md-3">
-                                <a data-toggle="modal" data-target="#modal-importar" class="btn btn-block card-button-home text-white">
-                                    <i class="fas fa-file-import fa-2x"></i>
-                                    <br>Importar<br> Planilha GAL
                                 </a>
                             </div>
                         </div>
@@ -214,18 +214,18 @@ else if (TempData["mensagemErro"] != null)
         <div class="modal-content">
             <div id="container-importacao">
                 <div class="modal-header">
-                    <h4 class="modal-title" id="myModalLabel">Importar Planilha GAL</h4>
+                    <h4 class="modal-title" id="myModalLabel">Importar Planilha GAL/UFS</h4>
                 </div>
 
                 <div style="padding: 10pt">
                     <p>
-                        Gere a planilha do GAL selecionando todos os campos disponíveis
+                        Gere a planilha do GAL/UFS selecionando todos os campos disponíveis
                         e faça o upload do arquivo .csv gerado. Caso um exame já tenha sido
                         importado para base de dados do MonitoraSUS, os dados serão apenas atualizados.
                     </p>
 
                     <form name="form-arquivo" enctype="multipart/form-data" method="post" asp-action="Import" asp-controller="Exame">
-                        <h4>Selecione a Planilha do GAL: </h4>
+                        <h4>Selecione a Planilha (formato .csv): </h4>
                         <input lang="pt-br" required id="input-file" name="file" type="file" accept=".csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-Excel">
 
                         <div class="modal-footer">
@@ -239,7 +239,7 @@ else if (TempData["mensagemErro"] != null)
             </div>
             <div id="container-espera" hidden>
                 <div class="loading-spinner" style="padding: 20pt;text-align: center">
-                    <h3>Aguarde um momento enquanto processamos a planilha GAL!</h3>
+                    <h3>Aguarde um momento enquanto processamos a planilha de Exames!</h3>
                     <svg id="hourglass" width='64px' height='64px' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" class="uil-hourglass">
                         <rect x="0" y="0" width="100" height="100" fill="none" class="bk"></rect>
                         <g>
